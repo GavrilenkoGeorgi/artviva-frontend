@@ -45,10 +45,10 @@ const LoginForm = ({ setNotification, ...props }) => {
 				setLoginSuccessful(true)
 			})
 			.catch(error => {
-				const { message } = { ...error.response.data }
+				const { message, variant } = { ...error.response.data }
 				setNotification({
 					message,
-					variant: 'danger'
+					variant: variant ? variant : 'danger'
 				}, 5)
 			})
 			.finally(() => {
@@ -146,9 +146,6 @@ const LoginForm = ({ setNotification, ...props }) => {
 										isValid={touched.email && !errors.email}
 										isInvalid={touched.email && !!errors.email}
 									/>
-									<Form.Control.Feedback>
-										Ok
-									</Form.Control.Feedback>
 									<Form.Control.Feedback type="invalid">
 										{errors.email}
 									</Form.Control.Feedback>
@@ -185,9 +182,6 @@ const LoginForm = ({ setNotification, ...props }) => {
 												}
 											</Button>
 										</InputGroup.Append>
-										<Form.Control.Feedback className="login-pass-feedback">
-											Ok
-										</Form.Control.Feedback>
 										<Form.Control.Feedback type="invalid" className="login-pass-feedback">
 											{errors.password}
 										</Form.Control.Feedback>

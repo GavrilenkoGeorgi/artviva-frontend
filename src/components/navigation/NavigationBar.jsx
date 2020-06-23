@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { connect } from 'react-redux'
+
 import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
 import NavBarLink from '../common/NavBarLink'
 import NavTogglerIcon from '../common/NavTogglerIcon'
 import Logout from '../common/Logout'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 const NavigationBar = ({ user }) => {
 
@@ -67,11 +71,6 @@ const NavigationBar = ({ user }) => {
 			label: 'Блог',
 			className: linkClassList
 		},
-		/*{
-			to: '/pay/form',
-			label: 'Оплата',
-			className: linkClassList
-		},*/
 		{
 			to: '/contacts',
 			label: 'Контакти',
@@ -102,7 +101,6 @@ const NavigationBar = ({ user }) => {
 					<span className="pl-2 nav-logo-font">ArtViva</span>
 				</Navbar.Brand>
 				<Navbar.Toggle
-					// children={<NavTogglerIcon />}
 					aria-controls="responsive-navbar-nav"
 				>
 					<NavTogglerIcon type={isExpanded}/>
@@ -117,13 +115,22 @@ const NavigationBar = ({ user }) => {
 									<NavDropdown.Item href="/school/overview">Вчителі, учні, групи</NavDropdown.Item>
 									<NavDropdown.Item href="/school/payments">Всі платежі</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/school/payments"><Logout /></NavDropdown.Item>
+									<NavDropdown.Item href="/school/overview">
+										<span className="nav-list-icon">
+											<FontAwesomeIcon icon={faUser} />
+										</span>
+										<em>Профіль {user.lastname}</em>
+									</NavDropdown.Item>
+									<NavDropdown.Item href="#">
+										<Logout />
+									</NavDropdown.Item>
 								</>
 								: <>
 									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
 									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
-									<NavDropdown.Item href="/login">Логін</NavDropdown.Item>
 									<NavDropdown.Item href="/register">Реєстрація</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item href="/login">Логін</NavDropdown.Item>
 								</>
 							}
 						</NavDropdown>
@@ -137,7 +144,6 @@ const NavigationBar = ({ user }) => {
 								onClick={toggleExpanded}
 							/>
 						)}
-						{/*<UserInfoPopover />*/}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

@@ -532,7 +532,7 @@ const TeacherForm = ({
 							/>
 
 							<Col xs={12} className="py-3">
-								<div className="border1 border-success">
+								<div>
 									Робочий стаж:
 									<strong> {employeeExperience.years}
 									</strong> років
@@ -770,16 +770,18 @@ const TeacherForm = ({
 									errors={errors.employeeIsAStudent}
 								/>
 							</Col>
-							<TextAreaInput
-								label="Додаткова інформація/опис"
-								rows={2}
-								name="info"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.info}
-								touched={touched.info}
-								errors={errors.info}
-							/>
+							<Col xs={12}>
+								<TextAreaInput
+									label="Додаткова інформація/опис"
+									rows={2}
+									name="info"
+									onChange={handleChange}
+									onBlur={handleBlur}
+									value={values.info}
+									touched={touched.info}
+									errors={errors.info}
+								/>
+							</Col>
 						</Form.Row>
 
 						{/* Button */}

@@ -134,7 +134,7 @@ const UserEditForm = ({
 
 					{/* User account settings */}
 					<Form.Row className="mt-3 py-1 pl-1 border border-warning rounded">
-						<Col>
+						<Col xs={12}>
 							<em className="text-warning">
 								Редагуйте ці налаштування з обережністю!
 							</em>

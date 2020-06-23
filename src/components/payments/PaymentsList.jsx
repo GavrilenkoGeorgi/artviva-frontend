@@ -74,7 +74,6 @@ const PaymentsList = ({
 	}
 
 	const sortLabel = (label, fieldName) => {
-		console.log('Label:', label, fieldName)
 		return (
 			<Row>
 				<Col>{label}&nbsp;

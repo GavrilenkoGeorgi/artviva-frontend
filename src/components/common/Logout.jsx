@@ -11,7 +11,7 @@ const Logout = ({ setNotification }) => {
 			window.localStorage.removeItem('loggedUserJSON')
 			document.location.href='/'
 			setNotification({
-				message: 'Ви успішно вийшли з системи.',
+				message: 'Ви успішно вийшли.',
 				variant: 'info'
 			}, 3)
 		} catch (error) {

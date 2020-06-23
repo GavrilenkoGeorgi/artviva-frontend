@@ -37,7 +37,9 @@ const UserInfoPopover = ({ user }) => {
 				onHide={closePopover}
 			>
 				<Popover id="popover-basic">
-					<Popover.Title as="h3">{user ? `Hello, ${user.name} ${user.middlename} ${user.lastname}` : 'Hello'}!</Popover.Title>
+					<Popover.Title as="h3">
+						{user ? `Hello, ${user.name} ${user.middlename} ${user.lastname}` : 'Hello'}!
+					</Popover.Title>
 					<Popover.Content>
 						<ListGroup variant="flush">
 							{user ?

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
+import { Redirect, useLocation } from 'react-router-dom'
 import { setNotification } from '../../reducers/notificationReducer'
 import { getUsersList } from '../../reducers/userReducer'
 import userService from '../../services/users'
@@ -12,6 +13,7 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
 	const componentIsMounted = useRef(true)
+	const location = useLocation()
 
 	useEffect(() => {
 		return () => {
@@ -22,7 +24,6 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 	useEffect(() => {
 		if (user) {
 			userService.setToken(user.token)
-
 			getUsersList()
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -30,7 +31,6 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 						message,
 						variant: 'danger'
 					}, 5)
-					if (componentIsMounted.current) setIsLoading(false)
 				})
 				.finally(() => {
 					if (componentIsMounted.current) setIsLoading(false)
@@ -47,7 +47,17 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 							animation="border"
 							variant="primary"
 						/>
-						: <>{users.map(user => <UserDetailsCard key={user.id} userData={user} />)}</>
+						: <>
+							{user.superUser
+								? <>{users.map(user => <UserDetailsCard key={user.id} userData={user} />)}</>
+								: <Redirect
+									to={{
+										pathname: '/school/overview',
+										state: { from: location }
+									}}
+								/>
+							}
+						</>
 					}
 				</Col>
 			</Row>

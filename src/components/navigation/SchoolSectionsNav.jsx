@@ -6,10 +6,10 @@ import SectionLink from './SectionLink'
 const SchoolDataNav = () => {
 
 	const schoolSectionsLinks = [
-		/*{
+		{
 			to: '/school/overview',
 			label: 'Статистика'
-		},*/
+		},
 		{
 			to: '/school/classes',
 			label: 'Групи'

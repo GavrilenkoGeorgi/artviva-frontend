@@ -1,13 +1,15 @@
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
-import { initializePupils, sortPupils } from '../../reducers/pupilsReducer'
+import { initializePupils } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
+import { nestedSort } from '../../utils/arrayHelpers'
 
-import { Container, Row, Col, Form, ListGroup } from 'react-bootstrap'
+import { Container, Row, Col, ListGroup } from 'react-bootstrap'
 import Pupil from './Pupil'
 import LoadingIndicator from '../common/LoadingIndicator'
 import CollapseForm from '../common/CollapseForm'
+import SortingControls from '../common/SortingControls'
 
 const LazyPupilForm = React.lazy(() => import('../forms/PupilForm'))
 
@@ -15,11 +17,50 @@ const PupilsList = ({
 	user,
 	pupils,
 	initializePupils,
-	sortPupils,
 	setNotification }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
-	const [defaultSortOrder, setdefaultSortOrder] = useState(true)
+	const [pupilsData, setPupilsData] = useState([])
+	const componentIsMounted = useRef(true)
+
+	const defaultSortOrder = {
+		name: false,
+		artSchoolClass: false,
+		docsPresent: false,
+		currentlyEnrolled: false
+	}
+
+	const [sortOrder, setSortOrder] = useState(defaultSortOrder)
+
+	const filterBy = [
+		{
+			fieldName: 'name',
+			label: 'Ім\'я учня'
+		},
+		{
+			fieldName: 'specialty',
+			label: 'Фах'
+		}
+	]
+
+	const sortBy = [
+		{
+			fieldName: 'name',
+			label: 'Ім\'я учня'
+		},
+		{
+			fieldName: 'artSchoolClass',
+			label: 'Поточний клас'
+		},
+		{
+			fieldName: 'docsPresent',
+			label: 'Надав усі документи'
+		},
+		{
+			fieldName: 'currentlyEnrolled',
+			label: 'Зарахован до навчання'
+		},
+	]
 
 	useEffect(() => {
 		if (user) {
@@ -32,79 +73,106 @@ const PupilsList = ({
 						variant: 'danger'
 					}, 5)
 				})
-				.finally(() => setIsLoading(false))
+				.finally(() => {
+					if (componentIsMounted.current) setIsLoading(false)
+				})
 		}
 	// eslint-disable-next-line
 	}, [user, initializePupils, setNotification])
 
+	useEffect(() => {
+		setPupilsData(pupils)
+	}, [pupils])
+
 	const checkPupilStatus = pupil => {
 		const { currentlyEnrolled, docsPresent } = pupil
-		return !currentlyEnrolled || !docsPresent ? true : false
+		return (!currentlyEnrolled && !docsPresent)
+			? 'danger-background'
+			: (!currentlyEnrolled || !docsPresent ? 'warning-background': null)
 	}
 
-	const changeOrder = () => {
-		defaultSortOrder ? sortPupils('name') : sortPupils('name', 'desc')
-		setdefaultSortOrder(!defaultSortOrder)
+	const sort = ({ id: field }) => {
+		setSortOrder({ ...defaultSortOrder, [field]: !sortOrder[field] })
+		const search = {
+			field,
+			sortOrder: sortOrder[field] ? 'desc' : 'asc'
+		}
+		pupilsData.sort(nestedSort(search.field, null, search.sortOrder))
+	}
+
+	const filter = ({ target }) => {
+		const { name, value } = target
+		let result
+		if (name === 'specialty') {
+			result = pupils
+				.filter(pupil => pupil[name]['title'] // data structure ((
+					.toUpperCase()
+					.includes(value.toUpperCase()))
+		} else {
+			result = pupils
+				.filter(pupil => pupil[name]
+					.toUpperCase()
+					.includes(value.toUpperCase()))
+		}
+		setPupilsData([...result])
 	}
 
 	return (
-		<Container>
-			<Row className="d-flex justify-content-center">
-				<Col md={10} xl={8}>
-					{isLoading
-						? <LoadingIndicator
-							animation="border"
-							variant="primary"
-						/>
-						: <>
-							<Row className="py-3">
-								<Col>
-									<CollapseForm
-										title="Додати нового учня"
-										ariaControls="pupil-add-form-collapse"
-									>
-										<Suspense
-											fallback={
-												<LoadingIndicator
-													animation="border"
-													variant="primary"
-												/>}>
-											<LazyPupilForm mode="create" />
-										</Suspense>
-									</CollapseForm>
-								</Col>
-							</Row>
-							<Row className="py-2">
-								<Col xs={8}>
-									<em className="text-muted">Список усіх учнів школи.</em>
-								</Col>
-								<Col xs={4}>
-									<Form>
-										<Form.Check
-											custom
-											type="checkbox"
-											id="sort-checkbox"
-											label="A-Z"
-											onClick={changeOrder}
-										/>
-									</Form>
-								</Col>
-							</Row>
-							<ListGroup>
-								{pupils.map(pupil =>
-									<ListGroup.Item
-										className={`px-0 py-1 ${checkPupilStatus(pupil) ? 'warning-background' : null}`}
-										key={pupil.id}
-									>
-										<Pupil pupil={pupil} />
-									</ListGroup.Item>
-								)}
-							</ListGroup>
-						</>
-					}
-				</Col>
-			</Row>
-		</Container>
+		<>
+			{isLoading
+				? <LoadingIndicator
+					animation="border"
+					variant="primary"
+				/>
+				: <>
+					<Container>
+						<Row className="pt-3 d-flex justify-content-center">
+							<Col xs={12} md={8} xl={6} className="order-xl-1">
+								<SortingControls
+									sortOrder={sortOrder}
+									filter={filter}
+									filterBy={filterBy}
+									sort={sort}
+									sortBy={sortBy}
+								/>
+
+								<CollapseForm
+									title="Додати нового учня"
+									ariaControls="pupil-add-form-collapse"
+								>
+									<Suspense
+										fallback={
+											<LoadingIndicator
+												animation="border"
+												variant="primary"
+											/>}>
+										<LazyPupilForm mode="create" />
+									</Suspense>
+								</CollapseForm>
+							</Col>
+
+							<Col xs={12} md={8} xl={6} className="order-xl-0">
+								<h6 className="text-muted mt-2 mb-3">
+									<em>Список усіх учнів школи.</em>
+								</h6>
+
+								<ListGroup>
+									{pupilsData.map(pupil =>
+										<ListGroup.Item
+											className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
+											key={pupil.id}
+										>
+											<Pupil pupil={pupil} />
+										</ListGroup.Item>
+									)}
+								</ListGroup>
+
+							</Col>
+						</Row>
+					</Container>
+				</>
+			}
+		</>
 	)
 }
 
@@ -117,8 +185,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
 	setNotification,
-	initializePupils,
-	sortPupils
+	initializePupils
 }
 
 export default connect(
