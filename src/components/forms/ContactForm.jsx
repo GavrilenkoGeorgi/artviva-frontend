@@ -1,13 +1,27 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import emailService from '../../services/email'
-import { Container, Row, Col, Form, Button } from 'react-bootstrap'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
+import { Container, Row, Col, Form } from 'react-bootstrap'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
+import ReCaptchaComp from '../common/ReCaptchaComp'
+
+
 const ContactForm = ({ setNotification }) => {
+
+	const [processingForm, setProcessingForm] = useState(false)
+	const componentIsMounted = useRef(true)
+
+	useEffect(() => {
+		return () => {
+			componentIsMounted.current = false
+		}
+	}, [])
 
 	const messageFormSchema = Yup.object().shape({
 		name: Yup.string()
@@ -23,12 +37,14 @@ const ContactForm = ({ setNotification }) => {
 	})
 
 	const sendContactMessage = async values => {
+		setProcessingForm(true)
 		await emailService.sendContactEmail(values)
 			.then(() => {
 				setNotification({
 					message: 'Ваше повідомлення надіслано, дякуємо вам.',
 					variant: 'success'
 				}, 5)
+				setProcessingForm(false)
 			})
 			.catch(error => {
 				setNotification({
@@ -36,6 +52,24 @@ const ContactForm = ({ setNotification }) => {
 					variant: 'danger'
 				}, 5)
 			})
+			.finally(() => {
+				if (componentIsMounted.current)setProcessingForm(false)
+			})
+	}
+
+	const reCaptchaRef = React.createRef()
+	const [score, setScore] = useState(null)
+
+	const setRecaptchaScore = score => {
+		if (componentIsMounted.current) {
+			if (score <= .1) {
+				setNotification({
+					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
+					variant: 'warning'
+				}, 5)
+			}
+			setScore(score)
+		}
 	}
 
 	return (
@@ -85,9 +119,6 @@ const ContactForm = ({ setNotification }) => {
 											isValid={touched.name && !errors.name}
 											isInvalid={touched.name && !!errors.name}
 										/>
-										<Form.Control.Feedback>
-											Ok
-										</Form.Control.Feedback>
 										<Form.Control.Feedback type="invalid">
 											{errors.name}
 										</Form.Control.Feedback>
@@ -111,9 +142,6 @@ const ContactForm = ({ setNotification }) => {
 											isValid={touched.email && !errors.email}
 											isInvalid={touched.email && !!errors.email}
 										/>
-										<Form.Control.Feedback>
-											Ok
-										</Form.Control.Feedback>
 										<Form.Control.Feedback type="invalid">
 											{errors.email}
 										</Form.Control.Feedback>
@@ -138,31 +166,51 @@ const ContactForm = ({ setNotification }) => {
 											isValid={touched.message && !errors.message}
 											isInvalid={touched.message && !!errors.message}
 										/>
-										<Form.Control.Feedback>
-											Ok
-										</Form.Control.Feedback>
 										<Form.Control.Feedback type="invalid">
 											{errors.message}
 										</Form.Control.Feedback>
 									</Form.Group>
 								</Form.Row>
 
+								<Form.Row>
+									<Col className="recaptcha-statement">
+										Цей сайт захищений reCAPTCHA, і застосовуються
+										<a href="https://policies.google.com/privacy">
+											Політика конфіденційності
+										</a>
+										Google та
+										<a href="https://policies.google.com/terms">
+											Умови використання.
+										</a>
+									</Col>
+								</Form.Row>
+
 								{/* Button */}
-								<Form.Row className="d-flex justify-content-center">
-									<Button
+								<Form.Row className="mt-3 d-flex justify-content-center">
+									<BtnWithSpinner
 										type="submit"
+										loadingState={processingForm}
+										disabled={score <= .1 ? true : false}
+										waitingState={!score}
+										label="Відправити"
 										variant="primary"
-										data-cy="contact-msg-btn"
-										className="primary-color-shadow px-5"
-									>
-										Відправити
-									</Button>
+										dataCy="contact-msg-btn"
+										className="primary-color-shadow max-width-btn"
+									/>
 								</Form.Row>
 							</Form>
 						)}
 					</Formik>
 				</Col>
 			</Row>
+			<ReCaptchaComp
+				ref={reCaptchaRef}
+				size="invisible"
+				render="explicit"
+				badge="none"
+				hl="uk"
+				setScore={setRecaptchaScore}
+			/>
 		</Container>
 	)
 }

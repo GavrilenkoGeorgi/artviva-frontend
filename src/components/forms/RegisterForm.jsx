@@ -1,16 +1,29 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
-import { Col, Form, InputGroup, Button } from 'react-bootstrap'
+
 import { Link } from 'react-router-dom'
-import ButtonComponent from '../common/Button'
+import { Col, Form, InputGroup, Button } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
+import ReCaptchaComp from '../common/ReCaptchaComp'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
+import TextInput from './components/TextInput'
+import CheckBox from './components/Checkbox'
+
 const RegisterForm = ({ setNotification, setRegistrationSuccessful, registrationSuccessful }) => {
+
+	const unmounted = useRef(false)
+	const [processingForm, setProcessingForm] = useState(false)
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
+
 	// Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 
@@ -50,6 +63,7 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 	})
 
 	const handleRegister = ({ email, name, middlename, lastname, password }, setErrors ) => {
+		setProcessingForm(true)
 		const userCreds = {
 			email,
 			name,
@@ -75,6 +89,27 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 					variant: 'danger'
 				}, 5)
 			})
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
+	}
+
+	// recaptcha
+	const reCaptchaRef = React.createRef()
+	const [score, setScore] = useState(null)
+
+	const setRecaptchaScore = score => {
+		if (!unmounted.current) {
+			if (score <= .1) {
+				setNotification({
+					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
+					variant: 'warning'
+				}, 5)
+			}
+			setScore(score)
+		}
 	}
 
 	const checkboxLabel = () => <>Я погоджуюся з <Link to="#">умовами</Link> використання сайту</>
@@ -97,275 +132,205 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 	}
 
 	return (
-		<Formik
-			initialValues={{
-				email: '',
-				name: '',
-				middlename: '',
-				lastname: '',
-				password: '',
-				passwordConfirm: '',
-				termsCheckbox: false
-			}}
-			onSubmit={async (values, { resetForm, setErrors }) => {
-				await handleRegister(values, setErrors)
-				if (registrationSuccessful) resetForm()
-			}}
-			validationSchema={registerFormSchema}
-		>
-			{({ handleSubmit,
-				handleChange,
-				handleBlur,
-				values,
-				touched,
-				errors
-			}) => (
-				<Form
-					data-cy="register-form"
-					noValidate
-					onSubmit={handleSubmit}
-					className="text-left"
-				>
-					{/* User email input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-email-input"
-							as={Col}
-						>
-							<Form.Label>
-								Ваша електронна пошта
-							</Form.Label>
-							<Form.Control
-								type="email"
-								name="email"
-								data-cy="email-input"
-								placeholder="Ваш майбутній логін"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.email}
-								isValid={touched.email && !errors.email}
-								isInvalid={touched.email && !!errors.email}
-							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.email}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+		<>
+			<Formik
+				initialValues={{
+					email: '',
+					name: '',
+					middlename: '',
+					lastname: '',
+					password: '',
+					passwordConfirm: '',
+					termsCheckbox: false
+				}}
+				onSubmit={async (values, { resetForm, setErrors }) => {
+					await handleRegister(values, setErrors)
+					if (registrationSuccessful) resetForm()
+				}}
+				validationSchema={registerFormSchema}
+			>
+				{({ handleSubmit,
+					handleChange,
+					handleBlur,
+					values,
+					touched,
+					errors
+				}) => (
+					<Form
+						data-cy="register-form"
+						noValidate
+						onSubmit={handleSubmit}
+						className="text-left"
+					>
 
-					{/* User name input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-name-input"
-							as={Col}
-						>
-							<Form.Label>
-								Ваше ім&apos;я
-							</Form.Label>
-							<Form.Control
-								type="text"
-								name="name"
-								data-cy="name-input"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.name}
-								isValid={touched.name && !errors.name}
-								isInvalid={touched.name && !!errors.name}
-							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.name}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+						{/* User email input */}
+						<TextInput
+							type="email"
+							label="Ваша електронна пошта"
+							name="email"
+							placeholder="Ваш майбутній логін"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.email}
+							touched={touched.email}
+							errors={errors.email}
+						/>
 
-					{/* User middle name input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-middlename-input"
-							as={Col}
-						>
-							<Form.Label>
-								По батькові
-							</Form.Label>
-							<Form.Control
-								type="text"
-								name="middlename"
-								data-cy="middlename-input"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.middlename}
-								isValid={touched.middlename && !errors.middlename}
-								isInvalid={touched.middlename && !!errors.middlename}
-							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.middlename}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+						{/* User name input */}
+						<TextInput
+							label="Ваше ім'я"
+							name="name"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.name}
+							touched={touched.name}
+							errors={errors.name}
+						/>
 
-					{/* User last name input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-lastname-input"
-							as={Col}
-						>
-							<Form.Label>
-								Прізвище
-							</Form.Label>
-							<Form.Control
-								type="text"
-								name="lastname"
-								data-cy="lastname-input"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.lastname}
-								isValid={touched.lastname && !errors.lastname}
-								isInvalid={touched.lastname && !!errors.lastname}
-							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.lastname}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+						{/* User middle name input */}
+						<TextInput
+							label="По батькові"
+							name="middlename"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.middlename}
+							touched={touched.middlename}
+							errors={errors.middlename}
+						/>
 
-					{/* User password input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-pass-input"
-							as={Col}
-						>
-							<Form.Label>
-								Ваш пароль
-							</Form.Label>
-							<InputGroup>
-								<Form.Control
-									className="elevated-z-index"
-									type={passHidden ? 'text' : 'password'}
-									name="password"
-									data-cy="password-input"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.password}
-									isValid={touched.password && !errors.password}
-									isInvalid={touched.password && !!errors.password}
+						{/* User last name input */}
+						<TextInput
+							label="Прізвище"
+							name="lastname"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.lastname}
+							touched={touched.lastname}
+							errors={errors.lastname}
+						/>
+
+						{/* User password input */}
+						<Form.Row className="d-flex justify-content-center">
+							<Form.Group
+								controlId="user-pass-input"
+								as={Col}
+							>
+								<Form.Label>
+									Ваш пароль
+								</Form.Label>
+								<InputGroup>
+									<Form.Control
+										className="elevated-z-index"
+										type={passHidden ? 'text' : 'password'}
+										name="password"
+										data-cy="password-input"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.password}
+										isValid={touched.password && !errors.password}
+										isInvalid={touched.password && !!errors.password}
+									/>
+									<InputGroup.Append>
+										<Button
+											variant="outline-secondary border rounded-right"
+											onClick={() => togglePassFieldType('pass')}
+										>
+											{passHidden
+												? <FontAwesomeIcon icon={faEye} />
+												: <FontAwesomeIcon icon={faEyeSlash} />
+											}
+										</Button>
+									</InputGroup.Append>
+									<Form.Control.Feedback type="invalid">
+										{errors.password}
+									</Form.Control.Feedback>
+								</InputGroup>
+							</Form.Group>
+						</Form.Row>
+
+						{/* User password confirmation input */}
+						<Form.Row className="d-flex justify-content-center">
+							<Form.Group
+								controlId="user-pass-confirm-input"
+								as={Col}
+							>
+								<Form.Label>
+									Підтвердження пароля
+								</Form.Label>
+								<InputGroup>
+									<Form.Control
+										className="elevated-z-index"
+										type={passConfirmHidden ? 'text' : 'password'}
+										name="passwordConfirm"
+										data-cy="password-confirm-input"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.passwordConfirm}
+										isValid={touched.passwordConfirm && !errors.passwordConfirm}
+										isInvalid={touched.passwordConfirm && !!errors.passwordConfirm}
+									/>
+									<InputGroup.Append>
+										<Button
+											variant="outline-secondary border rounded-right"
+											onClick={() => togglePassFieldType('passConfirm')}
+										>
+											{passConfirmHidden
+												? <FontAwesomeIcon icon={faEye} />
+												: <FontAwesomeIcon icon={faEyeSlash} />
+											}
+										</Button>
+									</InputGroup.Append>
+									<Form.Control.Feedback type="invalid">
+										{errors.passwordConfirm}
+									</Form.Control.Feedback>
+								</InputGroup>
+							</Form.Group>
+						</Form.Row>
+
+						{/* Checkbox */}
+						<CheckBox
+							type="checkbox"
+							id="terms-checkbox"
+							label={checkboxLabel()}
+							name="termsCheckbox"
+							dataCy="terms-checkbox"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							checked={values.termsCheckbox}
+							value={values.termsCheckbox}
+							touched={touched.termsCheckbox}
+							errors={errors.termsCheckbox}
+						/>
+
+						{/* Button */}
+						<Form.Row className='d-flex justify-content-center text-center'>
+							<Form.Group
+								as={Col}
+							>
+								<BtnWithSpinner
+									type="submit"
+									loadingState={processingForm}
+									disabled={score <= .1 ? true : false}
+									waitingState={!score}
+									label="Реєстрація"
+									variant="primary"
+									dataCy="register-btn"
+									className="primary-color-shadow px-5"
 								/>
-								<InputGroup.Append>
-									<Button
-										variant="outline-secondary border rounded-right"
-										onClick={() => togglePassFieldType('pass')}
-									>
-										{passHidden
-											? <FontAwesomeIcon icon={faEye} />
-											: <FontAwesomeIcon icon={faEyeSlash} />
-										}
-									</Button>
-								</InputGroup.Append>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.password}
-								</Form.Control.Feedback>
-							</InputGroup>
-						</Form.Group>
-					</Form.Row>
-
-					{/* User password confirmation input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="user-pass-confirm-input"
-							as={Col}
-						>
-							<Form.Label>
-								Підтвердження пароля
-							</Form.Label>
-							<InputGroup>
-								<Form.Control
-									className="elevated-z-index"
-									type={passConfirmHidden ? 'text' : 'password'}
-									name="passwordConfirm"
-									data-cy="password-confirm-input"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.passwordConfirm}
-									isValid={touched.passwordConfirm && !errors.passwordConfirm}
-									isInvalid={touched.passwordConfirm && !!errors.passwordConfirm}
-								/>
-								<InputGroup.Append>
-									<Button
-										variant="outline-secondary border rounded-right"
-										onClick={() => togglePassFieldType('passConfirm')}
-									>
-										{passConfirmHidden
-											? <FontAwesomeIcon icon={faEye} />
-											: <FontAwesomeIcon icon={faEyeSlash} />
-										}
-									</Button>
-								</InputGroup.Append>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.passwordConfirm}
-								</Form.Control.Feedback>
-							</InputGroup>
-						</Form.Group>
-					</Form.Row>
-
-					{/* Checkbox */}
-					<Form.Row className="py-3 d-flex justify-content-center">
-						<Form.Group
-							as={Col}
-						>
-							<Form.Check
-								custom
-								name='termsCheckbox'
-								type="checkbox"
-								id="terms-checkbox"
-								data-cy="terms-checkbox"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.termsCheckbox}
-								isValid={touched.termsCheckbox && !errors.termsCheckbox}
-								isInvalid={touched.termsCheckbox && !!errors.termsCheckbox}
-								label={checkboxLabel()}
-							/>
-							<Form.Control.Feedback>
-									Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.termsCheckbox}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
-
-					{/* Button */}
-					<Form.Row className='d-flex justify-content-center text-center'>
-						<Form.Group
-							as={Col}
-						>
-							<ButtonComponent
-								className={'px-4 primary-color-shadow'}
-								variant={'primary'}
-								type={'submit'}
-								label={'Реєстрація'}
-							/>
-						</Form.Group>
-					</Form.Row>
-				</Form>
-			)}
-		</Formik>
+							</Form.Group>
+						</Form.Row>
+					</Form>
+				)}
+			</Formik>
+			<ReCaptchaComp
+				ref={reCaptchaRef}
+				size="invisible"
+				render="explicit"
+				badge="bottomleft"
+				hl="uk"
+				setScore={setRecaptchaScore}
+			/>
+		</>
 	)
 }
 

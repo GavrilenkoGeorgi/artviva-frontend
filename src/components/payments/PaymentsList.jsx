@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { initialisePayments } from '../../reducers/paymentsReducer'
@@ -17,6 +17,11 @@ const PaymentsList = ({
 	initialisePayments,
 	setNotification
 }) => {
+
+	const unmounted = useRef(false)
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
 
 	const [isLoading, setIsLoading] = useState(true)
 	const [paymentsData, setPaymentsData] = useState([])
@@ -46,7 +51,9 @@ const PaymentsList = ({
 						variant: 'danger'
 					}, 5)
 				})
-				.finally(() => setIsLoading(false))
+				.finally(() => {
+					if (!unmounted.current) setIsLoading(false)
+				})
 		}
 	}, [user, setNotification, initialisePayments])
 

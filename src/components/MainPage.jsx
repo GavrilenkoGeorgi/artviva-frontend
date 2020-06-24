@@ -1,14 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Carousel from './common/MainViewCarousel'
-import ContactForm from './forms/ContactForm'
-import { Container, Row, Col, Image } from 'react-bootstrap'
+
 import { ParallaxBanner } from 'react-scroll-parallax'
 import ParallaxCache from './common/ParallaxCache'
+import ScrollAnimation from 'react-animate-on-scroll'
+
+import { Container, Row, Col, Image } from 'react-bootstrap'
+import Carousel from './common/MainViewCarousel'
+import ContactForm from './forms/ContactForm'
+import ButtonLink from './common/buttons/ButtonLink'
 import { ReactComponent as OrigamiIcon } from '../svg/origami.svg'
 import { ReactComponent as EditIcon } from '../svg/edit.svg'
 import { ReactComponent as LoveSongIcon } from '../svg/love-song.svg'
-import ScrollAnimation from 'react-animate-on-scroll'
+import { ReactComponent as Enrollment } from '../svg/enrollment.svg'
 
 const MainPage = () => {
 	return (
@@ -57,7 +61,7 @@ const MainPage = () => {
 									та підняття якості навчання на новий рівень.
 								</p>
 							</Col>
-							<Col xs={12} sm={8} className="py-4">
+							<Col xs={12} sm={10} className="py-4">
 								<ScrollAnimation animateIn="fadeIn">
 									<LoveSongIcon />
 								</ScrollAnimation>
@@ -69,6 +73,33 @@ const MainPage = () => {
 								</p>
 							</Col>
 						</Row>
+					</Col>
+				</Row>
+			</Container>
+			<Container className="border1 border-primary">
+				<Row className="border1 border-success d-flex justify-content-center">
+					<Col sm={10} className="py-4 text-center">
+						<ScrollAnimation animateIn="fadeIn">
+							<Enrollment />
+						</ScrollAnimation>
+						<p className="pt-4 px-2 main-page-descr">
+							Ви можете оплатити або заповнити та надіслати заявку на
+							навчання за допомогою нашої зручної форми ;)
+						</p>
+						<p className="py-4 text-center">
+							<ButtonLink
+								variant="primary"
+								route="/apply"
+								label="Подати заяву"
+								className="primary-color-shadow mx-1 my-2 my-sm-0 max-width-btn"
+							/>
+							<ButtonLink
+								variant="success"
+								route="/pay/form"
+								label="Оплатити"
+								className="success-color-shadow mx-1 my-2 my-sm-0 max-width-btn"
+							/>
+						</p>
 					</Col>
 				</Row>
 			</Container>

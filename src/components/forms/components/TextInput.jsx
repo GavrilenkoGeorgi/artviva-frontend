@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Form, Col } from 'react-bootstrap'
 
 const TextInput = props => {
-	const { touched, className, ...other } = props
+	const { type, touched, className, ...other } = props
 	return (
 		<Form.Group
 			controlId={`${props.name}-input`}
@@ -16,14 +16,12 @@ const TextInput = props => {
 				<span className="form-required-mark"> *</span>
 			</Form.Label>
 			<Form.Control
-				type="text"
+				// type="text"
+				type={type || 'text'}
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
 				{ ...other }
 			/>
-			{/*<Form.Control.Feedback>
-				Ok
-			</Form.Control.Feedback>*/}
 			<Form.Control.Feedback type="invalid">
 				{props.errors}
 			</Form.Control.Feedback>
@@ -32,6 +30,7 @@ const TextInput = props => {
 }
 
 TextInput.propTypes = {
+	type: PropTypes.string,
 	label: PropTypes.string.isRequired,
 	name: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,

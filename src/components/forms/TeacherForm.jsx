@@ -17,7 +17,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 import TextInput from './components/TextInput'
 import DateInput from './components/DateInput'
@@ -717,13 +717,13 @@ const TeacherForm = ({
 							<Col md={6} className="d-flex align-items-end mt-3 mb-4">
 								<CheckBox
 									type="checkbox"
-									// id="admin-employee-checkbox"
 									id={editMode
 										? `${teacher.id}-admin-employee-checkbox`
 										: 'admin-employee-checkbox'
 									}
 									label="Адміністрація"
 									name="isAdministration"
+									dataCy="admin-employee-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									disabled={partTimeEmployee}
@@ -745,6 +745,7 @@ const TeacherForm = ({
 									}
 									label="Пенсионер"
 									name="isRetired"
+									dataCy="senior-employee-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									checked={values.isRetired}
@@ -762,6 +763,7 @@ const TeacherForm = ({
 									}
 									label="Співробітник навчается у ВНЗ?"
 									name="employeeIsAStudent"
+									dataCy="employee-is-student-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									checked={values.employeeIsAStudent}

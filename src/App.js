@@ -6,6 +6,7 @@ import { loadReCaptcha } from 'react-recaptcha-google'
 import { setUserFromLocalStorage } from './reducers/loginReducer'
 
 import PrivateRoute from './components/PrivateRoute'
+import ScrollToTop from './components/navigation/ScrollToTop'
 
 import Notification from './components/Notification'
 import NavigationBar from './components/navigation/NavigationBar'
@@ -30,7 +31,7 @@ import Payments from './components/payments/Payments'
 import PaymentView from './components/views/PaymentView'
 import ActivateAccountView from './components/views/ActivateAccountView'
 import PassResetView from './components/views/PassResetView'
-import ScrollToTop from './components/common/ScrollToTop'
+import ScrollToTopArrow from './components/common/ScrollToTopArrow'
 import SchoolSectionsNav from './components/navigation/SchoolSectionsNav'
 import ShowcaseView from './components/views/ShowcaseView'
 
@@ -58,6 +59,7 @@ const App = (props) => {
 
 	return (
 		<Router>
+			<ScrollToTop />
 			<NavigationBar />
 			<Notification />
 			<ParallaxProvider>
@@ -101,7 +103,7 @@ const App = (props) => {
 			<Route path="/activate/:email/:uuid" exact component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" exact component={PassResetView} />
 			<Footer />
-			<ScrollToTop />
+			<ScrollToTopArrow />
 		</Router>
 	)
 }

@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 import ReCaptchaComp from '../common/ReCaptchaComp'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
 const LoginForm = ({ setNotification, ...props }) => {
 

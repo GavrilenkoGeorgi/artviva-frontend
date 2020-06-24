@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { Col } from 'react-bootstrap'
-import BtnWithIcon from './BtnWithIcon'
+import BtnWithIcon from './buttons/BtnWithIcon'
 
 const EntityControlButtons = ({
 	route,

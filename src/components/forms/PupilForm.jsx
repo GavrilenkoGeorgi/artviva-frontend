@@ -16,7 +16,7 @@ import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
 import { Container, Col, Form } from 'react-bootstrap'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 import TextInput from './components/TextInput'
 import TextAreaInput from './components/TextAreaInput'
@@ -484,6 +484,7 @@ const PupilForm = ({
 											id="docs-checkbox"
 											label="Я зобов'язаний надати ці документи шкільному відділу"
 											name="docsCheck"
+											dataCy="docs-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.docsCheck}
@@ -506,6 +507,7 @@ const PupilForm = ({
 											id="personal-data-checkbox"
 											label="Я згоден на збір та обробку моїх персональних даних"
 											name="processDataCheck"
+											dataCy="personal-data-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.processDataCheck}
@@ -520,6 +522,7 @@ const PupilForm = ({
 											id="payment-checkbox"
 											label="Зобов'язання про оплату"
 											name="paymentObligationsCheck"
+											dataCy="payment-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.paymentObligationsCheck}
@@ -538,6 +541,7 @@ const PupilForm = ({
 												: 'currently-enrolled-checkbox'}
 											label="Зарахований до школи на навчання."
 											name="currentlyEnrolled"
+											dataCy="currently-enrolled-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.currentlyEnrolled}
@@ -552,6 +556,7 @@ const PupilForm = ({
 												: 'docs-present-checkbox'}
 											label="Надав усі необхідні документи."
 											name="docsPresent"
+											dataCy="docs-present-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.docsPresent}

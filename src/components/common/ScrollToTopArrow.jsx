@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import Fade from 'react-bootstrap/Fade'
 
-const ScrollToTop = () => {
+const ScrollToTopArrow = () => {
 
 	const [isVisible, setVisible] = useState(false)
 
@@ -40,4 +40,4 @@ const ScrollToTop = () => {
 	)
 }
 
-export default ScrollToTop
+export default ScrollToTopArrow

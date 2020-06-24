@@ -8,7 +8,7 @@ import { Col, Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import TextInput from './components/TextInput'
 import CheckBox from './components/Checkbox'
 

@@ -14,7 +14,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
 const SchoolClassForm = ({
 	schoolClass,
