@@ -2,15 +2,10 @@ import React from 'react'
 import { Button } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
-const ButtonComponent = ({ className, variant, type, handleClick, label, block, disabled }) => {
+const ButtonComponent = ({ label, ...props }) => {
 	return (
 		<Button
-			block={block}
-			className={className}
-			variant={variant}
-			type={type}
-			onClick={handleClick}
-			disabled={disabled}
+			{...props}
 		>
 			{label}
 		</Button>
@@ -18,13 +13,15 @@ const ButtonComponent = ({ className, variant, type, handleClick, label, block, 
 }
 
 ButtonComponent.propTypes = {
-	className: PropTypes.string,
-	variant: PropTypes.string.isRequired,
-	type: PropTypes.string.isRequired,
-	handleClick: PropTypes.func,
 	label: PropTypes.string.isRequired,
-	block: PropTypes.bool,
-	disabled: PropTypes.bool
+	props: PropTypes.shape({
+		onClick: PropTypes.func,
+		className: PropTypes.string,
+		variant: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		block: PropTypes.bool,
+		disabled: PropTypes.bool
+	})
 }
 
 export default ButtonComponent

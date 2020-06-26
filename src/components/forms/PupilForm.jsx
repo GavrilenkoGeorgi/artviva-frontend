@@ -5,24 +5,21 @@ import { setNotification } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
-import { findByPropertyValue } from '../../utils/arrayHelpers'
-import { phoneNumber } from '../../utils/stringPatterns'
-import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
-import { trimObject } from '../../utils/objectHelpers'
 import moment from 'moment'
+import { paymentObligations, personalDataProcessing } from '../../data/formTexts.json'
+import { findByPropertyValue, phoneNumber,
+	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
 import { Container, Col, Form } from 'react-bootstrap'
-import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
+import { BtnWithSpinner, Button } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
-import TextInput from './components/TextInput'
-import TextAreaInput from './components/TextAreaInput'
-import Select from './components/Select'
-import DateInput from './components/DateInput'
-import CheckBox from './components/Checkbox'
+import { CheckBox, DateInput, Select,
+	TextAreaInput, TextInput } from './components'
+import { InfoModal } from '../common/modals'
 
 const PupilForm = ({
 	pupil,
@@ -38,6 +35,9 @@ const PupilForm = ({
 	const [processingForm, setProcessingForm] = useState(false)
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specialtiesData, setSpecialtiesData] = useState([])
+	const [infoModalVis, setInfoModalVis] = useState(false)
+	const [infoModalText, setInfoModalText] = useState({})
+	const [infoModalTitle, setInfoModalTitle] = useState('')
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -140,6 +140,32 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => setProcessingForm(false))
+	}
+
+	const checkBoxLabel = (label, type) => {
+		const data = { label, type }
+		return <>
+			<Button
+				variant="link"
+				className="p-0 d-flex text-left"
+				onClick={() => openInfoModal(data)}
+				label={label} />
+		</>
+	}
+
+	const openInfoModal = ({ type, label: title }) => {
+		switch (type) {
+		case 'personal-data':
+			setInfoModalText(personalDataProcessing)
+			break
+		case 'payment':
+			setInfoModalText(paymentObligations)
+			break
+		default:
+			break
+		}
+		setInfoModalTitle(title)
+		setInfoModalVis(true)
 	}
 
 	// form data and schema
@@ -497,7 +523,7 @@ const PupilForm = ({
 												Копія свідоцтва про народження
 											</li>
 											<li>
-												Медічна довідка про відсутність противопоказань до занять обраним фахом.
+												Медична довідка про відсутність протипоказань до занять у закладі
 											</li>
 										</ol>
 									</Col>
@@ -505,7 +531,9 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="personal-data-checkbox"
-											label="Я згоден на збір та обробку моїх персональних даних"
+											label={
+												checkBoxLabel('Я згоден на збір та обробку моїх персональних даних',
+													'personal-data')}
 											name="processDataCheck"
 											dataCy="personal-data-checkbox"
 											onChange={handleChange}
@@ -520,7 +548,7 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="payment-checkbox"
-											label="Зобов'язання про оплату"
+											label={checkBoxLabel('Зобов\'язання про оплату', 'payment')}
 											name="paymentObligationsCheck"
 											dataCy="payment-checkbox"
 											onChange={handleChange}
@@ -605,6 +633,13 @@ const PupilForm = ({
 					</Form>
 				)}
 			</Formik>
+			<InfoModal
+				title={infoModalTitle}
+				text={infoModalText}
+				centered
+				show={infoModalVis}
+				onHide={() => setInfoModalVis(!infoModalVis)}
+			/>
 		</Container>
 	)
 }

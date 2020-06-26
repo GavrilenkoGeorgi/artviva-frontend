@@ -91,13 +91,13 @@ const MainPage = () => {
 								variant="primary"
 								route="/apply"
 								label="Подати заяву"
-								className="primary-color-shadow mx-1 my-2 my-sm-0 max-width-btn"
+								className="primary-color-shadow mx-3 my-3 my-md-0 max-width-btn"
 							/>
 							<ButtonLink
 								variant="success"
 								route="/pay/form"
 								label="Оплатити"
-								className="success-color-shadow mx-1 my-2 my-sm-0 max-width-btn"
+								className="success-color-shadow mx-3 my-3 my-md-0 max-width-btn"
 							/>
 						</p>
 					</Col>

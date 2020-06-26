@@ -19,9 +19,6 @@ const TextAreaInput = props => {
 				isInvalid={touched && !!props.errors}
 				{ ...other }
 			/>
-			<Form.Control.Feedback>
-				Ok
-			</Form.Control.Feedback>
 			<Form.Control.Feedback type="invalid">
 				{props.errors}
 			</Form.Control.Feedback>

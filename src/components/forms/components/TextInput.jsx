@@ -16,7 +16,6 @@ const TextInput = props => {
 				<span className="form-required-mark"> *</span>
 			</Form.Label>
 			<Form.Control
-				// type="text"
 				type={type || 'text'}
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
