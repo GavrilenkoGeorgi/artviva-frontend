@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import emailService from '../../services/email'
@@ -9,8 +9,9 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
-import ReCaptchaComp from '../common/ReCaptchaComp'
+import LoadingIndicator from '../common/LoadingIndicator'
 
+const LazyReCaptchaComp = React.lazy(() => import('../common/ReCaptchaComp'))
 
 const ContactForm = ({ setNotification }) => {
 
@@ -203,14 +204,24 @@ const ContactForm = ({ setNotification }) => {
 					</Formik>
 				</Col>
 			</Row>
-			<ReCaptchaComp
-				ref={reCaptchaRef}
-				size="invisible"
-				render="explicit"
-				badge="none"
-				hl="uk"
-				setScore={setRecaptchaScore}
-			/>
+			<Suspense fallback={
+				<LoadingIndicator
+					animation="border"
+					variant="primary"
+					size="md"
+				/>}>
+				{/*
+					window.grecaptcha ? <ReCaptcha/> : null
+				*/}
+				<LazyReCaptchaComp
+					ref={reCaptchaRef}
+					size="invisible"
+					render="explicit"
+					badge="none"
+					hl="uk"
+					setScore={setRecaptchaScore}
+				/>
+			</Suspense>
 		</Container>
 	)
 }
