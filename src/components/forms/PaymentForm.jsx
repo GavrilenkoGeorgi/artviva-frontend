@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { connect } from 'react-redux'
 import paymentService from '../../services/payment'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification,	setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { schoolYearMonths } from '../../utils/datesAndTime'
 import searchService from '../../services/search'
 import specialtyService from '../../services/specialties'
@@ -9,13 +10,20 @@ import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Col, Form, Button } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
+import { BtnWithSpinner, Button } from '../common/buttons'
+import { SimpleSpinner } from '../common/spinners'
 
+const PaymentForm = ({
+	processingForm,
+	fetchingData,
+	setNotification,
+	setProcessingForm,
+	setFetchingData }) => {
 
-const PaymentForm = () => {
-
+	const unmounted = useRef(false)
 	const [teachersList, setTeachersList] = useState([])
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specilltiesData, setSpecialtiesData] = useState([])
@@ -27,20 +35,35 @@ const PaymentForm = () => {
 				setSpecialtiesData(data)
 				setSpecialtiesNames(data.map(specialty => specialty.title))
 			})
-			.catch(error => console.error(error))
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+	}, [setNotification])
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
 	}, [])
 
 	const getTeachers = (value) => {
 		if (value.length >= 2) {
+			setFetchingData(true)
 			const query = { value }
 			searchService.teachers(query)
 				.then((data) => {
 					setTeachersList(data)
-					console.log('Techers list', teachersList)
 				})
 				.catch(error => {
-					console.error(error)
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'danger'
+					}, 5)
 				})
+				.finally(() => setFetchingData(false))
 		}
 	}
 
@@ -96,6 +119,7 @@ const PaymentForm = () => {
 
 	// Send generate and send data to liqpay
 	const handlePayment = async ({ teacher, pupil, specialty, months }) => {
+		setProcessingForm(true)
 		// compile payment data
 		const paymentData = {
 			action: 'pay',
@@ -120,6 +144,9 @@ const PaymentForm = () => {
 					message,
 					variant: 'danger'
 				}, 5)
+			})
+			.finally(() => {
+				if (!unmounted.current) setProcessingForm(false)
 			})
 	}
 
@@ -153,8 +180,7 @@ const PaymentForm = () => {
 				await handlePayment(values, setErrors)
 			}}
 			onReset={() => {
-				console.log('Reseting')
-				setOrderData({ ...orderData, cost: null })
+				setOrderData({ ...orderData, months: [], cost: null })
 				setTotal(null)
 			}}
 			validationSchema={paymentFormSchema}
@@ -185,7 +211,17 @@ const PaymentForm = () => {
 							controlId="teacher-name-input"
 							as={Col}
 						>
-							<Form.Label>Викладач</Form.Label>
+							<Form.Label>Викладач
+								{fetchingData
+									? <SimpleSpinner
+										className="ml-1"
+										animation="grow"
+										size="sm"
+										variant="primary"
+									/>
+									: null
+								}
+							</Form.Label>
 							<Form.Control
 								type="text"
 								name="teacher"
@@ -204,9 +240,6 @@ const PaymentForm = () => {
 									<option key={name} value={name} />
 								)}
 							</datalist>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">
 								{errors.teacher}
 							</Form.Control.Feedback>
@@ -231,9 +264,6 @@ const PaymentForm = () => {
 								isValid={touched.pupil && !errors.pupil}
 								isInvalid={touched.pupil && !!errors.pupil}
 							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">
 								{errors.pupil}
 							</Form.Control.Feedback>
@@ -264,9 +294,6 @@ const PaymentForm = () => {
 									<option value={specialty} key={specialty}>{specialty}</option>
 								)}
 							</Form.Control>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">
 								{errors.specialty}
 							</Form.Control.Feedback>
@@ -326,7 +353,7 @@ const PaymentForm = () => {
 									<FontAwesomeIcon icon={faHryvnia} />
 								</>
 								: <h6 className="text-muted">
-										Заповніть форму для розрахунку вартості
+									<em>Заповніть форму для розрахунку вартості</em>
 								</h6>
 							}
 						</Col>
@@ -339,27 +366,24 @@ const PaymentForm = () => {
 					{/* Pay button */}
 					<Form.Row className="d-flex justify-content-around py-4">
 						<Col>
-							<Button
+							<BtnWithSpinner
 								block
 								type="submit"
 								variant="primary"
-								data-cy="payBtn"
+								dataCy="pay-button"
+								loadingState={processingForm}
 								className="primary-color-shadow"
-							>
-									Оплатити
-							</Button>
+								label="Оплатити"
+							/>
 						</Col>
 						<Col>
 							<Button
 								block
-								type="reset"
 								variant="light"
-								data-cy="payBtn"
-								className=""
+								dataCy="reset-pay-form-btn"
 								onClick={handleReset}
-							>
-									Очистити
-							</Button>
+								label="Очистити"
+							/>
 						</Col>
 					</Form.Row>
 
@@ -369,4 +393,20 @@ const PaymentForm = () => {
 	)
 }
 
-export default PaymentForm
+const mapStateToProps = (state) => {
+	return {
+		processingForm: state.notification.processingForm,
+		fetchingData: state.notification.fetchingData
+	}
+}
+
+const mapDispatchToProps = {
+	setNotification,
+	setProcessingForm,
+	setFetchingData
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(PaymentForm)

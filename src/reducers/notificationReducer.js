@@ -1,26 +1,33 @@
-const notificationReducer = (state = { message: null, variant: null, loadingState: false }, action) => {
-	switch (action.type) {
-	case 'SET_NOTIFICATION':
-		state = {
-			message: action.message,
-			variant: action.variant
+const notificationReducer =
+	(state = {
+		message: null,
+		variant: null,
+		processingForm: false,
+		fetchingData: false
+	}, action) => {
+
+		switch (action.type) {
+		case 'SET_NOTIFICATION':
+			return { ...state,
+				message: action.message,
+				variant: action.variant
+			}
+		case 'CLOSE_NOTIFICATION':
+			return { ...state,
+				message: null,
+				variant: null
+			}
+		case 'SET_PROCESSING_FORM':
+			return { ...state,
+				processingForm: action.processingForm
+			}
+		case 'SET_FETCHING_DATA':
+			return { ...state,
+				fetchingData: action.fetchingData }
+		default:
+			return state
 		}
-		return state
-	case 'CLOSE_NOTIFICATION':
-		state = {
-			message: null,
-			variant: null
-		}
-		return state
-	case 'SET_LOADING_STATE':
-		state = {
-			loadingState: action.loadingState
-		}
-		return state
-	default:
-		return state
 	}
-}
 
 // set notification with auto close timeout
 export const setNotification = (notification, time) => {
@@ -47,11 +54,20 @@ export const closeNotification = () => {
 	}
 }
 
-export const setLoadingState = loadingState => {
+export const setProcessingForm = processingForm => {
 	return dispatch => {
 		dispatch ({
-			type: 'SET_LOADING_STATE',
-			loadingState
+			type: 'SET_PROCESSING_FORM',
+			processingForm
+		})
+	}
+}
+
+export const setFetchingData = fetchingData => {
+	return dispatch => {
+		dispatch ({
+			type: 'SET_FETCHING_DATA',
+			fetchingData
 		})
 	}
 }

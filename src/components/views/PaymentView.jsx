@@ -12,8 +12,8 @@ const PaymentView = ({ match }) => {
 					<h1 className="custom-font">
 						Оплата навчання
 					</h1>
-					<h6 className="text-muted">
-						тестовий режим
+					<h6 className="text-warning border border-warning rounded py-2">
+						<em>тестовий режим</em>
 					</h6>
 					{status === 'success'
 						? <h4 className="text-success pt-5">
