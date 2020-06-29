@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { loadReCaptcha } from 'react-recaptcha-google'
 import { setUserFromLocalStorage } from './reducers/loginReducer'
 
 import Routes from './Routes'
@@ -19,10 +18,6 @@ const App = ({ user, setUserFromLocalStorage }) => {
 			)
 		}
 	}, [user, setUserFromLocalStorage])
-
-	useEffect(() => {
-		loadReCaptcha()
-	}, [])
 
 	return (
 		<Routes />

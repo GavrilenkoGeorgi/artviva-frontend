@@ -7,7 +7,7 @@ import { Col, Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-import ReCaptchaComp from '../common/ReCaptchaComp'
+// import ReCaptchaComp from '../common/ReCaptchaComp'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
 const RecoverForm = ({ setNotification, setEmailSent }) => {
@@ -43,9 +43,10 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 			})
 	}
 
-	const reCaptchaRef = React.createRef()
-	const [score, setScore] = useState(null)
+	// const reCaptchaRef = React.createRef()
+	// const [score, setScore] = useState(null)
 
+	/*
 	const setRecaptchaScore = score => {
 		if (componentIsMounted.current) {
 			if (score <= .1) {
@@ -56,7 +57,7 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 			}
 			setScore(score)
 		}
-	}
+	}*/
 
 	const recoverFormSchema = Yup.object().shape({
 		email: Yup.string()
@@ -120,21 +121,21 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 								className="primary-color-shadow default-width-btn"
 								label="Надіслати"
 								loadingState={processingForm}
-								disabled={score <= .1 ? true : false}
-								waitingState={!score}
+								// disabled={score <= .1 ? true : false}
+								// waitingState={!score}
 							/>
 						</Form.Row>
 					</Form>
 				)}
 			</Formik>
-			<ReCaptchaComp
+			{/*<ReCaptchaComp
 				ref={reCaptchaRef}
 				size="invisible"
 				render="explicit"
 				badge="bottomleft"
 				hl="uk"
 				setScore={setRecaptchaScore}
-			/>
+			/>*/}
 		</>
 	)
 }

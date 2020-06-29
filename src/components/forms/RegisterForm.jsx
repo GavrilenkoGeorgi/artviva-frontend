@@ -1,7 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification,
+	setRecaptchaScore, setProcessingForm } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { personalDataProcessing } from '../../data/formTexts.json'
 
 import { Link } from 'react-router-dom'
 import { Col, Form, InputGroup, Button } from 'react-bootstrap'
@@ -10,19 +13,80 @@ import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-import ReCaptchaComp from '../common/ReCaptchaComp'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import TextInput from './components/TextInput'
 import CheckBox from './components/Checkbox'
+import { InfoModal } from '../common/modals'
 
-const RegisterForm = ({ setNotification, setRegistrationSuccessful, registrationSuccessful }) => {
+const RegisterForm = ({
+	reCaptchaScore,
+	processingForm,
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm }) => {
 
 	const unmounted = useRef(false)
-	const [processingForm, setProcessingForm] = useState(false)
+	const [registrationData, setRegistrationData] = useState(null)
+	const [infoModalVis, setInfoModalVis] = useState(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	useEffect(() => {
 		return () => { unmounted.current = true }
 	}, [])
+
+	const getRecaptchaScore = () => {
+		executeRecaptcha('submit')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
+
+	const handleRegister = useCallback(() => {
+		setProcessingForm(true)
+		const { user, setErrors } = registrationData
+
+		userService.signUp(user)
+			.then(() => {
+				setNotification({
+					message: 'Ви отримаєте електронний лист із посиланням для активації свого акаунта.',
+					variant: 'success'
+				}, 5)
+			})
+			.catch(error => {
+				const { message, cause } = { ...error.response.data }
+				if (cause === 'email') {
+					setErrors({ email: message })
+				}
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
+	}, [setNotification, setProcessingForm, registrationData])
+
+	useEffect(() => {
+		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+			setNotification({
+				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
+				variant: 'warning'
+			}, 5)
+			setProcessingForm(false)
+		} else if (registrationData && reCaptchaScore >= .5) {
+			handleRegister(registrationData)
+		}
+	}, [reCaptchaScore, registrationData, handleRegister, setNotification, setProcessingForm])
 
 	// Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
@@ -62,57 +126,8 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 			.oneOf([true], 'Будь ласка, погодьтеся з умовами використання сайту.')
 	})
 
-	const handleRegister = ({ email, name, middlename, lastname, password }, setErrors ) => {
-		setProcessingForm(true)
-		const userCreds = {
-			email,
-			name,
-			middlename,
-			lastname: lastname,
-			password
-		}
-		userService.signUp(userCreds)
-			.then(() => {
-				setNotification({
-					message: 'Ви отримаєте електронний лист із посиланням для активації свого акаунта.',
-					variant: 'success'
-				}, 5)
-				setRegistrationSuccessful(true)
-			})
-			.catch(error => {
-				const { message, cause } = { ...error.response.data }
-				if (cause === 'email') {
-					setErrors({ email: message })
-				}
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-			})
-			.finally(() => {
-				if (!unmounted.current) {
-					setProcessingForm(false)
-				}
-			})
-	}
-
-	// recaptcha
-	const reCaptchaRef = React.createRef()
-	const [score, setScore] = useState(null)
-
-	const setRecaptchaScore = score => {
-		if (!unmounted.current) {
-			if (score <= .1) {
-				setNotification({
-					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
-					variant: 'warning'
-				}, 5)
-			}
-			setScore(score)
-		}
-	}
-
-	const checkboxLabel = () => <>Я погоджуюся з <Link to="#">умовами</Link> використання сайту</>
+	const checkboxLabel = () =>
+		<>Я погоджуюся з <Link to="#" onClick={() => setInfoModalVis(true)}>умовами</Link> використання сайту</>
 
 	// password visibility
 	const [passHidden, setPassVis] = useState(false)
@@ -144,8 +159,15 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 					termsCheckbox: false
 				}}
 				onSubmit={async (values, { resetForm, setErrors }) => {
-					await handleRegister(values, setErrors)
-					if (registrationSuccessful) resetForm()
+					const user = {};
+					({ email: user.email,
+						name: user.name,
+						middlename: user.middlename,
+						lastname: user.lastname,
+						password: user.password } = values)
+					setProcessingForm(true)
+					setRegistrationData({ user, resetForm, setErrors })
+					getRecaptchaScore()
 				}}
 				validationSchema={registerFormSchema}
 			>
@@ -309,40 +331,41 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 							>
 								<BtnWithSpinner
 									type="submit"
+									block
 									loadingState={processingForm}
-									disabled={score <= .1 ? true : false}
-									waitingState={!score}
+									disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
 									label="Реєстрація"
 									variant="primary"
 									dataCy="register-btn"
-									className="primary-color-shadow px-5"
+									className="primary-color-shadow my-3"
 								/>
 							</Form.Group>
 						</Form.Row>
 					</Form>
 				)}
 			</Formik>
-			<ReCaptchaComp
-				ref={reCaptchaRef}
-				size="invisible"
-				render="explicit"
-				badge="bottomleft"
-				hl="uk"
-				setScore={setRecaptchaScore}
+			<InfoModal
+				title="Я погоджуюся з умовами використання сайту"
+				text={personalDataProcessing}
+				centered
+				show={infoModalVis}
+				onHide={() => setInfoModalVis(!infoModalVis)}
 			/>
 		</>
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		user: state.user,
-		account: state.account
+		reCaptchaScore: state.notification.reCaptchaScore,
+		processingForm: state.notification.processingForm
 	}
 }
 
 const mapDispatchToProps = {
-	setNotification
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm
 }
 
 export default connect(

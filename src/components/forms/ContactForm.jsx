@@ -1,28 +1,72 @@
-import React, { useState, useRef, useEffect, Suspense } from 'react'
+import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import emailService from '../../services/email'
 import PropTypes from 'prop-types'
+import { setNotification,	setRecaptchaScore,
+	setProcessingForm } from '../../reducers/notificationReducer'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
-import LoadingIndicator from '../common/LoadingIndicator'
+import { BtnWithSpinner } from '../common/buttons'
 
-const LazyReCaptchaComp = React.lazy(() => import('../common/ReCaptchaComp'))
+const ContactForm = ({
+	reCaptchaScore,
+	processingForm,
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm }) => {
 
-const ContactForm = ({ setNotification }) => {
-
-	const [processingForm, setProcessingForm] = useState(false)
-	const componentIsMounted = useRef(true)
+	const [messageData, setMessageData] = useState(null)
+	const unmounted = useRef(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	useEffect(() => {
-		return () => {
-			componentIsMounted.current = false
-		}
+		return () => { unmounted.current = true }
 	}, [])
+
+	const sendContactMessage = useCallback(async messageData => {
+		await emailService.sendContactEmail(messageData.values)
+			.then(() => {
+				setNotification({
+					message: 'Ваше повідомлення надіслано, дякуємо вам.',
+					variant: 'success'
+				}, 5)
+				setProcessingForm(false)
+				messageData.resetForm()
+			})
+			.catch(error => {
+				setNotification({
+					message: `На жаль, нам не вдалося надіслати ваше повідомлення, ось помилка: ${error.message}`,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				if (!unmounted.current) setProcessingForm(false)
+			})
+	}, [setNotification, setProcessingForm])
+
+	const getRecaptchaScore = () => {
+		executeRecaptcha('homepage')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
+
+	useEffect(() => {
+		if (messageData && reCaptchaScore > .1) {
+			sendContactMessage(messageData)
+		}
+	}, [reCaptchaScore, messageData, sendContactMessage])
 
 	const messageFormSchema = Yup.object().shape({
 		name: Yup.string()
@@ -37,42 +81,6 @@ const ContactForm = ({ setNotification }) => {
 			.required('Будь ласка, введіть своє повідомлення.')
 	})
 
-	const sendContactMessage = async values => {
-		setProcessingForm(true)
-		await emailService.sendContactEmail(values)
-			.then(() => {
-				setNotification({
-					message: 'Ваше повідомлення надіслано, дякуємо вам.',
-					variant: 'success'
-				}, 5)
-				setProcessingForm(false)
-			})
-			.catch(error => {
-				setNotification({
-					message: `На жаль, нам не вдалося надіслати ваше повідомлення, ось помилка: ${error.message}`,
-					variant: 'danger'
-				}, 5)
-			})
-			.finally(() => {
-				if (componentIsMounted.current)setProcessingForm(false)
-			})
-	}
-
-	const reCaptchaRef = React.createRef()
-	const [score, setScore] = useState(null)
-
-	const setRecaptchaScore = score => {
-		if (componentIsMounted.current) {
-			if (score <= .1) {
-				setNotification({
-					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
-					variant: 'warning'
-				}, 5)
-			}
-			setScore(score)
-		}
-	}
-
 	return (
 		<Container className="py-4">
 			<Row className="d-flex justify-content-center">
@@ -84,9 +92,10 @@ const ContactForm = ({ setNotification }) => {
 							email: '',
 							message: ''
 						}}
-						onSubmit={async (values, { resetForm }) => {
-							await sendContactMessage(values)
-							resetForm()
+						onSubmit={(values, { resetForm }) => {
+							setProcessingForm(true)
+							setMessageData({ values, resetForm })
+							getRecaptchaScore()
 						}}
 						validationSchema={messageFormSchema}
 					>
@@ -173,26 +182,12 @@ const ContactForm = ({ setNotification }) => {
 									</Form.Group>
 								</Form.Row>
 
-								<Form.Row>
-									<Col className="recaptcha-statement">
-										Цей сайт захищений reCAPTCHA, і застосовуються
-										<a href="https://policies.google.com/privacy">
-											Політика конфіденційності
-										</a>
-										Google та
-										<a href="https://policies.google.com/terms">
-											Умови використання.
-										</a>
-									</Col>
-								</Form.Row>
-
 								{/* Button */}
 								<Form.Row className="mt-3 d-flex justify-content-center">
 									<BtnWithSpinner
 										type="submit"
 										loadingState={processingForm}
-										disabled={score <= .1 ? true : false}
-										waitingState={!score}
+										disabled={reCaptchaScore !==null && reCaptchaScore <= .1 ? true : false}
 										label="Відправити"
 										variant="primary"
 										dataCy="contact-msg-btn"
@@ -204,40 +199,29 @@ const ContactForm = ({ setNotification }) => {
 					</Formik>
 				</Col>
 			</Row>
-			<Suspense fallback={
-				<LoadingIndicator
-					animation="border"
-					variant="primary"
-					size="md"
-				/>}>
-				{/*
-					window.grecaptcha ? <ReCaptcha/> : null
-				*/}
-				<LazyReCaptchaComp
-					ref={reCaptchaRef}
-					size="invisible"
-					render="explicit"
-					badge="none"
-					hl="uk"
-					setScore={setRecaptchaScore}
-				/>
-			</Suspense>
 		</Container>
 	)
 }
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		reCaptchaScore: state.notification.reCaptchaScore,
+		processingForm: state.notification.processingForm
 	}
 }
 
 const mapDispatchToProps = {
-	setNotification
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm
 }
 
 ContactForm.propTypes = {
-	setNotification: PropTypes.func.isRequired
+	reCaptchaScore: PropTypes.number,
+	processingForm: PropTypes.bool.isRequired,
+	setNotification: PropTypes.func.isRequired,
+	setRecaptchaScore: PropTypes.func.isRequired,
+	setProcessingForm: PropTypes.func.isRequired
 }
 
 export default connect(

@@ -26,6 +26,7 @@ const InfoModal = ({ title, text, ...props }) => {
 				<Button
 					label="Я згоден"
 					type="button"
+					dataCy="modal-agree-btn"
 					block
 					variant="primary"
 					onClick={props.onHide}

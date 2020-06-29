@@ -147,6 +147,7 @@ const PupilForm = ({
 		return <>
 			<Button
 				variant="link"
+				dataCy={`${type}-modal-btn`}
 				className="p-0 d-flex text-left"
 				onClick={() => openInfoModal(data)}
 				label={label} />
@@ -610,7 +611,7 @@ const PupilForm = ({
 						{/* Button */}
 						<Form.Group
 							as={Col}
-							className="pt-4 px-0 d-flex justify-content-end"
+							className="pt-4 px-0 d-flex justify-content-around"
 						>
 							<BtnWithSpinner
 								label={editMode
@@ -624,8 +625,10 @@ const PupilForm = ({
 								className="default-width-btn"
 							/>
 							<ResetBtn
+								block
 								label="Очистити"
 								variant="light"
+								dataCy="reset-pupil-form-btn"
 								onClick={handleReset}
 								className="ml-2 default-width-btn"
 							/>

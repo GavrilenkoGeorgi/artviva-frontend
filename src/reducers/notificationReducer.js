@@ -1,9 +1,12 @@
+import recaptchaService from '../services/recaptcha'
+
 const notificationReducer =
 	(state = {
 		message: null,
 		variant: null,
 		processingForm: false,
-		fetchingData: false
+		fetchingData: false,
+		reCaptchaScore: null
 	}, action) => {
 
 		switch (action.type) {
@@ -23,7 +26,13 @@ const notificationReducer =
 			}
 		case 'SET_FETCHING_DATA':
 			return { ...state,
-				fetchingData: action.fetchingData }
+				fetchingData: action.fetchingData
+			}
+		case 'SET_RECAPTCHA_SCORE': {
+			return { ...state,
+				reCaptchaScore: action.score
+			}
+		}
 		default:
 			return state
 		}
@@ -72,4 +81,19 @@ export const setFetchingData = fetchingData => {
 	}
 }
 
+/**
+ * Verify recaptcha score
+ *
+ * @param {string} token - Recaptcha token to verify
+ */
+
+export const setRecaptchaScore = token => {
+	return async dispatch => {
+		const result = await recaptchaService.verify(token)
+		dispatch ({
+			type: 'SET_RECAPTCHA_SCORE',
+			score: result.score
+		})
+	}
+}
 export default notificationReducer

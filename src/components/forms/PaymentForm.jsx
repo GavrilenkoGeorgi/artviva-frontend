@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { connect } from 'react-redux'
 import paymentService from '../../services/payment'
-import { setNotification,	setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
+import { setNotification,	setProcessingForm,
+	setFetchingData, setRecaptchaScore } from '../../reducers/notificationReducer'
 import { schoolYearMonths } from '../../utils/datesAndTime'
 import searchService from '../../services/search'
 import specialtyService from '../../services/specialties'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
@@ -15,19 +17,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
 import { BtnWithSpinner, Button } from '../common/buttons'
 import { SimpleSpinner } from '../common/spinners'
+import { TextInput } from './components'
 
 const PaymentForm = ({
+	reCaptchaScore,
 	processingForm,
 	fetchingData,
 	setNotification,
 	setProcessingForm,
-	setFetchingData }) => {
+	setFetchingData,
+	setRecaptchaScore }) => {
 
 	const unmounted = useRef(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 	const [teachersList, setTeachersList] = useState([])
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specilltiesData, setSpecialtiesData] = useState([])
+	const [paymentData, setPaymentData] = useState(null)
 	const months = schoolYearMonths('uk-ua')
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
 
 	useEffect(() => {
 		specialtyService.getAll()
@@ -44,9 +55,19 @@ const PaymentForm = ({
 			})
 	}, [setNotification])
 
-	useEffect(() => {
-		return () => { unmounted.current = true }
-	}, [])
+	const getRecaptchaScore = () => {
+		executeRecaptcha('submit')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
 
 	const getTeachers = (value) => {
 		if (value.length >= 2) {
@@ -87,7 +108,11 @@ const PaymentForm = ({
 			break
 		case 'specialty':
 			priceData = specilltiesData.find(specialty => specialty.title === target.value)
-			setOrderData({ ...orderData, specialty: target.value, cost: priceData.cost })
+			setOrderData({
+				...orderData,
+				specialty: target.value,
+				cost: priceData ? priceData.cost : 0
+			})
 			break
 		case 'months':
 			months = orderData.months
@@ -118,8 +143,7 @@ const PaymentForm = ({
 	const [liqpayData, setLiqpayData] = useState({})
 
 	// Send generate and send data to liqpay
-	const handlePayment = async ({ teacher, pupil, specialty, months }) => {
-		setProcessingForm(true)
+	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
 		const paymentData = {
 			action: 'pay',
@@ -135,7 +159,7 @@ const PaymentForm = ({
 		// make a payment
 		paymentService.form(paymentData)
 			.then(({ data, signature }) => {
-				setLiqpayData({ ...liqpayData, data, signature })
+				setLiqpayData(liqpayData => ({ ...liqpayData, data, signature }))
 				paymentFormEl.current.submit()
 			})
 			.catch(error => {
@@ -148,7 +172,19 @@ const PaymentForm = ({
 			.finally(() => {
 				if (!unmounted.current) setProcessingForm(false)
 			})
-	}
+	}, [total, setNotification, setProcessingForm])
+
+	useEffect(() => {
+		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+			setNotification({
+				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
+				variant: 'warning'
+			}, 5)
+			setProcessingForm(false)
+		} else if (paymentData && reCaptchaScore >= .5) {
+			handlePayment(paymentData)
+		}
+	}, [reCaptchaScore, paymentData, handlePayment, setNotification, setProcessingForm])
 
 	// Form schema
 	const paymentFormSchema = Yup.object().shape({
@@ -176,8 +212,11 @@ const PaymentForm = ({
 				specialty: '',
 				months: []
 			}}
-			onSubmit={async (values, { setErrors }) => {
-				await handlePayment(values, setErrors)
+			onSubmit={async (values) => {
+				// await handlePayment(values, setErrors)
+				setProcessingForm(true)
+				setPaymentData(values)
+				getRecaptchaScore()
 			}}
 			onReset={() => {
 				setOrderData({ ...orderData, months: [], cost: null })
@@ -246,29 +285,15 @@ const PaymentForm = ({
 						</Form.Group>
 					</Form.Row>
 
-					{/* Pupil's name input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="paymentForm.pupilNameInput"
-							as={Col}
-						>
-							<Form.Label>
-								Прізвище учня
-							</Form.Label>
-							<Form.Control
-								type="text"
-								name="pupil"
-								data-cy="pupil-name-input"
-								onChange={handleChange}
-								value={values.pupil}
-								isValid={touched.pupil && !errors.pupil}
-								isInvalid={touched.pupil && !!errors.pupil}
-							/>
-							<Form.Control.Feedback type="invalid">
-								{errors.pupil}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+					<TextInput
+						label="Прізвище учня"
+						name="pupil"
+						dataCy="pupil-name-input"
+						onChange={handleChange}
+						value={values.pupil}
+						touched={touched.pupil}
+						errors={errors.pupil}
+					/>
 
 					{/* Specialty input */}
 					<Form.Row>
@@ -396,14 +421,16 @@ const PaymentForm = ({
 const mapStateToProps = (state) => {
 	return {
 		processingForm: state.notification.processingForm,
-		fetchingData: state.notification.fetchingData
+		fetchingData: state.notification.fetchingData,
+		reCaptchaScore: state.notification.reCaptchaScore,
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
 	setProcessingForm,
-	setFetchingData
+	setFetchingData,
+	setRecaptchaScore
 }
 
 export default connect(
