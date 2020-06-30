@@ -77,4 +77,20 @@ const update = async (id, payload) => {
 	return response.data
 }
 
-export default { getAll, signUp, setToken, activate, update }
+/**
+ * Delete single user
+ *
+ * @param {string} id - User ID
+ *
+ * @returns {Object} - Response data
+ */
+
+const deleteById = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.delete(`${baseUrl}/${id}`, config)
+	return response.data
+}
+
+export default { getAll, signUp, setToken, activate, update, deleteById }

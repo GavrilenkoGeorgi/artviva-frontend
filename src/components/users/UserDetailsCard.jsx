@@ -1,4 +1,8 @@
 import React, { useState, Suspense } from 'react'
+import { connect } from 'react-redux'
+import userService from '../../services/users'
+import { deleteUser } from '../../reducers/userReducer'
+import { setNotification,	setProcessingForm } from '../../reducers/notificationReducer'
 
 import { Card } from 'react-bootstrap'
 import Emoji from '../common/Emoji'
@@ -9,21 +13,31 @@ import UserEditForm from '../forms/UserEditForm'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const UserDetailsCard = ({ userData }) => {
+const UserDetailsCard = ({
+	userData,
+	user,
+	processingForm,
+	deleteUser,
+	setNotification,
+	setProcessingForm }) => {
 
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
-	const [isDeleting, setIsDeleting] = useState(false)
 
 	const handleDelete = () => {
-		console.log('Deleting')
-		setIsDeleting(true)
-
-		setTimeout(() => {
-			setIsDeleting(false)
-			console.log('Deleted')
-			setDeleteModalShow(false)
-		}, 1000)
+		setProcessingForm(true)
+		userService.setToken(user.token)
+		deleteUser(userData.id)
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				setProcessingForm(false)
+			})
 	}
 
 	return (
@@ -99,7 +113,7 @@ const UserDetailsCard = ({ userData }) => {
 					valuetoconfirm={userData.name}
 					show={deleteModalShow}
 					handleDelete={handleDelete}
-					loadingState={isDeleting}
+					loadingState={processingForm}
 					onHide={() => setDeleteModalShow(false)}
 				/>
 			</Suspense>
@@ -107,4 +121,18 @@ const UserDetailsCard = ({ userData }) => {
 	)
 }
 
-export default UserDetailsCard
+const mapStateToProps = state => ({
+	user: state.user,
+	processingForm: state.notification.processingForm
+})
+
+const mapDispatchToProps = {
+	setNotification,
+	setProcessingForm,
+	deleteUser
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(UserDetailsCard)

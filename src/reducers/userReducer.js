@@ -9,6 +9,9 @@ const usersReducer = (state = null, action) => {
 			user.id !== action.data.id ? user : action.data
 		)
 	}
+	case 'DELETE_USER': {
+		return state.filter(user =>	user.id !== action.data)
+	}
 	case 'GET_USER_BY_ID': //???
 		return action.data
 	default:
@@ -47,6 +50,20 @@ export const updateUser = (id, payload) => {
 		dispatch ({
 			type: 'UPDATE_USER_DETAILS',
 			data: updatedUser
+		})
+	}
+}
+
+/**
+ * Delete single user by given id
+ * @param {string} id - ID of the user to delete
+ */
+export const deleteUser = id => {
+	return async dispatch => {
+		await userService.deleteById(id)
+		dispatch ({
+			type: 'DELETE_USER',
+			data: id
 		})
 	}
 }
