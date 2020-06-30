@@ -10,6 +10,7 @@ import { ReactComponent as MasterCardIcon } from '../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../svg/visa-logo.svg'
 
 const Footer = () => {
+	console.log('Footer!')
 	const socialIconsStyle = {
 		maxWidth: '1.4em',
 		margin: '0em .5em'
@@ -23,7 +24,7 @@ const Footer = () => {
 	return (
 		<footer className="footer">
 			<Container>
-				<Row className="pt-4 border1 border-success">
+				<Row className="pt-4 pt-md-5 border1 border-success">
 					<Col className="text-center d-flex align-items-center">
 						<div style={{ width: '100%' }}>
 							<VisaIcon style={paymentIconsStyle} />
@@ -49,19 +50,22 @@ const Footer = () => {
 					</Col>
 				</Row>
 
-				<Row className="py-2 pt-md-4 border1 border-danger">
+				<Row className="py-2 pt-md-4">
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
-						<span className="text-muted copy-info">
-							<strong>
-								&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva.
-							</strong>
-							<br />
-							<small>
-								{/* eslint-disable-next-line */}
-								Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
-								</a>
-							</small>
-						</span>
+						<Row className="text-muted">
+							<Col xs={12}>
+								<strong>
+									&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva.
+								</strong>
+							</Col>
+							<Col>
+								<small>
+									{/* eslint-disable-next-line */}
+									Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
+									</a>
+								</small>
+							</Col>
+						</Row>
 					</Col>
 					<Col xs={12} md={6} className="py-1">
 						<ReCaptchaStatement />
