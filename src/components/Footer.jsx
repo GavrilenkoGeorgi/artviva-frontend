@@ -10,7 +10,6 @@ import { ReactComponent as MasterCardIcon } from '../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../svg/visa-logo.svg'
 
 const Footer = () => {
-	console.log('Footer!')
 	const socialIconsStyle = {
 		maxWidth: '1.4em',
 		margin: '0em .5em'
@@ -50,7 +49,7 @@ const Footer = () => {
 					</Col>
 				</Row>
 
-				<Row className="py-2 pt-md-4">
+				<Row className="py-2 pt-lg-3">
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
 						<Row className="text-muted">
 							<Col xs={12}>
