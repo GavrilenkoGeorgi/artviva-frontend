@@ -10,6 +10,7 @@ const EntityControlButtons = ({
 	route,
 	openEditModal,
 	openDeleteModal,
+	fetchingTeacherData,
 	user
 }) => {
 
@@ -36,6 +37,7 @@ const EntityControlButtons = ({
 				icon="edit"
 				variant="outline-success"
 				type="button"
+				loading={fetchingTeacherData}
 				onClick={() => openEditModal()}
 			/>
 			{user.superUser ?

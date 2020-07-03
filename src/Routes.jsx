@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import './css/index.css'
@@ -20,9 +21,24 @@ import { ScrollToTop, ScrollToTopArrow,
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
-	ShowcaseView } from './components/views'
+	ShowcaseView, UserProfileView, TeacherGroupsView, TeacherPupilsView } from './components/views'
 
-const Routes = () => {
+const Routes = ({ user }) => {
+
+	const [userData, setUserData] = useState({
+		id: null,
+		superUser: false
+	})
+
+	const [superUser, setSuperUser] = useState(false)
+
+	useEffect(() => {
+		if (user) {
+			setSuperUser(user.superUser)
+			setUserData({ id: user.id, superUser: user.superUser })
+		}
+	}, [user])
+
 	return (
 		<Router>
 			<ScrollToTop />
@@ -40,31 +56,30 @@ const Routes = () => {
 			<Route path="/blog" component={BlogView} />
 			<Route path="/contacts" component={ContactsView} />
 			<Route path="/apply/:status?" component={PublicApplyView} />
-			<PrivateRoute path="/school" component={SchoolSectionsNav} />
-			{/* How is this different? */}
-			{/*<Route
-				path="/test"
-				render={({ match: { url } }) => (
-					<>
-						<PrivateRoute path={`${url}/`} component={Test} exact />
-						<PrivateRoute path={`${url}/userslist`} component={UsersList}/>
-						<PrivateRoute path={`${url}/other`} component={SomeOtherComponent}/>
-					</>
-				)}
-			/>*/}
-			<PrivateRoute path="/school/overview" component={SchoolOverview} />
-			<Switch>
-				{/*<PrivateRoute path="/school/users/:id" exact component={SchoolClassDetails} />*/}
-				<PrivateRoute path="/school/users" exact component={UsersListView} />
-				<PrivateRoute path="/school/classes/:id" exact component={SchoolClassDetails} />
-				<PrivateRoute path="/school/classes" component={SchoolClassesList} />
-				<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
-				<PrivateRoute path="/school/teachers" component={TeachersList} />
-			</Switch>
-			<PrivateRoute path="/school/pupils" component={PupilsList} />
-			<PrivateRoute path="/school/specialties" component={SpecialtiesList} />
-			<PrivateRoute path="/school/branches" component={BranchesList} />
-			<PrivateRoute path="/school/payments" component={Payments} />
+			<PrivateRoute
+				path="/school"
+				component={() => <SchoolSectionsNav userData={userData} isSuperUser={superUser}/>}/>
+			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
+			<PrivateRoute path="/school/teachergroups" exact component={TeacherGroupsView} />
+			<PrivateRoute path="/school/teacherpupils" exact component={TeacherPupilsView} />
+			{superUser
+				? <>
+					<PrivateRoute path="/school/overview" component={SchoolOverview} />
+					<Switch>
+						{/*<PrivateRoute path="/school/users/:id" exact component={SchoolClassDetails} />*/}
+						<PrivateRoute path="/school/users" exact component={UsersListView} />
+						<PrivateRoute path="/school/classes/:id" exact component={SchoolClassDetails} />
+						<PrivateRoute path="/school/classes" component={SchoolClassesList} />
+						<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
+						<PrivateRoute path="/school/teachers" component={TeachersList} />
+					</Switch>
+					<PrivateRoute path="/school/pupils" component={PupilsList} />
+					<PrivateRoute path="/school/specialties" component={SpecialtiesList} />
+					<PrivateRoute path="/school/branches" component={BranchesList} />
+					<PrivateRoute path="/school/payments" component={Payments} />
+				</>
+				: null
+			}
 			<Route path="/pay/:status" component={PaymentView} />
 			<Route path="/activate/:email/:uuid" exact component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" exact component={PassResetView} />
@@ -74,4 +89,12 @@ const Routes = () => {
 	)
 }
 
-export default Routes
+const mapStateToProps = state => {
+	return {
+		user: state.user
+	}
+}
+
+export default connect (
+	mapStateToProps,
+)(Routes)

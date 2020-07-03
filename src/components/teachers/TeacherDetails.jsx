@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 import teachersService from '../../services/teachers'
 import { setNotification } from '../../reducers/notificationReducer'
@@ -11,7 +11,7 @@ import LoadingIndicator from '../common/LoadingIndicator'
 import PaymentDescr from './PaymentDescr'
 import Emoji from '../common/Emoji'
 
-const TeacherDetails = ({ user, match, setNotification }) => {
+const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 
 	const [teacherDetails, setTeacherDetails] = useState(null)
 	const [teacherExperience, setTeacherExperience] = useState({})
@@ -31,12 +31,13 @@ const TeacherDetails = ({ user, match, setNotification }) => {
 		endOfSchoolYear
 	}
 
-	const calcXpToDate = ({ employmentDate, experienceToDate }) => {
+	const calcXpToDate = useCallback(({ employmentDate, experienceToDate }) => {
+		const date = moment()
 		const { years, months, days } = experienceToDate
 		const adjustedExperienceDate = moment(employmentDate).subtract({ years, months, days })
-		const experience = moment.preciseDiff(adjustedExperienceDate, today, true)
+		const experience = moment.preciseDiff(adjustedExperienceDate, date, true)
 		setTeacherExperience(experience)
-	}
+	}, [])
 
 	const sortByField = ({ checked, id }) => {
 		const order = checked ? 'desc' : 'asc'
@@ -61,7 +62,18 @@ const TeacherDetails = ({ user, match, setNotification }) => {
 	}
 
 	useEffect(() => {
-		if (user) {
+		if (teacher.id) {
+			setTeacherDetails(teacher)
+			setTeacherDetails({
+				...teacher,
+				payments: teacher.payments.sort(nestedSort('create_date', null, 'desc'))
+			})
+			calcXpToDate(teacher)
+		}
+	}, [teacher, calcXpToDate])
+
+	useEffect(() => {
+		if (user && match) {
 			teachersService.setToken(user.token)
 			teachersService.getById(match.params.id)
 				.then((data) => {
@@ -244,7 +256,12 @@ const TeacherDetails = ({ user, match, setNotification }) => {
 						</Col>
 					</Row>
 				</Container>
-				: <LoadingIndicator animation="border" variant="primary" />
+				: <>
+					{ match
+						? <LoadingIndicator animation="border" variant="primary" />
+						: null
+					}
+				</>
 			}
 		</>
 	)
@@ -252,7 +269,8 @@ const TeacherDetails = ({ user, match, setNotification }) => {
 
 const mapStateToProps = state => {
 	return {
-		user: state.user
+		user: state.user,
+		teacher: state.teacher
 	}
 }
 

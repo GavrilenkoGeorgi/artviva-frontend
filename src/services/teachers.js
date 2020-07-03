@@ -74,6 +74,23 @@ const update = async (id, payload) => {
 }
 
 /**
+ * Update single teacher's data
+ * @param {string} id - Teacher's id
+ * @param {Object} payload - Updated teacher's data
+ * @param {string} payload.name - Unique teacher's name
+ *
+ * @returns {Object} - Response data
+ */
+
+const updateSingle = async (id, payload) => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.put(`${baseUrl}/${id}`, payload, config)
+	return response.data
+}
+
+/**
  * Get single teacher details by id
  * @param {string} id - Teacher ID
  *
@@ -84,8 +101,8 @@ const getById = async id => {
 	const config = {
 		headers: { Authorization: token }
 	}
-	const request = axios.post(`${baseUrl}/${id}`, null, config)
-	return request.then(response => response.data)
+	const response = await axios.post(`${baseUrl}/${id}`, null, config)
+	return response.data
 }
 
-export default { getAll, setToken, create, deleteById, update, getById }
+export default { getAll, setToken, create, deleteById, update, getById, updateSingle }

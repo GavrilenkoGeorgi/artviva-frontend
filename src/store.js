@@ -13,6 +13,8 @@ import pupilsReducer from './reducers/pupilsReducer'
 import schoolStatsReducer from './reducers/schoolStatsReducer'
 import schoolClassesReducer from './reducers/schoolClassesReducer'
 import paymentsReducer from './reducers/paymentsReducer'
+import teacherDataReducer from './reducers/teacherDataReducer'
+// import { teacherDataReducer } from './reducers'
 
 const reducer = combineReducers({
 	user: loginReducer,
@@ -24,7 +26,8 @@ const reducer = combineReducers({
 	pupils: pupilsReducer,
 	schoolStats: schoolStatsReducer,
 	schoolClasses: schoolClassesReducer,
-	payments: paymentsReducer
+	payments: paymentsReducer,
+	teacher: teacherDataReducer
 })
 
 const store = createStore(

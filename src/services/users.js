@@ -93,4 +93,20 @@ const deleteById = async id => {
 	return response.data
 }
 
-export default { getAll, signUp, setToken, activate, update, deleteById }
+/**
+ * Get single user by given id
+ *
+ * @param {string} id - User ID
+ *
+ * @returns {Object} - Object with user data
+ */
+
+const getById = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.get(`${baseUrl}/${id}`, config)
+	return response.data
+}
+
+export default { getAll, signUp, setToken, activate, update, deleteById, getById }

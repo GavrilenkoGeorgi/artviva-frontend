@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
-import { deleteTeacher } from '../../reducers/teachersReducer'
+import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
+import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
+import { getTeacherData } from '../../reducers/teacherDataReducer'
 import teachersService from '../../services/teachers'
 
 import { Container, Row, Collapse, Button } from 'react-bootstrap'
@@ -14,7 +15,18 @@ import EntityControlButtons from '../common/EntityControlButtons'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const Teacher = ({ user, teacher, deleteTeacher, setNotification }) => {
+const Teacher = ({
+	user,
+	teacher,
+	fetchingData,
+	deleteTeacher,
+	updateTeacher,
+	getTeacherData,
+	setNotification,
+	setProcessingForm,
+	setFetchingData
+}) => {
+
 	const [open, setOpen] = useState(false)
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
@@ -50,6 +62,44 @@ const Teacher = ({ user, teacher, deleteTeacher, setNotification }) => {
 			})
 	}
 
+	const saveTeacherEdits = values => {
+		setProcessingForm(true)
+		updateTeacher(teacher.id, values)
+			.then(() => {
+				setNotification({
+					message: 'Зміни успішно збережено.',
+					variant: 'success'
+				}, 5)
+				setEditModalShow(false)
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => setProcessingForm(false))
+	}
+
+	const openEditModal = id => {
+		setFetchingData(true)
+		getTeacherData(id)
+			.then(() => {
+				setEditModalShow(true)
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				setFetchingData(false)
+			})
+	}
+
 	return (
 		<>
 			<Button
@@ -72,8 +122,12 @@ const Teacher = ({ user, teacher, deleteTeacher, setNotification }) => {
 				<Container fluid className="text-left">
 					<Row>
 						<EntityControlButtons
-							route={`/school/teachers/${teacher.id}`}
-							openEditModal={() => setEditModalShow(true)}
+							route={teacher.linkedUserAccountId
+								? `users/${teacher.linkedUserAccountId}`
+								: `teachers/${teacher.id}`
+							}
+							fetchingTeacherData={fetchingData}
+							openEditModal={() => openEditModal(teacher.id)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
 					</Row>
@@ -94,8 +148,8 @@ const Teacher = ({ user, teacher, deleteTeacher, setNotification }) => {
 					onHide={() => setEditModalShow(false)}
 				>
 					<TeacherForm
-						closeModal={() => setEditModalShow(false)}
-						teacher={teacher}
+						processTeacherData={saveTeacherEdits}
+						teacherData={teacher}
 						mode="edit" />
 				</LazyEntityEditModal>
 				<LazyEntityDeleteModal
@@ -114,13 +168,18 @@ const Teacher = ({ user, teacher, deleteTeacher, setNotification }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
-	deleteTeacher
+	setProcessingForm,
+	deleteTeacher,
+	updateTeacher,
+	getTeacherData,
+	setFetchingData
 }
 
 export default connect(

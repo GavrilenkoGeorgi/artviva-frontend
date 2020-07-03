@@ -16,6 +16,7 @@ const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal')
 const UserDetailsCard = ({
 	userData,
 	user,
+	mode,
 	processingForm,
 	deleteUser,
 	setNotification,
@@ -54,7 +55,7 @@ const UserDetailsCard = ({
 						{userData.superUser
 							? <>
 								<Emoji label="Key" emoji={'🔑'} />
-								Користувач &mdash; адміністратор сайту
+								Користувач &mdash; завуч
 							</>
 							: null
 						}
@@ -104,6 +105,7 @@ const UserDetailsCard = ({
 				>
 					<UserEditForm
 						closeModal={() => setEditModalShow(false)}
+						mode={mode}
 						userData={userData}
 					/>
 				</LazyEntityEditModal>

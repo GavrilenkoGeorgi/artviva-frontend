@@ -12,8 +12,6 @@ const usersReducer = (state = null, action) => {
 	case 'DELETE_USER': {
 		return state.filter(user =>	user.id !== action.data)
 	}
-	case 'GET_USER_BY_ID': //???
-		return action.data
 	default:
 		return state
 	}

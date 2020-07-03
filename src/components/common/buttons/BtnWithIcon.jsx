@@ -5,9 +5,11 @@ import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit, faInfo } from '@fortawesome/free-solid-svg-icons'
 
+import { SimpleSpinner } from '../spinners'
+
 const BtnWithIcon = props => {
 
-	const { label, icon, className, ...other } = props
+	const { label, icon, className, loading, ...other } = props
 	const chooseIcon = () => {
 		if (icon === 'trash') return <FontAwesomeIcon icon={faTrash} />
 		if (icon === 'edit') return <FontAwesomeIcon icon={faEdit} />
@@ -17,9 +19,12 @@ const BtnWithIcon = props => {
 	return (
 		<Button
 			{ ...other }
-			className={`${className} ml-2 py-1 btn-with-icon`}
+			className={`${className} ml-2 py-2 btn-with-icon d-flex align-items-center justify-content-center`}
 		>
-			{chooseIcon() || label}
+			{loading
+				? <SimpleSpinner size="sm" variant="success"/>
+				: <>{chooseIcon() || label}</>
+			}
 		</Button>
 	)
 }
@@ -32,7 +37,8 @@ BtnWithIcon.propTypes = {
 	label: PropTypes.string.isRequired,
 	block: PropTypes.bool,
 	disabled: PropTypes.bool,
-	iocn: PropTypes.string
+	loading: PropTypes.bool,
+	icon: PropTypes.string
 }
 
 export default BtnWithIcon

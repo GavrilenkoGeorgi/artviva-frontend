@@ -7,21 +7,11 @@ import { Container, Row, Col } from 'react-bootstrap'
 import LoadingIndicator from '../common/LoadingIndicator'
 import SchoolStatsTable from '../common/SchoolStatsTable'
 
-const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification, history }) => {
+const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		// check if redirected from users
-		const { action, location } = history
-		if (action === 'REPLACE'
-			&& location.state.from.pathname === '/school/users') {
-			setNotification({
-				message: 'Щоб отримати доступ до списку користувачів, зверніться до директора школи.',
-				variant: 'warning'
-			}, 10)
-		}
-
 		initializeSchoolStats()
 			.catch(error => {
 				setNotification({
@@ -31,7 +21,7 @@ const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification, h
 				}, 5)
 			})
 			.finally(() => setIsLoading(false))
-	}, [history, setNotification, initializeSchoolStats])
+	}, [setNotification, initializeSchoolStats])
 
 	return (
 		<Container>
@@ -96,8 +86,6 @@ const mapDispatchToProps = {
 	initializeSchoolStats,
 	setNotification
 }
-
-// const MemodSchoolOverview = React.memo(SchoolOverview)
 
 export default connect(
 	mapStateToProps,

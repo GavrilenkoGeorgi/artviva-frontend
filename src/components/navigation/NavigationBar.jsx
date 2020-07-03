@@ -112,10 +112,13 @@ const NavigationBar = ({ user }) => {
 								? <>
 									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
 									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
-									<NavDropdown.Item href="/school/overview">Вчителі, учні, групи</NavDropdown.Item>
-									<NavDropdown.Item href="/school/payments">Всі платежі</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/school/overview">
+									{user.superUser
+										? <NavDropdown.Item href="/school/payments">Всі платежі</NavDropdown.Item>
+										: null
+									}
+									<NavDropdown.Item href="/school/overview">Учні, групи</NavDropdown.Item>
+									<NavDropdown.Item href={`/school/users/${user.id}`}>
 										<span className="nav-list-icon">
 											<FontAwesomeIcon icon={faUser} />
 										</span>

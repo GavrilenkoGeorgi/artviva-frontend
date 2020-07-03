@@ -176,6 +176,7 @@ const SpecialtyForm = ({
 						/>
 						<ResetBtn
 							label="Очистити"
+							dataCy="specialty-form-rest-btn"
 							variant="light"
 							onClick={handleReset}
 							className="ml-2 default-width-btn"

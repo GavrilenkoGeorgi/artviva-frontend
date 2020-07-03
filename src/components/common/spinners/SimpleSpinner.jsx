@@ -4,10 +4,12 @@ import PropTypes from 'prop-types'
 import { Spinner } from 'react-bootstrap'
 
 const SimpleSpinner = props => {
-	console.log('Spinner')
+	const { animation, variant, ...rest } = props
 	return (
 		<Spinner
-			{...props}
+			animation={animation || 'border'}
+			variant={variant || 'primary'}
+			{...rest}
 		/>
 	)
 }
