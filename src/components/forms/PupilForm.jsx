@@ -32,6 +32,7 @@ const PupilForm = ({
 
 	const history = useHistory()
 	const [editMode, setEditMode] = useState(false)
+	const [createMode, setCreateMode] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specialtiesData, setSpecialtiesData] = useState([])
@@ -46,7 +47,11 @@ const PupilForm = ({
 	// set auth token and mode
 	useEffect(() => {
 		if (user) pupilsService.setToken(user.token)
-		if (mode === 'edit') setEditMode(true)
+		if (mode === 'edit') {
+			setEditMode(true)
+		} else if (mode === 'create') {
+			setCreateMode(true)
+		}
 	}, [user, mode])
 
 	useEffect(() => {
@@ -99,7 +104,8 @@ const PupilForm = ({
 	}
 
 	const addPupil = (values, setErrors, resetForm) => {
-		createPupil(values)
+		const valuesToSend = { ...values, assignedTo: user.id }
+		createPupil(valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Новий учень був успішно додан.',
@@ -268,12 +274,37 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
-		docsCheck: Yup.bool()
-			.oneOf([true]),
-		processDataCheck: Yup.bool()
-			.oneOf([true]),
-		paymentObligationsCheck: Yup.bool()
-			.oneOf([true]),
+		// this doesn't spark joy ((
+		// next three fields are not present
+		// in the teacher view form
+		// but are needed in schema
+		docsCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
+		processDataCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
+		paymentObligationsCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
 		docsPresent: Yup.bool()
 			.oneOf([true, false]),
 		currentlyEnrolled: Yup.bool()
@@ -288,7 +319,7 @@ const PupilForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={(values, { resetForm, setErrors }) => {
+				onSubmit={(values, { setErrors, resetForm }) => {
 					handlePupil(values, setErrors, resetForm)
 				}}
 				validationSchema={pupilFormSchema}
@@ -614,12 +645,12 @@ const PupilForm = ({
 							className="pt-4 px-0 d-flex justify-content-around"
 						>
 							<BtnWithSpinner
+								type="submit"
 								label={editMode
 									? 'Зберегти'
 									: (mode === 'public' ? 'Відправити' : 'Додати')
 								}
 								variant={editMode ? 'success' : 'primary'}
-								type="submit"
 								loadingState={processingForm}
 								dataCy="add-pupil-btn"
 								className="default-width-btn"
