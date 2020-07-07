@@ -26,9 +26,6 @@ const Select = (props) => {
 					<option value={item} key={item}>{item}</option>
 				)}
 			</Form.Control>
-			<Form.Control.Feedback>
-				Ok
-			</Form.Control.Feedback>
 			<Form.Control.Feedback type="invalid">
 				{props.errors}
 			</Form.Control.Feedback>

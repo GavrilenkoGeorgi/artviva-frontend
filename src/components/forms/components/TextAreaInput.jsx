@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Col, Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
 const TextAreaInput = props => {
 	const { touched, ...other } = props
@@ -9,7 +9,6 @@ const TextAreaInput = props => {
 	return (
 		<Form.Group
 			controlId={`${props.name}-input`}
-			as={Col}
 		>
 			<Form.Label>
 				{props.label}
@@ -20,9 +19,6 @@ const TextAreaInput = props => {
 				isInvalid={touched && !!props.errors}
 				{ ...other }
 			/>
-			<Form.Control.Feedback>
-				Ok
-			</Form.Control.Feedback>
 			<Form.Control.Feedback type="invalid">
 				{props.errors}
 			</Form.Control.Feedback>

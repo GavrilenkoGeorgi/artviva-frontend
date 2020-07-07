@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { Modal, Form, Button, Container, Row } from 'react-bootstrap'
-import BtnWithSpinner from './BtnWithSpinner'
+import BtnWithSpinner from './buttons/BtnWithSpinner'
 
 const EntityDeleteModal = ({
 	handleDelete,

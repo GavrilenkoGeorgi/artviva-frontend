@@ -5,15 +5,14 @@ import pupilsService from '../../services/pupils'
 import { setNotification } from '../../reducers/notificationReducer'
 import moment from 'moment'
 
-import { Link } from 'react-router-dom'
-import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Button, Card } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
 import LoadingIndicator from '../common/LoadingIndicator'
 import PupilForm from '../forms/PupilForm'
 import EntityControlButtons from '../common/EntityControlButtons'
-import ListItem from './ListItem'
+import Emoji from '../common/Emoji'
 
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
@@ -25,6 +24,7 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 	const [editModalShow, setEditModalShow] = useState(false)
 	const [isDeleting, setIsDeleting] = useState(false)
 	const unmounted = useRef(false)
+	const cardStyle = 'mb-3'
 
 	// set auth token
 	useEffect(() => {
@@ -55,6 +55,15 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 			})
 	}
 
+	const pupilTitleInfo = pupil => {
+		return `${pupil.name}: ${pupil.specialty
+			? pupil.specialty.title
+			: null}
+			${pupil.artSchoolClass
+		? pupil.artSchoolClass
+		: null } клас`
+	}
+
 	return (
 		<>
 			<Button
@@ -66,7 +75,7 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span className="text-left">
-					{pupil.name}: {pupil.specialty.title} {pupil.artSchoolClass ? `${pupil.artSchoolClass} клас` : null}
+					{pupilTitleInfo(pupil)}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -74,83 +83,130 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 				}
 			</Button>
 			<Collapse in={open}>
-				<Container fluid className="text-left borde1r border-primary">
+				<Container>
 					<Row>
 						<Col>
-							<ul style={{ paddingLeft: '0rem', listStyle: 'none' }}>
-								<ListItem
-									label="Им'я контактної особі: "
-									data={pupil.applicantName}
-								/>
-								<li>
-									<span className="text-muted">
-										Її email: </span>
-									<a href={`mailto:${pupil.contactEmail}`}>{pupil.contactEmail}</a>
-								</li>
-								<ListItem
-									label="Домашня адреса: "
-									data={pupil.homeAddress}
-								/>
 
-								<ListItem
-									label="Загально освітня школа: "
-									data={`${pupil.mainSchool} ${pupil.mainSchoolClass} клас`}
-								/>
+							{/* Contact info */}
+							<Card className={cardStyle}>
+								<Card.Body>
+									<Card.Subtitle className="text-muted mb-2">
+										<Emoji label="Magnifying Glass Tilted Right" emoji={'🔎'} /> Контактні дані
+									</Card.Subtitle>
+									<Card.Text>
+										Дата подяння заяві: {moment(pupil.createdAt).format('LL')}
+									</Card.Text>
+									<Card.Text>
+										Ім&apos;я контактної особі: {pupil.applicantName}
+									</Card.Text>
+									<Card.Text>
+										Її email: <a href={`mailto:${pupil.contactEmail}`}>{pupil.contactEmail}</a>
+									</Card.Text>
+									<Card.Text>
+										Домашня адреса: {pupil.homeAddress}
+									</Card.Text>
+								</Card.Body>
+							</Card>
 
-								<ListItem
-									label="Стать: "
-									data={pupil.gender}
-								/>
+							{/* Personal info */}
+							<Card className={cardStyle}>
+								<Card.Body>
+									<Card.Subtitle className="text-muted mb-2">
+										<Emoji label="Memo" emoji={'📝'} /> Персональна інформація
+									</Card.Subtitle>
+									<Card.Text>
+										Стать: {pupil.gender === 'Чоловіча'
+											? <Emoji label="Man" emoji={'👨'} />
+											: <Emoji label="Woman" emoji={'👩'} />}
+											&nbsp;{pupil.gender}
+									</Card.Text>
+									<Card.Text>
+										Возраст: {moment(pupil.dateOfBirth).fromNow().split(' ')[0]} років
+									</Card.Text>
+									<Card.Text>
+										День народження: {moment(pupil.dateOfBirth).format('Do MMMM YYYY')}
+									</Card.Text>
+									<Card.Text>
+										Надав усі документи?&nbsp;
+										{pupil.docsPresent
+											? <Emoji label="Check Mark" emoji={'✔️'} />
+											: <Emoji label="Cross Mark" emoji={'❌'} />
+										}
+									</Card.Text>
+									<Card.Text>
+										Зарахован до навчання?&nbsp;
+										{pupil.currentlyEnrolled
+											? <Emoji label="Check Mark" emoji={'✔️'} />
+											: <Emoji label="Cross Mark" emoji={'❌'} />
+										}
+									</Card.Text>
+									<Card.Text>
+										Пільги: {pupil.hasBenefit}%
+									</Card.Text>
+									{pupil.info
+										? <Card.Text>
+											<Emoji label="Pencil" emoji={'✏️'} /> {pupil.info}
+										</Card.Text>
+										: null
+									}
+								</Card.Body>
+							</Card>
 
-								<ListItem
-									label="Возраст: "
-									data={moment(pupil.dateOfBirth).fromNow().split(' ')[0]}
-								/>
+							{/* School info */}
+							<Card className={cardStyle}>
+								<Card.Body>
+									<Card.Subtitle className="text-muted mb-2">
+										<Emoji label="Graduation Cap" emoji={'🎓'} /> Навчання
+									</Card.Subtitle>
+									<Card.Text>
+										ЗОШ: {pupil.mainSchool} {pupil.mainSchoolClass} клас
+									</Card.Text>
+									<Card.Text>
+										Музична школа: {pupil.artSchoolClass} клас
+									</Card.Text>
+									{pupil.specialty
+										? <Card.Text>
+											Фах: {pupil.specialty.title}
+										</Card.Text>
+										: null}
+									<Card.Text>
+										Класи ДШМ: {pupil.schoolClasses.map(item =>
+											<span className="pl-3 d-block" key={item.id}>
+												{item.title}
+											</span>
+										)}
+									</Card.Text>
+								</Card.Body>
+							</Card>
 
-								<ListItem
-									label="День народження: "
-									// data={moment(pupil.dateOfBirth).format('YYYY-MM-DD')}
-									data={moment(pupil.dateOfBirth).format('Do MMM YYYY')}
-								/>
-
-								<ListItem
-									label="Ім'я батька, тел. та місто роботи: "
-									data={`${pupil.fathersName}. ${pupil.fathersPhone} ${pupil.fathersEmploymentInfo}`}
-								/>
-
-								<ListItem
-									label="Ім'я матері, тел. та місто роботи: "
-									data={`${pupil.mothersName}. ${pupil.mothersPhone} ${pupil.mothersEmploymentInfo}`}
-								/>
-
-								<ListItem
-									label="Дата подяння заяві: "
-									data={moment(pupil.createdAt).format('LL')}
-								/>
-							</ul>
-
-							<div>
-								<em className="text-muted">Класи:</em>
-								<ol>
-									{pupil.schoolClasses.map(schoolClass =>
-										<li key={schoolClass.id}>
-											<Link to={`classes/${schoolClass.id}`}>
-												{schoolClass.title}
-											</Link>
-										</li>
-									)}
-								</ol>
-							</div>
+							{/* Parents info */}
+							<Card className={cardStyle}>
+								<Card.Body>
+									<Card.Subtitle className="text-muted mb-2">
+										<Emoji label="Family" emoji={'👪'} /> Батьки
+									</Card.Subtitle>
+									<Card.Text>
+										<strong>{pupil.fathersName}</strong><br />
+										{pupil.fathersPhone}<br />
+										{pupil.fathersEmploymentInfo}<br />
+									</Card.Text>
+									<Card.Text>
+										<strong>{pupil.mothersName}</strong><br />
+										{pupil.mothersPhone}<br />
+										{pupil.mothersEmploymentInfo}
+									</Card.Text>
+								</Card.Body>
+							</Card>
 						</Col>
 					</Row>
 
+					{/* Control buttons */}
 					<Row>
 						<EntityControlButtons
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
 					</Row>
-
 				</Container>
 			</Collapse>
 

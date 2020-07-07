@@ -21,15 +21,14 @@ const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification })
 				}, 5)
 			})
 			.finally(() => setIsLoading(false))
-	// eslint-disable-next-line
-	}, [])
+	}, [setNotification, initializeSchoolStats])
 
 	return (
 		<Container>
 			<Row className="d-flex justify-content-center">
 				<Col md={8}>
 					<p className="pt-3">
-						Списки вчителів, учнів та філій, оплата та інша інформація..
+						Списки вчителів, учнів та філій, оплата та інша інформація.
 					</p>
 					{isLoading
 						? <LoadingIndicator
@@ -38,36 +37,36 @@ const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification })
 						/>
 						: <>
 							<SchoolStatsTable
+								link="/school/schoolclasses"
+								linkText={`Групи: ${schoolStats.schoolClasses.length} шт.`}
+								header1stCol="№"
+								header2ndCol="Назва"
+								fieldName="title"
+								stats={schoolStats.schoolClasses}
+							/>
+							<SchoolStatsTable
 								link="/school/teachers"
-								linkText="Вчітелі"
+								linkText={`Вчітелі: ${schoolStats.teachers.length} шт.`}
 								header1stCol="№"
 								header2ndCol="Ім&apos;я"
 								fieldName="name"
 								stats={schoolStats.teachers}
 							/>
 							<SchoolStatsTable
-								link="/school/specialties"
-								linkText="Спеціальності"
-								header1stCol="№"
-								header2ndCol="Назва"
-								fieldName="title"
-								stats={schoolStats.specialties}
-							/>
-							<SchoolStatsTable
 								link="/school/pupils"
-								linkText="Учні"
+								linkText={`Учні: ${schoolStats.pupils.length} шт.`}
 								header1stCol="№"
 								header2ndCol="Ім&apos;я"
 								fieldName="name"
 								stats={schoolStats.pupils}
 							/>
 							<SchoolStatsTable
-								link="/school/schoolclasses"
-								linkText="Класи"
+								link="/school/specialties"
+								linkText={`Спеціальності: ${schoolStats.specialties.length} шт.`}
 								header1stCol="№"
 								header2ndCol="Назва"
 								fieldName="title"
-								stats={schoolStats.schoolClasses}
+								stats={schoolStats.specialties}
 							/>
 						</>
 					}

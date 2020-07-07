@@ -1,7 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
-import { initializeSchoolClasses } from '../../reducers/schoolClassesReducer'
 import schoolClassesService from '../../services/schoolClasses'
 
 import { Link } from 'react-router-dom'
@@ -14,9 +13,9 @@ const LazySchoolClassForm = React.lazy(() => import('../forms/SchoolClassForm'))
 
 const SchoolClassesList = ({
 	user,
+	getGroups,
 	schoolClasses,
-	setNotification,
-	initializeSchoolClasses
+	setNotification
 }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
@@ -24,17 +23,18 @@ const SchoolClassesList = ({
 	useEffect(() => {
 		if (user) {
 			schoolClassesService.setToken(user.token)
-			initializeSchoolClasses()
+			getGroups(user.teacher)
 				.catch(error => {
+					const { message } = { ...error.response.data }
 					setNotification({
 						message: `Щось пішло не так, спробуйте пізніше:
-							${error.status} ${error.statusText}`,
+							${message}`,
 						variant: 'danger'
 					}, 5)
 				})
 				.finally(() => setIsLoading(false))
 		}
-	}, [user, initializeSchoolClasses, setNotification])
+	}, [user, setNotification, getGroups])
 
 	return (
 		<Container>
@@ -96,8 +96,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-	setNotification,
-	initializeSchoolClasses
+	setNotification
 }
 
 export default connect(

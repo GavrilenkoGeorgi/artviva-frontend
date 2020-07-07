@@ -1,14 +1,17 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { Col } from 'react-bootstrap'
-import BtnWithIcon from './BtnWithIcon'
+import BtnWithIcon from './buttons/BtnWithIcon'
 
 const EntityControlButtons = ({
 	route,
 	openEditModal,
-	openDeleteModal
+	openDeleteModal,
+	fetchingTeacherData,
+	user
 }) => {
 
 	const history = useHistory()
@@ -34,17 +37,26 @@ const EntityControlButtons = ({
 				icon="edit"
 				variant="outline-success"
 				type="button"
+				loading={fetchingTeacherData}
 				onClick={() => openEditModal()}
 			/>
-			<BtnWithIcon
-				label="Видалити"
-				icon="trash"
-				variant="outline-danger"
-				type="button"
-				onClick={() => openDeleteModal()}
-			/>
+			{user.superUser ?
+				<BtnWithIcon
+					label="Видалити"
+					icon="trash"
+					variant="outline-danger"
+					type="button"
+					onClick={() => openDeleteModal()}
+				/>
+				: null }
 		</Col>
 	)
+}
+
+const mapStateToProps = (state) => {
+	return {
+		user: state.user
+	}
 }
 
 EntityControlButtons.propTypes = {
@@ -53,4 +65,6 @@ EntityControlButtons.propTypes = {
 	openDeleteModal: PropTypes.func.isRequired
 }
 
-export default EntityControlButtons
+export default connect(
+	mapStateToProps
+)(EntityControlButtons)

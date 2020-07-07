@@ -5,10 +5,10 @@ import { Container, Row, Col } from 'react-bootstrap'
 
 const PassResetView = ({ match }) => {
 	return (
-		<Container className="pt-4">
-			<Row className="pt-4">
+		<Container>
+			<Row>
 				<Col xs={12}>
-					<h1 className="text-center custom-font py-4">
+					<h1 className="text-center custom-font py-2">
 						Введіть новий пароль
 					</h1>
 					<PassResetForm

@@ -18,10 +18,10 @@ const ShowcaseView = () => {
 
 	return (
 		<Container className="border1 border-primary text-center">
-			<h2 className="mb-4">На сцені</h2>
+			<h2 className="mb-4 custom-font">На сцені</h2>
 			{videos.map(video => (
 				<div key={video.src}>
-					<h6 className="text-muted">
+					<h6 className="text-muted pb-2">
 						<em>{video.title}</em>
 					</h6>
 					<YoutubeVideo

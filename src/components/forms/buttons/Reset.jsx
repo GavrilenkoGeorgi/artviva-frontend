@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 
 import { Button } from 'react-bootstrap'
 
-const Reset = props => {
+const Reset = ({ dataCy, ...props }) => {
 	return (
 		<Button
 			type="reset"
+			data-cy={dataCy}
 			{ ...props }
 		>
 			{props.label}
@@ -16,6 +17,7 @@ const Reset = props => {
 
 Reset.propTypes = {
 	label: PropTypes.string.isRequired,
+	dataCy: PropTypes.string.isRequired,
 	className: PropTypes.string,
 	variant: PropTypes.string,
 	onClick: PropTypes.func,

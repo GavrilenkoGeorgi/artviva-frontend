@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
-import { createTeacher, updateTeacher } from '../../reducers/teachersReducer'
 import teachersService from '../../services/teachers'
 import { trimObject } from '../../utils/objectHelpers'
 import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
 import { phoneNumber } from '../../utils/stringPatterns'
-import { fullTimeEmployee, parseIntegerValue, currentExperience } from '../../utils/formsUtils'
+import { fullTimeEmployee,
+	parseIntegerValue, currentExperience } from '../../utils/formsUtils'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 
@@ -17,7 +16,7 @@ import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 import TextInput from './components/TextInput'
 import DateInput from './components/DateInput'
@@ -26,17 +25,15 @@ import CheckBox from './components/Checkbox'
 import TextAreaInput from './components/TextAreaInput'
 
 const TeacherForm = ({
+	processTeacherData,
 	teacher,
 	user,
 	specialties,
-	setNotification,
-	createTeacher,
-	updateTeacher,
-	mode,
-	closeModal }) => {
+	processingForm,
+	mode
+}) => {
 
 	const [editMode, setEditMode] = useState(false)
-	const [processingForm, setProcessingForm] = useState(false)
 	const [specialtyListData, setSpecialtyListData] = useState([])
 	const [unusedSpecialties, setUnusedSpecialties] = useState(null)
 	const [partTimeEmployee, setPartTimeEmployee] = useState(true)
@@ -55,33 +52,29 @@ const TeacherForm = ({
 	const employeeTypes = ['Штатний співробітник', 'Сумісник']
 
 	useEffect(() => {
-		setSpecialtyListData(specialties.map(specialty => specialty.title))
 		teachersService.setToken(user.token)
-	}, [user, specialties])
+	}, [user])
 
 	useEffect(() => {
-		if (mode === 'edit') {
-			// prepare edit form data
+		setSpecialtyListData(specialties.map(specialty => specialty.title))
+		if (teacher.id && mode === 'edit') {
 			setEditMode(true)
-
-			// set list of specialties
 			const fullList = new Set(specialties.map(specialty => specialty.title))
 			const used = new Set(teacher.specialties.map(specialty => specialty.title))
 			const difference = new Set([...fullList].filter((item) => !used.has(item)))
 			setUnusedSpecialties(Array.from(difference))
 
 			// set experience
+			const today = moment()
 			const experience = currentExperience(teacher.experienceToDate, teacher.employmentDate, today)
 			setEmployeeExperience(experience)
 
-			// set checkbox
-			// remove this from here
+			// disable check box if needed
 			fullTimeEmployee(teacher.employeeType)
 				? setPartTimeEmployee(false)
 				: setPartTimeEmployee(true)
 		}
-	// eslint-disable-next-line
-	}, [])
+	}, [teacher, specialties, editMode, mode])
 
 	const changeEmployeeType = ({ target }, setFieldValue) => {
 		const { value: employeeType, name: fieldName } = target
@@ -91,8 +84,8 @@ const TeacherForm = ({
 		setFieldValue(fieldName, employeeType)
 	}
 
+	// eslint-disable-next-line
 	const handleTeacher = (values, setErrors, resetForm) => {
-		setProcessingForm(true)
 		// get selected specialties id's
 		const uniqueSpecialties = new Set(values.specialties)
 		let specialtiesIds = []
@@ -101,7 +94,7 @@ const TeacherForm = ({
 			specialtiesIds.push(specialties[index].id)
 		})
 
-		// remove classes and payments so we don't send them in this form
+		// extract classes and payments data so we don't send them in this form
 		// eslint-disable-next-line
 		let { years, months, days, payments, schoolClasses, ...valuesToSend } = values
 
@@ -112,54 +105,9 @@ const TeacherForm = ({
 				? { years: parseIntegerValue(years),
 					months: parseIntegerValue(months),
 					days: parseIntegerValue(days) }
-				: employeeExperience,
+				: employeeExperience
 		}
-
-		// if current from mode is edit or create..
-		editMode
-			? existingTeacher(trimObject(valuesToSend))
-			: newTeacher(trimObject(valuesToSend), setErrors, resetForm)
-	}
-
-	const newTeacher = (values, setErrors, resetForm) => {
-		createTeacher(values)
-			.then(() => {
-				setNotification({
-					message: 'Новий вчітель був успішно додан.',
-					variant: 'success'
-				}, 5)
-				resetForm()
-			})
-			.catch(error => {
-				const { message, cause } = { ...error.response.data }
-				if (cause === 'name') {
-					setErrors({ name: message })
-				}
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-			})
-			.finally(() => setProcessingForm(false))
-	}
-
-	const existingTeacher = values => {
-		updateTeacher(teacher.id, values)
-			.then(() => {
-				setNotification({
-					message: 'Зміни успішно збережено.',
-					variant: 'success'
-				}, 5)
-				closeModal()
-			})
-			.catch(error => {
-				const { message } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-			})
-			.finally(() => setProcessingForm(false))
+		processTeacherData(trimObject(valuesToSend), setErrors, resetForm)
 	}
 
 	const calcEmployeeExperience = (event, values, setFieldError) => {
@@ -326,12 +274,11 @@ const TeacherForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={async (values, { resetForm, setErrors }) => {
-					// fix this await
-					await handleTeacher(values, setErrors, resetForm)
+				onSubmit={(values, { resetForm, setErrors }) => {
+					handleTeacher(values, setErrors, resetForm)
 				}}
 				onReset={() => {
-					mode === 'edit'
+					editMode
 					// eslint-disable-next-line
 						? setEmployeeExperience(currentExperience(teacher.experienceToDate, teacher.employmentDate, today))
 						: setEmployeeExperience({ years: 0, months: 0, days: 0 })
@@ -532,7 +479,7 @@ const TeacherForm = ({
 							/>
 
 							<Col xs={12} className="py-3">
-								<div className="border1 border-success">
+								<div>
 									Робочий стаж:
 									<strong> {employeeExperience.years}
 									</strong> років
@@ -717,13 +664,13 @@ const TeacherForm = ({
 							<Col md={6} className="d-flex align-items-end mt-3 mb-4">
 								<CheckBox
 									type="checkbox"
-									// id="admin-employee-checkbox"
 									id={editMode
 										? `${teacher.id}-admin-employee-checkbox`
 										: 'admin-employee-checkbox'
 									}
 									label="Адміністрація"
 									name="isAdministration"
+									dataCy="admin-employee-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									disabled={partTimeEmployee}
@@ -745,6 +692,7 @@ const TeacherForm = ({
 									}
 									label="Пенсионер"
 									name="isRetired"
+									dataCy="senior-employee-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									checked={values.isRetired}
@@ -762,6 +710,7 @@ const TeacherForm = ({
 									}
 									label="Співробітник навчается у ВНЗ?"
 									name="employeeIsAStudent"
+									dataCy="employee-is-student-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									checked={values.employeeIsAStudent}
@@ -770,16 +719,18 @@ const TeacherForm = ({
 									errors={errors.employeeIsAStudent}
 								/>
 							</Col>
-							<TextAreaInput
-								label="Додаткова інформація/опис"
-								rows={2}
-								name="info"
-								onChange={handleChange}
-								onBlur={handleBlur}
-								value={values.info}
-								touched={touched.info}
-								errors={errors.info}
-							/>
+							<Col xs={12}>
+								<TextAreaInput
+									label="Додаткова інформація/опис"
+									rows={2}
+									name="info"
+									onChange={handleChange}
+									onBlur={handleBlur}
+									value={values.info}
+									touched={touched.info}
+									errors={errors.info}
+								/>
+							</Col>
 						</Form.Row>
 
 						{/* Button */}
@@ -798,6 +749,7 @@ const TeacherForm = ({
 							<ResetBtn
 								label="Очистити"
 								variant="light"
+								dataCy="teacher-form-reset"
 								onClick={handleReset}
 								className="ml-2 default-width-btn"
 							/>
@@ -810,29 +762,22 @@ const TeacherForm = ({
 }
 
 TeacherForm.propTypes = {
+	processTeacherData: PropTypes.func.isRequired,
 	teacher: PropTypes.object,
 	user: PropTypes.object.isRequired,
 	specialties: PropTypes.array.isRequired,
-	setNotification: PropTypes.func.isRequired,
-	createTeacher: PropTypes.func.isRequired,
-	updateTeacher: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit']).isRequired
 }
 
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
-		specialties: state.specialties
+		specialties: state.specialties,
+		teacher: state.teacher,
+		processingForm: state.notification.processingForm
 	}
 }
 
-const mapDispatchToProps = {
-	setNotification,
-	createTeacher,
-	updateTeacher
-}
-
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+	mapStateToProps
 )(TeacherForm)

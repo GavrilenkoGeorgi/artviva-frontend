@@ -2,19 +2,11 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Redirect, Route } from 'react-router-dom'
 import authService from '../services/authService'
-// import { useEffect } from 'react'
 
-// import { setUserFromLocalStorage } from '../reducers/loginReducer'
-
-const PrivateRoute = ({ user, component: Component, ...rest }) => {
+// eslint-disable-next-line
+const PrivateRoute = ({ user, component: Component, ...rest }) => { // remove user!
 
 	const isLoggedInMK1 = authService.isLoggedIn()
-	// const isLoggedIn = true
-
-	/*
-	useEffect(() => {
-		console.log('Private route effect 111111111111111', isLoggedInMK1)
-	}, [isLoggedInMK1])*/
 
 	return (
 		<Route
@@ -35,12 +27,7 @@ const mapStateToProps = (state) => {
 		user: state.user
 	}
 }
-/*
-const mapDispatchToProps = {
-	setUserFromLocalStorage
-}*/
 
 export default connect (
 	mapStateToProps,
-	// mapDispatchToProps
 )(PrivateRoute)

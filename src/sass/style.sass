@@ -14,13 +14,11 @@
 html
 	scroll-behavior: smooth
 	+handheld(2, 768px) // ipad
-		font-size: 120%
+		font-size: 110%
 	+handheld(2, 1024px) // ipadPro
-		font-size: 170%
+		font-size: 140%
 	+desktop(96dpi, 640px)
-		font-size: 120%
-	+desktop(96dpi, 1440px)
-		font-size: 160%
+		font-size: 110%
 
 p
 	margin: 0
@@ -48,6 +46,10 @@ p
 .primary-color-shadow
 	border-radius: .3rem
 	box-shadow: 0 0 .5rem 0 rgba(0, 123, 255, 1)
+
+.success-color-shadow
+	border-radius: .3rem
+	box-shadow: 0 0 .5rem 0 #00ff88
 
 .gray-shadow
 	border-radius: .3rem
@@ -94,22 +96,29 @@ p
 .dropdown
 	a
 		color: $grayish !important
-		// align-self: flex-start
+	.dropdown-toggle
+		padding: .25rem 0
+
+.nav-list-icon
+	padding-right: .5rem
+
 
 // navigation bar links
 .navbar-nav
 	a
 		text-decoration: none
 		color: $grayish
-		border-bottom: .1rem solid transparent
-		transition: color ease-in 250ms, border-bottom ease-in 250ms
-		// align-self: flex-start
+		// border-bottom: .1rem solid transparent
+		// transition: color ease-in 250ms, border-bottom ease-in 250ms
+		transition: color ease-in 250ms, text-decoration ease-in 250ms
 		&:hover
 			color: $primary-color
-			border-bottom: .1rem solid $primary-color
+			text-decoration: underline
+			// border-bottom: .1rem solid $primary-color
 	a.active
 		color: $primary-color
-		border-bottom: .1rem solid $primary-color
+		text-decoration: underline
+		// border-bottom: .1rem solid $primary-color
 
 .carousel-container
 	margin-top: -5rem
@@ -169,15 +178,11 @@ nav
 
 .grecaptcha-badge
 	z-index: 4
-	margin-bottom: 3.5rem
 
 .profile-tab
 	a
 		color: red
 		padding: 2rem
-
-.valid-feedback, .invalid-feedback
-	position: absolute
 
 .form-label
 	margin-top: .75rem
@@ -256,3 +261,23 @@ nav
 .teacher-details-container
 	p
 		padding: .3rem 0rem
+
+.map-container
+	// messes up footer
+	// or remove height from 'google-maps-react'
+	height: 0 !important
+
+.warning-background
+	background-color: $warn
+
+.danger-background
+	background-color: $danger
+
+.recaptcha-statement
+	color: $lightGrey
+	font-size: .7rem
+	a
+		padding: 0 .2rem
+
+.grecaptcha-badge
+	visibility: hidden

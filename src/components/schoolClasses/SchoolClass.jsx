@@ -60,7 +60,7 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span>
-					{schoolClass.title}
+					{schoolClass.title} - {schoolClass.specialty.title}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -90,7 +90,11 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 							<ol>
 								{schoolClass.pupils.map(pupil => (
 									<li key={pupil.id}>
-										{pupil.name}: <em className="text-primary">{pupil.info}</em>
+										{pupil.name}
+										{pupil.info
+											? <em className="text-primary">: {pupil.info}</em>
+											: null
+										}
 									</li>
 								))}
 							</ol>

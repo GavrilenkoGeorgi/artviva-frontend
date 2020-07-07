@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
-import { findByPropertyValue } from '../../utils/arrayHelpers'
-import { phoneNumber } from '../../utils/stringPatterns'
-import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
-import { trimObject } from '../../utils/objectHelpers'
 import moment from 'moment'
+import { paymentObligations, personalDataProcessing } from '../../data/formTexts.json'
+import { findByPropertyValue, phoneNumber,
+	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
 import { Container, Col, Form } from 'react-bootstrap'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import { BtnWithSpinner, Button } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
-import TextInput from './components/TextInput'
-import TextAreaInput from './components/TextAreaInput'
-import Select from './components/Select'
-import DateInput from './components/DateInput'
-import CheckBox from './components/Checkbox'
+import { CheckBox, DateInput, Select,
+	TextAreaInput, TextInput } from './components'
+import { InfoModal } from '../common/modals'
 
 const PupilForm = ({
 	pupil,
@@ -32,10 +30,15 @@ const PupilForm = ({
 	mode,
 	closeModal }) => {
 
+	const history = useHistory()
 	const [editMode, setEditMode] = useState(false)
+	const [createMode, setCreateMode] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specialtiesData, setSpecialtiesData] = useState([])
+	const [infoModalVis, setInfoModalVis] = useState(false)
+	const [infoModalText, setInfoModalText] = useState({})
+	const [infoModalTitle, setInfoModalTitle] = useState('')
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -43,9 +46,11 @@ const PupilForm = ({
 
 	// set auth token and mode
 	useEffect(() => {
-		pupilsService.setToken(user.token)
+		if (user) pupilsService.setToken(user.token)
 		if (mode === 'edit') {
 			setEditMode(true)
+		} else if (mode === 'create') {
+			setCreateMode(true)
 		}
 	}, [user, mode])
 
@@ -67,12 +72,40 @@ const PupilForm = ({
 
 		setProcessingForm(true)
 		editMode
-			? existingPupil(trimObject(values), setErrors)
-			: newPupil(trimObject(values), setErrors, resetForm)
+			? editPupil(trimObject(values), setErrors)
+			: (mode === 'create'
+				? addPupil(trimObject(values), setErrors, resetForm)
+				: publicApply(trimObject(values), setErrors, resetForm))
 	}
 
-	const newPupil = (values, setErrors, resetForm ) => {
-		createPupil(values)
+	const publicApply = (values, setErrors, resetForm) => {
+		// this one is a little different
+		pupilsService.publicApply(values)
+			.then(() => {
+				setNotification({
+					message: 'Ваша заява була успішно додана.',
+					variant: 'success'
+				}, 5)
+				setProcessingForm(false)
+				resetForm()
+				history.push('/apply/success')
+			})
+			.catch(error => {
+				const { message, cause } = { ...error.response.data }
+				if (cause === 'name') {
+					setErrors({ name: message })
+				}
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+				setProcessingForm(false)
+			})
+	}
+
+	const addPupil = (values, setErrors, resetForm) => {
+		const valuesToSend = { ...values, assignedTo: user.id }
+		createPupil(valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Новий учень був успішно додан.',
@@ -83,17 +116,19 @@ const PupilForm = ({
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
 				if (cause === 'name') {
-					setErrors({ title: message })
+					setErrors({ name: message })
 				}
 				setNotification({
 					message,
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setProcessingForm(false))
+			.finally(() => {
+				setProcessingForm(false)
+			})
 	}
 
-	const existingPupil = (values, setErrors) => {
+	const editPupil = (values, setErrors) => {
 		updatePupil(pupil.id, values)
 			.then(() => {
 				setNotification({
@@ -105,7 +140,7 @@ const PupilForm = ({
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
 				if (cause === 'name') {
-					setErrors({ title: message })
+					setErrors({ name: message })
 				}
 				setNotification({
 					message,
@@ -113,6 +148,33 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => setProcessingForm(false))
+	}
+
+	const checkBoxLabel = (label, type) => {
+		const data = { label, type }
+		return <>
+			<Button
+				variant="link"
+				dataCy={`${type}-modal-btn`}
+				className="p-0 d-flex text-left"
+				onClick={() => openInfoModal(data)}
+				label={label} />
+		</>
+	}
+
+	const openInfoModal = ({ type, label: title }) => {
+		switch (type) {
+		case 'personal-data':
+			setInfoModalText(personalDataProcessing)
+			break
+		case 'payment':
+			setInfoModalText(paymentObligations)
+			break
+		default:
+			break
+		}
+		setInfoModalTitle(title)
+		setInfoModalVis(true)
 	}
 
 	// form data and schema
@@ -143,6 +205,7 @@ const PupilForm = ({
 				processDataCheck: false,
 				paymentObligationsCheck: false,
 				docsPresent: false,
+				currentlyEnrolled: false,
 				info: ''
 			}
 
@@ -213,12 +276,41 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
-		docsCheck: Yup.bool()
-			.oneOf([true]),
-		processDataCheck: Yup.bool()
-			.oneOf([true]),
-		paymentObligationsCheck: Yup.bool()
-			.oneOf([true]),
+		// this doesn't spark joy ((
+		// next three fields are not present
+		// in the teacher view form
+		// but are needed in schema
+		docsCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
+		processDataCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
+		paymentObligationsCheck: Yup.bool().test(value => {
+			if (createMode) {
+				const schema = Yup.bool().oneOf([false])
+				return schema.isValidSync(value)
+			} else {
+				const schema = Yup.bool().oneOf([true])
+				return schema.isValidSync(value)
+			}
+		}),
+		docsPresent: Yup.bool()
+			.oneOf([true, false]),
+		currentlyEnrolled: Yup.bool()
+			.oneOf([true, false]),
 		info: Yup.string()
 			.min(3, 'Не менш 3 символів.')
 			.max(255, 'Максимум 255 символів.')
@@ -229,7 +321,7 @@ const PupilForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={(values, { resetForm, setErrors }) => {
+				onSubmit={async (values, { setErrors, resetForm }) => {
 					handlePupil(values, setErrors, resetForm)
 				}}
 				validationSchema={pupilFormSchema}
@@ -444,14 +536,89 @@ const PupilForm = ({
 						/>
 
 						<Form.Row>
-							{editMode
-								?	<>
+							{mode === 'public'
+								? <>
 									<Col xs={12} className="pt-4">
 										<CheckBox
 											type="checkbox"
-											id="docs-present-checkbox"
+											id="docs-checkbox"
+											label="Я зобов'язаний надати ці документи шкільному відділу"
+											name="docsCheck"
+											dataCy="docs-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.docsCheck}
+											value={values.docsCheck}
+											touched={touched.docsCheck}
+											errors={errors.docsCheck}
+										/>
+										<ol style={{ marginBottom: '0rem', paddingLeft: '2.5rem' }}>
+											<li>
+												Копія свідоцтва про народження
+											</li>
+											<li>
+												Медична довідка про відсутність протипоказань до занять у закладі
+											</li>
+										</ol>
+									</Col>
+									<Col xs={12} className="py-2">
+										<CheckBox
+											type="checkbox"
+											id="personal-data-checkbox"
+											label={
+												checkBoxLabel('Я згоден на збір та обробку моїх персональних даних',
+													'personal-data')}
+											name="processDataCheck"
+											dataCy="personal-data-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.processDataCheck}
+											value={values.processDataCheck}
+											touched={touched.processDataCheck}
+											errors={errors.processDataCheck}
+										/>
+									</Col>
+									<Col xs={12} className="py-2">
+										<CheckBox
+											type="checkbox"
+											id="payment-checkbox"
+											label={checkBoxLabel('Зобов\'язання про оплату', 'payment')}
+											name="paymentObligationsCheck"
+											dataCy="payment-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.paymentObligationsCheck}
+											value={values.paymentObligationsCheck}
+											touched={touched.paymentObligationsCheck}
+											errors={errors.paymentObligationsCheck}
+										/>
+									</Col>
+								</>
+								: <>
+									<Col xs={12} className="pt-3">
+										<CheckBox
+											type="checkbox"
+											id={editMode
+												? `currently-enrolled-checkbox-${pupil.id}`
+												: 'currently-enrolled-checkbox'}
+											label="Зарахований до школи на навчання."
+											name="currentlyEnrolled"
+											dataCy="currently-enrolled-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.currentlyEnrolled}
+											value={values.currentlyEnrolled}
+											touched={touched.currentlyEnrolled}
+											errors={errors.currentlyEnrolled}
+										/>
+										<CheckBox
+											type="checkbox"
+											id={editMode
+												? `docs-present-checkbox-${pupil.id}`
+												: 'docs-present-checkbox'}
 											label="Надав усі необхідні документи."
 											name="docsPresent"
+											dataCy="docs-present-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
 											checked={values.docsPresent}
@@ -471,77 +638,30 @@ const PupilForm = ({
 										/>
 									</Col>
 								</>
-								: <>
-									<Col xs={12} className="pt-4">
-										<CheckBox
-											type="checkbox"
-											id="docs-checkbox"
-											label="Я зобов'язаний надати ці документи шкільному відділу"
-											name="docsCheck"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											checked={values.docsCheck}
-											value={values.docsCheck}
-											touched={touched.docsCheck}
-											errors={errors.docsCheck}
-										/>
-										<ol style={{ marginBottom: '0rem', paddingLeft: '2.5rem' }}>
-											<li>
-												Копія свідоцтва про народження
-											</li>
-											<li>
-												Медічна довідка про відсутність противопоказань до занять обраним фахом.
-											</li>
-										</ol>
-									</Col>
-									<Col xs={12} className="py-2">
-										<CheckBox
-											type="checkbox"
-											id="personal-data-checkbox"
-											label="Я згоден на збір та обробку моїх персональних даних"
-											name="processDataCheck"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											checked={values.processDataCheck}
-											value={values.processDataCheck}
-											touched={touched.processDataCheck}
-											errors={errors.processDataCheck}
-										/>
-									</Col>
-									<Col xs={12} className="py-2">
-										<CheckBox
-											type="checkbox"
-											id="payment-checkbox"
-											label="Зобов'язання про оплату"
-											name="paymentObligationsCheck"
-											onChange={handleChange}
-											onBlur={handleBlur}
-											checked={values.paymentObligationsCheck}
-											value={values.paymentObligationsCheck}
-											touched={touched.paymentObligationsCheck}
-											errors={errors.paymentObligationsCheck}
-										/>
-									</Col>
-								</>
 							}
 						</Form.Row>
 
 						{/* Button */}
 						<Form.Group
 							as={Col}
-							className="pt-4 px-0 d-flex justify-content-end"
+							className="pt-4 px-0 d-flex justify-content-around"
 						>
 							<BtnWithSpinner
-								label={editMode ? 'Зберегти' : 'Додати'}
-								variant={editMode ? 'success' : 'primary'}
 								type="submit"
+								label={editMode
+									? 'Зберегти'
+									: (mode === 'public' ? 'Відправити' : 'Додати')
+								}
+								variant={editMode ? 'success' : 'primary'}
 								loadingState={processingForm}
 								dataCy="add-pupil-btn"
 								className="default-width-btn"
 							/>
 							<ResetBtn
+								block
 								label="Очистити"
 								variant="light"
+								dataCy="reset-pupil-form-btn"
 								onClick={handleReset}
 								className="ml-2 default-width-btn"
 							/>
@@ -549,17 +669,24 @@ const PupilForm = ({
 					</Form>
 				)}
 			</Formik>
+			<InfoModal
+				title={infoModalTitle}
+				text={infoModalText}
+				centered
+				show={infoModalVis}
+				onHide={() => setInfoModalVis(!infoModalVis)}
+			/>
 		</Container>
 	)
 }
 
 PupilForm.propTypes = {
 	pupil: PropTypes.object,
-	user: PropTypes.object.isRequired,
+	user: PropTypes.object,
 	setNotification: PropTypes.func.isRequired,
 	createPupil: PropTypes.func.isRequired,
 	updatePupil: PropTypes.func.isRequired,
-	mode: PropTypes.oneOf(['create', 'edit']).isRequired,
+	mode: PropTypes.oneOf(['create', 'edit', 'public']).isRequired,
 	closeModal: PropTypes.func
 }
 

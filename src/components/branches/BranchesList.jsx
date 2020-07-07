@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { initializeBranches } from '../../reducers/branchesReducer'
@@ -12,6 +12,13 @@ const LazyBranchForm = React.lazy(() => import('../forms/BranchForm'))
 
 const BranchesList = ({ initializeBranches, branches }) => {
 
+	const unmounted = useRef(false)
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
+
+
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
@@ -23,7 +30,9 @@ const BranchesList = ({ initializeBranches, branches }) => {
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setIsLoading(false))
+			.finally(() => {
+				if (!unmounted.current) setIsLoading(false)
+			})
 	// eslint-disable-next-line
 	}, [])
 
@@ -49,7 +58,7 @@ const BranchesList = ({ initializeBranches, branches }) => {
 						)}
 					</ListGroup>
 
-					<p className="pt-3 text-muted">
+					<p className="py-3 text-muted">
 						Щоб додати відділення, вам потрібна така інформація:
 						назва, місто, адреса, номер телефону.
 					</p>

@@ -47,29 +47,12 @@ export const schoolYearMonths = locale => {
 		return result.reverse()
 	}
 
-	const fullYear = () => {
-		let date = new Date()
-		const result = []
-		try {
-			// nine being months in a school year
-			[...Array(9).keys()].map(month => {
-				// start from september
-				date.setMonth(8 + month)
-				result.push(date.toLocaleString(locale, { month:'long' }))
-				return null
-			})
-		} catch (error) {
-			console.error(error)
-		}
-		return result
-	}
-
 	// finally
 	const currentDate = new Date()
 	let endingMonth
 
 	if (currentDate.getMonth() === 8 || isSummer(currentDate)) { // september or summer
-		return fullYear()
+		return ['вересень', 'жовтень', 'листопад', 'грудень', 'січень', 'лютий', 'березень', 'квітень', 'травень']
 	} else { // not september nor summer, i.e. middle of the year
 		endingMonth = (currentDate.getMonth() - 1) + monthsTillSummer(currentDate.getMonth())
 		return getPeriodMonths(currentDate.getMonth(), endingMonth)

@@ -12,7 +12,7 @@ const MainViewCarousel = () => {
 					alt="First slide"
 				/>
 				<Carousel.Caption>
-					<h3>Навчання</h3>
+					<h3>Напрямки</h3>
 					<br />
 					<p>Образотворче мистецтво, музика, театр</p>
 				</Carousel.Caption>
@@ -40,9 +40,9 @@ const MainViewCarousel = () => {
 					alt="Third slide"
 				/>
 				<Carousel.Caption>
-					<h3>Співбесіда</h3>
+					<h3>Навчання</h3>
 					<br />
-					<p>Ви можете записатися на співбесіду у нас на сайті</p>
+					<p>Заповнити заявку ви можете у нас на сайті</p>
 				</Carousel.Caption>
 			</Carousel.Item>
 		</Carousel>

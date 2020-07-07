@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { login } from '../../reducers/loginReducer'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setRecaptchaScore,
+	setProcessingForm } from '../../reducers/notificationReducer'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -11,15 +13,21 @@ import { Container, Col, Form, InputGroup, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-import ReCaptchaComp from '../common/ReCaptchaComp'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import { BtnWithSpinner } from '../common/buttons'
 
-// const LoginForm = ({ user, setNotification, ...props }) => {
-const LoginForm = ({ setNotification, ...props }) => {
+const LoginForm = ({
+	login,
+	reCaptchaScore,
+	processingForm,
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm }) => {
 
 	const unmounted = useRef(false)
 	const history = useHistory()
 	const [loginSuccessful, setLoginSuccessful] = useState(false)
+	const [loginValues, setLoginValues] = useState(null)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	useEffect(() => {
 		if (loginSuccessful) history.push('/school/overview')
@@ -29,35 +37,48 @@ const LoginForm = ({ setNotification, ...props }) => {
 		return () => { unmounted.current = true }
 	}, [])
 
-	const [logginIn, setLogginIn] = useState(false)
+	const getRecaptchaScore = () => {
+		executeRecaptcha('login')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
 
-	const handleLogin = async ({ email, password }) => {
-		const userCreds = {
-			email: email,
-			password : password
-		}
-		setLogginIn(true)
-		props.login(userCreds)
+	const loginUser = useCallback(loginValues => {
+		login(loginValues)
 			.then(() => {
 				setNotification({
-					message: 'Ви успішно ввійшли в систему.',
+					message: 'Вхід вдалий.',
 					variant: 'info'
 				}, 5)
 				setLoginSuccessful(true)
 			})
 			.catch(error => {
-				const { message } = { ...error.response.data }
+				const { message, variant } = { ...error.response.data }
 				setNotification({
 					message,
-					variant: 'danger'
+					variant: variant ? variant : 'danger'
 				}, 5)
 			})
 			.finally(() => {
 				if (!unmounted.current) {
-					setLogginIn(false)
+					setProcessingForm(false)
 				}
 			})
-	}
+	}, [login, setNotification, setProcessingForm])
+
+	useEffect(() => {
+		if (loginValues && reCaptchaScore >= .5) {
+			loginUser(loginValues)
+		}
+	}, [reCaptchaScore, loginValues, loginUser])
 
 	// Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
@@ -86,25 +107,9 @@ const LoginForm = ({ setNotification, ...props }) => {
 		}
 	}
 
-	// recaptcha
-	const reCaptchaRef = React.createRef()
-	const [score, setScore] = useState(null)
-
-	const setRecaptchaScore = score => {
-		if (!unmounted.current) {
-			if (score <= .1) {
-				setNotification({
-					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
-					variant: 'warning'
-				}, 5)
-			}
-			setScore(score)
-		}
-	}
-
 	return (
 		<>
-			<Container className="pb-4">
+			<Container>
 				<h1 className="text-center custom-font py-4">
 					Логін
 				</h1>
@@ -114,7 +119,9 @@ const LoginForm = ({ setNotification, ...props }) => {
 						password: ''
 					}}
 					onSubmit={async (values) => {
-						await handleLogin(values)
+						setProcessingForm(true)
+						setLoginValues(values)
+						getRecaptchaScore()
 					}}
 					validationSchema={loginFormSchema}
 				>
@@ -132,8 +139,8 @@ const LoginForm = ({ setNotification, ...props }) => {
 						>
 
 							{/* Message sender email input */}
-							<Form.Row className="d-flex justify-content-center">
-								<Form.Group as={Col} sm={10} >
+							<Form.Row>
+								<Form.Group as={Col}>
 									<Form.Label>
 										Ваша електронна пошта
 									</Form.Label>
@@ -147,9 +154,6 @@ const LoginForm = ({ setNotification, ...props }) => {
 										isValid={touched.email && !errors.email}
 										isInvalid={touched.email && !!errors.email}
 									/>
-									<Form.Control.Feedback>
-										Ok
-									</Form.Control.Feedback>
 									<Form.Control.Feedback type="invalid">
 										{errors.email}
 									</Form.Control.Feedback>
@@ -157,8 +161,8 @@ const LoginForm = ({ setNotification, ...props }) => {
 							</Form.Row>
 
 							{/* User password input */}
-							<Form.Row className="d-flex1 justify-content-center">
-								<Form.Group as={Col} sm={10} >
+							<Form.Row>
+								<Form.Group as={Col}>
 									<Form.Label>
 										Ваш пароль
 									</Form.Label>
@@ -186,9 +190,6 @@ const LoginForm = ({ setNotification, ...props }) => {
 												}
 											</Button>
 										</InputGroup.Append>
-										<Form.Control.Feedback className="login-pass-feedback">
-											Ok
-										</Form.Control.Feedback>
 										<Form.Control.Feedback type="invalid" className="login-pass-feedback">
 											{errors.password}
 										</Form.Control.Feedback>
@@ -200,8 +201,8 @@ const LoginForm = ({ setNotification, ...props }) => {
 							<Form.Row className="d-flex justify-content-center">
 								<Form.Group
 									as={Col}
-									sm={10}
-									className="d-flex
+									sm={12}
+									className="d-flex pt-3
 									justify-content-between
 									align-items-center"
 								>
@@ -214,17 +215,15 @@ const LoginForm = ({ setNotification, ...props }) => {
 								</Form.Group>
 								<Form.Group
 									as={Col}
-									sm={10}
+									sm={12}
 									className="d-flex pt-3
 										justify-content-center
 										align-items-center"
 								>
 									<BtnWithSpinner
 										type="submit"
-										style= {{ width: '7rem' }}
-										loadingState={logginIn}
-										disabled={score <= .1 ? true : false}
-										waitingState={!score}
+										loadingState={processingForm}
+										disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
 										label="Логін"
 										variant="primary"
 										dataCy="login-btn"
@@ -235,14 +234,6 @@ const LoginForm = ({ setNotification, ...props }) => {
 						</Form>
 					)}
 				</Formik>
-				<ReCaptchaComp
-					ref={reCaptchaRef}
-					size="invisible"
-					render="explicit"
-					badge="bottomleft"
-					hl="uk"
-					setScore={setRecaptchaScore}
-				/>
 			</Container>
 		</>
 	)
@@ -250,13 +241,16 @@ const LoginForm = ({ setNotification, ...props }) => {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		reCaptchaScore: state.notification.reCaptchaScore,
+		processingForm: state.notification.processingForm
 	}
 }
 
 const mapDispatchToProps = {
 	login,
-	setNotification
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm
 }
 
 export default connect(

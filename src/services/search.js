@@ -14,10 +14,11 @@ const setToken = newToken => {
 
 /**
  * Search teachers
+ * @param {string} payload - Search term
  *
  * @returns {Object} - Response data
  */
-const teachers = async (payload) => {
+const teachers = async payload => {
 
 	const config = {
 		headers: { Authorization: token }
@@ -33,10 +34,11 @@ const teachers = async (payload) => {
 
 /**
  * Search pupils
+ * @param {string} payload - Search term
  *
  * @returns {Object} - Response data
  */
-const pupils = async (payload) => {
+const pupils = async payload => {
 
 	const config = {
 		headers: { Authorization: token }
@@ -52,6 +54,7 @@ const pupils = async (payload) => {
 
 /**
  * Search specialties
+ * @param {string} payload - Search term
  *
  * @returns {Object} - Response data
  */
@@ -69,4 +72,24 @@ const specialties = async payload => {
 	}
 }
 
-export default { pupils, teachers, specialties, setToken }
+/**
+ * Search specialties
+ * @param {string} payload - Search term
+ *
+ * @returns {Object} - Response data
+ */
+const teacherNameById = async id => {
+
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	try {
+		const response = await axios.get(`${baseUrl}/teachers/name/${id}`, config)
+		return response.data
+	} catch (error) {
+		return Promise.reject(error.response)
+	}
+}
+
+export default { pupils, teachers, teacherNameById, specialties, setToken }

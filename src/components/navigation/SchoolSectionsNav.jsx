@@ -1,17 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { Container, Row } from 'react-bootstrap'
 import SectionLink from './SectionLink'
 
-const SchoolDataNav = () => {
+const SchoolSectionsNav = ({ userData }) => {
 
-	const schoolSectionsLinks = [
-		/*{
-			to: '/school/overview',
-			label: 'Взагалі'
-		},*/
+	const [links, setLinks] = useState(null)
+
+	const superUserLinks = [
 		{
-			to: '/school/classes',
+			to: '/school/overview',
+			label: 'Статистика'
+		},
+		{
+			to: '/school/groups',
 			label: 'Групи'
 		},
 		{
@@ -32,24 +34,60 @@ const SchoolDataNav = () => {
 		},
 		{
 			to: '/school/payments',
-			label: 'Дані по оплаті'
+			label: 'Платежі'
+		},
+		{
+			to: '/school/users',
+			label: 'Користувачі'
+		},
+		{
+			to: `/school/users/${userData.id}`,
+			label: 'Профіль'
+		},
+	]
+
+	const teacherLinks = [
+		{
+			to: `/school/users/${userData.id}`,
+			label: 'Профіль'
+		},
+		{
+			to: '/school/teachergroups',
+			label: 'Групи'
+		},
+		{
+			to: '/school/teacherpupils',
+			label: 'Учні'
 		}
 	]
 
+	const chooseLinks = useCallback(superUser => {
+		superUser ? setLinks(superUserLinks) : setLinks(teacherLinks)
+	}, [superUserLinks, teacherLinks])
+
+	useEffect(() => {
+		chooseLinks(userData.superUser)
+	// eslint-disable-next-line
+	}, [])
+
 	return (
-		<Container>
-			<Row className="d-flex justify-content-center">
-				{schoolSectionsLinks.map(link =>
-					<SectionLink
-						key={link.label}
-						className="py-2 px-3 section-link"
-						to={link.to}
-						label={link.label}
-					/>
-				)}
-			</Row>
-		</Container>
+		<>
+			<Container>
+				<Row className="d-flex justify-content-center">
+					{links
+						? links.map(link =>
+							<SectionLink
+								key={link.label}
+								className="py-2 px-3 section-link"
+								to={link.to}
+								label={link.label}
+							/>)
+						: null
+					}
+				</Row>
+			</Container>
+		</>
 	)
 }
 
-export default SchoolDataNav
+export default SchoolSectionsNav

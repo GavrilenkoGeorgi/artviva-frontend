@@ -9,10 +9,10 @@ import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 import { trimObject } from '../../utils/objectHelpers'
 
-import { Col, Row, Form } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import TextAreaInput from './components/TextAreaInput'
 import TextInput from './components/TextInput'
-import BtnWithSpinner from '../common/BtnWithSpinner'
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 
 const SpecialtyForm = ({
@@ -150,18 +150,16 @@ const SpecialtyForm = ({
 					/>
 
 					{/* Specilalty info / descr input */}
-					<Row>
-						<TextAreaInput
-							label="Додаткова інформація/опис"
-							rows={2}
-							name="info"
-							onChange={handleChange}
-							onBlur={handleBlur}
-							value={values.info}
-							touched={touched.info}
-							errors={errors.info}
-						/>
-					</Row>
+					<TextAreaInput
+						label="Додаткова інформація/опис"
+						rows={2}
+						name="info"
+						onChange={handleChange}
+						onBlur={handleBlur}
+						value={values.info}
+						touched={touched.info}
+						errors={errors.info}
+					/>
 
 					{/* Button */}
 					<Form.Group
@@ -178,6 +176,7 @@ const SpecialtyForm = ({
 						/>
 						<ResetBtn
 							label="Очистити"
+							dataCy="specialty-form-rest-btn"
 							variant="light"
 							onClick={handleReset}
 							className="ml-2 default-width-btn"

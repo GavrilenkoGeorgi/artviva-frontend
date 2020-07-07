@@ -20,7 +20,7 @@ const ActivateAccountView = ({ match, setNotification }) => {
 		userService.activate(data)
 			.then(() => {
 				setNotification({
-					message: 'Ваш обліковий запис активовано, ви можете увійти.',
+					message: 'Ваш обліковий запис активовано.',
 					variant: 'success'
 				}, 5)
 				setActivated(true)
@@ -43,7 +43,13 @@ const ActivateAccountView = ({ match, setNotification }) => {
 				Активація облікового запису...
 			</h1>
 			{ processingActivation ? <Spinner animation="border" variant="primary" /> : null }
-			{ activated ? <h5>Ваш обліковий запис активовано, ви можете увійти.</h5> : null }
+			{ activated
+				? <h5>
+					Ваш обліковий запис активовано.
+					Зачекайте, коли адміністратор перевірить і затвердить ваш обліковий запис користувача.
+				</h5>
+				: null
+			}
 			{ activationError ? <h5>{activationError}</h5> : null }
 		</Container>
 	)

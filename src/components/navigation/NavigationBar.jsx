@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { connect } from 'react-redux'
+
 import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
 import NavBarLink from '../common/NavBarLink'
 import NavTogglerIcon from '../common/NavTogglerIcon'
 import Logout from '../common/Logout'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 const NavigationBar = ({ user }) => {
 
@@ -45,7 +49,7 @@ const NavigationBar = ({ user }) => {
 	}
 
 	// list of links
-	const linkClassList = 'pr-2 py-2 py-sm-0 px-md-2 d-flex align-items-center'
+	const linkClassList = 'pr-2 py-1 py-lg-0 px-lg-2 d-flex align-items-center'
 	const navLinks = [
 		{
 			to: '/teachers',
@@ -68,11 +72,6 @@ const NavigationBar = ({ user }) => {
 			className: linkClassList
 		},
 		{
-			to: '/pay/form',
-			label: 'Оплата',
-			className: linkClassList
-		},
-		{
 			to: '/contacts',
 			label: 'Контакти',
 			className: linkClassList
@@ -87,7 +86,7 @@ const NavigationBar = ({ user }) => {
 				collapseOnSelect
 				onToggle={toggleExpanded}
 				expanded={isExpanded}
-				expand="sm"
+				expand="lg"
 				bg="light"
 				variant="light"
 				className={visibility ? 'navbar-visible' : 'navbar-hidden' }
@@ -102,7 +101,6 @@ const NavigationBar = ({ user }) => {
 					<span className="pl-2 nav-logo-font">ArtViva</span>
 				</Navbar.Brand>
 				<Navbar.Toggle
-					// children={<NavTogglerIcon />}
 					aria-controls="responsive-navbar-nav"
 				>
 					<NavTogglerIcon type={isExpanded}/>
@@ -112,19 +110,30 @@ const NavigationBar = ({ user }) => {
 						<NavDropdown title="Школа" id="school-mgmt-links">
 							{user
 								? <>
-									<NavDropdown.Item href="/school/overview">Огляд</NavDropdown.Item>
-									{/*<NavDropdown.Item href="/school/classes">Класи</NavDropdown.Item>
-									<NavDropdown.Item href="/school/teachers">Вчителі</NavDropdown.Item>
-									<NavDropdown.Item href="/school/pupils">Учні</NavDropdown.Item>
-									<NavDropdown.Item href="/school/specialties">Спеціальності</NavDropdown.Item>
-									<NavDropdown.Item href="/school/branches">Філії</NavDropdown.Item>*/}
-									<NavDropdown.Item href="/school/payments">Платежі</NavDropdown.Item>
+									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
+									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/school/payments"><Logout /></NavDropdown.Item>
+									{user.superUser
+										? <NavDropdown.Item href="/school/payments">Всі платежі</NavDropdown.Item>
+										: null
+									}
+									<NavDropdown.Item href="/school/overview">Учні, групи</NavDropdown.Item>
+									<NavDropdown.Item href={`/school/users/${user.id}`}>
+										<span className="nav-list-icon">
+											<FontAwesomeIcon icon={faUser} />
+										</span>
+										<em>Профіль {user.lastname}</em>
+									</NavDropdown.Item>
+									<NavDropdown.Item href="#">
+										<Logout />
+									</NavDropdown.Item>
 								</>
 								: <>
-									<NavDropdown.Item href="/login">Логін</NavDropdown.Item>
+									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
+									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
 									<NavDropdown.Item href="/register">Реєстрація</NavDropdown.Item>
+									<NavDropdown.Divider />
+									<NavDropdown.Item href="/login">Логін</NavDropdown.Item>
 								</>
 							}
 						</NavDropdown>
@@ -138,7 +147,6 @@ const NavigationBar = ({ user }) => {
 								onClick={toggleExpanded}
 							/>
 						)}
-						{/*<UserInfoPopover />*/}
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

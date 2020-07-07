@@ -5,8 +5,8 @@ import { Container, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 
-const CollapseForm = ({ title, ariaControls, children }) => {
-	const [open, setOpen] = useState(false)
+const CollapseForm = ({ title, ariaControls, children, isOpen }) => {
+	const [open, setOpen] = useState(isOpen)
 
 	return (
 		<>
@@ -41,7 +41,8 @@ const CollapseForm = ({ title, ariaControls, children }) => {
 CollapseForm.propTypes = {
 	title: PropTypes.string.isRequired,
 	ariaControls: PropTypes.string.isRequired,
-	children: PropTypes.object
+	children: PropTypes.object,
+	isOpen: PropTypes.bool
 }
 
 export default CollapseForm

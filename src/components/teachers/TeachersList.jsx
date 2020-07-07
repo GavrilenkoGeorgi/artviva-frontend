@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
-import { initializeTeachers } from '../../reducers/teachersReducer'
+import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
+import { initializeTeachers, createTeacher } from '../../reducers/teachersReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 
 import { Link } from 'react-router-dom'
@@ -12,12 +12,19 @@ import LoadingIndicator from '../common/LoadingIndicator'
 
 const LazyTeacherForm = React.lazy(() => import('../forms/TeacherForm'))
 
-const TeachersList = ({ teachers, setNotification, initializeTeachers, initializeSpecialties }) => {
+const TeachersList = ({
+	teachers,
+	setNotification,
+	initializeTeachers,
+	initializeSpecialties,
+	setProcessingForm,
+	createTeacher
+}) => {
 
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		// wtf is this?!
+		// prepare data for the form i guess
 		initializeSpecialties()
 			.catch(error => {
 				setNotification({
@@ -37,6 +44,32 @@ const TeachersList = ({ teachers, setNotification, initializeTeachers, initializ
 			.finally(() => setIsLoading(false))
 	// eslint-disable-next-line
 	}, [])
+
+	const processTeacherData = (values, setErrors, resetForm) => {
+		// no linked teacher id cause we are creating
+		// a teacher profile without linked account
+		// only visible to admins
+		setProcessingForm(true)
+		createTeacher(values)
+			.then(() => {
+				setNotification({
+					message: 'Новий вчітель був успішно додан.',
+					variant: 'success'
+				}, 5)
+				resetForm()
+			})
+			.catch(error => {
+				const { message, cause } = { ...error.response.data }
+				if (cause === 'name') {
+					setErrors({ name: message })
+				}
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => setProcessingForm(false))
+	}
 
 	return (
 		<Container>
@@ -64,7 +97,10 @@ const TeachersList = ({ teachers, setNotification, initializeTeachers, initializ
 											animation="border"
 											variant="primary"
 										/>}>
-									<LazyTeacherForm mode="create" />
+									<LazyTeacherForm
+										mode="create"
+										processTeacherData={processTeacherData}
+									/>
 								</Suspense>
 							</CollapseForm>
 
@@ -89,17 +125,20 @@ const TeachersList = ({ teachers, setNotification, initializeTeachers, initializ
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		teachers: state.teachers,
-		specialties: state.specialties
+		specialties: state.specialties,
+		processingForm: state.notification.processingForm
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
+	createTeacher,
 	initializeTeachers,
-	initializeSpecialties
+	initializeSpecialties,
+	setProcessingForm
 }
 
 export default connect(

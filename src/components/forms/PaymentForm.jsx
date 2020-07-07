@@ -1,25 +1,44 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { connect } from 'react-redux'
 import paymentService from '../../services/payment'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification,	setProcessingForm,
+	setFetchingData, setRecaptchaScore } from '../../reducers/notificationReducer'
 import { schoolYearMonths } from '../../utils/datesAndTime'
 import searchService from '../../services/search'
 import specialtyService from '../../services/specialties'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 
 import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Col, Form, Button } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
+import { BtnWithSpinner, Button } from '../common/buttons'
+import { SimpleSpinner } from '../common/spinners'
+import { TextInput } from './components'
 
+const PaymentForm = ({
+	reCaptchaScore,
+	processingForm,
+	fetchingData,
+	setNotification,
+	setProcessingForm,
+	setFetchingData,
+	setRecaptchaScore }) => {
 
-const PaymentForm = () => {
-
+	const unmounted = useRef(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
 	const [teachersList, setTeachersList] = useState([])
 	const [specialtiesNames, setSpecialtiesNames] = useState([])
 	const [specilltiesData, setSpecialtiesData] = useState([])
+	const [paymentData, setPaymentData] = useState(null)
 	const months = schoolYearMonths('uk-ua')
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
 
 	useEffect(() => {
 		specialtyService.getAll()
@@ -27,20 +46,45 @@ const PaymentForm = () => {
 				setSpecialtiesData(data)
 				setSpecialtiesNames(data.map(specialty => specialty.title))
 			})
-			.catch(error => console.error(error))
-	}, [])
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+	}, [setNotification])
+
+	const getRecaptchaScore = () => {
+		executeRecaptcha('submit')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
 
 	const getTeachers = (value) => {
 		if (value.length >= 2) {
+			setFetchingData(true)
 			const query = { value }
 			searchService.teachers(query)
 				.then((data) => {
 					setTeachersList(data)
-					console.log('Techers list', teachersList)
 				})
 				.catch(error => {
-					console.error(error)
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'danger'
+					}, 5)
 				})
+				.finally(() => setFetchingData(false))
 		}
 	}
 
@@ -64,7 +108,11 @@ const PaymentForm = () => {
 			break
 		case 'specialty':
 			priceData = specilltiesData.find(specialty => specialty.title === target.value)
-			setOrderData({ ...orderData, specialty: target.value, cost: priceData.cost })
+			setOrderData({
+				...orderData,
+				specialty: target.value,
+				cost: priceData ? priceData.cost : 0
+			})
 			break
 		case 'months':
 			months = orderData.months
@@ -95,7 +143,7 @@ const PaymentForm = () => {
 	const [liqpayData, setLiqpayData] = useState({})
 
 	// Send generate and send data to liqpay
-	const handlePayment = async ({ teacher, pupil, specialty, months }) => {
+	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
 		const paymentData = {
 			action: 'pay',
@@ -111,7 +159,7 @@ const PaymentForm = () => {
 		// make a payment
 		paymentService.form(paymentData)
 			.then(({ data, signature }) => {
-				setLiqpayData({ ...liqpayData, data, signature })
+				setLiqpayData(liqpayData => ({ ...liqpayData, data, signature }))
 				paymentFormEl.current.submit()
 			})
 			.catch(error => {
@@ -121,7 +169,22 @@ const PaymentForm = () => {
 					variant: 'danger'
 				}, 5)
 			})
-	}
+			.finally(() => {
+				if (!unmounted.current) setProcessingForm(false)
+			})
+	}, [total, setNotification, setProcessingForm])
+
+	useEffect(() => {
+		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+			setNotification({
+				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
+				variant: 'warning'
+			}, 5)
+			setProcessingForm(false)
+		} else if (paymentData && reCaptchaScore >= .5) {
+			handlePayment(paymentData)
+		}
+	}, [reCaptchaScore, paymentData, handlePayment, setNotification, setProcessingForm])
 
 	// Form schema
 	const paymentFormSchema = Yup.object().shape({
@@ -149,12 +212,14 @@ const PaymentForm = () => {
 				specialty: '',
 				months: []
 			}}
-			onSubmit={async (values, { setErrors }) => {
-				await handlePayment(values, setErrors)
+			onSubmit={async (values) => {
+				// await handlePayment(values, setErrors)
+				setProcessingForm(true)
+				setPaymentData(values)
+				getRecaptchaScore()
 			}}
 			onReset={() => {
-				console.log('Reseting')
-				setOrderData({ ...orderData, cost: null })
+				setOrderData({ ...orderData, months: [], cost: null })
 				setTotal(null)
 			}}
 			validationSchema={paymentFormSchema}
@@ -185,7 +250,17 @@ const PaymentForm = () => {
 							controlId="teacher-name-input"
 							as={Col}
 						>
-							<Form.Label>Викладач</Form.Label>
+							<Form.Label>Викладач
+								{fetchingData
+									? <SimpleSpinner
+										className="ml-1"
+										animation="grow"
+										size="sm"
+										variant="primary"
+									/>
+									: null
+								}
+							</Form.Label>
 							<Form.Control
 								type="text"
 								name="teacher"
@@ -204,41 +279,21 @@ const PaymentForm = () => {
 									<option key={name} value={name} />
 								)}
 							</datalist>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">
 								{errors.teacher}
 							</Form.Control.Feedback>
 						</Form.Group>
 					</Form.Row>
 
-					{/* Pupil's name input */}
-					<Form.Row className="d-flex justify-content-center">
-						<Form.Group
-							controlId="paymentForm.pupilNameInput"
-							as={Col}
-						>
-							<Form.Label>
-								Прізвище учня
-							</Form.Label>
-							<Form.Control
-								type="text"
-								name="pupil"
-								data-cy="pupil-name-input"
-								onChange={handleChange}
-								value={values.pupil}
-								isValid={touched.pupil && !errors.pupil}
-								isInvalid={touched.pupil && !!errors.pupil}
-							/>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
-							<Form.Control.Feedback type="invalid">
-								{errors.pupil}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
+					<TextInput
+						label="Прізвище учня"
+						name="pupil"
+						dataCy="pupil-name-input"
+						onChange={handleChange}
+						value={values.pupil}
+						touched={touched.pupil}
+						errors={errors.pupil}
+					/>
 
 					{/* Specialty input */}
 					<Form.Row>
@@ -264,9 +319,6 @@ const PaymentForm = () => {
 									<option value={specialty} key={specialty}>{specialty}</option>
 								)}
 							</Form.Control>
-							<Form.Control.Feedback>
-								Ok
-							</Form.Control.Feedback>
 							<Form.Control.Feedback type="invalid">
 								{errors.specialty}
 							</Form.Control.Feedback>
@@ -326,7 +378,7 @@ const PaymentForm = () => {
 									<FontAwesomeIcon icon={faHryvnia} />
 								</>
 								: <h6 className="text-muted">
-										Заповніть форму для розрахунку вартості
+									<em>Заповніть форму для розрахунку вартості</em>
 								</h6>
 							}
 						</Col>
@@ -339,27 +391,24 @@ const PaymentForm = () => {
 					{/* Pay button */}
 					<Form.Row className="d-flex justify-content-around py-4">
 						<Col>
-							<Button
+							<BtnWithSpinner
 								block
 								type="submit"
 								variant="primary"
-								data-cy="payBtn"
+								dataCy="pay-button"
+								loadingState={processingForm}
 								className="primary-color-shadow"
-							>
-									Оплатити
-							</Button>
+								label="Оплатити"
+							/>
 						</Col>
 						<Col>
 							<Button
 								block
-								type="reset"
 								variant="light"
-								data-cy="payBtn"
-								className=""
+								dataCy="reset-pay-form-btn"
 								onClick={handleReset}
-							>
-									Очистити
-							</Button>
+								label="Очистити"
+							/>
 						</Col>
 					</Form.Row>
 
@@ -369,4 +418,22 @@ const PaymentForm = () => {
 	)
 }
 
-export default PaymentForm
+const mapStateToProps = (state) => {
+	return {
+		processingForm: state.notification.processingForm,
+		fetchingData: state.notification.fetchingData,
+		reCaptchaScore: state.notification.reCaptchaScore,
+	}
+}
+
+const mapDispatchToProps = {
+	setNotification,
+	setProcessingForm,
+	setFetchingData,
+	setRecaptchaScore
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(PaymentForm)

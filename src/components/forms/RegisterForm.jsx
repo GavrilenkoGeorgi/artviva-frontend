@@ -1,16 +1,93 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification,
+	setRecaptchaScore, setProcessingForm } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
-import { Container, Col, Form, InputGroup, Button } from 'react-bootstrap'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { personalDataProcessing } from '../../data/formTexts.json'
+
 import { Link } from 'react-router-dom'
-import ButtonComponent from '../common/Button'
+import { Col, Form, InputGroup, Button } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
-const RegisterForm = ({ setNotification, setRegistrationSuccessful, registrationSuccessful }) => {
+import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
+import TextInput from './components/TextInput'
+import CheckBox from './components/Checkbox'
+import { InfoModal } from '../common/modals'
+
+const RegisterForm = ({
+	reCaptchaScore,
+	processingForm,
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm }) => {
+
+	const unmounted = useRef(false)
+	const [registrationData, setRegistrationData] = useState(null)
+	const [infoModalVis, setInfoModalVis] = useState(false)
+	const { executeRecaptcha } = useGoogleReCaptcha()
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
+
+	const getRecaptchaScore = () => {
+		executeRecaptcha('submit')
+			.then(token => {
+				setRecaptchaScore(token)
+			})
+			.catch(error => {
+				const { message, variant } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: variant ? variant : 'danger'
+				}, 5)
+			})
+	}
+
+	const handleRegister = useCallback(() => {
+		setProcessingForm(true)
+		const { user, setErrors } = registrationData
+
+		userService.signUp(user)
+			.then(() => {
+				setNotification({
+					message: 'Ви отримаєте електронний лист із посиланням для активації свого акаунта.',
+					variant: 'success'
+				}, 5)
+			})
+			.catch(error => {
+				const { message, cause } = { ...error.response.data }
+				if (cause === 'email') {
+					setErrors({ email: message })
+				}
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
+	}, [setNotification, setProcessingForm, registrationData])
+
+	useEffect(() => {
+		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+			setNotification({
+				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
+				variant: 'warning'
+			}, 5)
+			setProcessingForm(false)
+		} else if (registrationData && reCaptchaScore >= .5) {
+			handleRegister(registrationData)
+		}
+	}, [reCaptchaScore, registrationData, handleRegister, setNotification, setProcessingForm])
+
 	// Minimum eight characters, at least one uppercase letter, one lowercase letter and one number
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 
@@ -32,11 +109,13 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 			.required('Введіть прізвище.'),
 		password: Yup.string()
 			.min(8, 'Мінімум 8 символів.')
-			.matches(mediumStrPass, 'Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
+			.matches(mediumStrPass,
+				'Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
 			.required('Будь ласка, введіть свій пароль.'),
 		passwordConfirm: Yup.string()
 			.min(8, 'Мінімум 8 символів.')
-			.matches(mediumStrPass, 'Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
+			.matches(mediumStrPass,
+				'Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
 			.required('Будь ласка, введіть підтвердження свого пароля.')
 			.when('password', {
 				is: value => value && value.length > 0,
@@ -47,35 +126,8 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 			.oneOf([true], 'Будь ласка, погодьтеся з умовами використання сайту.')
 	})
 
-	const handleRegister = ({ email, name, middlename, lastname, password }, setErrors ) => {
-		const userCreds = {
-			email,
-			name,
-			middlename,
-			lastname: lastname,
-			password
-		}
-		userService.signUp(userCreds)
-			.then(() => {
-				setNotification({
-					message: 'Ви отримаєте електронний лист із посиланням для активації свого акаунта.',
-					variant: 'success'
-				}, 5)
-				setRegistrationSuccessful(true)
-			})
-			.catch(error => {
-				const { message, cause } = { ...error.response.data }
-				if (cause === 'email') {
-					setErrors({ email: message })
-				}
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-			})
-	}
-
-	const checkboxLabel = () => <>Я погоджуюся з <Link to="#">умовами</Link> використання сайту</>
+	const checkboxLabel = () =>
+		<>Я погоджуюся з <Link to="#" onClick={() => setInfoModalVis(true)}>умовами</Link> використання сайту</>
 
 	// password visibility
 	const [passHidden, setPassVis] = useState(false)
@@ -95,10 +147,7 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 	}
 
 	return (
-		<Container className="pb-4">
-			<h1 className="text-center custom-font py-4">
-				Реєстрація
-			</h1>
+		<>
 			<Formik
 				initialValues={{
 					email: '',
@@ -110,8 +159,15 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 					termsCheckbox: false
 				}}
 				onSubmit={async (values, { resetForm, setErrors }) => {
-					await handleRegister(values, setErrors)
-					if (registrationSuccessful) resetForm()
+					const user = {};
+					({ email: user.email,
+						name: user.name,
+						middlename: user.middlename,
+						lastname: user.lastname,
+						password: user.password } = values)
+					setProcessingForm(true)
+					setRegistrationData({ user, resetForm, setErrors })
+					getRecaptchaScore()
 				}}
 				validationSchema={registerFormSchema}
 			>
@@ -128,129 +184,58 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 						onSubmit={handleSubmit}
 						className="text-left"
 					>
+
 						{/* User email input */}
-						<Form.Row className="d-flex justify-content-center">
-							<Form.Group
-								controlId="user-email-input"
-								as={Col}
-								className="col-md-10 col-lg-7"
-							>
-								<Form.Label>
-									Ваша електронна пошта
-								</Form.Label>
-								<Form.Control
-									type="email"
-									name="email"
-									data-cy="email-input"
-									placeholder="Ваш майбутній логін"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.email}
-									isValid={touched.email && !errors.email}
-									isInvalid={touched.email && !!errors.email}
-								/>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.email}
-								</Form.Control.Feedback>
-							</Form.Group>
-						</Form.Row>
+						<TextInput
+							type="email"
+							label="Ваша електронна пошта"
+							name="email"
+							placeholder="Ваш майбутній логін"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.email}
+							touched={touched.email}
+							errors={errors.email}
+						/>
 
 						{/* User name input */}
-						<Form.Row className="d-flex justify-content-center">
-							<Form.Group
-								controlId="user-name-input"
-								as={Col}
-								className="col-md-10 col-lg-7"
-							>
-								<Form.Label>
-									Ваше ім&apos;я
-								</Form.Label>
-								<Form.Control
-									type="text"
-									name="name"
-									data-cy="name-input"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.name}
-									isValid={touched.name && !errors.name}
-									isInvalid={touched.name && !!errors.name}
-								/>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.name}
-								</Form.Control.Feedback>
-							</Form.Group>
-						</Form.Row>
+						<TextInput
+							label="Ваше ім'я"
+							name="name"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.name}
+							touched={touched.name}
+							errors={errors.name}
+						/>
 
 						{/* User middle name input */}
-						<Form.Row className="d-flex justify-content-center">
-							<Form.Group
-								controlId="user-middlename-input"
-								as={Col}
-								className="col-md-10 col-lg-7"
-							>
-								<Form.Label>
-									По батькові
-								</Form.Label>
-								<Form.Control
-									type="text"
-									name="middlename"
-									data-cy="middlename-input"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.middlename}
-									isValid={touched.middlename && !errors.middlename}
-									isInvalid={touched.middlename && !!errors.middlename}
-								/>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.middlename}
-								</Form.Control.Feedback>
-							</Form.Group>
-						</Form.Row>
+						<TextInput
+							label="По батькові"
+							name="middlename"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.middlename}
+							touched={touched.middlename}
+							errors={errors.middlename}
+						/>
 
 						{/* User last name input */}
-						<Form.Row className="d-flex justify-content-center">
-							<Form.Group
-								controlId="user-lastname-input"
-								as={Col}
-								className="col-md-10 col-lg-7"
-							>
-								<Form.Label>
-									Прізвище
-								</Form.Label>
-								<Form.Control
-									type="text"
-									name="lastname"
-									data-cy="lastname-input"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.lastname}
-									isValid={touched.lastname && !errors.lastname}
-									isInvalid={touched.lastname && !!errors.lastname}
-								/>
-								<Form.Control.Feedback>
-									Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.lastname}
-								</Form.Control.Feedback>
-							</Form.Group>
-						</Form.Row>
+						<TextInput
+							label="Прізвище"
+							name="lastname"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							value={values.lastname}
+							touched={touched.lastname}
+							errors={errors.lastname}
+						/>
 
 						{/* User password input */}
 						<Form.Row className="d-flex justify-content-center">
 							<Form.Group
 								controlId="user-pass-input"
 								as={Col}
-								className="col-md-10 col-lg-7"
 							>
 								<Form.Label>
 									Ваш пароль
@@ -278,9 +263,6 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 											}
 										</Button>
 									</InputGroup.Append>
-									<Form.Control.Feedback>
-										Ok
-									</Form.Control.Feedback>
 									<Form.Control.Feedback type="invalid">
 										{errors.password}
 									</Form.Control.Feedback>
@@ -293,7 +275,6 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 							<Form.Group
 								controlId="user-pass-confirm-input"
 								as={Col}
-								className="col-md-10 col-lg-7"
 							>
 								<Form.Label>
 									Підтвердження пароля
@@ -321,9 +302,6 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 											}
 										</Button>
 									</InputGroup.Append>
-									<Form.Control.Feedback>
-										Ok
-									</Form.Control.Feedback>
 									<Form.Control.Feedback type="invalid">
 										{errors.passwordConfirm}
 									</Form.Control.Feedback>
@@ -332,63 +310,62 @@ const RegisterForm = ({ setNotification, setRegistrationSuccessful, registration
 						</Form.Row>
 
 						{/* Checkbox */}
-						<Form.Row className="d-flex justify-content-center">
-							<Form.Group
-								as={Col}
-								className="col-md-10 col-lg-7"
-							>
-								<Form.Check
-									custom
-									name='termsCheckbox'
-									type="checkbox"
-									id="terms-checkbox"
-									data-cy="terms-checkbox"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									value={values.termsCheckbox}
-									isValid={touched.termsCheckbox && !errors.termsCheckbox}
-									isInvalid={touched.termsCheckbox && !!errors.termsCheckbox}
-									label={checkboxLabel()}
-								/>
-								<Form.Control.Feedback>
-										Ok
-								</Form.Control.Feedback>
-								<Form.Control.Feedback type="invalid">
-									{errors.termsCheckbox}
-								</Form.Control.Feedback>
-							</Form.Group>
-						</Form.Row>
+						<CheckBox
+							type="checkbox"
+							id="terms-checkbox"
+							label={checkboxLabel()}
+							name="termsCheckbox"
+							dataCy="terms-checkbox"
+							onChange={handleChange}
+							onBlur={handleBlur}
+							checked={values.termsCheckbox}
+							value={values.termsCheckbox}
+							touched={touched.termsCheckbox}
+							errors={errors.termsCheckbox}
+						/>
 
 						{/* Button */}
 						<Form.Row className='d-flex justify-content-center text-center'>
 							<Form.Group
 								as={Col}
-								className='col-md-10 col-lg-7 pt-4'
 							>
-								<ButtonComponent
-									className={'px-4 primary-color-shadow'}
-									variant={'primary'}
-									type={'submit'}
-									label={'Реєстрація'}
+								<BtnWithSpinner
+									type="submit"
+									block
+									loadingState={processingForm}
+									disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
+									label="Реєстрація"
+									variant="primary"
+									dataCy="register-btn"
+									className="primary-color-shadow my-3"
 								/>
 							</Form.Group>
 						</Form.Row>
 					</Form>
 				)}
 			</Formik>
-		</Container>
+			<InfoModal
+				title="Я погоджуюся з умовами використання сайту"
+				text={personalDataProcessing}
+				centered
+				show={infoModalVis}
+				onHide={() => setInfoModalVis(!infoModalVis)}
+			/>
+		</>
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		user: state.user,
-		account: state.account
+		reCaptchaScore: state.notification.reCaptchaScore,
+		processingForm: state.notification.processingForm
 	}
 }
 
 const mapDispatchToProps = {
-	setNotification
+	setNotification,
+	setRecaptchaScore,
+	setProcessingForm
 }
 
 export default connect(

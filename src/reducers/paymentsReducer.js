@@ -14,10 +14,10 @@ const paymentsReducer = (state = [], action) => {
  */
 export const initialisePayments = () => {
 	return async dispatch => {
-		const pupils = await paymentService.getAll()
+		const payments = await paymentService.getAll()
 		dispatch ({
 			type: 'INIT_PAYMENTS',
-			data: pupils
+			data: payments
 		})
 	}
 }
