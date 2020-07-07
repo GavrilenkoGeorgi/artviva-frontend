@@ -45,6 +45,21 @@ const getById = async id => {
 }
 
 /**
+ * Get list of teacher groups by id
+ * @param {string} id - Group ID
+ *
+ * @returns {Array} - Array of object containing group data
+ */
+
+const getTeacherGroups = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.get(`${baseUrl}/teacher/${id}`, config)
+	return response.data
+}
+
+/**
  * Create new school class
  * @param {Object} payload - New school class data
  * @param {string} payload.title - Unique class title
@@ -99,4 +114,4 @@ const update = async (id, payload) => {
 	return request.then(response => response.data)
 }
 
-export default { getAll, getById, setToken, create, deleteById, update }
+export default { getAll, getById, getTeacherGroups, setToken, create, deleteById, update }

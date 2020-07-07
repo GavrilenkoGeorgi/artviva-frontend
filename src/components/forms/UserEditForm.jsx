@@ -27,17 +27,18 @@ const UserEditForm = ({
 
 	const successNotification = () => {
 		setNotification({
-			message: 'Інформація про користувача оновлена.',
+			message: 'Інформація про користувача оновлена. Вам потрібно вийти та знову увійти, щоб застосувати зміни.',
 			variant: 'success'
-		}, 5)
+		}, 10)
 	}
 
-	const errorNotification = useCallback(error => {
-		const { message } = { ...error.response.data }
+	const errorNotification = useCallback((error, setErrors) => {
+		const { message, cause } = { ...error.response.data }
 		setNotification({
 			message,
 			variant: 'danger'
 		}, 5)
+		if (cause) setErrors({ [cause]: message })
 	}, [setNotification])
 
 	useEffect(() => {
@@ -52,20 +53,20 @@ const UserEditForm = ({
 		}
 	}, [userData, user, errorNotification])
 
-	const handleUserDetailsEdit = values => {
+	const handleUserDetailsEdit = (values, setErrors) => {
 		setProcessingForm(true)
 		userService.setToken(user.token)
 		if (mode === 'single') {
 			userService.update(user.id, values)
 				.then(() => {
 					successNotification()
+					closeModal()
 				})
 				.catch(error => {
-					errorNotification(error)
+					errorNotification(error, setErrors)
 				})
 				.finally(() => {
 					setProcessingForm(false)
-					closeModal()
 				})
 		} else {
 			updateUser(userData.id, values)
@@ -125,8 +126,8 @@ const UserEditForm = ({
 		<Formik
 			initialValues={{ ...userData, teacher: currentTeacher || '' }}
 			enableReinitialize
-			onSubmit={values => {
-				handleUserDetailsEdit(values)
+			onSubmit={(values, { setErrors }) => {
+				handleUserDetailsEdit(values, setErrors)
 			}}
 			validationSchema={userEditFormSchema}
 		>

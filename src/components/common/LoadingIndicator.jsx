@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 const LoadingIndicator = ({ animation, variant, size }) => {
 	return (
-		<div className="position-center">
+		<div className="position-center loading-background">
 			<Spinner
 				animation={animation}
 				variant={variant || ''}

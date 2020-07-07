@@ -55,6 +55,15 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 			})
 	}
 
+	const pupilTitleInfo = pupil => {
+		return `${pupil.name}: ${pupil.specialty
+			? pupil.specialty.title
+			: null}
+			${pupil.artSchoolClass
+		? pupil.artSchoolClass
+		: null } клас`
+	}
+
 	return (
 		<>
 			<Button
@@ -66,7 +75,7 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span className="text-left">
-					{pupil.name}: {pupil.specialty.title} {pupil.artSchoolClass ? `${pupil.artSchoolClass} клас` : null}
+					{pupilTitleInfo(pupil)}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -155,9 +164,11 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 									<Card.Text>
 										Музична школа: {pupil.artSchoolClass} клас
 									</Card.Text>
-									<Card.Text>
-										Фах: {pupil.specialty.title}
-									</Card.Text>
+									{pupil.specialty
+										? <Card.Text>
+											Фах: {pupil.specialty.title}
+										</Card.Text>
+										: null}
 									<Card.Text>
 										Класи ДШМ: {pupil.schoolClasses.map(item =>
 											<span className="pl-3 d-block" key={item.id}>

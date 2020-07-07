@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { initialiseUserPupils } from '../../reducers/pupilsReducer'
+import { initializePupils } from '../../reducers/pupilsReducer'
 
 import PupilsList from '../pupils/PupilsList'
 
-const TeacherPupilsView = ({ initialiseUserPupils }) => {
+const PupilsView = ({ initializePupils }) => {
 	return (
 		<>
 			<h4 className="text-center">Учні вчителя</h4>
-			<PupilsList getPupils={initialiseUserPupils} />
+			<PupilsList getPupils={initializePupils} />
 		</>
 	)
 }
@@ -20,10 +20,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	initialiseUserPupils
+	initializePupils
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(TeacherPupilsView)
+)(PupilsView)

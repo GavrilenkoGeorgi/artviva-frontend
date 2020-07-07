@@ -1,14 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { initialiseTeacherGroups } from '../../reducers/schoolClassesReducer'
+import { initializeSchoolClasses } from '../../reducers/schoolClassesReducer'
 
 import SchoolClassesList from '../schoolClasses/SchoolClassesList'
 
-const TeacherGroupsView = ({ initialiseTeacherGroups }) => {
+const GroupsView = ({ initializeSchoolClasses }) => {
 	return (
 		<>
-			<h4 className="text-center">Групи вчителя</h4>
-			<SchoolClassesList getGroups={initialiseTeacherGroups}/>
+			<h4 className="text-center">Всі групи школи</h4>
+			<SchoolClassesList getGroups={initializeSchoolClasses}/>
 		</>
 	)
 }
@@ -20,10 +20,10 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	initialiseTeacherGroups
+	initializeSchoolClasses
 }
 
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(TeacherGroupsView)
+)(GroupsView)

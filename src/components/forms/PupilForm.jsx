@@ -74,7 +74,7 @@ const PupilForm = ({
 		editMode
 			? editPupil(trimObject(values), setErrors)
 			: (mode === 'create'
-				? addPupil(trimObject((values), setErrors, resetForm))
+				? addPupil(trimObject(values), setErrors, resetForm)
 				: publicApply(trimObject(values), setErrors, resetForm))
 	}
 
@@ -93,7 +93,7 @@ const PupilForm = ({
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
 				if (cause === 'name') {
-					setErrors({ title: message })
+					setErrors({ name: message })
 				}
 				setNotification({
 					message,
@@ -116,14 +116,16 @@ const PupilForm = ({
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
 				if (cause === 'name') {
-					setErrors({ title: message })
+					setErrors({ name: message })
 				}
 				setNotification({
 					message,
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setProcessingForm(false))
+			.finally(() => {
+				setProcessingForm(false)
+			})
 	}
 
 	const editPupil = (values, setErrors) => {
@@ -138,7 +140,7 @@ const PupilForm = ({
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
 				if (cause === 'name') {
-					setErrors({ title: message })
+					setErrors({ name: message })
 				}
 				setNotification({
 					message,
@@ -319,7 +321,7 @@ const PupilForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={(values, { setErrors, resetForm }) => {
+				onSubmit={async (values, { setErrors, resetForm }) => {
 					handlePupil(values, setErrors, resetForm)
 				}}
 				validationSchema={pupilFormSchema}

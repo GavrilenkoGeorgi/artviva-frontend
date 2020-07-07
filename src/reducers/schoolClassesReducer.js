@@ -53,6 +53,23 @@ export const initializeSchoolClasses = () => {
 }
 
 /**
+ * Initialise teacher groups list
+ * @param {string} id - Id of the teacher
+ *
+ * @returns {Array} - Array of objects containing group info
+ */
+export const initialiseTeacherGroups = id => {
+	return async dispatch => {
+		const groups = await schoolClassesService.getTeacherGroups(id)
+		dispatch ({
+			// sets still not renamed 'school classes' list
+			type: 'INIT_SCHOOL_CLASSES',
+			data: groups
+		})
+	}
+}
+
+/**
  * Delete single school class
  * @param {string} id - Id of the school class to delete
  */

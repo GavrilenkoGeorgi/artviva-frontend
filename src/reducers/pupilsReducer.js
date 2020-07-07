@@ -74,6 +74,19 @@ export const initializePupils = () => {
 }
 
 /**
+ * Initialise list of user assigned pupils
+ */
+export const initialiseUserPupils = id => {
+	return async dispatch => {
+		const pupils = await pupilsService.getUserPupils(id)
+		dispatch ({
+			type: 'INIT_PUPILS',
+			data: pupils
+		})
+	}
+}
+
+/**
  * Delete single pupil
  * @param {string} id - ID of the pupil to delete
  */

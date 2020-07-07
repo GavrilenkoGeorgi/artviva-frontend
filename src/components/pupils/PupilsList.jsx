@@ -1,7 +1,6 @@
 import React, { useEffect, useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
-import { initializePupils } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import { nestedSort } from '../../utils/arrayHelpers'
 
@@ -16,7 +15,7 @@ const LazyPupilForm = React.lazy(() => import('../forms/PupilForm'))
 const PupilsList = ({
 	user,
 	pupils,
-	initializePupils,
+	getPupils,
 	setNotification }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
@@ -65,11 +64,11 @@ const PupilsList = ({
 	useEffect(() => {
 		if (user) {
 			pupilsService.setToken(user.token)
-			initializePupils()
+			getPupils(user.id)
 				.catch(error => {
+					const { message } = { ...error.response.data }
 					setNotification({
-						message: `Щось пішло не так, спробуйте пізніше:
-							${error.status} ${error.statusText}`,
+						message: `Щось пішло не так, спробуйте пізніше: ${message}`,
 						variant: 'danger'
 					}, 5)
 				})
@@ -77,8 +76,7 @@ const PupilsList = ({
 					if (componentIsMounted.current) setIsLoading(false)
 				})
 		}
-	// eslint-disable-next-line
-	}, [user, initializePupils, setNotification])
+	}, [user, getPupils, setNotification])
 
 	useEffect(() => {
 		setPupilsData(pupils)
@@ -128,14 +126,6 @@ const PupilsList = ({
 					<Container>
 						<Row className="pt-3 d-flex justify-content-center">
 							<Col xs={12} md={8} xl={6} className="order-xl-1">
-								<SortingControls
-									sortOrder={sortOrder}
-									filter={filter}
-									filterBy={filterBy}
-									sort={sort}
-									sortBy={sortBy}
-								/>
-
 								<CollapseForm
 									title="Додати нового учня"
 									ariaControls="pupil-add-form-collapse"
@@ -149,11 +139,19 @@ const PupilsList = ({
 										<LazyPupilForm mode="create" />
 									</Suspense>
 								</CollapseForm>
+
+								<SortingControls
+									sortOrder={sortOrder}
+									filter={filter}
+									filterBy={filterBy}
+									sort={sort}
+									sortBy={sortBy}
+								/>
 							</Col>
 
 							<Col xs={12} md={8} xl={6} className="order-xl-0">
 								<h6 className="text-muted mt-2 mb-3">
-									<em>Список усіх учнів школи.</em>
+									<em>Список учнів.</em>
 								</h6>
 
 								<ListGroup>
@@ -184,8 +182,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-	setNotification,
-	initializePupils
+	setNotification
+	// initializePupils
 }
 
 export default connect(

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import { Container, Row } from 'react-bootstrap'
 import SectionLink from './SectionLink'
@@ -13,7 +13,7 @@ const SchoolSectionsNav = ({ userData }) => {
 			label: 'Статистика'
 		},
 		{
-			to: '/school/classes',
+			to: '/school/groups',
 			label: 'Групи'
 		},
 		{
@@ -61,8 +61,12 @@ const SchoolSectionsNav = ({ userData }) => {
 		}
 	]
 
+	const chooseLinks = useCallback(superUser => {
+		superUser ? setLinks(superUserLinks) : setLinks(teacherLinks)
+	}, [superUserLinks, teacherLinks])
+
 	useEffect(() => {
-		userData.superUser ? setLinks(superUserLinks) : setLinks(teacherLinks)
+		chooseLinks(userData.superUser)
 	// eslint-disable-next-line
 	}, [])
 

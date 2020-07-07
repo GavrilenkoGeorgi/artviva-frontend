@@ -4,11 +4,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import './css/index.css'
 
-import SchoolClassesList from './components/schoolClasses/SchoolClassesList'
 import SchoolClassDetails from './components/schoolClasses/SchoolClassDetails'
 import TeachersList from './components/teachers/TeachersList'
 import TeacherDetails from './components/teachers/TeacherDetails'
-import PupilsList from './components/pupils/PupilsList'
 import SpecialtiesList from './components/specialties/SpecialtiesList'
 import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
@@ -21,7 +19,8 @@ import { ScrollToTop, ScrollToTopArrow,
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
-	ShowcaseView, UserProfileView, TeacherGroupsView, TeacherPupilsView } from './components/views'
+	ShowcaseView, UserProfileView, TeacherGroupsView, TeacherPupilsView,
+	GroupsView, PupilsView } from './components/views'
 
 const Routes = ({ user }) => {
 
@@ -69,11 +68,11 @@ const Routes = ({ user }) => {
 						{/*<PrivateRoute path="/school/users/:id" exact component={SchoolClassDetails} />*/}
 						<PrivateRoute path="/school/users" exact component={UsersListView} />
 						<PrivateRoute path="/school/classes/:id" exact component={SchoolClassDetails} />
-						<PrivateRoute path="/school/classes" component={SchoolClassesList} />
+						<PrivateRoute path="/school/groups" component={GroupsView} />
 						<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
 						<PrivateRoute path="/school/teachers" component={TeachersList} />
 					</Switch>
-					<PrivateRoute path="/school/pupils" component={PupilsList} />
+					<PrivateRoute path="/school/pupils" component={PupilsView} />
 					<PrivateRoute path="/school/specialties" component={SpecialtiesList} />
 					<PrivateRoute path="/school/branches" component={BranchesList} />
 					<PrivateRoute path="/school/payments" component={Payments} />

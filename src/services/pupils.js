@@ -19,15 +19,26 @@ const setToken = newToken => {
  */
 
 const getAll = async () => {
-	try {
-		const config = {
-			headers: { Authorization: token }
-		}
-		const response = await axios.get(baseUrl, config)
-		return response.data
-	} catch (error) {
-		return Promise.reject(error.response)
+	const config = {
+		headers: { Authorization: token }
 	}
+	const response = await axios.get(baseUrl, config)
+	return response.data
+}
+
+/**
+ * Get list of teacher groups by id
+ * @param {string} id - Group ID
+ *
+ * @returns {Array} - Array of object containing group data
+ */
+
+const getUserPupils = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const response = await axios.get(`${baseUrl}/user/${id}`, config)
+	return response.data
 }
 
 /**
@@ -145,4 +156,4 @@ const publicApply = async payload => {
 	return response.data
 }
 
-export default { getAll, setToken, create, deleteById, update, publicApply }
+export default { getAll, getUserPupils, setToken, create, deleteById, update, publicApply }
