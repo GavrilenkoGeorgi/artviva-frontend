@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
 import moment from 'moment'
-import { paymentObligations, personalDataProcessing } from '../../data/formTexts.json'
+import { paymentObligations,
+	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
 import { findByPropertyValue, phoneNumber,
 	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
 
-import { Link } from 'react-router-dom'
 import { Container, Col, Form } from 'react-bootstrap'
 import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
@@ -161,6 +161,10 @@ const PupilForm = ({
 		case 'payment':
 			title = 'Зобов\'язання про оплату'
 			setInfoModalText(paymentObligations)
+			break
+		case 'benefits':
+			title = 'Пільги на навчання'
+			setInfoModalText(benefitsExplained)
 			break
 		default:
 			break
@@ -412,6 +416,8 @@ const PupilForm = ({
 							<Select
 								label="Пільги %"
 								placeholder="Немає"
+								infoBtn
+								showInfo={() => openInfoModal('benefits')}
 								name="hasBenefit"
 								options={benefits}
 								onChange={handleChange}

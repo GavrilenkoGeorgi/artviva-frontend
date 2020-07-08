@@ -2,9 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Form, Col } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
 const Select = props => {
-	const { touched, placeholder, ...other } = props
+	const {
+		touched,
+		placeholder,
+		infoBtn,
+		showInfo,
+		...other } = props
 
 	return (
 		<Form.Group
@@ -14,6 +21,12 @@ const Select = props => {
 		>
 			<Form.Label>
 				{props.label}
+				{infoBtn
+					? <FontAwesomeIcon
+						icon={faQuestionCircle}
+						onClick={showInfo}
+						className="ml-2 text-primary"/>
+					: null}
 			</Form.Label>
 			<Form.Control
 				as="select"
@@ -36,6 +49,8 @@ const Select = props => {
 Select.propTypes = {
 	label: PropTypes.string.isRequired,
 	placeholder: PropTypes.string,
+	infoBtn: PropTypes.bool,
+	showInfo: PropTypes.func,
 	name: PropTypes.string.isRequired,
 	options: PropTypes.array.isRequired,
 	onChange: PropTypes.func.isRequired,
