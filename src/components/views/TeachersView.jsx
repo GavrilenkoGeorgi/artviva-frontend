@@ -29,7 +29,7 @@ const TeachersView = ({ match }) => {
 					}
 				</Col>
 				<h3 className="custom-font pt-4 pb-2">
-					Наші вчітели
+					Наші вчителі
 				</h3>
 				<Col xs={12} className="p-0">
 					{departments

@@ -708,7 +708,7 @@ const TeacherForm = ({
 										? `${teacher.id}-employee-is-student-checkbox`
 										: 'employee-is-student-checkbox'
 									}
-									label="Співробітник навчается у ВНЗ?"
+									label="Студент"
 									name="employeeIsAStudent"
 									dataCy="employee-is-student-checkbox"
 									onChange={handleChange}

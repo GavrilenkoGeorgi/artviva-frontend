@@ -14,8 +14,9 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
+import { Link } from 'react-router-dom'
 import { Container, Col, Form } from 'react-bootstrap'
-import { BtnWithSpinner, Button } from '../common/buttons'
+import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
 	TextAreaInput, TextInput } from './components'
@@ -150,24 +151,15 @@ const PupilForm = ({
 			.finally(() => setProcessingForm(false))
 	}
 
-	const checkBoxLabel = (label, type) => {
-		const data = { label, type }
-		return <>
-			<Button
-				variant="link"
-				dataCy={`${type}-modal-btn`}
-				className="p-0 d-flex text-left"
-				onClick={() => openInfoModal(data)}
-				label={label} />
-		</>
-	}
-
-	const openInfoModal = ({ type, label: title }) => {
+	const openInfoModal = type => {
+		let title
 		switch (type) {
 		case 'personal-data':
+			title = 'Я згоден на збір та обробку моїх персональних даних'
 			setInfoModalText(personalDataProcessing)
 			break
 		case 'payment':
+			title = 'Зобов\'язання про оплату'
 			setInfoModalText(paymentObligations)
 			break
 		default:
@@ -542,7 +534,7 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="docs-checkbox"
-											label="Я зобов'язаний надати ці документи шкільному відділу"
+											label="Я зобов'язаний надати ці документи адміністрації школи"
 											name="docsCheck"
 											dataCy="docs-checkbox"
 											onChange={handleChange}
@@ -566,8 +558,13 @@ const PupilForm = ({
 											type="checkbox"
 											id="personal-data-checkbox"
 											label={
-												checkBoxLabel('Я згоден на збір та обробку моїх персональних даних',
-													'personal-data')}
+												<>
+													Я згоден на <Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('personal-data')}>
+														збір та обробку</Link> моїх персональних даних
+												</>
+											}
 											name="processDataCheck"
 											dataCy="personal-data-checkbox"
 											onChange={handleChange}
@@ -582,7 +579,14 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="payment-checkbox"
-											label={checkBoxLabel('Зобов\'язання про оплату', 'payment')}
+											label={
+												<>
+													<Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('payment')}>
+														Зобов&apos;язання</Link> про оплату
+												</>
+											}
 											name="paymentObligationsCheck"
 											dataCy="payment-checkbox"
 											onChange={handleChange}

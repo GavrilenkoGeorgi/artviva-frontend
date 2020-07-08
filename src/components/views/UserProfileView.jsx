@@ -10,8 +10,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import UserDetailsCard from '../users/UserDetailsCard'
 import TeacherDetails from '../teachers/TeacherDetails'
 import TeacherForm from '../forms/TeacherForm'
-import CollapseForm from '../common/CollapseForm'
-import LoadingIndicator from '../common/LoadingIndicator'
+import { CollapseComponent, LoadingIndicator } from '../common'
 
 const UserProfileView = ({
 	user,
@@ -99,8 +98,7 @@ const UserProfileView = ({
 						</div>
 					</Col>
 					<Col xs={12} md={5}>
-						<h3 className="text-center" >Анкета вчітеля</h3>
-						<CollapseForm
+						<CollapseComponent
 							title={teacherDataPresent ? 'Редагувати дані вчителя' : 'Заповніть дані вчителя'}
 							ariaControls="pupil-add-form-collapse"
 						>
@@ -112,7 +110,7 @@ const UserProfileView = ({
 								/>
 								: null
 							}
-						</CollapseForm>
+						</CollapseComponent>
 					</Col>
 				</Row>
 				: <LoadingIndicator
