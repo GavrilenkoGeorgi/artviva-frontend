@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 
 import { Form, Col } from 'react-bootstrap'
 
-const Select = (props) => {
-	const { touched, ...other } = props
+const Select = props => {
+	const { touched, placeholder, ...other } = props
 
 	return (
 		<Form.Group
@@ -21,7 +21,7 @@ const Select = (props) => {
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
 			>
-				<option>Виберіть...</option>
+				<option value={0}>{placeholder || 'Виберіть...'}</option>
 				{props.options.map(item =>
 					<option value={item} key={item}>{item}</option>
 				)}
@@ -35,6 +35,7 @@ const Select = (props) => {
 
 Select.propTypes = {
 	label: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
 	name: PropTypes.string.isRequired,
 	options: PropTypes.array.isRequired,
 	onChange: PropTypes.func.isRequired,

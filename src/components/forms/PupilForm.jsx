@@ -43,7 +43,7 @@ const PupilForm = ({
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
-	const benefits = [0, 50, 100] // %
+	const benefits = [50, 100] // %
 
 	// set auth token and mode
 	useEffect(() => {
@@ -184,7 +184,7 @@ const PupilForm = ({
 				mainSchool: '',
 				mainSchoolClass: '',
 				gender: '',
-				hasBenefit: '',
+				hasBenefit: 0,
 				fathersName: '',
 				fathersPhone: '',
 				fathersEmploymentInfo: '',
@@ -226,7 +226,7 @@ const PupilForm = ({
 			.max(255, 'Максимум 255 символів.')
 			.required('Введіть основну адресу школи.'),
 		mainSchoolClass: Yup.number()
-			.min(1)
+			.min(1, 'Введіть поточний клас.')
 			.max(11)
 			.required('Введіть поточний клас.'),
 		gender: Yup.string()
@@ -411,6 +411,7 @@ const PupilForm = ({
 
 							<Select
 								label="Пільги %"
+								placeholder="Немає"
 								name="hasBenefit"
 								options={benefits}
 								onChange={handleChange}
