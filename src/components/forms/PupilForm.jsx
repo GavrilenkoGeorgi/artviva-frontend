@@ -205,7 +205,7 @@ const PupilForm = ({
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть прізвище та повне ім\'я учня.'),
 		applicantName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
@@ -336,7 +336,7 @@ const PupilForm = ({
 							Дані/інформація про учня
 						</p>
 						<TextInput
-							label="Повне ім'я учня"
+							label="Прізвище та повне ім'я учня"
 							name="name"
 							onChange={handleChange}
 							onBlur={handleBlur}
