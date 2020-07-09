@@ -73,8 +73,8 @@ const specialties = async payload => {
 }
 
 /**
- * Search specialties
- * @param {string} payload - Search term
+ * Get teacher name by id
+ * @param {string} id - Id of a teacher
  *
  * @returns {Object} - Response data
  */

@@ -9,7 +9,7 @@ import specialtyService from '../../services/specialties'
 import moment from 'moment'
 import { paymentObligations,
 	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
-import { findByPropertyValue, phoneNumber,
+import { findByPropertyValue, phoneNumber as phonePattern,
 	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
@@ -130,7 +130,11 @@ const PupilForm = ({
 	}
 
 	const editPupil = (values, setErrors) => {
-		updatePupil(pupil.id, values)
+		// remove teachers and schoolClasses
+		// as they are not updated through this form
+		// eslint-disable-next-line
+		const { teachers, schoolClasses, ...valuesToSend } = values
+		updatePupil(pupil.id, valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Зміни успішно збережено.',
@@ -197,6 +201,7 @@ const PupilForm = ({
 				mothersEmploymentInfo: '',
 				contactEmail: '',
 				homeAddress: '',
+				phoneNumber: '',
 				docsCheck: false,
 				processDataCheck: false,
 				paymentObligationsCheck: false,
@@ -246,7 +251,7 @@ const PupilForm = ({
 		fathersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		fathersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -259,7 +264,7 @@ const PupilForm = ({
 		mothersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		mothersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -272,6 +277,10 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
+		phoneNumber: Yup.string()
+			.min(3, 'Не менш 19 символів.')
+			.max(19, 'Максимум 19 символів.')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form
@@ -419,6 +428,7 @@ const PupilForm = ({
 								infoBtn
 								showInfo={() => openInfoModal('benefits')}
 								name="hasBenefit"
+								required={false}
 								options={benefits}
 								onChange={handleChange}
 								onBlur={handleBlur}
@@ -446,6 +456,18 @@ const PupilForm = ({
 							value={values.homeAddress}
 							touched={touched.homeAddress}
 							errors={errors.homeAddress}
+						/>
+
+						<TextInput
+							label="Телефонний номер учня"
+							name="phoneNumber"
+							required={false}
+							onChange={handleChange}
+							onKeyUp={event => formatPhoneNumber(event, 'phoneNumber', setFieldValue)}
+							onBlur={handleBlur}
+							value={values.phoneNumber}
+							touched={touched.phoneNumber}
+							errors={errors.phoneNumber}
 						/>
 
 						<TextInput

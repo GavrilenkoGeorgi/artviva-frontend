@@ -21,6 +21,9 @@ const Select = props => {
 		>
 			<Form.Label>
 				{props.label}
+				{props.required === false
+					? null
+					: <span className="form-required-mark"> *</span>}
 				{infoBtn
 					? <FontAwesomeIcon
 						icon={faQuestionCircle}
