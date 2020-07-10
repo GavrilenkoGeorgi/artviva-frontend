@@ -4,7 +4,12 @@ import PropTypes from 'prop-types'
 import { Form, Col } from 'react-bootstrap'
 
 const TextInput = props => {
-	const { dataCy, type, touched, className, ...other } = props
+	const {
+		dataCy,
+		type,
+		touched,
+		className,
+		...other } = props
 	return (
 		<Form.Group
 			controlId={`${props.name}-input`}
@@ -13,7 +18,9 @@ const TextInput = props => {
 		>
 			<Form.Label>
 				{props.label}
-				<span className="form-required-mark"> *</span>
+				{props.required === false
+					? null
+					: <span className="form-required-mark"> *</span>}
 			</Form.Label>
 			<Form.Control
 				data-cy={dataCy}

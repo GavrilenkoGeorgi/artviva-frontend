@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
 import moment from 'moment'
-import { paymentObligations, personalDataProcessing } from '../../data/formTexts.json'
-import { findByPropertyValue, phoneNumber,
+import { paymentObligations,
+	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
+import { findByPropertyValue, phoneNumber as phonePattern,
 	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
 
 import { Container, Col, Form } from 'react-bootstrap'
-import { BtnWithSpinner, Button } from '../common/buttons'
+import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
 	TextAreaInput, TextInput } from './components'
@@ -42,7 +43,7 @@ const PupilForm = ({
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
-	const benefits = [0, 50, 100] // %
+	const benefits = [50, 100] // %
 
 	// set auth token and mode
 	useEffect(() => {
@@ -129,7 +130,11 @@ const PupilForm = ({
 	}
 
 	const editPupil = (values, setErrors) => {
-		updatePupil(pupil.id, values)
+		// remove teachers and schoolClasses
+		// as they are not updated through this form
+		// eslint-disable-next-line
+		const { teachers, schoolClasses, ...valuesToSend } = values
+		updatePupil(pupil.id, valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Зміни успішно збережено.',
@@ -150,25 +155,20 @@ const PupilForm = ({
 			.finally(() => setProcessingForm(false))
 	}
 
-	const checkBoxLabel = (label, type) => {
-		const data = { label, type }
-		return <>
-			<Button
-				variant="link"
-				dataCy={`${type}-modal-btn`}
-				className="p-0 d-flex text-left"
-				onClick={() => openInfoModal(data)}
-				label={label} />
-		</>
-	}
-
-	const openInfoModal = ({ type, label: title }) => {
+	const openInfoModal = type => {
+		let title
 		switch (type) {
 		case 'personal-data':
+			title = 'Я згоден на збір та обробку моїх персональних даних'
 			setInfoModalText(personalDataProcessing)
 			break
 		case 'payment':
+			title = 'Зобов\'язання про оплату'
 			setInfoModalText(paymentObligations)
+			break
+		case 'benefits':
+			title = 'Пільги на навчання'
+			setInfoModalText(benefitsExplained)
 			break
 		default:
 			break
@@ -192,7 +192,7 @@ const PupilForm = ({
 				mainSchool: '',
 				mainSchoolClass: '',
 				gender: '',
-				hasBenefit: '',
+				hasBenefit: 0,
 				fathersName: '',
 				fathersPhone: '',
 				fathersEmploymentInfo: '',
@@ -201,6 +201,7 @@ const PupilForm = ({
 				mothersEmploymentInfo: '',
 				contactEmail: '',
 				homeAddress: '',
+				phoneNumber: '',
 				docsCheck: false,
 				processDataCheck: false,
 				paymentObligationsCheck: false,
@@ -213,7 +214,7 @@ const PupilForm = ({
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть прізвище та повне ім\'я учня.'),
 		applicantName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
@@ -234,7 +235,7 @@ const PupilForm = ({
 			.max(255, 'Максимум 255 символів.')
 			.required('Введіть основну адресу школи.'),
 		mainSchoolClass: Yup.number()
-			.min(1)
+			.min(1, 'Введіть поточний клас.')
 			.max(11)
 			.required('Введіть поточний клас.'),
 		gender: Yup.string()
@@ -250,7 +251,7 @@ const PupilForm = ({
 		fathersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		fathersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -263,7 +264,7 @@ const PupilForm = ({
 		mothersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		mothersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -276,6 +277,10 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
+		phoneNumber: Yup.string()
+			.min(3, 'Не менш 19 символів.')
+			.max(19, 'Максимум 19 символів.')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form
@@ -344,7 +349,7 @@ const PupilForm = ({
 							Дані/інформація про учня
 						</p>
 						<TextInput
-							label="Повне ім'я учня"
+							label="Прізвище та повне ім'я учня"
 							name="name"
 							onChange={handleChange}
 							onBlur={handleBlur}
@@ -419,7 +424,11 @@ const PupilForm = ({
 
 							<Select
 								label="Пільги %"
+								placeholder="Немає"
+								infoBtn
+								showInfo={() => openInfoModal('benefits')}
 								name="hasBenefit"
+								required={false}
 								options={benefits}
 								onChange={handleChange}
 								onBlur={handleBlur}
@@ -447,6 +456,18 @@ const PupilForm = ({
 							value={values.homeAddress}
 							touched={touched.homeAddress}
 							errors={errors.homeAddress}
+						/>
+
+						<TextInput
+							label="Телефонний номер учня"
+							name="phoneNumber"
+							required={false}
+							onChange={handleChange}
+							onKeyUp={event => formatPhoneNumber(event, 'phoneNumber', setFieldValue)}
+							onBlur={handleBlur}
+							value={values.phoneNumber}
+							touched={touched.phoneNumber}
+							errors={errors.phoneNumber}
 						/>
 
 						<TextInput
@@ -542,7 +563,7 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="docs-checkbox"
-											label="Я зобов'язаний надати ці документи шкільному відділу"
+											label="Я зобов'язаний надати ці документи адміністрації школи"
 											name="docsCheck"
 											dataCy="docs-checkbox"
 											onChange={handleChange}
@@ -566,8 +587,13 @@ const PupilForm = ({
 											type="checkbox"
 											id="personal-data-checkbox"
 											label={
-												checkBoxLabel('Я згоден на збір та обробку моїх персональних даних',
-													'personal-data')}
+												<>
+													Я згоден на <Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('personal-data')}>
+														збір та обробку</Link> моїх персональних даних
+												</>
+											}
 											name="processDataCheck"
 											dataCy="personal-data-checkbox"
 											onChange={handleChange}
@@ -582,7 +608,14 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="payment-checkbox"
-											label={checkBoxLabel('Зобов\'язання про оплату', 'payment')}
+											label={
+												<>
+													<Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('payment')}>
+														Зобов&apos;язання</Link> про оплату
+												</>
+											}
 											name="paymentObligationsCheck"
 											dataCy="payment-checkbox"
 											onChange={handleChange}
