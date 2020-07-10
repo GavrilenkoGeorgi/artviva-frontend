@@ -50,7 +50,7 @@ const RegisterForm = ({
 
 	const handleRegister = useCallback(() => {
 		setProcessingForm(true)
-		const { user, setErrors } = registrationData
+		const { user, setErrors, resetForm } = registrationData
 
 		userService.signUp(user)
 			.then(() => {
@@ -72,6 +72,7 @@ const RegisterForm = ({
 			.finally(() => {
 				if (!unmounted.current) {
 					setProcessingForm(false)
+					resetForm()
 				}
 			})
 	}, [setNotification, setProcessingForm, registrationData])
