@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import userService from '../../services/users'
-import { getTeacherData, updateTeacherData } from '../../reducers/teacherDataReducer'
+import loginService from '../../services/login'
+import { getTeacherData, updateTeacherData, createTeacherData } from '../../reducers/teacherDataReducer'
+import { refreshUserData } from '../../reducers/loginReducer'
 import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { trimObject } from '../../utils/objectHelpers'
@@ -10,7 +12,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 import UserDetailsCard from '../users/UserDetailsCard'
 import TeacherDetails from '../teachers/TeacherDetails'
 import TeacherForm from '../forms/TeacherForm'
-import { CollapseComponent, LoadingIndicator } from '../common'
+import { CollapseComponent } from '../common'
 
 const UserProfileView = ({
 	user,
@@ -19,15 +21,23 @@ const UserProfileView = ({
 	getTeacherData,
 	initializeSpecialties,
 	updateTeacherData,
+	createTeacherData,
 	setNotification,
+	refreshUserData,
 	setProcessingForm }) => {
 
 	const [userData, setUserData] = useState(null)
 	const [teacherDataPresent, setTeacherDataPresent] = useState(true)
+	const unmounted = useRef(false)
+
+	useEffect(() => {
+		return () => { unmounted.current = true }
+	}, [])
 
 	useEffect(() => {
 		if (user && (user.id === match.params.id)) {
 			setUserData(user)
+			initializeSpecialties()
 		} else if (user) {
 			userService.setToken(user.token)
 			userService.getById(match.params.id)
@@ -42,11 +52,10 @@ const UserProfileView = ({
 					}, 5)
 				})
 		}
-	}, [user, match.params.id, setNotification])
+	}, [user, match.params.id, setNotification, initializeSpecialties])
 
 	useEffect(() => {
 		if (userData && userData.teacher) {
-			initializeSpecialties()
 			getTeacherData(userData.teacher)
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -58,15 +67,24 @@ const UserProfileView = ({
 		} else if (userData && !userData.teacher) {
 			setTeacherDataPresent(false)
 		}
-	}, [userData, getTeacherData, setNotification, initializeSpecialties])
+	}, [userData, getTeacherData, setNotification])
 
 	const processTeacherData = async values => {
 		setProcessingForm(true)
-		values = {
-			...values,
-			linkedUserAccountId: userData.id
+		if (teacher.id) {
+			update(teacher.id, values)
+		} else {
+			values = {
+				...values,
+				linkedUserAccountId: userData.id
+			}
+			// create new teacher
+			create(values)
 		}
-		updateTeacherData(teacher.id, trimObject(values))
+	}
+
+	const update = (id, values) => {
+		updateTeacherData(id, trimObject(values))
 			.then(() => {
 				setNotification({
 					message: 'Зміни успішно збережено.',
@@ -80,17 +98,50 @@ const UserProfileView = ({
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setProcessingForm(false))
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
+	}
+
+	const create = values => {
+		createTeacherData(trimObject(values))
+			.then(() => {
+				setNotification({
+					message: 'Зміни успішно збережено.',
+					variant: 'success'
+				}, 5)
+				// all ok, update current user refs
+				// sort of relogin
+				loginService.setToken(user.token)
+				refreshUserData(user.id)
+					.catch(error => {
+						console.error(error)
+					})
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
 	}
 
 	return (
-		<Container>
+		<Container className="py-2">
 			{userData
-				? <Row className="border1 border-primary text-center1">
-					<Col xs={12} md={7}>
-						<h3 className="text-center">Профіль</h3>
+				? <Row>
+					<Col xs={12} md={7} className="pb-3">
+						<h4 className="text-center custom-font">Профіль</h4>
 						<UserDetailsCard mode="single" userData={userData}/>
-						<div className="border1 border-success">
+						<div>
 							{teacher
 								? <TeacherDetails />
 								: null
@@ -98,6 +149,9 @@ const UserProfileView = ({
 						</div>
 					</Col>
 					<Col xs={12} md={5}>
+						<h4 className="text-center custom-font">
+							Ваші дані
+						</h4>
 						<CollapseComponent
 							title={teacherDataPresent ? 'Редагувати дані вчителя' : 'Заповніть дані вчителя'}
 							ariaControls="pupil-add-form-collapse"
@@ -108,15 +162,12 @@ const UserProfileView = ({
 									teacher={teacher}
 									mode={teacher ? 'edit' : 'create'}
 								/>
-								: null
+								: <>Just a sec..</>
 							}
 						</CollapseComponent>
 					</Col>
 				</Row>
-				: <LoadingIndicator
-					animation="border"
-					variant="primary"
-				/>
+				: null
 			}
 		</Container>
 	)
@@ -134,7 +185,9 @@ const mapDispatchToProps = {
 	setProcessingForm,
 	getTeacherData,
 	initializeSpecialties,
-	updateTeacherData
+	updateTeacherData,
+	createTeacherData,
+	refreshUserData
 }
 
 export default connect(

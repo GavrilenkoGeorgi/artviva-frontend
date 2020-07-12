@@ -19,7 +19,7 @@ const PupilsList = ({
 	setNotification }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
-	const [pupilsData, setPupilsData] = useState([])
+	const [pupilsData, setPupilsData] = useState(null)
 	const componentIsMounted = useRef(true)
 
 	const defaultSortOrder = {
@@ -124,7 +124,7 @@ const PupilsList = ({
 				/>
 				: <>
 					<Container>
-						<Row className="pt-3 d-flex justify-content-center">
+						<Row className="d-flex justify-content-center">
 							<Col xs={12} md={8} xl={6} className="order-xl-1">
 								<CollapseForm
 									title="Додати нового учня"
@@ -150,21 +150,25 @@ const PupilsList = ({
 							</Col>
 
 							<Col xs={12} md={8} xl={6} className="order-xl-0">
-								<h6 className="text-muted mt-2 mb-3">
-									<em>Список учнів.</em>
-								</h6>
-
-								<ListGroup>
-									{pupilsData.map(pupil =>
-										<ListGroup.Item
-											className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
-											key={pupil.id}
-										>
-											<Pupil pupil={pupil} />
-										</ListGroup.Item>
-									)}
-								</ListGroup>
-
+								<h5 className="text-center custom-font">
+									Список вашіх учнів.
+								</h5>
+								{(pupilsData.length > 0)
+									? <ListGroup>
+										{pupilsData.map((pupil, index) =>
+											<ListGroup.Item
+												className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
+												key={pupil.id}
+											>
+												<Pupil pupil={pupil} posInList={index + 1} />
+											</ListGroup.Item>
+										)}
+									</ListGroup>
+									: <h6 className="text-muted" >
+										<em>
+											У вас ще немає учнів, ви можете додати свого першого учня через форму вище.
+										</em>
+									</h6> }
 							</Col>
 						</Row>
 					</Container>

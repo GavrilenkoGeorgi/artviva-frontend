@@ -33,6 +33,26 @@ const teachers = async payload => {
 }
 
 /**
+ * Search users
+ * @param {string} payload - Search term
+ *
+ * @returns {Object} - Response data
+ */
+const users = async payload => {
+
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	try {
+		const response = await axios.post(`${baseUrl}/users`, payload, config)
+		return response.data
+	} catch (error) {
+		return Promise.reject(error.response)
+	}
+}
+
+/**
  * Search pupils
  * @param {string} payload - Search term
  *
@@ -74,7 +94,7 @@ const specialties = async payload => {
 
 /**
  * Get teacher name by id
- * @param {string} id - Id of a teacher
+ * @param {string} id - Id of the teacher
  *
  * @returns {Object} - Response data
  */
@@ -92,4 +112,32 @@ const teacherNameById = async id => {
 	}
 }
 
-export default { pupils, teachers, teacherNameById, specialties, setToken }
+/**
+ * Get email by id
+ * @param {string} id - Id of the user
+ *
+ * @returns {Object} - Response data
+ */
+const userEmailById = async id => {
+
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	try {
+		const response = await axios.get(`${baseUrl}/users/email/${id}`, config)
+		return response.data
+	} catch (error) {
+		return Promise.reject(error.response)
+	}
+}
+
+export default {
+	pupils,
+	teachers,
+	users,
+	specialties,
+	teacherNameById,
+	userEmailById,
+	setToken
+}

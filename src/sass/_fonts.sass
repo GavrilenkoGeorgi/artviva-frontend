@@ -1,11 +1,20 @@
 @import url('https://fonts.googleapis.com/css?family=Lora&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@1,575&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500&display=swap')
 @import 'palette.scss'
 
+$custom-font: 'Exo 2', sans-serif
+$serif-font: 'EB Garamond', serif
+$logo-font: 'Lora', serif
+
 .custom-font
-	font-family: 'Lora', serif
-	letter-spacing: .1em
-	text-align: center
-	color: $grayish
+	font-family: $custom-font
+	letter-spacing: .15em
+
+.custom-font-small
+	font-family: $custom-font
+	font-size: 120%
 
 .nav-logo-font
-	font-family: 'Lora', serif
+	font-family: $logo-font
+	letter-spacing: .065em

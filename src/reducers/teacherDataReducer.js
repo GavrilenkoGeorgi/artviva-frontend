@@ -8,6 +8,9 @@ const teacherDataReducer = (state = {}, action) => {
 	case 'UPDATE_TEACHER': {
 		return action.data
 	}
+	case 'CREATE_TEACHER' : {
+		return action.data
+	}
 	default:
 		return state
 	}
@@ -40,6 +43,21 @@ export const updateTeacherData = (id, payload) => {
 		dispatch ({
 			type: 'UPDATE_TEACHER',
 			data: updatedTeacher
+		})
+	}
+}
+
+/**
+ * Create new teacher linked to user account
+ * @param {Object} payload - New teacher data
+ * @param {string} payload.name - Unique teacher name
+ */
+export const createTeacherData = payload => {
+	return async dispatch => {
+		const newTeacher = await teachersService.create(payload)
+		dispatch ({
+			type: 'CREATE_TEACHER',
+			data: newTeacher
 		})
 	}
 }

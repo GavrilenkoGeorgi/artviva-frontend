@@ -1,4 +1,5 @@
 import teachersService from '../services/teachers'
+import { nestedSort } from '../utils/arrayHelpers'
 
 const teachersReducer = (state = [], action) => {
 	switch (action.type) {
@@ -7,7 +8,7 @@ const teachersReducer = (state = [], action) => {
 	case 'DELETE_TEACHER':
 		return state.filter(teacher => teacher.id !== action.data)
 	case 'INIT_TEACHERS':
-		return action.data
+		return action.data.sort(nestedSort('name'))
 	case 'UPDATE_TEACHER': {
 		const updatedTeacher= action.data
 		return state.map(teacher =>

@@ -41,9 +41,9 @@ const TeacherPayments = ({ payments }) => {
 
 	return (
 		<>
-			<h6>
+			<h4 className="py-3 text-center custom-font">
 				<Emoji label="Dollar Banknote" emoji={'💵'} /> Платежі:
-			</h6>
+			</h4>
 			{/* Sorting controls */}
 			<Form>
 				<Form.Check
@@ -65,6 +65,10 @@ const TeacherPayments = ({ payments }) => {
 					onChange={event => sortByField(event.target)}
 				/>
 			</Form>
+			{(paymentsData.length === 0)
+				?	<p className="py-3 text-muted">Ви ще не маєте жодних платежів.</p>
+				: null
+			}
 			{paymentsData.map(payment => (
 				<Container
 					key={payment.id}
