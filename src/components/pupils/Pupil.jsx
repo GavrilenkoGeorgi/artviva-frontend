@@ -17,7 +17,7 @@ import Emoji from '../common/Emoji'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
+const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 
 	const [open, setOpen] = useState(false)
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
@@ -75,7 +75,7 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span className="text-left">
-					{pupilTitleInfo(pupil)}
+					{posInList}. {pupilTitleInfo(pupil)}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -86,7 +86,6 @@ const Pupil = ({ user, pupil, deletePupil, setNotification }) => {
 				<Container>
 					<Row>
 						<Col>
-
 							{/* Contact info */}
 							<Card className={cardStyle}>
 								<Card.Body>

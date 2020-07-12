@@ -5,7 +5,7 @@ import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 import teachersService from '../../services/teachers'
 
-import { Container, Row, Collapse, Button } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import TeacherForm from '../forms/TeacherForm'
@@ -18,6 +18,7 @@ const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal')
 const Teacher = ({
 	user,
 	teacher,
+	number,
 	fetchingData,
 	deleteTeacher,
 	updateTeacher,
@@ -111,7 +112,7 @@ const Teacher = ({
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span>
-					{teacher.name}
+					{number}. {teacher.name}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -120,6 +121,19 @@ const Teacher = ({
 			</Button>
 			<Collapse in={open}>
 				<Container fluid className="text-left">
+					<Row>
+						<Col>
+							{teacher.specialties.map(specialty => (
+								<p className="custom-font-small text-muted" key={specialty.id}>{specialty.title}</p>
+							))}
+							<p className="pt-3">
+								<strong>Груп: {teacher.schoolClasses.length || '0'}</strong>
+							</p>
+							{teacher.schoolClasses.map(item => (
+								<p className="text-muted1" key={item.id}>{item.title}</p>
+							))}
+						</Col>
+					</Row>
 					<Row>
 						<EntityControlButtons
 							route={teacher.linkedUserAccountId

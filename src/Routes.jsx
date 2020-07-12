@@ -12,6 +12,7 @@ import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
 
 import { PrivateRoute, Notification, MainPage, Footer } from './components'
+import LoadingIndicator from './components/common/LoadingIndicator'
 
 import { ScrollToTop, ScrollToTopArrow,
 	NavigationBar, SchoolSectionsNav } from './components/navigation'
@@ -19,10 +20,10 @@ import { ScrollToTop, ScrollToTopArrow,
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
-	ShowcaseView, UserProfileView, TeacherGroupsView, TeacherPupilsView,
+	ShowcaseView, UserProfileView, TeacherPupilsView,
 	GroupsView, PupilsView } from './components/views'
 
-const Routes = ({ user }) => {
+const Routes = ({ user, fetchingData }) => {
 
 	const [userData, setUserData] = useState({
 		id: null,
@@ -33,8 +34,9 @@ const Routes = ({ user }) => {
 
 	useEffect(() => {
 		if (user) {
-			setSuperUser(user.superUser)
-			setUserData({ id: user.id, superUser: user.superUser })
+			const { email, id, lastname, superUser } = user
+			setSuperUser(superUser)
+			setUserData({ email, id, lastname, superUser })
 		}
 	}, [user])
 
@@ -43,6 +45,12 @@ const Routes = ({ user }) => {
 			<ScrollToTop />
 			<NavigationBar />
 			<Notification />
+			{fetchingData
+				? <LoadingIndicator
+					animation="border"
+					variant="primary"
+				/>
+				: null }
 			<ParallaxProvider>
 				<Route path="/" exact component={MainPage} />
 			</ParallaxProvider>
@@ -57,9 +65,9 @@ const Routes = ({ user }) => {
 			<Route path="/apply/:status?" component={PublicApplyView} />
 			<PrivateRoute
 				path="/school"
-				component={() => <SchoolSectionsNav userData={userData} isSuperUser={superUser}/>}/>
+				component={() => <SchoolSectionsNav userData={userData} />}/>
 			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
-			<PrivateRoute path="/school/teachergroups" exact component={TeacherGroupsView} />
+			<PrivateRoute path="/school/teachergroups" exact component={GroupsView} /> {/* ?? */}
 			<PrivateRoute path="/school/teacherpupils" exact component={TeacherPupilsView} />
 			{superUser
 				? <>
@@ -90,7 +98,8 @@ const Routes = ({ user }) => {
 
 const mapStateToProps = state => {
 	return {
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 

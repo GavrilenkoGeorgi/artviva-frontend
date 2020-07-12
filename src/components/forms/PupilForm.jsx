@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
+import searchService from '../../services/search'
 import moment from 'moment'
 import { paymentObligations,
 	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
@@ -21,6 +22,7 @@ import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
 	TextAreaInput, TextInput } from './components'
 import { InfoModal } from '../common/modals'
+import { SimpleSpinner } from '../common/spinners'
 
 const PupilForm = ({
 	pupil,
@@ -28,10 +30,16 @@ const PupilForm = ({
 	setNotification,
 	createPupil,
 	updatePupil,
+	fetchingData,
 	mode,
 	closeModal }) => {
 
+	// console.log('Super user', user.superUser, 'mode', mode)
+
 	const history = useHistory()
+	const unmounted = useRef(false)
+	const [usersList, setUsersList] = useState([])
+	const [assignedTo, setAssignedTo] = useState('')
 	const [editMode, setEditMode] = useState(false)
 	const [createMode, setCreateMode] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
@@ -56,22 +64,58 @@ const PupilForm = ({
 	}, [user, mode])
 
 	useEffect(() => {
+		if (pupil && pupil.assignedTo) {
+			// console.log('Assigned to', pupil.assignedTo)
+			searchService.userEmailById(pupil.assignedTo)
+				.then(email => {
+					setAssignedTo(email)
+				})
+				.catch(error => {
+					console.error(error)
+				})
+		}
+	}, [pupil])
+
+	useEffect(() => {
 		specialtyService.getAll()
 			.then(data => {
 				setSpecialtiesData(data)
 				setSpecialtiesNames(data.map(specialty => specialty.title))
 			})
 			.catch(error => console.error(error))
+		return () => { unmounted.current = true }
 	}, [])
 
+	console.log('Pupil form', mode)
 	// handle edit or create
-	const handlePupil = (values, setErrors, resetForm) => {
+	const handlePupil = async (values, setErrors, resetForm) => {
 		// replace human readable specialty with id
-		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData)
-		values = { ...values,	specialty: id }
-		if (editMode) values = { ...values, schoolClasses: values.schoolClasses.map(item => item.id) }
+		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData) //??
+		values = { ...values,
+			specialty: id
+			// schoolClasses: values.schoolClasses.map(item => item.id)
+		}
+
+		// const assignedToUser = usersList.find(user => user.email === values.assignedTo)
+		const assignedToUser = await searchService.users({ value: values.assignedTo })
+		console.log('Assigned to user', assignedToUser[0])
+		if (assignedToUser[0]) {
+			console.log('handle pupil', assignedToUser[0].id) // this is bad, really ((
+			console.log('Mode', mode)
+			values = { ...values,
+				assignedTo: assignedToUser[0].id
+			}
+		} else {
+			values = { ...values,
+				assignedTo: user.email
+			}
+		}
+		if (editMode) values = { ...values,
+			schoolClasses: values.schoolClasses.map(item => item.id),
+		}
 
 		setProcessingForm(true)
+		console.log('Sending this', values)
 		editMode
 			? editPupil(trimObject(values), setErrors)
 			: (mode === 'create'
@@ -100,12 +144,15 @@ const PupilForm = ({
 					message,
 					variant: 'danger'
 				}, 5)
-				setProcessingForm(false)
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
 			})
 	}
 
 	const addPupil = (values, setErrors, resetForm) => {
 		const valuesToSend = { ...values, assignedTo: user.id }
+		console.log(valuesToSend)
 		createPupil(valuesToSend)
 			.then(() => {
 				setNotification({
@@ -125,7 +172,9 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => {
-				setProcessingForm(false)
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
 			})
 	}
 
@@ -152,7 +201,32 @@ const PupilForm = ({
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setProcessingForm(false))
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
+	}
+
+	const getUsers = value => {
+		console.log(value)
+		if (value.length >= 2) {
+			setFetchingData(true)
+			const query = { value }
+			searchService.users(query)
+				.then(users => {
+					setUsersList(users)
+					console.log(users)
+				})
+				.catch(error => {
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'warning'
+					}, 5)
+				})
+				.finally(() => setFetchingData(false))
+		}
 	}
 
 	const openInfoModal = type => {
@@ -182,9 +256,11 @@ const PupilForm = ({
 		editMode
 			? { ...pupil,
 				specialty: pupil.specialty.title,
-				dateOfBirth: moment(pupil.dateOfBirth).format('YYYY-MM-DD')
+				dateOfBirth: moment(pupil.dateOfBirth).format('YYYY-MM-DD'),
+				assignedTo: assignedTo
 			}
-			: { name: '',
+			: { assignedTo: '',
+				name: '',
 				applicantName: '',
 				specialty: '',
 				artSchoolClass: 1,
@@ -211,6 +287,8 @@ const PupilForm = ({
 			}
 
 	const pupilFormSchema = Yup.object().shape({
+		assignedTo: Yup.string()
+			.email('Адреса електронної пошти недійсна.'),
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
@@ -287,7 +365,7 @@ const PupilForm = ({
 		// but are needed in schema
 		docsCheck: Yup.bool().test(value => {
 			if (createMode) {
-				const schema = Yup.bool().oneOf([false])
+				const schema = Yup.bool().oneOf([true, false])
 				return schema.isValidSync(value)
 			} else {
 				const schema = Yup.bool().oneOf([true])
@@ -296,7 +374,7 @@ const PupilForm = ({
 		}),
 		processDataCheck: Yup.bool().test(value => {
 			if (createMode) {
-				const schema = Yup.bool().oneOf([false])
+				const schema = Yup.bool().oneOf([true, false])
 				return schema.isValidSync(value)
 			} else {
 				const schema = Yup.bool().oneOf([true])
@@ -348,6 +426,54 @@ const PupilForm = ({
 						<p className="pt-2 mb-1 text-muted text-center">
 							Дані/інформація про учня
 						</p>
+
+						{/* Users email input */}
+						{user.superUser
+							? <Form.Row>
+								<Form.Group
+									controlId={editMode ? `${pupil.id}-assign-email-input` : 'assign-email-input' }
+									as={Col}
+								>
+									<Form.Label className="text-primary">
+										Електронна адреса користувача, якому призначено цього учня
+										{fetchingData
+											? <SimpleSpinner
+												className="ml-1"
+												animation="grow"
+												size="sm"
+												variant="primary"
+											/>
+											: null
+										}
+									</Form.Label>
+									<Form.Control className="border border-warning"
+										type="text"
+										name="assignedTo"
+										list={editMode ? `${pupil.id}-assignedTo-list` : 'assignedTo-list' }
+										autoComplete="off"
+										data-cy="assignedTo-input"
+										onChange={handleChange}
+										onKeyUp={event => getUsers(event.target.value)}
+										onBlur={handleBlur}
+										value={values.assignedTo}
+										isValid={touched.assignedTo && !errors.assignedTo}
+										isInvalid={touched.assignedTo && !!errors.assignedTo}
+									/>
+									<datalist id={editMode ? `${pupil.id}-assignedTo-list` : 'assignedTo-list' }>
+										{usersList.map((user) =>
+											<option key={user.email} value={user.email} >
+												{user.name} {user.lastname}
+											</option>
+										)}
+									</datalist>
+									<Form.Control.Feedback type="invalid">
+										{errors.assignedTo}
+									</Form.Control.Feedback>
+								</Form.Group>
+							</Form.Row>
+							: null
+						}
+
 						<TextInput
 							label="Прізвище та повне ім'я учня"
 							name="name"
@@ -725,14 +851,16 @@ PupilForm.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
 	createPupil,
-	updatePupil
+	updatePupil,
+	setFetchingData
 }
 
 export default connect(

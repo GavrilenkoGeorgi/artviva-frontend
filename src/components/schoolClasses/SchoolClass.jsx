@@ -57,7 +57,7 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				aria-controls="school-class-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center"
+				className="p-0 d-flex text-left justify-content-between align-items-center"
 			>
 				<span>
 					{schoolClass.title} - {schoolClass.specialty.title}
@@ -68,31 +68,32 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				}
 			</Button>
 			<Collapse in={open}>
-				<Container fluid className="text-left">
+				<Container>
 					<Row>
-						<Col>
-							<p>Вчітель: <strong>{schoolClass.teacher.name}</strong>
-								<small>
-									<Link
-										to={`/school/teachers/${schoolClass.teacher.id}`}
-										className="px-2"
-									>
-										<FontAwesomeIcon icon={faInfoCircle} />
-									</Link>
-								</small>
-							</p>
-							<p>Фах: <strong>{schoolClass.specialty.title}</strong></p>
+						<Col xs={12} className="py-2 px-0">
+							<strong>
+								{schoolClass.teacher.name}
+							</strong>
+							<Link
+								to={`/school/teachers/${schoolClass.teacher.id}`}
+								className="px-2"
+							>
+								<FontAwesomeIcon icon={faInfoCircle} className="icon-info" />
+							</Link>
+						</Col>
+						<Col className="px-0">
+							<p>{schoolClass.specialty.title}</p>
 							{schoolClass.info
-								? <p>Опіс: <strong>{schoolClass.info}</strong></p>
+								? <p><strong>{schoolClass.info}</strong></p>
 								: null
 							}
 							Учні:
 							<ol>
 								{schoolClass.pupils.map(pupil => (
 									<li key={pupil.id}>
-										{pupil.name}
+										<Link to="/school/pupils">{pupil.name}</Link>
 										{pupil.info
-											? <em className="text-primary">: {pupil.info}</em>
+											? <em className="text-secondary">: {pupil.info}</em>
 											: null
 										}
 									</li>
