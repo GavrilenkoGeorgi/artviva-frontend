@@ -65,7 +65,6 @@ const PupilForm = ({
 
 	useEffect(() => {
 		if (pupil && pupil.assignedTo) {
-			// console.log('Assigned to', pupil.assignedTo)
 			searchService.userEmailById(pupil.assignedTo)
 				.then(email => {
 					setAssignedTo(email)
@@ -86,22 +85,16 @@ const PupilForm = ({
 		return () => { unmounted.current = true }
 	}, [])
 
-	console.log('Pupil form', mode)
 	// handle edit or create
 	const handlePupil = async (values, setErrors, resetForm) => {
 		// replace human readable specialty with id
 		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData) //??
 		values = { ...values,
 			specialty: id
-			// schoolClasses: values.schoolClasses.map(item => item.id)
 		}
-
-		// const assignedToUser = usersList.find(user => user.email === values.assignedTo)
+		// all this looks ugly
 		const assignedToUser = await searchService.users({ value: values.assignedTo })
-		console.log('Assigned to user', assignedToUser[0])
 		if (assignedToUser[0]) {
-			console.log('handle pupil', assignedToUser[0].id) // this is bad, really ((
-			console.log('Mode', mode)
 			values = { ...values,
 				assignedTo: assignedToUser[0].id
 			}
@@ -115,7 +108,6 @@ const PupilForm = ({
 		}
 
 		setProcessingForm(true)
-		console.log('Sending this', values)
 		editMode
 			? editPupil(trimObject(values), setErrors)
 			: (mode === 'create'
@@ -428,7 +420,7 @@ const PupilForm = ({
 						</p>
 
 						{/* Users email input */}
-						{user.superUser
+						{(user && user.superUser)
 							? <Form.Row>
 								<Form.Group
 									controlId={editMode ? `${pupil.id}-assign-email-input` : 'assign-email-input' }
