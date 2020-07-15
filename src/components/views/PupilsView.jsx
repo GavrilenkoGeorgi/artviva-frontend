@@ -1,14 +1,22 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { initializePupils } from '../../reducers/pupilsReducer'
+import { initializePupils, initialiseUserPupils } from '../../reducers/pupilsReducer'
 
 import PupilsList from '../pupils/PupilsList'
 
-const PupilsView = ({ initializePupils }) => {
+const PupilsView = ({ user, initializePupils, initialiseUserPupils }) => {
 	return (
 		<>
-			<h4 className="custom-font text-center">Учні вчителя</h4>
-			<PupilsList getPupils={initializePupils} />
+			{user && user.superUser
+				? <>
+					<h4 className="custom-font text-center">Всі учні школи</h4>
+					<PupilsList getPupils={initializePupils} />
+				</>
+				: <>
+					<h4 className="custom-font text-center">Ваши учні</h4>
+					<PupilsList getPupils={initialiseUserPupils} />
+				</>
+			}
 		</>
 	)
 }
@@ -20,7 +28,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	initializePupils
+	initializePupils,
+	initialiseUserPupils
 }
 
 export default connect(
