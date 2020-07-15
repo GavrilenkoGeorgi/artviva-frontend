@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { ParallaxProvider } from 'react-scroll-parallax'
 import './css/index.css'
 
 import SchoolClassDetails from './components/schoolClasses/SchoolClassDetails'
-import TeachersList from './components/teachers/TeachersList'
 import TeacherDetails from './components/teachers/TeacherDetails'
 import SpecialtiesList from './components/specialties/SpecialtiesList'
 import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
 
 import { PrivateRoute, Notification, MainPage, Footer } from './components'
-import LoadingIndicator from './components/common/LoadingIndicator'
+import { LoadingIndicator } from './components/common'
 
 import { ScrollToTop, ScrollToTopArrow,
 	NavigationBar, SchoolSectionsNav } from './components/navigation'
@@ -20,8 +18,8 @@ import { ScrollToTop, ScrollToTopArrow,
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
-	ShowcaseView, UserProfileView, TeacherPupilsView,
-	GroupsView, PupilsView } from './components/views'
+	ShowcaseView, UserProfileView,
+	GroupsView, PupilsView, ListOfTeachers } from './components/views'
 
 const Routes = ({ user, fetchingData }) => {
 
@@ -51,9 +49,7 @@ const Routes = ({ user, fetchingData }) => {
 					variant="primary"
 				/>
 				: null }
-			<ParallaxProvider>
-				<Route path="/" exact component={MainPage} />
-			</ParallaxProvider>
+			<Route path="/" exact component={MainPage} />
 			<Route path="/about" component={AboutView} />
 			<Route path="/showcase" component={ShowcaseView} />
 			<Route path="/teachers/:department?" component={TeachersView} />
@@ -67,20 +63,17 @@ const Routes = ({ user, fetchingData }) => {
 				path="/school"
 				component={() => <SchoolSectionsNav userData={userData} />}/>
 			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
-			<PrivateRoute path="/school/teachergroups" exact component={GroupsView} /> {/* ?? */}
-			<PrivateRoute path="/school/teacherpupils" exact component={TeacherPupilsView} />
+			<PrivateRoute path="/school/groups" exact component={GroupsView} />
+			<PrivateRoute path="/school/groups/:id" exact component={SchoolClassDetails} />
+			<PrivateRoute path="/school/pupils" component={PupilsView} />
 			{superUser
 				? <>
 					<PrivateRoute path="/school/overview" component={SchoolOverview} />
 					<Switch>
-						{/*<PrivateRoute path="/school/users/:id" exact component={SchoolClassDetails} />*/}
 						<PrivateRoute path="/school/users" exact component={UsersListView} />
-						<PrivateRoute path="/school/classes/:id" exact component={SchoolClassDetails} />
-						<PrivateRoute path="/school/groups" component={GroupsView} />
 						<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
-						<PrivateRoute path="/school/teachers" component={TeachersList} />
+						<PrivateRoute path="/school/teachers" component={ListOfTeachers} />
 					</Switch>
-					<PrivateRoute path="/school/pupils" component={PupilsView} />
 					<PrivateRoute path="/school/specialties" component={SpecialtiesList} />
 					<PrivateRoute path="/school/branches" component={BranchesList} />
 					<PrivateRoute path="/school/payments" component={Payments} />
