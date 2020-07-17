@@ -53,11 +53,11 @@ const SchoolSectionsNav = ({ userData }) => {
 			label: 'Профіль'
 		},
 		{
-			to: '/school/teachergroups',
+			to: '/school/groups',
 			label: 'Групи'
 		},
 		{
-			to: '/school/teacherpupils',
+			to: '/school/pupils',
 			label: 'Учні'
 		}
 	]

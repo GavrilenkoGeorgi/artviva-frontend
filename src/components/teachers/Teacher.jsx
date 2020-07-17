@@ -101,6 +101,17 @@ const Teacher = ({
 			})
 	}
 
+	const showExperience = ({ years, months, days }) => {
+		return (
+			<>
+				<em className="text-muted">
+					{/* eslint-disable-next-line */}
+					{years > 0 ? `${years} років` : null} {months > 0 ? `${months} місяців` : null} {days > 0 ? `${days} днів` : null}
+				</em>
+			</>
+		)
+	}
+
 	return (
 		<>
 			<Button
@@ -112,7 +123,9 @@ const Teacher = ({
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span>
-					{number}. {teacher.name}
+					{number}. {teacher.name} {teacher.experience
+						? showExperience(teacher.experience)
+						: null }
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -129,8 +142,8 @@ const Teacher = ({
 							<p className="pt-3">
 								<strong>Груп: {teacher.schoolClasses.length || '0'}</strong>
 							</p>
-							{teacher.schoolClasses.map(item => (
-								<p className="text-muted1" key={item.id}>{item.title}</p>
+							{teacher.schoolClasses.map((item, index) => (
+								<p key={index}>{item.title}</p>
 							))}
 						</Col>
 					</Row>
