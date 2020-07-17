@@ -28,6 +28,21 @@
 		<meta property="og:url" content="https://artviva.netlify.com" />
 		<meta property="og:image" content="https://artviva.netlify.com/img/artviva.jpg" />
 		<meta property="og:type" content="website" />
+		<script>
+			var isLocalhost = Boolean(
+				window.location.hostname === 'localhost' ||
+					window.location.hostname === '[::1]' ||
+					window.location.hostname.match(
+						/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+					)
+			)
+			if (
+				!isLocalhost &&
+				typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object'
+			) {
+				window.__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () {}
+			}
+		</script>
 	</head>
 	<body>
 		<noscript>Вам потрібно ввімкнути JavaScript, щоб запустити цю програму.</noscript>
