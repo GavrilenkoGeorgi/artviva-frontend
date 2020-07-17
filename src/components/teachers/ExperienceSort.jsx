@@ -112,7 +112,6 @@ const ExperienceSort = ({ data: teachers, setData }) => {
 	)
 }
 
-
 ExperienceSort.propTypes = {
 	data: PropTypes.array.isRequired,
 	setData: PropTypes.func.isRequired

@@ -5,7 +5,9 @@ import { ListGroup, Container, Row, Col } from 'react-bootstrap'
 import { initializeTeachers } from '../../reducers/teachersReducer'
 import { setNotification } from '../../reducers/notificationReducer'
 
-import { Teacher, NewTeacherForm, FilterData, SortData, ExperienceSort } from '../teachers'
+import { Teacher,
+	NewTeacherForm, FilterData, SortData,
+	ExperienceSort, SelectData } from '../teachers'
 
 const ListOfTeachers = ({ teachers, initializeTeachers, setNotification }) => {
 
@@ -37,9 +39,74 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setNotification }) => {
 		}
 	]
 
+	/*
+	// const martialStatuses = ['Одружений', 'Не одружений']
+	// const scienceDegrees = ['Немає', 'Доктор наук', 'Кандидат наук']
+
+	const teacherBoolFields = [
+		{
+			fieldNames: ['employeeIsAStudent', 'isRetired'],
+			fields: [
+				{
+					field: 'isRetired',
+					label: 'Пенсионер?',
+					choices: ['На пенсии', 'Не пенсионер']
+				},
+				{
+					field: 'employeeIsAStudent',
+					label: 'Студент?',
+					choices: ['Зараз навчается', 'Не навчается']
+				}
+			]
+		}
+	]*/
+
+	const teacherSelectFields = [
+		{
+			field: 'gender',
+			label: 'Стать',
+			choices: ['Чоловіча', 'Жіноча']
+		},
+		{
+			field: 'qualification',
+			label: 'Кваліфікаційна категорія',
+			choices: ['Немає', 'ІІ категорія', 'І категорія', 'Вища категорія']
+		},
+		{
+			field: 'educationType',
+			label: 'Освітній рівень',
+			choices: ['Повна віща освіта', 'Базова віща освіта', 'Неповна віща освіта']
+		},
+		{
+			field: 'educationDegree',
+			label: 'Освітньо-кваліфікаційний рівень',
+			choices: ['Магистр', 'Спеціаліст', 'Бакалавр', 'Молодший спеціаліст']
+		},
+		{
+			field: 'category',
+			label: 'Розряд',
+			choices: [9, 10, 11, 12, 13, 14, 15, 16, 17]
+		},
+		{
+			field: 'teacherTitle',
+			label: 'Педагогічне звання',
+			choices: ['Немає', 'Старший викладач', 'Викладач-методист']
+		},
+		{
+			field: 'employeeType',
+			label: 'Тип співробітника',
+			choices: ['Штатний співробітник', 'Сумісник']
+		},
+		{
+			field: 'residence',
+			label: 'Місцевість проживання',
+			choices: ['Місто', 'Село']
+		}
+	]
+
 	return (
 		<Container>
-			<Row className="d-flex align-items-center">
+			<Row className="d-flex align-items-center border1">
 				<Col xs={12} className="border1 border-warning">
 					<h4 className="py-3 custom-font text-center">
 						Список усіх вчителів школи.
@@ -61,11 +128,30 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setNotification }) => {
 				</Col>
 				<Col xs={12} className="py-3">
 					<SortData
-						data={teacherList}
+						data={teachers}
 						setData={setTeacherList}
 						sortBy={sortBy}
 					/>
 				</Col>
+
+				{/* Filter by assorted fields */}
+				<Col xs={12} className="py-3">
+					<SelectData
+						data={teachers}
+						setData={setTeacherList}
+						selectBy={teacherSelectFields}
+					/>
+				</Col>
+
+				{/* Filter boolean fields
+
+				<Col xs={12} className="py-3">
+					<FilterBooleanFields
+						data={teachers}
+						setData={setTeacherList}
+						selectBy={teacherBoolFields}
+					/>
+				</Col> */}
 
 				<Col xs={12}>
 					<ListGroup>
