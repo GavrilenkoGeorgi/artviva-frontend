@@ -10,7 +10,7 @@ import searchService from '../../services/search'
 import moment from 'moment'
 import { paymentObligations,
 	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
-import { findByPropertyValue, phoneNumber as phonePattern,
+import { phoneNumber as phonePattern,
 	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
@@ -33,8 +33,6 @@ const PupilForm = ({
 	fetchingData,
 	mode,
 	closeModal }) => {
-
-	// console.log('Super user', user.superUser, 'mode', mode)
 
 	const history = useHistory()
 	const unmounted = useRef(false)
@@ -65,7 +63,6 @@ const PupilForm = ({
 
 	useEffect(() => {
 		if (pupil && pupil.assignedTo) {
-			// console.log('Assigned to', pupil.assignedTo)
 			searchService.userEmailById(pupil.assignedTo)
 				.then(email => {
 					setAssignedTo(email)
@@ -86,36 +83,29 @@ const PupilForm = ({
 		return () => { unmounted.current = true }
 	}, [])
 
-	console.log('Pupil form', mode)
 	// handle edit or create
 	const handlePupil = async (values, setErrors, resetForm) => {
-		// replace human readable specialty with id
-		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData) //??
+
+		// replace human readable specialty title with id
+		const { id: specialty } = specialtiesData.find(specialty => specialty.title === values.specialty)
 		values = { ...values,
-			specialty: id
-			// schoolClasses: values.schoolClasses.map(item => item.id)
+			specialty
 		}
 
-		// const assignedToUser = usersList.find(user => user.email === values.assignedTo)
-		const assignedToUser = await searchService.users({ value: values.assignedTo })
-		console.log('Assigned to user', assignedToUser[0])
-		if (assignedToUser[0]) {
-			console.log('handle pupil', assignedToUser[0].id) // this is bad, really ((
-			console.log('Mode', mode)
-			values = { ...values,
-				assignedTo: assignedToUser[0].id
-			}
-		} else {
-			values = { ...values,
-				assignedTo: user.email
-			}
+		// all this looks ugly
+		if (values.assignedTo) {
+			const users = await searchService.users({ value: values.assignedTo })
+			const { id: assignedTo } = users.find(user => user.email === values.assignedTo)
+			if (assignedTo) values = { ...values, assignedTo }
 		}
+
 		if (editMode) values = { ...values,
 			schoolClasses: values.schoolClasses.map(item => item.id),
 		}
 
-		setProcessingForm(true)
 		console.log('Sending this', values)
+
+		setProcessingForm(true)
 		editMode
 			? editPupil(trimObject(values), setErrors)
 			: (mode === 'create'
@@ -125,7 +115,10 @@ const PupilForm = ({
 
 	const publicApply = (values, setErrors, resetForm) => {
 		// this one is a little different
-		pupilsService.publicApply(values)
+		// remove assignedTo, as it is a public form
+		// eslint-disable-next-line
+		const { assignedTo, ...valuesToSend } = values
+		pupilsService.publicApply(valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Ваша заява була успішно додана.',
@@ -152,7 +145,6 @@ const PupilForm = ({
 
 	const addPupil = (values, setErrors, resetForm) => {
 		const valuesToSend = { ...values, assignedTo: user.id }
-		console.log(valuesToSend)
 		createPupil(valuesToSend)
 			.then(() => {
 				setNotification({
@@ -180,7 +172,8 @@ const PupilForm = ({
 
 	const editPupil = (values, setErrors) => {
 		// remove teachers and schoolClasses
-		// as they are not updated through this form
+		// as they are not updated through this
+		// instance of the form
 		// eslint-disable-next-line
 		const { teachers, schoolClasses, ...valuesToSend } = values
 		updatePupil(pupil.id, valuesToSend)
@@ -209,7 +202,6 @@ const PupilForm = ({
 	}
 
 	const getUsers = value => {
-		console.log(value)
 		if (value.length >= 2) {
 			setFetchingData(true)
 			const query = { value }
@@ -428,7 +420,7 @@ const PupilForm = ({
 						</p>
 
 						{/* Users email input */}
-						{user.superUser
+						{(user && user.superUser)
 							? <Form.Row>
 								<Form.Group
 									controlId={editMode ? `${pupil.id}-assign-email-input` : 'assign-email-input' }

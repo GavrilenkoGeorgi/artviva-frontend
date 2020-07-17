@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { ParallaxProvider } from 'react-scroll-parallax'
 import { ParallaxBanner } from 'react-scroll-parallax'
 import ParallaxCache from './common/ParallaxCache'
 import ScrollAnimation from 'react-animate-on-scroll'
@@ -103,20 +104,22 @@ const MainPage = () => {
 					</Col>
 				</Row>
 			</Container>
-			<ParallaxCache />
-			<ParallaxBanner
-				className="parallax-main-page"
-				layers={[
-					{
-						image: 'img/parallax/book-crop.jpg',
-						amount: 0.3,
-					},
-				]}
-				style={{
-					height: '30rem',
-				}}
-			>
-			</ParallaxBanner>
+			<ParallaxProvider>
+				<ParallaxCache />
+				<ParallaxBanner
+					className="parallax-main-page"
+					layers={[
+						{
+							image: 'img/parallax/book-crop.jpg',
+							amount: 0.3,
+						},
+					]}
+					style={{
+						height: '30rem',
+					}}
+				>
+				</ParallaxBanner>
+			</ParallaxProvider>
 			<Container>
 				<ContactForm />
 			</Container>

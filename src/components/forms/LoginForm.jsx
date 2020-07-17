@@ -30,7 +30,7 @@ const LoginForm = ({
 	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	useEffect(() => {
-		if (loginSuccessful) history.push('/school/overview')
+		if (loginSuccessful) history.push('/school/groups')
 	}, [loginSuccessful, history])
 
 	useEffect(() => {
