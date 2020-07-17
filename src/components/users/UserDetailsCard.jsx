@@ -44,8 +44,8 @@ const UserDetailsCard = ({
 	return (
 		<>
 			<Card className="mb-2" border={userData.superUser ? 'warning' : null}>
-				<Card.Header as="h6">
-					{userData.name} {userData.middlename} {userData.lastname}
+				<Card.Header as="h6" className="text-secondary">
+					<em>{userData.name} {userData.middlename} {userData.lastname}</em>
 				</Card.Header>
 				<Card.Body className="pb-1">
 					<Card.Text>

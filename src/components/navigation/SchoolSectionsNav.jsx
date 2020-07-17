@@ -1,13 +1,22 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { Container, Row } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import SectionLink from './SectionLink'
+import Emoji from '../common/Emoji'
 
 const SchoolSectionsNav = ({ userData }) => {
 
 	const [links, setLinks] = useState(null)
 
 	const superUserLinks = [
+		{
+			to: `/school/users/${userData.id}`,
+			label: 'Профіль'
+		},
+		{
+			to: '/school/users',
+			label: 'Користувачі'
+		},
 		{
 			to: '/school/overview',
 			label: 'Статистика'
@@ -35,15 +44,7 @@ const SchoolSectionsNav = ({ userData }) => {
 		{
 			to: '/school/payments',
 			label: 'Платежі'
-		},
-		{
-			to: '/school/users',
-			label: 'Користувачі'
-		},
-		{
-			to: `/school/users/${userData.id}`,
-			label: 'Профіль'
-		},
+		}
 	]
 
 	const teacherLinks = [
@@ -72,7 +73,21 @@ const SchoolSectionsNav = ({ userData }) => {
 
 	return (
 		<>
-			<Container>
+			<Container className="pb-2">
+				<Row className="d-flex align-items-center pb-3">
+					<Col className="pr-1 text-right text-muted">
+						<small className="text-small">{userData.email}</small>
+					</Col>
+					{userData.superUser
+						? <Col xs={1} className="px-0 text-center">
+							<Emoji label="Shield" emoji={'🛡️'} />
+						</Col>
+						: null
+					}
+					<Col className="pl-1 align-self-center">
+						<em className="profile-user-name">{userData.lastname} </em>
+					</Col>
+				</Row>
 				<Row className="d-flex justify-content-center">
 					{links
 						? links.map(link =>

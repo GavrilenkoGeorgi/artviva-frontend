@@ -1,25 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import { setNotification } from '../../reducers/notificationReducer'
+import { Link, useHistory } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import { createPupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import specialtyService from '../../services/specialties'
+import searchService from '../../services/search'
 import moment from 'moment'
-import { paymentObligations, personalDataProcessing } from '../../data/formTexts.json'
-import { findByPropertyValue, phoneNumber,
+import { paymentObligations,
+	personalDataProcessing, benefitsExplained } from '../../data/formTexts.json'
+import { findByPropertyValue, phoneNumber as phonePattern,
 	formatPhoneNumber, trimObject } from '../../utils'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import PropTypes from 'prop-types'
 
 import { Container, Col, Form } from 'react-bootstrap'
-import { BtnWithSpinner, Button } from '../common/buttons'
+import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
 	TextAreaInput, TextInput } from './components'
 import { InfoModal } from '../common/modals'
+import { SimpleSpinner } from '../common/spinners'
 
 const PupilForm = ({
 	pupil,
@@ -27,10 +30,16 @@ const PupilForm = ({
 	setNotification,
 	createPupil,
 	updatePupil,
+	fetchingData,
 	mode,
 	closeModal }) => {
 
+	// console.log('Super user', user.superUser, 'mode', mode)
+
 	const history = useHistory()
+	const unmounted = useRef(false)
+	const [usersList, setUsersList] = useState([])
+	const [assignedTo, setAssignedTo] = useState('')
 	const [editMode, setEditMode] = useState(false)
 	const [createMode, setCreateMode] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
@@ -42,7 +51,7 @@ const PupilForm = ({
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
-	const benefits = [0, 50, 100] // %
+	const benefits = [50, 100] // %
 
 	// set auth token and mode
 	useEffect(() => {
@@ -55,22 +64,58 @@ const PupilForm = ({
 	}, [user, mode])
 
 	useEffect(() => {
+		if (pupil && pupil.assignedTo) {
+			// console.log('Assigned to', pupil.assignedTo)
+			searchService.userEmailById(pupil.assignedTo)
+				.then(email => {
+					setAssignedTo(email)
+				})
+				.catch(error => {
+					console.error(error)
+				})
+		}
+	}, [pupil])
+
+	useEffect(() => {
 		specialtyService.getAll()
 			.then(data => {
 				setSpecialtiesData(data)
 				setSpecialtiesNames(data.map(specialty => specialty.title))
 			})
 			.catch(error => console.error(error))
+		return () => { unmounted.current = true }
 	}, [])
 
+	console.log('Pupil form', mode)
 	// handle edit or create
-	const handlePupil = (values, setErrors, resetForm) => {
+	const handlePupil = async (values, setErrors, resetForm) => {
 		// replace human readable specialty with id
-		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData)
-		values = { ...values,	specialty: id }
-		if (editMode) values = { ...values, schoolClasses: values.schoolClasses.map(item => item.id) }
+		const { id } = findByPropertyValue(values.specialty, 'title', specialtiesData) //??
+		values = { ...values,
+			specialty: id
+			// schoolClasses: values.schoolClasses.map(item => item.id)
+		}
+
+		// const assignedToUser = usersList.find(user => user.email === values.assignedTo)
+		const assignedToUser = await searchService.users({ value: values.assignedTo })
+		console.log('Assigned to user', assignedToUser[0])
+		if (assignedToUser[0]) {
+			console.log('handle pupil', assignedToUser[0].id) // this is bad, really ((
+			console.log('Mode', mode)
+			values = { ...values,
+				assignedTo: assignedToUser[0].id
+			}
+		} else {
+			values = { ...values,
+				assignedTo: user.email
+			}
+		}
+		if (editMode) values = { ...values,
+			schoolClasses: values.schoolClasses.map(item => item.id),
+		}
 
 		setProcessingForm(true)
+		console.log('Sending this', values)
 		editMode
 			? editPupil(trimObject(values), setErrors)
 			: (mode === 'create'
@@ -99,12 +144,15 @@ const PupilForm = ({
 					message,
 					variant: 'danger'
 				}, 5)
-				setProcessingForm(false)
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
 			})
 	}
 
 	const addPupil = (values, setErrors, resetForm) => {
 		const valuesToSend = { ...values, assignedTo: user.id }
+		console.log(valuesToSend)
 		createPupil(valuesToSend)
 			.then(() => {
 				setNotification({
@@ -124,12 +172,18 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => {
-				setProcessingForm(false)
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
 			})
 	}
 
 	const editPupil = (values, setErrors) => {
-		updatePupil(pupil.id, values)
+		// remove teachers and schoolClasses
+		// as they are not updated through this form
+		// eslint-disable-next-line
+		const { teachers, schoolClasses, ...valuesToSend } = values
+		updatePupil(pupil.id, valuesToSend)
 			.then(() => {
 				setNotification({
 					message: 'Зміни успішно збережено.',
@@ -147,28 +201,48 @@ const PupilForm = ({
 					variant: 'danger'
 				}, 5)
 			})
-			.finally(() => setProcessingForm(false))
+			.finally(() => {
+				if (!unmounted.current) {
+					setProcessingForm(false)
+				}
+			})
 	}
 
-	const checkBoxLabel = (label, type) => {
-		const data = { label, type }
-		return <>
-			<Button
-				variant="link"
-				dataCy={`${type}-modal-btn`}
-				className="p-0 d-flex text-left"
-				onClick={() => openInfoModal(data)}
-				label={label} />
-		</>
+	const getUsers = value => {
+		console.log(value)
+		if (value.length >= 2) {
+			setFetchingData(true)
+			const query = { value }
+			searchService.users(query)
+				.then(users => {
+					setUsersList(users)
+					console.log(users)
+				})
+				.catch(error => {
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'warning'
+					}, 5)
+				})
+				.finally(() => setFetchingData(false))
+		}
 	}
 
-	const openInfoModal = ({ type, label: title }) => {
+	const openInfoModal = type => {
+		let title
 		switch (type) {
 		case 'personal-data':
+			title = 'Я згоден на збір та обробку моїх персональних даних'
 			setInfoModalText(personalDataProcessing)
 			break
 		case 'payment':
+			title = 'Зобов\'язання про оплату'
 			setInfoModalText(paymentObligations)
+			break
+		case 'benefits':
+			title = 'Пільги на навчання'
+			setInfoModalText(benefitsExplained)
 			break
 		default:
 			break
@@ -182,9 +256,11 @@ const PupilForm = ({
 		editMode
 			? { ...pupil,
 				specialty: pupil.specialty.title,
-				dateOfBirth: moment(pupil.dateOfBirth).format('YYYY-MM-DD')
+				dateOfBirth: moment(pupil.dateOfBirth).format('YYYY-MM-DD'),
+				assignedTo: assignedTo
 			}
-			: { name: '',
+			: { assignedTo: '',
+				name: '',
 				applicantName: '',
 				specialty: '',
 				artSchoolClass: 1,
@@ -192,7 +268,7 @@ const PupilForm = ({
 				mainSchool: '',
 				mainSchoolClass: '',
 				gender: '',
-				hasBenefit: '',
+				hasBenefit: 0,
 				fathersName: '',
 				fathersPhone: '',
 				fathersEmploymentInfo: '',
@@ -201,6 +277,7 @@ const PupilForm = ({
 				mothersEmploymentInfo: '',
 				contactEmail: '',
 				homeAddress: '',
+				phoneNumber: '',
 				docsCheck: false,
 				processDataCheck: false,
 				paymentObligationsCheck: false,
@@ -210,10 +287,12 @@ const PupilForm = ({
 			}
 
 	const pupilFormSchema = Yup.object().shape({
+		assignedTo: Yup.string()
+			.email('Адреса електронної пошти недійсна.'),
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть прізвище та повне ім\'я учня.'),
 		applicantName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
@@ -234,7 +313,7 @@ const PupilForm = ({
 			.max(255, 'Максимум 255 символів.')
 			.required('Введіть основну адресу школи.'),
 		mainSchoolClass: Yup.number()
-			.min(1)
+			.min(1, 'Введіть поточний клас.')
 			.max(11)
 			.required('Введіть поточний клас.'),
 		gender: Yup.string()
@@ -250,7 +329,7 @@ const PupilForm = ({
 		fathersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		fathersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -263,7 +342,7 @@ const PupilForm = ({
 		mothersPhone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
 		mothersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -276,13 +355,17 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
+		phoneNumber: Yup.string()
+			.min(3, 'Не менш 19 символів.')
+			.max(19, 'Максимум 19 символів.')
+			.matches(phonePattern, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form
 		// but are needed in schema
 		docsCheck: Yup.bool().test(value => {
 			if (createMode) {
-				const schema = Yup.bool().oneOf([false])
+				const schema = Yup.bool().oneOf([true, false])
 				return schema.isValidSync(value)
 			} else {
 				const schema = Yup.bool().oneOf([true])
@@ -291,7 +374,7 @@ const PupilForm = ({
 		}),
 		processDataCheck: Yup.bool().test(value => {
 			if (createMode) {
-				const schema = Yup.bool().oneOf([false])
+				const schema = Yup.bool().oneOf([true, false])
 				return schema.isValidSync(value)
 			} else {
 				const schema = Yup.bool().oneOf([true])
@@ -343,8 +426,56 @@ const PupilForm = ({
 						<p className="pt-2 mb-1 text-muted text-center">
 							Дані/інформація про учня
 						</p>
+
+						{/* Users email input */}
+						{user.superUser
+							? <Form.Row>
+								<Form.Group
+									controlId={editMode ? `${pupil.id}-assign-email-input` : 'assign-email-input' }
+									as={Col}
+								>
+									<Form.Label className="text-primary">
+										Електронна адреса користувача, якому призначено цього учня
+										{fetchingData
+											? <SimpleSpinner
+												className="ml-1"
+												animation="grow"
+												size="sm"
+												variant="primary"
+											/>
+											: null
+										}
+									</Form.Label>
+									<Form.Control className="border border-warning"
+										type="text"
+										name="assignedTo"
+										list={editMode ? `${pupil.id}-assignedTo-list` : 'assignedTo-list' }
+										autoComplete="off"
+										data-cy="assignedTo-input"
+										onChange={handleChange}
+										onKeyUp={event => getUsers(event.target.value)}
+										onBlur={handleBlur}
+										value={values.assignedTo}
+										isValid={touched.assignedTo && !errors.assignedTo}
+										isInvalid={touched.assignedTo && !!errors.assignedTo}
+									/>
+									<datalist id={editMode ? `${pupil.id}-assignedTo-list` : 'assignedTo-list' }>
+										{usersList.map((user) =>
+											<option key={user.email} value={user.email} >
+												{user.name} {user.lastname}
+											</option>
+										)}
+									</datalist>
+									<Form.Control.Feedback type="invalid">
+										{errors.assignedTo}
+									</Form.Control.Feedback>
+								</Form.Group>
+							</Form.Row>
+							: null
+						}
+
 						<TextInput
-							label="Повне ім'я учня"
+							label="Прізвище та повне ім'я учня"
 							name="name"
 							onChange={handleChange}
 							onBlur={handleBlur}
@@ -419,7 +550,11 @@ const PupilForm = ({
 
 							<Select
 								label="Пільги %"
+								placeholder="Немає"
+								infoBtn
+								showInfo={() => openInfoModal('benefits')}
 								name="hasBenefit"
+								required={false}
 								options={benefits}
 								onChange={handleChange}
 								onBlur={handleBlur}
@@ -447,6 +582,18 @@ const PupilForm = ({
 							value={values.homeAddress}
 							touched={touched.homeAddress}
 							errors={errors.homeAddress}
+						/>
+
+						<TextInput
+							label="Телефонний номер учня"
+							name="phoneNumber"
+							required={false}
+							onChange={handleChange}
+							onKeyUp={event => formatPhoneNumber(event, 'phoneNumber', setFieldValue)}
+							onBlur={handleBlur}
+							value={values.phoneNumber}
+							touched={touched.phoneNumber}
+							errors={errors.phoneNumber}
 						/>
 
 						<TextInput
@@ -542,7 +689,7 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="docs-checkbox"
-											label="Я зобов'язаний надати ці документи шкільному відділу"
+											label="Я зобов'язаний надати ці документи адміністрації школи"
 											name="docsCheck"
 											dataCy="docs-checkbox"
 											onChange={handleChange}
@@ -566,8 +713,13 @@ const PupilForm = ({
 											type="checkbox"
 											id="personal-data-checkbox"
 											label={
-												checkBoxLabel('Я згоден на збір та обробку моїх персональних даних',
-													'personal-data')}
+												<>
+													Я згоден на <Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('personal-data')}>
+														збір та обробку</Link> моїх персональних даних
+												</>
+											}
 											name="processDataCheck"
 											dataCy="personal-data-checkbox"
 											onChange={handleChange}
@@ -582,7 +734,14 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id="payment-checkbox"
-											label={checkBoxLabel('Зобов\'язання про оплату', 'payment')}
+											label={
+												<>
+													<Link to="#"
+														className="checkbox-link"
+														onClick={() => openInfoModal('payment')}>
+														Зобов&apos;язання</Link> про оплату
+												</>
+											}
 											name="paymentObligationsCheck"
 											dataCy="payment-checkbox"
 											onChange={handleChange}
@@ -692,14 +851,16 @@ PupilForm.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
 	createPupil,
-	updatePupil
+	updatePupil,
+	setFetchingData
 }
 
 export default connect(

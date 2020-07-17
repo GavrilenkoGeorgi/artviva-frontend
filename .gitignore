@@ -10,6 +10,7 @@
 /cypress/integration/sample_spec.js
 src/__tests__/__snapshots__
 src/components/views/DebugView.js
+src/__mocks__/testData.json
 
 # production
 /build

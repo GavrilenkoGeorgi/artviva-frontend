@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { Button } from '../buttons'
 
-const InfoModal = ({ title, text, ...props }) => {
+const InfoModal = ({ btnLabel, title, text, ...props }) => {
 	return (
 		<Modal
 			{ ...props }
@@ -24,7 +24,8 @@ const InfoModal = ({ title, text, ...props }) => {
 			</Modal.Body>
 			<Modal.Footer>
 				<Button
-					label="Я згоден"
+					// label="Я згоден"
+					label={btnLabel || 'Я згоден'}
 					type="button"
 					dataCy="modal-agree-btn"
 					block
@@ -39,7 +40,8 @@ const InfoModal = ({ title, text, ...props }) => {
 
 InfoModal.propTypes = {
 	title: PropTypes.string.isRequired,
-	text: PropTypes.object.isRequired
+	text: PropTypes.object.isRequired,
+	btnLabel: PropTypes.string
 }
 
 export default InfoModal

@@ -7,7 +7,7 @@ import PupilsList from '../pupils/PupilsList'
 const PupilsView = ({ initializePupils }) => {
 	return (
 		<>
-			<h4 className="text-center">Учні вчителя</h4>
+			<h4 className="custom-font text-center">Учні вчителя</h4>
 			<PupilsList getPupils={initializePupils} />
 		</>
 	)

@@ -108,12 +108,12 @@ const TeachersList = ({
 								<em>Список усіх вчителів школи.</em>
 							</p>
 							<ListGroup>
-								{teachers.map(teacher =>
+								{teachers.map((teacher, index) =>
 									<ListGroup.Item
 										className="px-0 py-1"
 										key={teacher.id}
 									>
-										<Teacher teacher={teacher} />
+										<Teacher teacher={teacher} number={index + 1}/>
 									</ListGroup.Item>
 								)}
 							</ListGroup>

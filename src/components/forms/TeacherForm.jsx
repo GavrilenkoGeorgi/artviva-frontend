@@ -6,6 +6,7 @@ import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
 import { phoneNumber } from '../../utils/stringPatterns'
 import { fullTimeEmployee,
 	parseIntegerValue, currentExperience } from '../../utils/formsUtils'
+import { teacherAccomplishmentsDscr } from '../../data/formTexts.json'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 
@@ -23,6 +24,7 @@ import DateInput from './components/DateInput'
 import Select from './components/Select'
 import CheckBox from './components/Checkbox'
 import TextAreaInput from './components/TextAreaInput'
+import { InfoModal } from '../common/modals'
 
 const TeacherForm = ({
 	processTeacherData,
@@ -38,6 +40,7 @@ const TeacherForm = ({
 	const [unusedSpecialties, setUnusedSpecialties] = useState(null)
 	const [partTimeEmployee, setPartTimeEmployee] = useState(true)
 	const [employeeExperience, setEmployeeExperience] = useState({ years: 0, months: 0, days: 0 })
+	const [infoModalVis, setInfoModalVis] = useState(false)
 
 	const today = moment()
 	const residenceList = ['Місто', 'Село']
@@ -169,6 +172,7 @@ const TeacherForm = ({
 		isAdministration: false,
 		isRetired: false,
 		employeeIsAStudent: false,
+		accomplishmentsDscr: '',
 		info: ''
 	}
 
@@ -264,6 +268,9 @@ const TeacherForm = ({
 			.oneOf([true, false]),
 		employeeIsAStudent: Yup.bool()
 			.oneOf([true, false]),
+		accomplishmentsDscr: Yup.string()
+			.min(3, 'Не менш 3 символів.')
+			.max(255, 'Максимум 2500 символів.'),
 		info: Yup.string()
 			.min(3, 'Не менш 3 символів.')
 			.max(255, 'Максимум 255 символів.')
@@ -708,7 +715,7 @@ const TeacherForm = ({
 										? `${teacher.id}-employee-is-student-checkbox`
 										: 'employee-is-student-checkbox'
 									}
-									label="Співробітник навчается у ВНЗ?"
+									label="Студент"
 									name="employeeIsAStudent"
 									dataCy="employee-is-student-checkbox"
 									onChange={handleChange}
@@ -717,6 +724,20 @@ const TeacherForm = ({
 									value={values.employeeIsAStudent}
 									touched={touched.employeeIsAStudent}
 									errors={errors.employeeIsAStudent}
+								/>
+							</Col>
+							<Col xs={12}>
+								<TextAreaInput
+									label="Здобуття у цьому навчальному році"
+									rows={5}
+									name="accomplishmentsDscr"
+									infoBtn
+									showInfo={() => setInfoModalVis(!infoModalVis)}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									value={values.accomplishmentsDscr}
+									touched={touched.accomplishmentsDscr}
+									errors={errors.accomplishmentsDscr}
 								/>
 							</Col>
 							<Col xs={12}>
@@ -757,6 +778,14 @@ const TeacherForm = ({
 					</Form>
 				)}
 			</Formik>
+			<InfoModal
+				title={'Здобуття у цьому навчальному році'}
+				text={teacherAccomplishmentsDscr}
+				btnLabel="OK"
+				centered
+				show={infoModalVis}
+				onHide={() => setInfoModalVis(!infoModalVis)}
+			/>
 		</Container>
 	)
 }

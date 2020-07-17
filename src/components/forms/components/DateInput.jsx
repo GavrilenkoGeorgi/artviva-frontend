@@ -14,7 +14,9 @@ const DateInput = props => {
 		>
 			<Form.Label>
 				{props.label}
-				<span className="form-required-mark"> *</span>
+				{props.required === false
+					? null
+					: <span className="form-required-mark"> *</span>}
 			</Form.Label>
 			<Form.Control
 				type="date"

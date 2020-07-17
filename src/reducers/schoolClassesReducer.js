@@ -58,9 +58,14 @@ export const initializeSchoolClasses = () => {
  *
  * @returns {Array} - Array of objects containing group info
  */
-export const initialiseTeacherGroups = id => {
+export const getGroups = (access, id) => {
 	return async dispatch => {
-		const groups = await schoolClassesService.getTeacherGroups(id)
+		let groups = null
+		if (access) {
+			groups = await schoolClassesService.getAll()
+		} else if (id) {
+			groups = await schoolClassesService.getTeacherGroups(id)
+		}
 		dispatch ({
 			// sets still not renamed 'school classes' list
 			type: 'INIT_SCHOOL_CLASSES',

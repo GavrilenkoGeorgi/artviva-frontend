@@ -2,9 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Form, Col } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
-const Select = (props) => {
-	const { touched, ...other } = props
+const Select = props => {
+	const {
+		touched,
+		placeholder,
+		infoBtn,
+		showInfo,
+		...other } = props
 
 	return (
 		<Form.Group
@@ -14,6 +21,15 @@ const Select = (props) => {
 		>
 			<Form.Label>
 				{props.label}
+				{props.required === false
+					? null
+					: <span className="form-required-mark"> *</span>}
+				{infoBtn
+					? <FontAwesomeIcon
+						icon={faQuestionCircle}
+						onClick={showInfo}
+						className="ml-2 text-primary"/>
+					: null}
 			</Form.Label>
 			<Form.Control
 				as="select"
@@ -21,7 +37,7 @@ const Select = (props) => {
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
 			>
-				<option>Виберіть...</option>
+				<option value={0}>{placeholder || 'Виберіть...'}</option>
 				{props.options.map(item =>
 					<option value={item} key={item}>{item}</option>
 				)}
@@ -35,6 +51,9 @@ const Select = (props) => {
 
 Select.propTypes = {
 	label: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	infoBtn: PropTypes.bool,
+	showInfo: PropTypes.func,
 	name: PropTypes.string.isRequired,
 	options: PropTypes.array.isRequired,
 	onChange: PropTypes.func.isRequired,
