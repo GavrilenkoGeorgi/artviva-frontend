@@ -16,6 +16,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { BtnWithSpinner } from '../common/buttons'
 
 const LoginForm = ({
+	user,
 	login,
 	reCaptchaScore,
 	processingForm,
@@ -30,8 +31,14 @@ const LoginForm = ({
 	const { executeRecaptcha } = useGoogleReCaptcha()
 
 	useEffect(() => {
-		if (loginSuccessful) history.push('/school/groups')
-	}, [loginSuccessful, history])
+		if (loginSuccessful) {
+			if (user.superUser) {
+				history.push('/school/teachers')
+			} else {
+				history.push('/school/pupils')
+			}
+		}
+	}, [loginSuccessful, history, user])
 
 	useEffect(() => {
 		return () => { unmounted.current = true }
@@ -241,6 +248,7 @@ const LoginForm = ({
 
 const mapStateToProps = (state) => {
 	return {
+		user: state.user,
 		reCaptchaScore: state.notification.reCaptchaScore,
 		processingForm: state.notification.processingForm
 	}
