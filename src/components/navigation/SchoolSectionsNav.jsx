@@ -74,26 +74,26 @@ const SchoolSectionsNav = ({ userData }) => {
 	return (
 		<>
 			<Container className="pb-2">
-				<Row className="d-flex align-items-center pb-3">
-					<Col className="pr-1 text-right text-muted">
-						<small className="text-small">{userData.email}</small>
+				<Row className="px-4 py-2 py-lg-4 d-flex align-items-center">
+					<Col xs={12} sm={5} className="text-right">
+						<em className="profile-user-name">{userData.name} {userData.lastname}</em>
 					</Col>
 					{userData.superUser
-						? <Col xs={1} className="px-0 text-center">
+						? <Col xs={12} sm={2} className="px-0 text-center">
 							<Emoji label="Shield" emoji={'🛡️'} />
 						</Col>
 						: null
 					}
-					<Col className="pl-1 align-self-center">
-						<em className="profile-user-name">{userData.lastname} </em>
+					<Col xs={12} sm={5} className="text-left text-muted">
+						<small className="text-small">{userData.email}</small>
 					</Col>
 				</Row>
-				<Row className="d-flex justify-content-center">
+				<Row className="py-3 d-flex justify-content-center">
 					{links
 						? links.map(link =>
 							<SectionLink
 								key={link.label}
-								className="py-2 px-3 section-link"
+								className="px-3 pt-1 school-nav-link"
 								to={link.to}
 								label={link.label}
 							/>)

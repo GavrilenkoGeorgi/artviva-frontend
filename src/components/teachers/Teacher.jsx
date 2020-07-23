@@ -104,10 +104,10 @@ const Teacher = ({
 	const showExperience = ({ years, months, days }) => {
 		return (
 			<>
-				<em className="text-muted">
+				<small><em className="text-muted">
 					{/* eslint-disable-next-line */}
 					{years > 0 ? `${years} років` : null} {months > 0 ? `${months} місяців` : null} {days > 0 ? `${days} днів` : null}
-				</em>
+				</em></small>
 			</>
 		)
 	}
@@ -120,7 +120,7 @@ const Teacher = ({
 				aria-controls="teacher-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center"
+				className="d-flex justify-content-between align-items-center text-left"
 			>
 				<span>
 					{number}. {teacher.name} {teacher.experience

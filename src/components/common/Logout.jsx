@@ -30,7 +30,7 @@ const Logout = ({ setNotification }) => {
 				type="button"
 				data-cy="logoutBtn"
 				variant="link"
-				className="p-0"
+				className="p-0 logout-btn"
 			>
 				Вийти
 			</Button>

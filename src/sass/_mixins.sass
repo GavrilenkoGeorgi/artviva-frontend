@@ -1,4 +1,6 @@
-// carousel
+@import 'palette.scss'
+@import 'notification.sass'
+
 =carouselText()
 	margin: 0
 	text-align: left
@@ -39,6 +41,26 @@
 	filter: $first-filter-type+unquote('(#{$first-filter-amount})') $second-filter-type+unquote('(#{$second-filter-amount})')
 
 =linkHighlight()
-	background-color: #f1f1f1
-	text-decoration: underline
-	border-radius: .4rem
+	background-color: $primary-second-light
+	text-decoration: none
+	animation: fadeIn
+	color: $primary-second
+	border-bottom: $borderNavLinkHeight solid $primary-second
+
+=mainNavLink()
+	color: $primary-second
+	padding: .5rem .3rem .2rem 0rem
+	font-size: 120%
+	border-bottom: $borderNavLinkHeight solid transparent
+	transition: border .35s
+	transition-timing-function: cubic-bezier(.43,.18,.79,.48)
+	&:hover
+		text-decoration: none
+		color: $primary-second
+		border-bottom: $borderNavLinkHeight solid $primary-second
+	+handheld(2, 991px)
+		padding: .5rem .3rem .2rem .3rem
+		margin-right: 1rem
+	+desktop(96dpi, 991px)
+		margin-right: 1rem
+		padding: .5rem .3rem .2rem .3rem

@@ -9,6 +9,9 @@ const teachersReducer = (state = [], action) => {
 		return state.filter(teacher => teacher.id !== action.data)
 	case 'INIT_TEACHERS':
 		return action.data.sort(nestedSort('name'))
+	case 'SET_TEACHER_EXP': {
+		return state
+	}
 	case 'UPDATE_TEACHER': {
 		const updatedTeacher= action.data
 		return state.map(teacher =>
@@ -75,6 +78,23 @@ export const updateTeacher = (id, payload) => {
 		dispatch ({
 			type: 'UPDATE_TEACHER',
 			data: updatedTeacher
+		})
+	}
+}
+
+/**
+ * Set calculated teacher experience data
+ * @param {string} id - Id of the teacher to update
+ * @param {Object} payload - Teacher's data
+ * @param {Object} payload.name - Teacher's unique name
+ */
+
+export const setTeacherExp = (payload) => {
+	return async dispatch => {
+		// const updatedTeacher = await teachersService.update(id, payload)
+		dispatch ({
+			type: 'SET_TEACHER_EXP',
+			data: payload
 		})
 	}
 }
