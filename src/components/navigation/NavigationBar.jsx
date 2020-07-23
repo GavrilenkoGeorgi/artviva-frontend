@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { connect } from 'react-redux'
 
 import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
-import NavBarLink from '../common/NavBarLink'
+import NavBarLink from './NavBarLink'
 import NavTogglerIcon from '../common/NavTogglerIcon'
 import Logout from '../common/Logout'
 
@@ -49,7 +49,9 @@ const NavigationBar = ({ user }) => {
 	}
 
 	// list of links
-	const linkClassList = 'pr-2 py-1 py-lg-0 px-lg-2 d-flex align-items-center'
+	// const linkClassList = 'pr-2 py-1 py-lg-0 px-lg-2 d-flex align-items-center main-nav-link'
+	const linkClassList = 'main-nav-link'
+
 	const navLinks = [
 		{
 			to: '/teachers',
@@ -107,7 +109,7 @@ const NavigationBar = ({ user }) => {
 				</Navbar.Toggle>
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="ml-auto">
-						<NavDropdown title="Школа" id="school-mgmt-links">
+						<NavDropdown title="Школа" id="school-mgmt-links" className="school-mgmt-links">
 							{user
 								? <>
 									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>

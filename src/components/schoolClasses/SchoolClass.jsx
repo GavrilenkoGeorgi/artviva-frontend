@@ -81,7 +81,7 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 								<FontAwesomeIcon icon={faInfoCircle} className="icon-info" />
 							</Link>
 						</Col>
-						<Col className="px-0">
+						<Col className="px-0" xs={12}>
 							<p>{schoolClass.specialty.title}</p>
 							{schoolClass.info
 								? <p><strong>{schoolClass.info}</strong></p>

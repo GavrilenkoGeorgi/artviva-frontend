@@ -120,7 +120,7 @@ const Teacher = ({
 				aria-controls="teacher-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center"
+				className="d-flex justify-content-between align-items-center text-left"
 			>
 				<span>
 					{number}. {teacher.name} {teacher.experience

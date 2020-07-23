@@ -93,32 +93,46 @@ p
 .more-info
 	padding-top: .5rem
 
-.dropdown
-	a
-		color: $grayish !important
-	.dropdown-toggle
-		padding: .25rem 0
+.dropdown-menu
+	padding: 1rem 1.5rem
 
 .nav-list-icon
 	padding-right: .5rem
 
+.logout-btn
+	color: $primary-second
+	// border: 1px solid pink
+	width: 100%
+	text-align: right
+	font-size: 110%
 
 // navigation bar links
 .navbar-nav
+	+handheld(2, 100px)
+		padding: .7rem 1rem .7rem 1rem
+	+desktop(96dpi, 100px)
+		padding: .7rem 1rem .7rem 1rem
+
+.school-nav-link
+	color: $primary-second
+	font-weight: 500
+	border-bottom: $borderNavLinkHeight solid transparent
+	transition: border .15s, background-color .7s
+	transition-timing-function: cubic-bezier(.43,.18,.79,.48)
+	
+.school-nav-link
+	&.is-active
+		+linkHighlight()
+	&:hover
+		+linkHighlight()
+
+.main-nav-link
+	+mainNavLink()
+
+.school-mgmt-links
 	a
-		text-decoration: none
-		color: $grayish
-		// border-bottom: .1rem solid transparent
-		// transition: color ease-in 250ms, border-bottom ease-in 250ms
-		transition: color ease-in 250ms, text-decoration ease-in 250ms
-		&:hover
-			color: $primary-color
-			text-decoration: underline
-			// border-bottom: .1rem solid $primary-color
-	a.active
-		color: $primary-color
-		text-decoration: underline
-		// border-bottom: .1rem solid $primary-color
+		+mainNavLink()
+		color: $primary-second !important // :(
 
 .carousel-container
 	margin-top: -5rem
@@ -200,9 +214,9 @@ nav
 	color: #dc3545
 	font-size: 80%
 
-.nav-tabs
-	.nav-link
-		padding: .2rem .4rem
+// .nav-tabs
+	// .nav-link
+		// padding: .2rem .4rem
 
 .login-pass-feedback
 	position: inherit
@@ -221,10 +235,6 @@ nav
 
 .btn-with-icon
 	width: 5rem
-
-.section-link
-	&:hover
-		+linkHighlight()
 
 .is-active
 	+linkHighlight()
@@ -299,3 +309,9 @@ nav
 	content: "\2022"
 	color: $lightGrey
 	padding: 0 .3rem 0 .3rem
+
+
+
+.pupil-not-enrolled
+	// color: red !important
+	background-color: $pupil-not-enrolled
