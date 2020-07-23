@@ -10,7 +10,7 @@ import LoadingIndicator from '../common/LoadingIndicator'
 
 const LazyTeacherForm = React.lazy(() => import('../forms/TeacherForm'))
 
-const NewTeacherForm = ({
+const AddTeacher = ({
 	setNotification,
 	initializeSpecialties,
 	setProcessingForm,
@@ -98,4 +98,4 @@ const mapDispatchToProps = {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(NewTeacherForm)
+)(AddTeacher)

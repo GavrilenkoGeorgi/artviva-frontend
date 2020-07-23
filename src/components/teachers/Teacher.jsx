@@ -104,10 +104,10 @@ const Teacher = ({
 	const showExperience = ({ years, months, days }) => {
 		return (
 			<>
-				<em className="text-muted">
+				<small><em className="text-muted">
 					{/* eslint-disable-next-line */}
 					{years > 0 ? `${years} років` : null} {months > 0 ? `${months} місяців` : null} {days > 0 ? `${days} днів` : null}
-				</em>
+				</em></small>
 			</>
 		)
 	}

@@ -181,47 +181,6 @@ const UserEditForm = ({
 						/>
 					</Form.Row>
 
-					{/* Teacher's name input */}
-					<Form.Row>
-						<Form.Group
-							controlId="teacher-name-input"
-							as={Col}
-						>
-							<Form.Label>Ім&apos;я викладача в анкети
-								{fetchingData
-									? <SimpleSpinner
-										className="ml-1"
-										animation="grow"
-										size="sm"
-										variant="primary"
-									/>
-									: null
-								}
-							</Form.Label>
-							<Form.Control className="border border-warning"
-								type="text"
-								name="teacher"
-								list="teachers-list"
-								autoComplete="off"
-								data-cy="teacher-name-input"
-								onChange={handleChange}
-								onKeyUp={event => getTeachers(event.target.value)}
-								onBlur={handleBlur}
-								value={values.teacher}
-								isValid={touched.teacher && !errors.teacher}
-								isInvalid={touched.teacher && !!errors.teacher}
-							/>
-							<datalist id="teachers-list">
-								{teachersList.map((name) =>
-									<option key={name} value={name} />
-								)}
-							</datalist>
-							<Form.Control.Feedback type="invalid">
-								{errors.teacher}
-							</Form.Control.Feedback>
-						</Form.Group>
-					</Form.Row>
-
 					{/* User account settings */}
 					<Form.Row className="mt-2 py-2 px-3 border border-warning rounded">
 						{user.superUser
@@ -230,6 +189,48 @@ const UserEditForm = ({
 									<em className="text-warning">
 										Редагуйте ці налаштування з обережністю!
 									</em>
+								</Col>
+								<Col xs={12}>
+									{/* Teacher's name input */}
+									<Form.Row>
+										<Form.Group
+											controlId="teacher-name-input"
+											as={Col}
+										>
+											<Form.Label>Ім&apos;я викладача в анкети
+												{fetchingData
+													? <SimpleSpinner
+														className="ml-1"
+														animation="grow"
+														size="sm"
+														variant="primary"
+													/>
+													: null
+												}
+											</Form.Label>
+											<Form.Control className="border border-warning"
+												type="text"
+												name="teacher"
+												list="teachers-list"
+												autoComplete="off"
+												data-cy="teacher-name-input"
+												onChange={handleChange}
+												onKeyUp={event => getTeachers(event.target.value)}
+												onBlur={handleBlur}
+												value={values.teacher}
+												isValid={touched.teacher && !errors.teacher}
+												isInvalid={touched.teacher && !!errors.teacher}
+											/>
+											<datalist id="teachers-list">
+												{teachersList.map((name) =>
+													<option key={name} value={name} />
+												)}
+											</datalist>
+											<Form.Control.Feedback type="invalid">
+												{errors.teacher}
+											</Form.Control.Feedback>
+										</Form.Group>
+									</Form.Row>
 								</Col>
 								<Col md={6} className="py-1">
 									<CheckBox
