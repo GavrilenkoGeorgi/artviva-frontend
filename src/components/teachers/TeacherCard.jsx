@@ -31,8 +31,8 @@ const TeacherCard = ({ person }) => {
 	return (
 		<Card className="mb-4">
 			<Card.Body>
-				<Row className="d-flex justify-content-center">
-					<Col xs={8} sm={6} md={4} className="pb-3">
+				<Row className="d-flex justify-content-around">
+					<Col xs={6} sm={5} md={3} className="pb-3">
 						<LazyLoadedImage
 							src={`/img/teachers/${person.image}`}
 							classList="teacher-avatar"
@@ -46,20 +46,6 @@ const TeacherCard = ({ person }) => {
 								<strong className="custom-font teacher-name text-left">
 									{person.name}
 								</strong>
-								{/*<span className="d-flex justify-content-end">
-									{ person.social
-										?
-										person.social.map(social =>
-											<a key={social.link} href={social.link}
-												alt={`Посилання на профіль вчителя в соціальній мережі ${social.icon}`}
-												aria-label={social.icon} target="_blank" rel="noopener noreferrer"
-											>
-												{showIcon(social.icon)}
-											</a>
-										)
-										: null
-									}
-								</span>*/}
 							</li>
 							<li>
 								<span className="d-flex justify-content-end">
@@ -78,7 +64,7 @@ const TeacherCard = ({ person }) => {
 								</span>
 							</li>
 							<li>
-								<strong>{person.speciality}</strong>
+								<em>{person.speciality}</em>
 							</li>
 							{/*person.education
 								? <li>
