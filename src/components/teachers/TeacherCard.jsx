@@ -64,14 +64,12 @@ const TeacherCard = ({ person }) => {
 								</span>
 							</li>
 							<li>
-								<em>{person.speciality}</em>
+								{person.speciality.map((title, index) =>
+									<div key={index} className="teacher-speciality">
+										{title}
+									</div>
+								)}
 							</li>
-							{/*person.education
-								? <li>
-									{person.education}
-								</li>
-								: null
-							*/}
 							<li>
 								<p>
 									{person.description.intro}
