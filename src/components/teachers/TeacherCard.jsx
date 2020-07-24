@@ -46,6 +46,22 @@ const TeacherCard = ({ person }) => {
 								<strong className="custom-font teacher-name text-left">
 									{person.name}
 								</strong>
+								{/*<span className="d-flex justify-content-end">
+									{ person.social
+										?
+										person.social.map(social =>
+											<a key={social.link} href={social.link}
+												alt={`Посилання на профіль вчителя в соціальній мережі ${social.icon}`}
+												aria-label={social.icon} target="_blank" rel="noopener noreferrer"
+											>
+												{showIcon(social.icon)}
+											</a>
+										)
+										: null
+									}
+								</span>*/}
+							</li>
+							<li>
 								<span className="d-flex justify-content-end">
 									{ person.social
 										?
@@ -61,17 +77,21 @@ const TeacherCard = ({ person }) => {
 									}
 								</span>
 							</li>
-							{/*<li>
-								<em className="spec-title">Освіта: </em>
-								<strong>{person.education}</strong>
-							</li>*/}
 							<li>
-								<em className="spec-title">Посада: </em>
 								<strong>{person.speciality}</strong>
 							</li>
+							{/*person.education
+								? <li>
+									{person.education}
+								</li>
+								: null
+							*/}
 							<li>
 								<p>
 									{person.description.intro}
+								</p>
+								<p>
+									{person.description.moreInfo}
 								</p>
 								{person.description.text ?
 									<>
