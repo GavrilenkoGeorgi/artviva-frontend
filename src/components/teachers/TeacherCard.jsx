@@ -31,8 +31,8 @@ const TeacherCard = ({ person }) => {
 	return (
 		<Card className="mb-4">
 			<Card.Body>
-				<Row className="d-flex justify-content-center">
-					<Col xs={8} sm={6} md={4} className="pb-3">
+				<Row className="d-flex justify-content-around">
+					<Col xs={6} sm={5} md={3} className="pb-3">
 						<LazyLoadedImage
 							src={`/img/teachers/${person.image}`}
 							classList="teacher-avatar"
@@ -46,6 +46,8 @@ const TeacherCard = ({ person }) => {
 								<strong className="custom-font teacher-name text-left">
 									{person.name}
 								</strong>
+							</li>
+							<li>
 								<span className="d-flex justify-content-end">
 									{ person.social
 										?
@@ -61,17 +63,19 @@ const TeacherCard = ({ person }) => {
 									}
 								</span>
 							</li>
-							{/*<li>
-								<em className="spec-title">Освіта: </em>
-								<strong>{person.education}</strong>
-							</li>*/}
 							<li>
-								<em className="spec-title">Посада: </em>
-								<strong>{person.speciality}</strong>
+								{person.speciality.map((title, index) =>
+									<div key={index} className="teacher-speciality">
+										{title}
+									</div>
+								)}
 							</li>
 							<li>
 								<p>
 									{person.description.intro}
+								</p>
+								<p>
+									{person.description.moreInfo}
 								</p>
 								{person.description.text ?
 									<>

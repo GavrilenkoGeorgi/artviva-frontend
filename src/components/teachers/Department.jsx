@@ -21,7 +21,7 @@ const Department = ({ name, teachers, scrollTo }) => {
 	}, [executeScroll, name, scrollTo])
 
 	return (
-		<Container ref={htmlElRef} className="my-1 border border-light">
+		<Container ref={htmlElRef} className="my121-1 px-0 border1 border-light">
 			<Button
 				block
 				onClick={() => setOpen(!open)}
@@ -39,7 +39,7 @@ const Department = ({ name, teachers, scrollTo }) => {
 				}
 			</Button>
 			<Collapse in={open}>
-				<Container>
+				<Container className="px-0">
 					{teachers.map(teacher =>
 						<TeacherCard key={teacher.id} person={teacher} />
 					)}

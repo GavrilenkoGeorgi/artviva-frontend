@@ -17,21 +17,21 @@ const TeachersView = ({ match }) => {
 
 	return (
 		<Container>
-			<h3 className="text-center custom-font pb-2">
-				Адміністрація
-			</h3>
-			<Row className="p-2 d-flex justify-content-center">
-				<Col xs={12} className="p-0">
+			<Row className="p111-2 d-flex1 justify-content-center border1 border-primary">
+				<Col xs={12} md={10} className="px212-2">
+					<h3 className="text-center custom-font py-4">
+						Адміністрація
+					</h3>
 					{administration
 						? administration.map(person =>
 							<TeacherCard key={person.id} person={person} />)
 						: null
 					}
 				</Col>
-				<h3 className="custom-font pt-4 pb-2">
-					Наші вчителі
-				</h3>
-				<Col xs={12} className="p-0">
+				<Col xs={12} md={10} className="p111-1">
+					<h3 className="text-center custom-font py-4">
+						Наші вчителі
+					</h3>
 					{departments
 						? departments.map(department =>
 							<Department
