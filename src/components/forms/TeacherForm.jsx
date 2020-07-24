@@ -10,6 +10,8 @@ import { teacherAccomplishmentsDscr } from '../../data/formTexts.json'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 
+import { teacherSelectFields as teacherFields } from '../../data/forms/teacherFields.json'
+
 import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
@@ -43,16 +45,16 @@ const TeacherForm = ({
 	const [infoModalVis, setInfoModalVis] = useState(false)
 
 	const today = moment()
-	const residenceList = ['Місто', 'Село']
-	const genders = ['Чоловіча', 'Жіноча']
-	const martialStatuses = ['Одружений', 'Не одружений']
-	const educationTypes = ['Повна віща освіта', 'Базова віща освіта', 'Неповна віща освіта']
-	const educationDegrees = ['Магистр', 'Спеціаліст', 'Бакалавр', 'Молодший спеціаліст']
-	const qualificationsList = ['Немає', 'ІІ категорія', 'І категорія', 'Вища категорія']
-	const teacherTitles = ['Немає', 'Старший викладач', 'Викладач-методист']
-	const scienceDegrees = ['Немає', 'Доктор наук', 'Кандидат наук']
-	const categoryList = [9, 10, 11, 12, 13, 14, 15, 16, 17]
-	const employeeTypes = ['Штатний співробітник', 'Сумісник']
+
+	const fieldChoices = () => {
+		const result = {}
+		for (let item of teacherFields) {
+			const { field, choices } = item
+			result[field] = choices
+		}
+		return result
+	}
+	const choices = fieldChoices()
 
 	useEffect(() => {
 		teachersService.setToken(user.token)
@@ -229,38 +231,38 @@ const TeacherForm = ({
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть електронну пошту.'),
 		residence: Yup.string()
-			.oneOf(residenceList, 'Місто або село.')
+			.oneOf(choices.residence, 'Місто або село.')
 			.required('Місцевість прожівання.'),
 		gender: Yup.string()
-			.oneOf(genders, 'Перевірте значення.')
+			.oneOf(choices.gender, 'Перевірте значення.')
 			.required('Виберіть стать.'),
 		maritalStatus: Yup.string()
-			.oneOf(martialStatuses, 'Перевірте значення.')
+			.oneOf(choices.maritalStatus, 'Перевірте значення.')
 			.required('Вкажить сімейне положення.'),
 		university: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть назву навчального закладу.'),
 		educationType: Yup.string()
-			.oneOf(educationTypes, 'Перевірте значення.')
+			.oneOf(choices.educationType, 'Перевірте значення.')
 			.required('Вкажить освітній рівень.'),
 		educationDegree: Yup.string()
-			.oneOf(educationDegrees, 'Перевірте значення.')
+			.oneOf(choices.educationDegree, 'Перевірте значення.')
 			.required('Вкажить освітньо-кваліфікаційний рівень.'),
 		qualification: Yup.string()
-			.oneOf(qualificationsList, 'Перевірте значення.')
+			.oneOf(choices.qualification, 'Перевірте значення.')
 			.required('Вкажить кваліфікаційну категорію.'),
 		teacherTitle: Yup.string()
-			.oneOf(teacherTitles, 'Перевірте значення.')
+			.oneOf(choices.teacherTitle, 'Перевірте значення.')
 			.required('Вкажить педагогічне звання.'),
 		scienceDegree: Yup.string()
-			.oneOf(scienceDegrees, 'Перевірте значення.')
+			.oneOf(choices.scienceDegree, 'Перевірте значення.')
 			.required('Вкажить наукову ступінь.'),
 		category: Yup.number()
-			.oneOf(categoryList, 'Перевірте значення.')
+			.oneOf(choices.category, 'Перевірте значення.')
 			.required('Вкажить розряд.'),
 		employeeType: Yup.string()
-			.oneOf(employeeTypes, 'Перевірте значення.')
+			.oneOf(choices.employeeType, 'Перевірте значення.')
 			.required('Вкажить тип співробітника.'),
 		isAdministration: Yup.bool()
 			.oneOf([true, false]),
@@ -529,7 +531,7 @@ const TeacherForm = ({
 							<Select
 								label="Місцевість проживання"
 								name="residence"
-								options={residenceList}
+								options={choices.residence}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.residence}
@@ -539,7 +541,7 @@ const TeacherForm = ({
 							<Select
 								label="Стать"
 								name="gender"
-								options={genders}
+								options={choices.gender}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.gender}
@@ -552,7 +554,7 @@ const TeacherForm = ({
 							<Select
 								label="Сімеїний стан"
 								name="maritalStatus"
-								options={martialStatuses}
+								options={choices.maritalStatus}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.maritalStatus}
@@ -588,7 +590,7 @@ const TeacherForm = ({
 							<Select
 								label="Освітній рівень"
 								name="educationType"
-								options={educationTypes}
+								options={choices.educationType}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.educationType}
@@ -599,7 +601,7 @@ const TeacherForm = ({
 							<Select
 								label="Освітньо-кваліфікаційний рівень"
 								name="educationDegree"
-								options={educationDegrees}
+								options={choices.educationDegree}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.educationDegree}
@@ -612,7 +614,7 @@ const TeacherForm = ({
 							<Select
 								label="Кваліфікаційна категорія"
 								name="qualification"
-								options={qualificationsList}
+								options={choices.qualification}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.qualification}
@@ -623,7 +625,7 @@ const TeacherForm = ({
 							<Select
 								label="Педагогічне звання"
 								name="teacherTitle"
-								options={teacherTitles}
+								options={choices.teacherTitle}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.teacherTitle}
@@ -636,7 +638,7 @@ const TeacherForm = ({
 							<Select
 								label="Наукова ступінь"
 								name="scienceDegree"
-								options={scienceDegrees}
+								options={choices.scienceDegree}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.scienceDegree}
@@ -646,7 +648,7 @@ const TeacherForm = ({
 							<Select
 								label="Розряд"
 								name="category"
-								options={categoryList}
+								options={choices.category}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								value={values.category}
@@ -659,7 +661,7 @@ const TeacherForm = ({
 							<Select
 								label="Тип співробітника"
 								name="employeeType"
-								options={employeeTypes}
+								options={choices.employeeType}
 								onChange={handleChange}
 								onBlur={handleBlur}
 								onInput={event => changeEmployeeType(event, setFieldValue)}

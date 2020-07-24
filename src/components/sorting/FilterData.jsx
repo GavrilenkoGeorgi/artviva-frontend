@@ -3,17 +3,11 @@ import PropTypes from 'prop-types'
 
 import { Form } from 'react-bootstrap'
 
-const FilterData = ({ data, setData, fieldName, placeholder }) => {
-
-	const filter = ({ target }) => {
-		const { name: field, value } = target
-		const result = data.filter(item => item[field].toUpperCase().includes(value.toUpperCase()))
-		setData([...result])
-	}
+const FilterData = ({ filter, fieldName, placeholder }) => {
 
 	return (
-		<Form className="border1 border-danger justify-content-center">
-			<Form.Label htmlFor="xp-to" srOnly>
+		<Form>
+			<Form.Label htmlFor={`${fieldName}-filter-input`} srOnly>
 				{placeholder}
 			</Form.Label>
 			<Form.Control
@@ -30,8 +24,6 @@ const FilterData = ({ data, setData, fieldName, placeholder }) => {
 }
 
 FilterData.propTypes = {
-	data: PropTypes.array.isRequired,
-	setData: PropTypes.func.isRequired,
 	fieldName: PropTypes.string.isRequired,
 	placeholder: PropTypes.string.isRequired
 }

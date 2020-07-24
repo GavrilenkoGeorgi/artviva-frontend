@@ -32,9 +32,9 @@ const Routes = ({ user, fetchingData }) => {
 
 	useEffect(() => {
 		if (user) {
-			const { email, id, lastname, superUser } = user
+			const { email, id, name, lastname, superUser } = user
 			setSuperUser(superUser)
-			setUserData({ email, id, lastname, superUser })
+			setUserData({ email, id, name, lastname, superUser })
 		}
 	}, [user])
 

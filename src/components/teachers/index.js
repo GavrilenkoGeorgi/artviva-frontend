@@ -1,7 +1,2 @@
 export { default as Teacher } from './Teacher'
-export { default as NewTeacherForm } from './NewTeacherForm'
-export { default as FilterData } from './FilterData'
-export { default as SortData } from './SortData'
-export { default as ExperienceSort } from './ExperienceSort'
-export { default as SelectData } from './SelectData'
-// export { default as FilterBooleanFields } from './FilterBooleanFields'
+export { default as AddTeacher } from './AddTeacher'

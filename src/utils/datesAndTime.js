@@ -1,3 +1,6 @@
+import moment from 'moment'
+import 'moment-precise-range-plugin'
+
 export const toHumanReadable = (locale, seconds) => {
 	return new Date(seconds).toLocaleString(locale, { dateStyle: 'long', timeStyle: 'short' })
 }
@@ -56,5 +59,27 @@ export const schoolYearMonths = locale => {
 	} else { // not september nor summer, i.e. middle of the year
 		endingMonth = (currentDate.getMonth() - 1) + monthsTillSummer(currentDate.getMonth())
 		return getPeriodMonths(currentDate.getMonth(), endingMonth)
+	}
+}
+
+// returns user with calculated xp
+export const calcEmployeeExperience = ({ id, employmentDate, experienceToDate }) => {
+	const today = moment()
+	const date = moment(employmentDate)
+	const user = {
+		id,
+		result: {}
+	}
+
+	if (date.isBefore(today)) {
+		// adjust date, add previous xp
+		// to the current employment date
+		for (let value in experienceToDate) {
+			date.subtract(experienceToDate[value], value)
+		}
+		const result = moment.preciseDiff(date, today, true)
+		return ({ ...user, result })
+	} else {
+		return ({ ...user, result: experienceToDate })
 	}
 }

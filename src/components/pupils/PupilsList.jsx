@@ -84,9 +84,9 @@ const PupilsList = ({
 
 	const checkPupilStatus = pupil => {
 		const { currentlyEnrolled, docsPresent } = pupil
-		return (!currentlyEnrolled && !docsPresent)
-			? 'danger-background'
-			: (!currentlyEnrolled || !docsPresent ? 'warning-background': null)
+		return (!currentlyEnrolled)
+			? 'danger-background pupil-not-enrolled'
+			: (!docsPresent ? 'warning-background': null)
 	}
 
 	const sort = ({ id: field }) => {
