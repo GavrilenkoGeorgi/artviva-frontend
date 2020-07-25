@@ -60,7 +60,7 @@ export const initializeSchoolClasses = () => {
  */
 export const getGroups = (access, id) => {
 	return async dispatch => {
-		let groups = null
+		let groups = []
 		if (access) {
 			groups = await schoolClassesService.getAll()
 		} else if (id) {

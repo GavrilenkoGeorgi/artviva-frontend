@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { connect } from 'react-redux'
-import { initializeSchoolClasses, getGroups } from '../../reducers/schoolClassesReducer'
+import { getGroups } from '../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../reducers/notificationReducer'
 import schoolClassesService from '../../services/schoolClasses'
 
@@ -71,7 +71,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	initializeSchoolClasses,
+	// initializeSchoolClasses,
 	getGroups,
 	setNotification,
 	setFetchingData
