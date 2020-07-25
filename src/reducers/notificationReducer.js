@@ -33,6 +33,11 @@ const notificationReducer =
 				reCaptchaScore: action.score
 			}
 		}
+		case 'CLEAR_RECAPTCHA_SCORE': {
+			return { ...state,
+				reCaptchaScore: action.score
+			}
+		}
 		default:
 			return state
 		}
@@ -96,4 +101,19 @@ export const setRecaptchaScore = token => {
 		})
 	}
 }
+
+/**
+ * Clear recaptcha score
+ *
+ */
+
+export const clearRecaptchaScore = () => {
+	return async dispatch => {
+		dispatch ({
+			type: 'CLEAR_RECAPTCHA_SCORE',
+			score: null
+		})
+	}
+}
+
 export default notificationReducer
