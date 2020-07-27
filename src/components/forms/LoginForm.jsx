@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { login } from '../../reducers/loginReducer'
-import { setNotification, setRecaptchaScore,
+import { setNotification, setRecaptchaScore, clearRecaptchaScore,
 	setProcessingForm } from '../../reducers/notificationReducer'
 
 import { Formik } from 'formik'
@@ -22,6 +22,7 @@ const LoginForm = ({
 	processingForm,
 	setNotification,
 	setRecaptchaScore,
+	clearRecaptchaScore,
 	setProcessingForm }) => {
 
 	const unmounted = useRef(false)
@@ -73,13 +74,14 @@ const LoginForm = ({
 					message,
 					variant: variant ? variant : 'danger'
 				}, 5)
+				clearRecaptchaScore()
 			})
 			.finally(() => {
 				if (!unmounted.current) {
 					setProcessingForm(false)
 				}
 			})
-	}, [login, setNotification, setProcessingForm])
+	}, [login, setNotification, setProcessingForm, clearRecaptchaScore])
 
 	useEffect(() => {
 		if (loginValues && reCaptchaScore >= .5) {
@@ -258,7 +260,8 @@ const mapDispatchToProps = {
 	login,
 	setNotification,
 	setRecaptchaScore,
-	setProcessingForm
+	setProcessingForm,
+	clearRecaptchaScore
 }
 
 export default connect(

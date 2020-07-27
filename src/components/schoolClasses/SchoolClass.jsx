@@ -7,7 +7,7 @@ import schoolClassesService from '../../services/schoolClasses'
 
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDown, faAngleUp, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faAngleUp, faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
 import SchoolClassForm from '../forms/SchoolClassForm'
 import LoadingIndicator from '../common/LoadingIndicator'
 import EntityControlButtons from '../common/EntityControlButtons'
@@ -60,7 +60,7 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				className="p-0 d-flex text-left justify-content-between align-items-center"
 			>
 				<span>
-					{schoolClass.title} - {schoolClass.specialty.title}
+					{schoolClass.title} - <em className="text-muted">{schoolClass.specialty.title}</em>{' '}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -70,24 +70,24 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 			<Collapse in={open}>
 				<Container>
 					<Row>
-						<Col xs={12} className="py-2 px-0">
-							<strong>
-								{schoolClass.teacher.name}
-							</strong>
-							<Link
-								to={`/school/teachers/${schoolClass.teacher.id}`}
-								className="px-2"
-							>
-								<FontAwesomeIcon icon={faInfoCircle} className="icon-info" />
-							</Link>
+						<Col xs={12} className="py-2 px-0 border1 border-primary">
+							<p>
+								<em>{schoolClass.teacher.name}</em>
+								<Link
+									to={`/school/teachers/${schoolClass.teacher.id}`}
+									className="px-2"
+								>
+									<FontAwesomeIcon icon={faClipboardCheck} className="icon-info" />
+								</Link>
+							</p>
 						</Col>
 						<Col className="px-0" xs={12}>
-							<p>{schoolClass.specialty.title}</p>
+							{/*<p>{schoolClass.specialty.title}</p>*/}
 							{schoolClass.info
-								? <p><strong>{schoolClass.info}</strong></p>
+								? <p><em className="text-muted">{schoolClass.info}</em></p>
 								: null
 							}
-							Учні:
+							<em>Учні:</em>
 							<ol>
 								{schoolClass.pupils.map(pupil => (
 									<li key={pupil.id}>

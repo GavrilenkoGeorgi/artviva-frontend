@@ -273,6 +273,13 @@ nav
 			background-color: color.adjust($month-color, $hue: $i * 15%)
 			// color: red
 
+.top-ten-colors
+	// color: blue
+	@for $i from 1 through 9
+		&:nth-child(#{$i})
+			background-color: color.adjust($top-ten-color, $hue: $i * 30%)
+			// color: red
+
 .payment-month
 	font-size: .8rem
 

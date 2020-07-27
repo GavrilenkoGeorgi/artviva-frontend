@@ -6,6 +6,7 @@ const notificationReducer =
 		variant: null,
 		processingForm: false,
 		fetchingData: false,
+		searching: false,
 		reCaptchaScore: null
 	}, action) => {
 
@@ -28,7 +29,16 @@ const notificationReducer =
 			return { ...state,
 				fetchingData: action.fetchingData
 			}
+		case 'SET_SEARCHING':
+			return { ...state,
+				searching: action.searching
+			}
 		case 'SET_RECAPTCHA_SCORE': {
+			return { ...state,
+				reCaptchaScore: action.score
+			}
+		}
+		case 'CLEAR_RECAPTCHA_SCORE': {
 			return { ...state,
 				reCaptchaScore: action.score
 			}
@@ -82,6 +92,21 @@ export const setFetchingData = fetchingData => {
 }
 
 /**
+ * 'Search in progress' indicator
+ *
+ * @param {boolean} searching - True or false, cap!
+ */
+
+export const setSearchInProgress = searching => {
+	return dispatch => {
+		dispatch ({
+			type: 'SET_SEARCHING',
+			searching
+		})
+	}
+}
+
+/**
  * Verify recaptcha score
  *
  * @param {string} token - Recaptcha token to verify
@@ -96,4 +121,19 @@ export const setRecaptchaScore = token => {
 		})
 	}
 }
+
+/**
+ * Clear recaptcha score
+ *
+ */
+
+export const clearRecaptchaScore = () => {
+	return async dispatch => {
+		dispatch ({
+			type: 'CLEAR_RECAPTCHA_SCORE',
+			score: null
+		})
+	}
+}
+
 export default notificationReducer

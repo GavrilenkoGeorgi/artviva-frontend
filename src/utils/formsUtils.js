@@ -16,3 +16,14 @@ export const currentExperience = (currentTeacherExperience, employmentDate, toda
 	}
 	return xpToSet
 }
+
+/**
+ * Calculate percent of a number.
+ *
+ * @param float percent The percent that you want to get.
+ * @param float|int num The number that you want to calculate the percent of.
+ * @returns {Number}
+ */
+export const calculatePercent = (percent, num) => {
+	return (percent / 100) * num
+}

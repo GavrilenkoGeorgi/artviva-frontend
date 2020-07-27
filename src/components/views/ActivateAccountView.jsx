@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Container, Spinner } from 'react-bootstrap'
+import { Container, Spinner, Col } from 'react-bootstrap'
 import { setNotification } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
 
@@ -26,31 +26,37 @@ const ActivateAccountView = ({ match, setNotification }) => {
 				setActivated(true)
 			})
 			.catch(error => {
-				const { message } = { ...error.response.data }
+				const { message, variant } = { ...error.response.data }
 				setActivationError(message)
 				setNotification({
-					message: `Нам не вдалося активувати ваш акаунт: ${message}`,
-					variant: 'danger'
+					message,
+					variant: variant ? variant : 'danger'
 				}, 5)
 			})
 			.finally(() => setProcessingActivation(false))
 	// eslint-disable-next-line
-	},[])
+	},[]) // ??
 
 	return (
-		<Container className="pt-4 mt-4 text-center">
-			<h1 className="custom-font py-4">
-				Активація облікового запису...
-			</h1>
-			{ processingActivation ? <Spinner animation="border" variant="primary" /> : null }
-			{ activated
-				? <h5>
-					Ваш обліковий запис активовано.
-					Зачекайте, коли адміністратор перевірить і затвердить ваш обліковий запис користувача.
-				</h5>
-				: null
-			}
-			{ activationError ? <h5>{activationError}</h5> : null }
+		<Container className="pt-4 mt-4 d-flex justify-content-center">
+			<Col xs={8}>
+				<h2 className="custom-font py-4 text-center">
+					Активація облікового запису
+				</h2>
+				{ processingActivation
+					? <Spinner animation="border" variant="primary" />
+					: null }
+				{ activated
+					? <h5>
+						Ваш обліковий запис активовано.
+						Зачекайте, коли адміністратор перевірить і затвердить ваш обліковий запис користувача.
+					</h5>
+					: null }
+
+				{ activationError
+					? <h5 className="py-4 text-secondary">{activationError}</h5>
+					: null }
+			</Col>
 		</Container>
 	)
 }

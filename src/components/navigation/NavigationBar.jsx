@@ -49,7 +49,6 @@ const NavigationBar = ({ user }) => {
 	}
 
 	// list of links
-	// const linkClassList = 'pr-2 py-1 py-lg-0 px-lg-2 d-flex align-items-center main-nav-link'
 	const linkClassList = 'main-nav-link'
 
 	const navLinks = [
@@ -110,16 +109,17 @@ const NavigationBar = ({ user }) => {
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="ml-auto">
 						<NavDropdown title="Школа" id="school-mgmt-links" className="school-mgmt-links">
+							<NavDropdown.Item href="/pay/form">Оплата</NavDropdown.Item>
+							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							{user
 								? <>
-									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
-									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
-									<NavDropdown.Divider />
 									{user.superUser
-										? <NavDropdown.Item href="/school/payments">Всі платежі</NavDropdown.Item>
+										? <NavDropdown.Item href="/school/payments">
+												Список всіх платежів
+										</NavDropdown.Item>
 										: null
 									}
-									<NavDropdown.Item href="/school/overview">Учні, групи</NavDropdown.Item>
+									<NavDropdown.Divider />
 									<NavDropdown.Item href={`/school/users/${user.id}`}>
 										<span className="nav-list-icon">
 											<FontAwesomeIcon icon={faUser} />
@@ -131,11 +131,9 @@ const NavigationBar = ({ user }) => {
 									</NavDropdown.Item>
 								</>
 								: <>
-									<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
-									<NavDropdown.Item href="/apply">Подати заяву на навчання</NavDropdown.Item>
 									<NavDropdown.Item href="/register">Реєстрація</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/login">Логін</NavDropdown.Item>
+									<NavDropdown.Item href="/login" className="text-right">Логін</NavDropdown.Item>
 								</>
 							}
 						</NavDropdown>

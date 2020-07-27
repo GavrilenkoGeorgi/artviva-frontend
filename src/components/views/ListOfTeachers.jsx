@@ -60,7 +60,8 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 		let to = parseInt(range.to)
 
 		if (from > to) {
-			to = from + 1
+			// max i guess
+			to = 99
 		}
 
 		return data.filter(item => item.experience.years >= from &&
