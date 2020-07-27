@@ -6,6 +6,7 @@ const notificationReducer =
 		variant: null,
 		processingForm: false,
 		fetchingData: false,
+		searching: false,
 		reCaptchaScore: null
 	}, action) => {
 
@@ -27,6 +28,10 @@ const notificationReducer =
 		case 'SET_FETCHING_DATA':
 			return { ...state,
 				fetchingData: action.fetchingData
+			}
+		case 'SET_SEARCHING':
+			return { ...state,
+				searching: action.searching
 			}
 		case 'SET_RECAPTCHA_SCORE': {
 			return { ...state,
@@ -82,6 +87,21 @@ export const setFetchingData = fetchingData => {
 		dispatch ({
 			type: 'SET_FETCHING_DATA',
 			fetchingData
+		})
+	}
+}
+
+/**
+ * 'Search in progress' indicator
+ *
+ * @param {boolean} searching - True or false, cap!
+ */
+
+export const setSearchInProgress = searching => {
+	return dispatch => {
+		dispatch ({
+			type: 'SET_SEARCHING',
+			searching
 		})
 	}
 }

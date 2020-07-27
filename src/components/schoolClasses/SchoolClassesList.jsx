@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 
-import { Link } from 'react-router-dom'
 import { ListGroup, Row, Col } from 'react-bootstrap'
 import SchoolClass from './SchoolClass'
 
@@ -10,15 +9,7 @@ const SchoolClassesList = ({ schoolClasses }) => {
 
 	return (
 		<>
-			<Col>
-				<p className="py-3 text-muted">
-							Для створення групи, ви повинні бути впевнені,
-							що ви створили <Link to="/school/teachers">вчителя</Link>,&nbsp;
-					<Link to="/school/specialties">спеціальність</Link> та&nbsp;
-					<Link to="/school/pupils">учнів</Link> для вашої нової групи.
-				</p>
-			</Col>
-			<ListGroup>
+			<ListGroup className="py-2">
 				{schoolClasses.map(schoolClass =>
 					<ListGroup.Item
 						key={schoolClass.id}
@@ -27,7 +18,12 @@ const SchoolClassesList = ({ schoolClasses }) => {
 							<Col xs={12}>
 								<SchoolClass schoolClass={schoolClass}/>
 							</Col>
-							<Col>
+							<Col xs={3} className="pl-4">
+								<small className="text-muted">
+									<em>{schoolClass.pupils.length} учів</em>
+								</small>
+							</Col>
+							<Col xs={9}>
 								<div className="text-muted text-right">
 									<em>{schoolClass.teacher.name}
 									</em>
@@ -41,9 +37,8 @@ const SchoolClassesList = ({ schoolClasses }) => {
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		user: state.user,
 		schoolClasses: state.schoolClasses
 	}
 }

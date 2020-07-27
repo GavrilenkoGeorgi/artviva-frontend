@@ -1,17 +1,40 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import { initializeSchoolStats } from '../../reducers/schoolStatsReducer'
-import { setNotification } from '../../reducers/notificationReducer'
 
+import { initializeSchoolStats } from '../../reducers/schoolStatsReducer'
+import { initialisePayments } from '../../reducers/paymentsReducer'
+import paymentService from '../../services/payment'
+import { setNotification } from '../../reducers/notificationReducer'
+import { nestedSort } from '../../utils/arrayHelpers'
+import { pureObjectIsEmpty } from '../../utils/objectHelpers'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col } from 'react-bootstrap'
 import LoadingIndicator from '../common/LoadingIndicator'
-import SchoolStatsTable from '../common/SchoolStatsTable'
+import Emoji from '../common/Emoji'
 
-const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification }) => {
+const SchoolOverview =({
+	user, payments,
+	schoolStats,
+	initializeSchoolStats,
+	setNotification,
+	initialisePayments }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
+	const [stats, setStats] = useState({ topTen: [], otherStats: [] })
 
 	useEffect(() => {
+		paymentService.setToken(user.token)
+		initialisePayments()
+			.catch(error => {
+				setNotification({
+					message: `Щось пішло не так, спробуйте пізніше:
+						${error.status} ${error.statusText}`,
+					variant: 'danger'
+				}, 5)
+				setIsLoading(false)
+			})
 		initializeSchoolStats()
 			.catch(error => {
 				setNotification({
@@ -21,70 +44,121 @@ const SchoolOverview = ({ schoolStats, initializeSchoolStats, setNotification })
 				}, 5)
 			})
 			.finally(() => setIsLoading(false))
-	}, [setNotification, initializeSchoolStats])
+	}, [user, initialisePayments, setNotification, initializeSchoolStats])
+
+	useEffect(() => {
+		if (payments.length > 0) {
+			let result = payments.reduce((acc, d) => {
+				const found = acc.find(a => a.teacher === d.paymentDescr.teacher)
+				found
+					? found.amount += d.amount
+					: acc.push({ teacher: d.paymentDescr.teacher, amount: d.amount })
+				return acc
+			}, [])
+			setStats({ topTen: result.sort(nestedSort('amount', null, 'desc')) })
+		}
+
+	}, [payments])
+
+	useEffect(() => {
+		if (!pureObjectIsEmpty(schoolStats)) {
+			const topGroups = schoolStats.schoolClasses.sort((one, other) => {
+				return one.pupils.length - other.pupils.length
+			})
+			setStats(stats => ({ ...stats, topGroups: topGroups.reverse() }))
+		}
+	}, [schoolStats])
 
 	return (
 		<Container>
 			<Row className="d-flex justify-content-center">
-				<Col md={8}>
-					<p className="pt-3">
-						Списки вчителів, учнів та філій, оплата та інша інформація.
-					</p>
-					{isLoading
-						? <LoadingIndicator
-							animation="border"
-							variant="primary"
-						/>
-						: <>
-							<SchoolStatsTable
-								link="/school/schoolclasses"
-								linkText={`Групи: ${schoolStats.schoolClasses.length} шт.`}
-								header1stCol="№"
-								header2ndCol="Назва"
-								fieldName="title"
-								stats={schoolStats.schoolClasses}
-							/>
-							<SchoolStatsTable
-								link="/school/teachers"
-								linkText={`Вчітелі: ${schoolStats.teachers.length} шт.`}
-								header1stCol="№"
-								header2ndCol="Ім&apos;я"
-								fieldName="name"
-								stats={schoolStats.teachers}
-							/>
-							<SchoolStatsTable
-								link="/school/pupils"
-								linkText={`Учні: ${schoolStats.pupils.length} шт.`}
-								header1stCol="№"
-								header2ndCol="Ім&apos;я"
-								fieldName="name"
-								stats={schoolStats.pupils}
-							/>
-							<SchoolStatsTable
-								link="/school/specialties"
-								linkText={`Спеціальності: ${schoolStats.specialties.length} шт.`}
-								header1stCol="№"
-								header2ndCol="Назва"
-								fieldName="title"
-								stats={schoolStats.specialties}
-							/>
-						</>
-					}
-				</Col>
+				<h5 className="py-3 custom-font text-center">
+						Списки вчителів, учнів та філій, оплата та інша інформація
+				</h5>
+				{isLoading
+					? <LoadingIndicator
+						animation="border"
+						variant="primary"
+					/>
+					: <>
+						<Col xs={12} md={6}>
+							<Row className="px-3 d-flex justify-content-center">
+								<Col xs={12}>
+									<h6 className="text-muted py-3 pl-0">
+										<Emoji label="Party Popper" emoji={'🎉'} /> Працівник місяця
+									</h6>
+								</Col>
+								<Col>
+									{stats.topTen.map(result =>
+										<Row
+											key={result.teacher}
+											className="p-2 mb-2 top-ten-colors animated fadeIn rounded"
+										>
+											<Col xs={12} lg={8}>
+												{result.teacher}
+											</Col>
+											<Col xs={12} lg={4} className="text-right">
+												{result.amount}{' '}
+												<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
+											</Col>
+										</Row>
+									)}
+								</Col>
+							</Row>
+						</Col>
+
+						<Col xs={12} md={6}>
+							<Row className="px-3 d-flex justify-content-center">
+								<Col xs={12}>
+									<h6 className="text-muted py-3 pl-0">
+										<Emoji label="Graduation Cap" emoji={'🎓'} /> Групи
+									</h6>
+								</Col>
+								<Col>
+									{stats.topGroups.map(group =>
+										<Row
+											key={group.title}
+											className="p-2 mb-2 top-ten-colors animated fadeIn rounded"
+										>
+											{group.teacher.teacherTitle !== 'Немає педагогічного звання'
+												? <Col xs={12} className="text-muted">
+													<small><em>{group.teacher.teacherTitle}</em></small>
+												</Col>
+												: null
+											}
+											<Col xs={12}>
+												<small><em>{group.teacher.name}</em></small>
+											</Col>
+											<Col xs={12} lg={8} className="text-secondary">
+												<strong>{group.title}</strong>
+											</Col>
+											<Col xs={12} lg={4} className="text-right">
+												{group.pupils.length} учнів
+											</Col>
+										</Row>
+									)}
+								</Col>
+							</Row>
+						</Col>
+					</>
+				}
 			</Row>
 		</Container>
 	)
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
+		user: state.user,
+		payments: state.payments,
 		schoolStats: state.schoolStats
 	}
 }
 
 const mapDispatchToProps = {
 	initializeSchoolStats,
-	setNotification
+	setNotification,
+	initialisePayments
 }
 
 export default connect(

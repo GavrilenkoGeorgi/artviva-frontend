@@ -22,10 +22,16 @@ $primary-color: #3b5998;
 $primary-color-muted: rgb(59, 89, 152, .7);
 
 $month-color: hsl(0, 100%, 93%);
+$top-ten-color: hsla(113, 100%, 95%, 0.712);
 $warn: hsl(48, 100%, 94%);
 $danger: hsl(0, 100%, 95%);
 
-$primary-second: #005a0fda;
-$primary-second-light: #eaffea;
+// $primary-second: #005a0fda;
+// $primary-second-light: #eaffea;
+
+$primary-second: #3b5998;
+$primary-second-light: #0051ff0c;
+
+$primary-second-medium: #28a746b0;
 $pupil-not-enrolled: rgb(247, 242, 255)
 // $primary-second-light: rgba(134, 121, 0, 0.411);

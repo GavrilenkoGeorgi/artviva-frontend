@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { connect } from 'react-redux'
 import paymentService from '../../services/payment'
 import { setNotification,	setProcessingForm,
-	setFetchingData, setRecaptchaScore } from '../../reducers/notificationReducer'
+	setSearchInProgress, setRecaptchaScore } from '../../reducers/notificationReducer'
 import { schoolYearMonths } from '../../utils/datesAndTime'
+import { calculatePercent } from '../../utils/formsUtils'
 import searchService from '../../services/search'
 import specialtyService from '../../services/specialties'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
@@ -22,10 +23,10 @@ import { TextInput } from './components'
 const PaymentForm = ({
 	reCaptchaScore,
 	processingForm,
-	fetchingData,
+	searching,
+	setSearchInProgress,
 	setNotification,
 	setProcessingForm,
-	setFetchingData,
 	setRecaptchaScore }) => {
 
 	const unmounted = useRef(false)
@@ -71,7 +72,7 @@ const PaymentForm = ({
 
 	const getTeachers = (value) => {
 		if (value.length >= 2) {
-			setFetchingData(true)
+			setSearchInProgress(true)
 			const query = { value }
 			searchService.teachers(query)
 				.then((data) => {
@@ -84,7 +85,7 @@ const PaymentForm = ({
 						variant: 'danger'
 					}, 5)
 				})
-				.finally(() => setFetchingData(false))
+				.finally(() => setSearchInProgress(false))
 		}
 	}
 
@@ -93,11 +94,12 @@ const PaymentForm = ({
 		specialty: null,
 		months: [],
 		cost: null,
-		total: null
+		total: 1,
+		benefits: 0
 	})
 	const [total, setTotal] = useState(null)
 
-	// calculate total to show when filling the form
+	// calculate total to show on input
 	const processOrderData = ({ target }) => {
 		let months
 		let position
@@ -113,6 +115,9 @@ const PaymentForm = ({
 				specialty: target.value,
 				cost: priceData ? priceData.cost : 0
 			})
+			break
+		case 'benefits':
+			setOrderData({ ...orderData, benefits: Number(target.value) })
 			break
 		case 'months':
 			months = orderData.months
@@ -131,18 +136,20 @@ const PaymentForm = ({
 
 	// when order data changes, calculate total
 	useEffect(() => {
-		const { specialty, months, cost } = orderData
+		const { specialty, months, cost, benefits } = orderData
 		const preliminaryPaymentData = () => specialty && months ? true : false
 
 		if (preliminaryPaymentData()) {
-			setTotal(cost * months.length)
+			benefits
+				? setTotal(calculatePercent(benefits, cost * months.length))
+				: setTotal(cost * months.length)
 		}
 	}, [orderData])
 
 	const paymentFormEl = useRef(null)
 	const [liqpayData, setLiqpayData] = useState({})
 
-	// Send generate and send data to liqpay
+	// Send payment data to liqpay
 	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
 		const paymentData = {
@@ -198,8 +205,10 @@ const PaymentForm = ({
 		specialty: Yup.string()
 			.oneOf(specialtiesNames, 'Виберіть предмет викладача')
 			.required('Виберіть предмет викладача'),
+		benefits: Yup.number()
+			.min(0, 'No benefits')
+			.max(100, 'Too much percent'),
 		months: Yup.array()
-			// .oneOf(months, 'Ви повинні вибрати не менше одного місяця.')
 			.required('Ви повинні вибрати не менше одного місяця.')
 	})
 
@@ -210,16 +219,16 @@ const PaymentForm = ({
 				teacher: '',
 				pupil: '',
 				specialty: '',
-				months: []
+				months: [],
+				benefits: 0
 			}}
 			onSubmit={async (values) => {
-				// await handlePayment(values, setErrors)
 				setProcessingForm(true)
 				setPaymentData(values)
 				getRecaptchaScore()
 			}}
 			onReset={() => {
-				setOrderData({ ...orderData, months: [], cost: null })
+				setOrderData({ ...orderData, months: [], cost: null, benefits: 0 })
 				setTotal(null)
 			}}
 			validationSchema={paymentFormSchema}
@@ -250,13 +259,12 @@ const PaymentForm = ({
 							controlId="teacher-name-input"
 							as={Col}
 						>
-							<Form.Label>Викладач
-								{fetchingData
+							<Form.Label>Викладач<span className="form-required-mark"> *</span>
+								{searching
 									? <SimpleSpinner
 										className="ml-1"
-										animation="grow"
 										size="sm"
-										variant="primary"
+										variant="success"
 									/>
 									: null
 								}
@@ -306,6 +314,7 @@ const PaymentForm = ({
 							</Form.Label>
 							<Form.Control
 								as="select"
+								custom
 								name="specialty"
 								data-cy="specialty-input"
 								onChange={handleChange}
@@ -323,6 +332,35 @@ const PaymentForm = ({
 								{errors.specialty}
 							</Form.Control.Feedback>
 						</Form.Group>
+					</Form.Row>
+
+					<Form.Row>
+						<Form.Group
+							controlId="benefits-input"
+							as={Col}
+						>
+							<Form.Label>
+								Пільги?
+							</Form.Label>
+							<Form.Control
+								as="select"
+								custom
+								name="benefits"
+								data-cy="benefits-input"
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.benefits}
+								isValid={touched.benefits && !errors.benefits}
+								isInvalid={touched.benefits && !!errors.benefits}
+							>
+								<option value={0}>Виберіть...</option>
+								<option value={50}>Моя дитина має пільги у розмірі 50%</option>
+							</Form.Control>
+							<Form.Control.Feedback type="invalid">
+								{errors.benefits}
+							</Form.Control.Feedback>
+						</Form.Group>
+
 					</Form.Row>
 
 					<Form.Row>
@@ -368,20 +406,20 @@ const PaymentForm = ({
 						/>
 					</Form.Row>
 
-					<Form.Row className="py-3">
-						<Col>
-							{total
-								? <>
-									<h5 className="d-inline">
-										{`Всього: ${total} `}
-									</h5>
+					<Form.Row className="py-3 d-flex justify-content-center">
+						{total
+							? <>
+								<Col xs={11} className="text-right payment-total-message">
+									Всього: <span className="total-amount">{total} </span>
+								</Col>
+								<Col xs={1} className="d-flex align-items-center">
 									<FontAwesomeIcon icon={faHryvnia} />
-								</>
-								: <h6 className="text-muted">
-									<em>Заповніть форму для розрахунку вартості</em>
-								</h6>
-							}
-						</Col>
+								</Col>
+							</>
+							: <p className="payment-total-message">
+								<em>Заповніть форму для розрахунку вартості</em>
+							</p>
+						}
 					</Form.Row>
 
 					<input type="hidden" name="data" value={liqpayData.data || ''} />
@@ -421,7 +459,7 @@ const PaymentForm = ({
 const mapStateToProps = (state) => {
 	return {
 		processingForm: state.notification.processingForm,
-		fetchingData: state.notification.fetchingData,
+		searching: state.notification.searching,
 		reCaptchaScore: state.notification.reCaptchaScore,
 	}
 }
@@ -429,7 +467,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
 	setNotification,
 	setProcessingForm,
-	setFetchingData,
+	setSearchInProgress,
 	setRecaptchaScore
 }
 
