@@ -13,7 +13,7 @@ import { Teacher, AddTeacher } from '../teachers'
 import { FilterDisplay, FilterData, ExperienceSort, SelectFields, FilterBooleanFields } from '../sorting'
 
 const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotification }) => {
-
+	// better move this somewhere
 	const [teacherData, setTeacherData] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
 	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
@@ -159,7 +159,7 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 
 	return (
 		<Container>
-			<Row className="d-flex align-items-center border1">
+			<Row className="d-flex align-items-center">
 				<Col xs={12} className="border1 border-warning">
 					<h4 className="py-3 custom-font text-center">
 						Список усіх вчителів школи

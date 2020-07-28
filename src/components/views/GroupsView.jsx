@@ -1,23 +1,28 @@
-import React, { Suspense } from 'react'
+import React, { useState, useEffect, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { getGroups } from '../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../reducers/notificationReducer'
 import schoolClassesService from '../../services/schoolClasses'
+import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 
 import { Link } from 'react-router-dom'
-import { Container, Col } from 'react-bootstrap'
-import SchoolClassesList from '../schoolClasses/SchoolClassesList'
-import CollapseForm from '../common/CollapseForm'
-import LoadingIndicator from '../common/LoadingIndicator'
-import { useEffect } from 'react'
+import { Container, Col, Row } from 'react-bootstrap'
+import GroupsList from '../schoolClasses/GroupsList'
+import { CollapseComponent, LoadingIndicator } from '../common'
 
-const LazySchoolClassForm = React.lazy(() => import('../forms/SchoolClassForm'))
+import { FilterData } from '../sorting'
 
-const GroupsView = ({ user, getGroups, setNotification }) => {
+const LazySchoolClassForm = React.lazy(() => import('../forms/GroupForm'))
+
+const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 
 	useEffect(() => {
 		setFetchingData(true)
 	}, [])
+
+	const [groupsList, setGroupsList] = useState([])
+	const [filterSettings, setFilterSettings] = useState({})
+	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
 
 	useEffect(() => {
 		if (user) {
@@ -35,42 +40,152 @@ const GroupsView = ({ user, getGroups, setNotification }) => {
 		}
 	}, [user, setNotification, getGroups])
 
+	useEffect(() => {
+		console.log('Filter settings changed', filterSettings)
+	}, [filterSettings])
+
+	const changeFilterSetting = (event) => {
+		event.preventDefault()
+
+		const { target } = event
+		const { name: field, value } = target
+		console.log('filed and value ', field, ':', value)
+		switch (field) {
+		case 'teacher':
+		case 'specialty': {
+			if (value) {
+				setFilterSettings({ ...filterSettings, [field]: value })
+			}
+			else {
+				setFilterSettings({ [field]: '' })
+			}
+			setCurrentlyActiveFilter(field)
+			break
+		}
+		case 'from':
+		case 'to': {
+			setFilterSettings({ ...filterSettings, [field]: value || 0 })
+			setCurrentlyActiveFilter('range')
+			break
+		}
+		case 'isRetired':
+		case 'employeeIsAStudent': {
+			let statement
+			if (value) {
+				statement = JSON.parse(value)
+			} else {
+				statement = ''
+			}
+			setFilterSettings({ ...filterSettings, [field]: statement })
+			setCurrentlyActiveFilter('booleans')
+			break
+		}
+		default: {
+			// setCurrentlyActiveFilter('select')
+			// setFilterSettings({ ...filterSettings, [field]: value })
+			console.log('default case')
+		}
+		}
+	}
+
+	const sortData = useCallback(settings => {
+		let result = groups
+		if (settings) {
+			const { specialty, teacher } = settings
+
+			console.log('settings', settings, 'selected', specialty)
+
+			if (specialty) {
+				result =
+					result.filter(item => item.specialty.title.toUpperCase().includes(settings.specialty.toUpperCase()))
+			}
+
+			if (teacher) {
+				result =
+					result.filter(item => item.teacher.name.toUpperCase().includes(settings.teacher.toUpperCase()))
+			}
+			setGroupsList([ ...result ])
+
+		} else {
+			setGroupsList([ ...groups ])
+		}
+	}, [groups])
+
+	useEffect(() => {
+		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
+			sortData(null)
+			console.log('Empty filter')
+		} else {
+			console.log('Trying to sort')
+			sortData(filterSettings)
+		}
+	}, [filterSettings, sortData])
+
 	return (
-		<Container className="d-flex justify-content-center">
-			<Col lg={7} className="px-0">
-				{user
-					? <>
-						<h4 className="pb-3 text-center custom-font">
+		<Container className="px-0 d-flex justify-content-center">
+			<Col md={9}>
+				<Col xs={12}>
+					{user
+						? <h4 className="pb-3 text-center custom-font">
 							{`${user.superUser ? 'Всі' : 'Ваші'} групи в школи`}
 						</h4>
-						<SchoolClassesList />
+						: null
+					}
+				</Col>
+				<Row className="d-flex justify-content-center">
+					{/* Filter by specialty and teacher chars */}
+					<Col xs={6} className="my-2">
+						<FilterData
+							filter={changeFilterSetting}
+							fieldName="specialty"
+							placeholder="Назва фаху"
+						/>
+					</Col>
+					<Col xs={6} className="my-2">
+						<FilterData
+							filter={changeFilterSetting}
+							fieldName="teacher"
+							placeholder="Прізвище вчителя"
+						/>
+					</Col>
+				</Row>
 
-						<Col className="px-0">
-							<p className="py-4 text-muted">
-								Для створення групи, ви повинні бути впевнені, що ви
-								{!user.teacher
-									? <> заповнили <Link to={`/school/users/${user.id}`}>анкету вчителя</Link>, та </>
-									: ' '}
-								створили <Link to="/school/pupils">учнів</Link> для вашої нової групи.
-							</p>
-						</Col>
+				<Row>
+					<Col xs={12} className="pt-3">
+						{user
+							? <>
+								<GroupsList groups={groupsList}/>
 
-						<CollapseForm
-							title={`Додати нову групу ${user.superUser ? '(як завуч)' : '' }`}
-							ariaControls="school-class-add-form-collapse"
-						>
-							<Suspense
-								fallback={
-									<LoadingIndicator
-										animation="border"
-										variant="primary"
-									/>}>
-								<LazySchoolClassForm mode="create" />
-							</Suspense>
-						</CollapseForm>
-					</>
-					: <>Just a sec..</>
-				}
+								<Col className="px-0">
+									<p className="py-4 text-muted">
+										Для створення групи, ви повинні бути впевнені, що ви
+										{!user.teacher
+											? <>{' '}
+												заповнили <Link to={`/school/users/${user.id}`}>
+												анкету вчителя</Link>, та </>
+											: ' '}
+										створили <Link to="/school/pupils">учнів</Link> для вашої нової групи.
+									</p>
+								</Col>
+
+								<CollapseComponent
+									title={`Додати нову групу ${user.superUser ? '(як завуч)' : '' }`}
+									ariaControls="school-class-add-form-collapse"
+								>
+									<Suspense
+										fallback={
+											<LoadingIndicator
+												animation="border"
+												variant="primary"
+											/>}>
+										<LazySchoolClassForm mode="create" />
+									</Suspense>
+								</CollapseComponent>
+							</>
+							: <>Just a sec..</>
+						}
+					</Col>
+				</Row>
 			</Col>
 		</Container>
 	)

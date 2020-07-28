@@ -33,11 +33,13 @@ const LoginForm = ({
 
 	useEffect(() => {
 		if (loginSuccessful) {
+			history.push('/school')
+			/*
 			if (user.superUser) {
 				history.push('/school/teachers')
 			} else {
 				history.push('/school/pupils')
-			}
+			}*/
 		}
 	}, [loginSuccessful, history, user])
 

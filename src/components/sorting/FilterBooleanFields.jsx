@@ -7,7 +7,7 @@ const FilterBooleanFields = ({ filter, selectBy }) => {
 		<>
 			<Form.Group as={Row}>
 				{selectBy.map(item =>
-					<Col xs={6} key={item.field} className="mb-2">
+					<Col xs={6} key={item.field} className="py-2">
 						<Form.Control
 							size="sm"
 							as="select"

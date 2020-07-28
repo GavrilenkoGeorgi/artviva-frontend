@@ -96,10 +96,9 @@ const NavigationBar = ({ user }) => {
 					<Image
 						alt="Лого"
 						src="/img/schoolLogo-transparent.png"
-						width="30"
-						height="30"
+						className="nav-logo-img"
 					/>{' '}
-					<span className="pl-2 nav-logo-font">ArtViva</span>
+					<span className="pl-3 nav-logo-font">ArtViva</span>
 				</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls="responsive-navbar-nav"
@@ -114,8 +113,8 @@ const NavigationBar = ({ user }) => {
 							{user
 								? <>
 									{user.superUser
-										? <NavDropdown.Item href="/school/payments">
-												Список всіх платежів
+										? <NavDropdown.Item href="/school">
+												Кабинет
 										</NavDropdown.Item>
 										: null
 									}

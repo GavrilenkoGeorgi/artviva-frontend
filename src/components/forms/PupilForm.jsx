@@ -16,7 +16,7 @@ import { phoneNumber as phonePattern,
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-import { Container, Col, Form } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
@@ -392,7 +392,7 @@ const PupilForm = ({
 	})
 
 	return (
-		<Container>
+		<>
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
@@ -827,7 +827,7 @@ const PupilForm = ({
 				show={infoModalVis}
 				onHide={() => setInfoModalVis(!infoModalVis)}
 			/>
-		</Container>
+		</>
 	)
 }
 

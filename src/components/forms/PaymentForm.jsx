@@ -271,6 +271,7 @@ const PaymentForm = ({
 							</Form.Label>
 							<Form.Control
 								type="text"
+								custom
 								name="teacher"
 								list="teachers-list"
 								autoComplete="off"

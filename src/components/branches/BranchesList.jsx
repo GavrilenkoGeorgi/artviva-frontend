@@ -5,7 +5,7 @@ import { initializeBranches } from '../../reducers/branchesReducer'
 
 import { Container, ListGroup } from 'react-bootstrap'
 import LoadingIndicator from '../common/LoadingIndicator'
-import CollapseForm from '../common/CollapseForm'
+import { CollapseComponent } from '../common'
 import Branch from './Branch'
 
 const LazyBranchForm = React.lazy(() => import('../forms/BranchForm'))
@@ -63,7 +63,7 @@ const BranchesList = ({ initializeBranches, branches }) => {
 						назва, місто, адреса, номер телефону.
 					</p>
 
-					<CollapseForm
+					<CollapseComponent
 						title="Додати нову філію"
 						ariaControls="branch-add-form-collapse"
 					>
@@ -75,7 +75,7 @@ const BranchesList = ({ initializeBranches, branches }) => {
 								/>}>
 							<LazyBranchForm mode='create' />
 						</Suspense>
-					</CollapseForm>
+					</CollapseComponent>
 				</>
 			}
 		</Container>
