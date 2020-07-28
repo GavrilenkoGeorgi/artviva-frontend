@@ -33,6 +33,7 @@ const Select = props => {
 			</Form.Label>
 			<Form.Control
 				as="select"
+				custom
 				{ ...other }
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}

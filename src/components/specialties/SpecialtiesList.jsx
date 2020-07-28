@@ -6,8 +6,7 @@ import specialtiesService from '../../services/specialties'
 import PropTypes from 'prop-types'
 
 import { Container, ListGroup, Row, Col } from 'react-bootstrap'
-import LoadingIndicator from '../common/LoadingIndicator'
-import CollapseForm from '../common/CollapseForm'
+import { CollapseComponent, LoadingIndicator } from '../common'
 import Specialty from './Specialty'
 
 const LazySpecialtyForm = React.lazy(() => import('../forms/SpecialtyForm'))
@@ -47,7 +46,7 @@ const SpecialtiesList = ({ user, initializeSpecialties, specialties, setNotifica
 								Додаткова інформація не є обов&apos;язковою.
 							</p>
 
-							<CollapseForm
+							<CollapseComponent
 								title="Додати новій фах"
 								ariaControls="specialty-add-form-collapse"
 							>
@@ -59,7 +58,7 @@ const SpecialtiesList = ({ user, initializeSpecialties, specialties, setNotifica
 										/>}>
 									<LazySpecialtyForm mode="create" />
 								</Suspense>
-							</CollapseForm>
+							</CollapseComponent>
 
 							<p className="py-3 text-muted">
 								<em>Список усіх спеціальностей школи.</em>

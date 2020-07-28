@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
+import { Link, useHistory } from 'react-router-dom'
+
 import { Container, Row, Col } from 'react-bootstrap'
 import SectionLink from './SectionLink'
 import Emoji from '../common/Emoji'
+import SchoolExplained from '../help/SchoolExplained'
 
 const SchoolSectionsNav = ({ userData }) => {
 
 	const [links, setLinks] = useState(null)
+
+	const Home = ({ children }) => {
+		let history = useHistory()
+		return history.location.pathname === '/school' ? <> {children} </> : null
+	}
 
 	const superUserLinks = [
 		{
@@ -37,10 +45,10 @@ const SchoolSectionsNav = ({ userData }) => {
 			to: '/school/specialties',
 			label: 'Спеціальності'
 		},
-		{
+		/*{
 			to: '/school/branches',
 			label: 'Філії'
-		},
+		},*/
 		{
 			to: '/school/payments',
 			label: 'Платежі'
@@ -74,9 +82,13 @@ const SchoolSectionsNav = ({ userData }) => {
 	return (
 		<>
 			<Container className="pb-2">
-				<Row className="px-4 py-2 py-lg-4 d-flex align-items-center">
-					<Col xs={12} sm={5} className="text-right">
-						<em className="profile-user-name">{userData.name} {userData.lastname}</em>
+				<Row className="px-4 pt-lg-5 d-flex align-items-center">
+					<Col xs={12} sm={5} className="text-right profile-user-name">
+						<Link to="/school">
+							<span className="profile-user-name">
+								{userData.name} {userData.lastname}
+							</span>
+						</Link>
 					</Col>
 					{userData.superUser
 						? <Col xs={12} sm={2} className="px-0 text-center">
@@ -101,6 +113,9 @@ const SchoolSectionsNav = ({ userData }) => {
 					}
 				</Row>
 			</Container>
+			<Home>
+				<SchoolExplained />
+			</Home>
 		</>
 	)
 }

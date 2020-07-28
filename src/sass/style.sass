@@ -10,13 +10,14 @@
 @import 'icons.sass'
 @import 'lazyLoadingImage.sass'
 @import 'mixins.sass'
+@import 'logo.sass'
 
 html
 	scroll-behavior: smooth
 	+handheld(2, 768px) // ipad
 		font-size: 110%
 	+handheld(2, 1024px) // ipadPro
-		font-size: 140%
+		font-size: 115%
 	+desktop(96dpi, 640px)
 		font-size: 110%
 
@@ -324,8 +325,6 @@ nav
 	content: "\2022"
 	color: $lightGrey
 	padding: 0 .3rem 0 .3rem
-
-
 
 .pupil-not-enrolled
 	// color: red !important
