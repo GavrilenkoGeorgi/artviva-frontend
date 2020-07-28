@@ -15,7 +15,7 @@ import EntityControlButtons from '../common/EntityControlButtons'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const SchoolClass = ({ user, group, deleteSchoolClass }) => {
+const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 	const [open, setOpen] = useState(false)
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
@@ -60,7 +60,7 @@ const SchoolClass = ({ user, group, deleteSchoolClass }) => {
 				className="p-0 d-flex text-left justify-content-between align-items-center"
 			>
 				<span>
-					{group.title} - <em className="text-muted">{group.specialty.title}</em>{' '}
+					{number}. {group.title} - <em className="text-muted">{group.specialty.title}</em>{' '}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />

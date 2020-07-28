@@ -208,7 +208,7 @@ const PupilForm = ({
 			searchService.users(query)
 				.then(users => {
 					setUsersList(users)
-					console.log(users)
+					// console.log(users)
 				})
 				.catch(error => {
 					const { message } = { ...error.response.data }

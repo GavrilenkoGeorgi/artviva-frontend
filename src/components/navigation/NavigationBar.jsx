@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { connect } from 'react-redux'
 
-import { Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
+import { Row, Col, Navbar, Nav, NavDropdown, Image } from 'react-bootstrap'
 import NavBarLink from './NavBarLink'
 import NavTogglerIcon from '../common/NavTogglerIcon'
 import Logout from '../common/Logout'
@@ -92,13 +92,20 @@ const NavigationBar = ({ user }) => {
 				variant="light"
 				className={visibility ? 'navbar-visible' : 'navbar-hidden' }
 			>
-				<Navbar.Brand href="/" className="d-flex align-items-center py-0">
+				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image
 						alt="Лого"
 						src="/img/schoolLogo-transparent.png"
 						className="nav-logo-img"
 					/>{' '}
-					<span className="pl-3 nav-logo-font">ArtViva</span>
+					<Row className="d-inline pl-2 nav-logo">
+						<Col xs={12} className="pl-3 nav-logo-font">
+							ArtViva
+						</Col>
+						<Col xs={12} className="pl-3 nav-logo-small-font">
+							дитяча школа мистецтв
+						</Col>
+					</Row>
 				</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls="responsive-navbar-nav"

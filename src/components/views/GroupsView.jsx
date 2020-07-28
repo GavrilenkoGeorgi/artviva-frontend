@@ -22,7 +22,7 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 
 	const [groupsList, setGroupsList] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
-	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
+	// const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
 
 	useEffect(() => {
 		if (user) {
@@ -40,10 +40,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 		}
 	}, [user, setNotification, getGroups])
 
-	useEffect(() => {
-		console.log('Filter settings changed', filterSettings)
-	}, [filterSettings])
-
 	const changeFilterSetting = (event) => {
 		event.preventDefault()
 
@@ -59,13 +55,13 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 			else {
 				setFilterSettings({ [field]: '' })
 			}
-			setCurrentlyActiveFilter(field)
+			// setCurrentlyActiveFilter(field)
 			break
 		}
 		case 'from':
 		case 'to': {
 			setFilterSettings({ ...filterSettings, [field]: value || 0 })
-			setCurrentlyActiveFilter('range')
+			// setCurrentlyActiveFilter('range')
 			break
 		}
 		case 'isRetired':
@@ -77,12 +73,10 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 				statement = ''
 			}
 			setFilterSettings({ ...filterSettings, [field]: statement })
-			setCurrentlyActiveFilter('booleans')
+			// setCurrentlyActiveFilter('booleans')
 			break
 		}
 		default: {
-			// setCurrentlyActiveFilter('select')
-			// setFilterSettings({ ...filterSettings, [field]: value })
 			console.log('default case')
 		}
 		}
@@ -92,9 +86,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 		let result = groups
 		if (settings) {
 			const { specialty, teacher } = settings
-
-			console.log('settings', settings, 'selected', specialty)
-
 			if (specialty) {
 				result =
 					result.filter(item => item.specialty.title.toUpperCase().includes(settings.specialty.toUpperCase()))
@@ -114,9 +105,7 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 	useEffect(() => {
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
 			sortData(null)
-			console.log('Empty filter')
 		} else {
-			console.log('Trying to sort')
 			sortData(filterSettings)
 		}
 	}, [filterSettings, sortData])

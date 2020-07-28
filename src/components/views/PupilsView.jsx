@@ -7,8 +7,10 @@ import PupilsList from '../pupils/PupilsList'
 import { LoadingIndicator, CollapseComponent } from '../common'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 
+import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
 import { pupilBoolFields, pupilSelectFields } from '../../data/forms/pupilFields.json'
-import { FilterData as FilterString, SelectFields, FilterBooleanFields } from '../sorting'
+import { FilterData as FilterString,
+	FilterDisplay, SelectFields, FilterBooleanFields } from '../sorting'
 
 const LazyPupilForm = React.lazy(() => import('../forms/PupilForm'))
 
@@ -17,6 +19,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const [userData, setUser] = useState({})
 	const [pupilsList, setPupils] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
+	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
 
 	useEffect(() => {
 		if (user) setUser(user)
@@ -26,12 +29,16 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		setPupils(pupils)
 	}, [pupils])
 
+	const selectData = useCallback((arrayOfStuff) => {
+		// eslint-disable-next-line
+		const { name, from, to, ...filterData } = filterSettings
+		return multiPropsFilter(arrayOfStuff, filterData)
+	}, [filterSettings])
+
 	const sortData = useCallback(settings => {
 		let result = pupils
 		if (settings) {
-			const { name, specialty } = settings
-
-			console.log('settings', settings, 'selected', specialty)
+			const { name, specialty, docsPresent, currentlyEnrolled } = settings
 
 			if (specialty) {
 				result =
@@ -42,16 +49,26 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 				result =
 					result.filter(item => item.name.toUpperCase().includes(settings.name.toUpperCase()))
 			}
-			setPupils([ ...result ])
 
-		} else {
+			const boolFilter =
+			(typeof docsPresent === 'boolean' && typeof currentlyEnrolled === 'boolean')
+				? { docsPresent, currentlyEnrolled } :
+				(typeof docsPresent === 'boolean') ? { docsPresent } :
+					(typeof currentlyEnrolled === 'boolean') ? { currentlyEnrolled } : false
+
+			if (boolFilter) {
+				result = boolPropsFilter(result, boolFilter)
+			}
+
+			setPupils([ ...selectData(result) ])
+		} else { // reset
 			setPupils([ ...pupils ])
 		}
-	}, [pupils])
+	}, [pupils, selectData])
 
 	useEffect(() => {
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
-			sortData(null)
+			sortData(false)
 		} else {
 			sortData(filterSettings)
 		}
@@ -62,6 +79,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 
 		const { target } = event
 		const { name: field, value } = target
+
 		switch (field) {
 		case 'name':
 		case 'specialty': {
@@ -73,8 +91,20 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 			}
 			break
 		}
+		case 'docsPresent':
+		case 'currentlyEnrolled': {
+			let statement
+			if (value) {
+				statement = JSON.parse(value)
+			} else {
+				statement = ''
+			}
+			setFilterSettings({ ...filterSettings, [field]: statement })
+			break
+		}
 		default: {
-			console.log('default case')
+			setFilterSettings({ ...filterSettings, [field]: value })
+			setCurrentlyActiveFilter('select')
 		}
 		}
 	}
@@ -126,10 +156,16 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 							filter={changeFilterSetting}
 						/>
 					</Col>
-					<Col>
+					<Col xs={12}>
 						<SelectFields
 							selectBy={pupilSelectFields}
 							filter={changeFilterSetting}
+						/>
+					</Col>
+					<Col xs={12}>
+						<FilterDisplay
+							settings={filterSettings}
+							currentFilter={currentlyActiveFilter}
 						/>
 					</Col>
 					<Col xs={12} className="py-4 border1">

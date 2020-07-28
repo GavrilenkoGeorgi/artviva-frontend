@@ -7,13 +7,13 @@ const GroupsList = ({ groups }) => {
 
 	return (
 		<ListGroup className="py-2">
-			{groups.map(group =>
+			{groups.map((group, idx) =>
 				<ListGroup.Item
 					key={group.id}
 				>
 					<Row>
 						<Col xs={12}>
-							<Group group={group}/>
+							<Group number={idx + 1} group={group}/>
 						</Col>
 						<Col xs={3} className="pl-4">
 							<small className="text-muted">
