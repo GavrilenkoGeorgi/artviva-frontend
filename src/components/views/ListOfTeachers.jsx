@@ -196,6 +196,7 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 				{/* Current filter settings display */}
 				<Col xs={12}>
 					<FilterDisplay
+						labels={teacherSelectFields.map(({ field, label }) => ({ field, label }))}
 						settings={filterSettings}
 						currentFilter={currentlyActiveFilter}
 					/>

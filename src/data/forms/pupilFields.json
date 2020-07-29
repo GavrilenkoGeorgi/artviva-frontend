@@ -1,5 +1,17 @@
 {
-	"pupilSelectFields": [
+	"filter": [
+		{
+		"field": "name",
+		"label": "І'мя",
+		"choices": ["You can't choose your name"]
+		},
+		{
+			"field": "specialty",
+			"label": "Фах",
+			"choices": ["same here"]
+			}
+	],
+	"select": [
 		{
 			"field": "gender",
 			"label": "Стать",
@@ -13,7 +25,7 @@
 		{
 			"field": "hasBenefit",
 			"label": "Пільги %",
-			"choices": [50, 100]
+			"choices": ["Немає пільг", 50, 100]
 		},
 		{
 			"field": "artSchoolClass",
@@ -21,7 +33,7 @@
 			"choices": [1, 2, 3, 4]
 		}
 	],
-	"pupilBoolFields": [
+	"boolean": [
 		{
 			"field": "currentlyEnrolled",
 			"label": "Навчается?",

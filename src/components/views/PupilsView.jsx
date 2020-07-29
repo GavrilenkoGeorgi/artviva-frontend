@@ -2,17 +2,20 @@ import React, { Suspense, useState, useEffect, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { initializePupils, initialiseUserPupils } from '../../reducers/pupilsReducer'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Form } from 'react-bootstrap'
 import PupilsList from '../pupils/PupilsList'
-import { LoadingIndicator, CollapseComponent } from '../common'
+import { LoadingIndicator } from '../common'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 
+import { filter, select, boolean } from '../../data/forms/pupilFields.json'
 import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
-import { pupilBoolFields, pupilSelectFields } from '../../data/forms/pupilFields.json'
 import { FilterData as FilterString,
 	FilterDisplay, SelectFields, FilterBooleanFields } from '../sorting'
 
-const LazyPupilForm = React.lazy(() => import('../forms/PupilForm'))
+import Reset from '../forms/buttons/Reset'
+import { Button } from '../common/buttons'
+import PupilForm from '../forms/PupilForm'
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
 const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) => {
 
@@ -20,6 +23,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const [pupilsList, setPupils] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
 	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
+	const [editModalShow, setEditModalShow] = useState(false)
 
 	useEffect(() => {
 		if (user) setUser(user)
@@ -30,15 +34,16 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	}, [pupils])
 
 	const selectData = useCallback((arrayOfStuff) => {
+		// extract already filtered props
 		// eslint-disable-next-line
-		const { name, from, to, ...filterData } = filterSettings
+		const { name, specialty, from, to, ...filterData } = filterSettings
 		return multiPropsFilter(arrayOfStuff, filterData)
 	}, [filterSettings])
 
 	const sortData = useCallback(settings => {
 		let result = pupils
 		if (settings) {
-			const { name, specialty, docsPresent, currentlyEnrolled } = settings
+			const { name, specialty, docsPresent, currentlyEnrolled, hasBenefit } = settings
 
 			if (specialty) {
 				result =
@@ -60,6 +65,10 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 				result = boolPropsFilter(result, boolFilter)
 			}
 
+			if (hasBenefit !== undefined) { // 0 percent benefits messes this up
+				result = result.filter(item => item.hasBenefit === hasBenefit)
+			}
+
 			setPupils([ ...selectData(result) ])
 		} else { // reset
 			setPupils([ ...pupils ])
@@ -73,6 +82,10 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 			sortData(filterSettings)
 		}
 	}, [filterSettings, sortData])
+
+	useEffect(() => {
+		console.log('Filter settings changed')
+	}, [filterSettings])
 
 	const changeFilterSetting = (event) => {
 		event.preventDefault()
@@ -100,6 +113,11 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 				statement = ''
 			}
 			setFilterSettings({ ...filterSettings, [field]: statement })
+			break
+		}
+		case 'hasBenefit': {
+			const percent = value === 'Немає пільг' ? 0 : !value ? '' : Number(value)
+			setFilterSettings({ ...filterSettings, [field]: percent })
 			break
 		}
 		default: {
@@ -131,43 +149,68 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 								введіть кілька літер від його назви та відсортуйте за ним.
 							</p>
 							<p>
-								Щоб додати нового учня, скористайтеся формою нижче.
+								Щоб додати нового учня, заповніть форму натиснув кнопку нижче.
 							</p>
 						</section>
 
 					</Col>
-					<Col xs={6} className="py-2">
-						<FilterString
-							filter={changeFilterSetting}
-							fieldName="name"
-							placeholder="І'мя"
-						/>
-					</Col>
-					<Col xs={6} className="py-2">
-						<FilterString
-							filter={changeFilterSetting}
-							fieldName="specialty"
-							placeholder="Назва фаху"
-						/>
-					</Col>
-					<Col xs={12}>
-						<FilterBooleanFields
-							selectBy={pupilBoolFields}
-							filter={changeFilterSetting}
-						/>
-					</Col>
-					<Col xs={12}>
-						<SelectFields
-							selectBy={pupilSelectFields}
-							filter={changeFilterSetting}
-						/>
-					</Col>
-					<Col xs={12}>
-						<FilterDisplay
-							settings={filterSettings}
-							currentFilter={currentlyActiveFilter}
-						/>
-					</Col>
+					<Form onReset={() => setFilterSettings({})}>
+						<Col xs={12} className="py-2">
+							<Row>
+								<FilterString
+									filter={changeFilterSetting}
+									fieldName="name"
+									placeholder="І'мя"
+								/>
+								<FilterString
+									filter={changeFilterSetting}
+									fieldName="specialty"
+									placeholder="Назва фаху"
+								/>
+							</Row>
+						</Col>
+						<Col xs={12}>
+							<FilterBooleanFields
+								selectBy={boolean}
+								filter={changeFilterSetting}
+							/>
+						</Col>
+						<Col xs={12}>
+							<SelectFields
+								selectBy={select}
+								filter={changeFilterSetting}
+							/>
+						</Col>
+						<Col xs={12}>
+							<FilterDisplay
+								labels={[ ...filter, ...select, ...boolean ]}
+								settings={filterSettings}
+								currentFilter={currentlyActiveFilter}
+							/>
+						</Col>
+						<Col xs={12} className="border1 pt-4">
+							<Row>
+								<Col xs={6}>
+									<Button
+										block
+										dataCy="add-new-pupil"
+										label="Додати нового"
+										onClick={() => setEditModalShow(true)}
+									/>
+								</Col>
+								<Col xs={6}>
+									<Reset
+										label="Показати всіх"
+										block
+										variant="outline-success"
+										dataCy="filter-reset-btn"
+										disabled={pureObjectIsEmpty(filterSettings)}
+									/>
+								</Col>
+							</Row>
+						</Col>
+					</Form>
+
 					<Col xs={12} className="py-4 border1">
 						<div className="text-right pb-2 ">
 							<em className="text-muted">Загалом: {pupilsList.length}</em>
@@ -177,21 +220,20 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 							: <PupilsList list={pupilsList} getPupils={initialiseUserPupils} />
 						}
 					</Col>
-					<Col xs={12} md={8} className="py-4">
-						<CollapseComponent
-							title="Додати нового учня"
-							ariaControls="pupil-add-form-collapse"
+					<Suspense fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+							size="md"
+						/>}>
+						<LazyEntityEditModal
+							subject="Додати нового учня"
+							show={editModalShow}
+							onHide={() => setEditModalShow(false)}
 						>
-							<Suspense
-								fallback={
-									<LoadingIndicator
-										animation="border"
-										variant="primary"
-									/>}>
-								<LazyPupilForm mode="create" />
-							</Suspense>
-						</CollapseComponent>
-					</Col>
+							<PupilForm mode="create" />
+						</LazyEntityEditModal>
+					</Suspense>
 				</Row>
 			</Col>
 

@@ -103,8 +103,6 @@ const PupilForm = ({
 			schoolClasses: values.schoolClasses.map(item => item.id),
 		}
 
-		console.log('Sending this', values)
-
 		setProcessingForm(true)
 		editMode
 			? editPupil(trimObject(values), setErrors)

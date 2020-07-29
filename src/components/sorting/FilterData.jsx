@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Form } from 'react-bootstrap'
+import { Form, Col } from 'react-bootstrap'
 
 const FilterData = ({ filter, fieldName, placeholder }) => {
 
 	return (
-		<Form>
+		<Col xs={6}>
 			<Form.Label htmlFor={`${fieldName}-filter-input`} srOnly>
 				{placeholder}
 			</Form.Label>
@@ -19,7 +19,7 @@ const FilterData = ({ filter, fieldName, placeholder }) => {
 				type="text"
 				placeholder={placeholder}
 			/>
-		</Form>
+		</Col>
 	)
 }
 
