@@ -9,8 +9,8 @@ import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 
 import { filter, select, boolean } from '../../data/forms/pupilFields.json'
 import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
-import { FilterData as FilterString,
-	FilterDisplay, SelectFields, FilterBooleanFields } from '../sorting'
+import { FilterData as FilterString, ShowFilterSettings,
+	SelectFields, FilterBooleanFields } from '../sorting'
 
 import Reset from '../forms/buttons/Reset'
 import { Button } from '../common/buttons'
@@ -22,7 +22,6 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const [userData, setUser] = useState({})
 	const [pupilsList, setPupils] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
-	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
 	const [editModalShow, setEditModalShow] = useState(false)
 
 	useEffect(() => {
@@ -43,7 +42,9 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const sortData = useCallback(settings => {
 		let result = pupils
 		if (settings) {
-			const { name, specialty, docsPresent, currentlyEnrolled, hasBenefit } = settings
+			// name, specialty and benefits values
+			const { name, specialty, hasBenefit } = settings
+			const boolFieldsList = boolean.map(item => item.field)
 
 			if (specialty) {
 				result =
@@ -55,11 +56,13 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 					result.filter(item => item.name.toUpperCase().includes(settings.name.toUpperCase()))
 			}
 
-			const boolFilter =
-			(typeof docsPresent === 'boolean' && typeof currentlyEnrolled === 'boolean')
-				? { docsPresent, currentlyEnrolled } :
-				(typeof docsPresent === 'boolean') ? { docsPresent } :
-					(typeof currentlyEnrolled === 'boolean') ? { currentlyEnrolled } : false
+			const boolFilter = {}
+			for (let field of boolFieldsList) {
+				const value = settings[field]
+				if (typeof value === 'boolean') {
+					boolFilter[field] = settings[field]
+				}
+			}
 
 			if (boolFilter) {
 				result = boolPropsFilter(result, boolFilter)
@@ -83,10 +86,6 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		}
 	}, [filterSettings, sortData])
 
-	useEffect(() => {
-		console.log('Filter settings changed')
-	}, [filterSettings])
-
 	const changeFilterSetting = (event) => {
 		event.preventDefault()
 
@@ -105,6 +104,8 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 			break
 		}
 		case 'docsPresent':
+		case 'graduated':
+		case 'suspended':
 		case 'currentlyEnrolled': {
 			let statement
 			if (value) {
@@ -122,7 +123,6 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		}
 		default: {
 			setFilterSettings({ ...filterSettings, [field]: value })
-			setCurrentlyActiveFilter('select')
 		}
 		}
 	}
@@ -182,10 +182,9 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 							/>
 						</Col>
 						<Col xs={12}>
-							<FilterDisplay
+							<ShowFilterSettings
 								labels={[ ...filter, ...select, ...boolean ]}
 								settings={filterSettings}
-								currentFilter={currentlyActiveFilter}
 							/>
 						</Col>
 						<Col xs={12} className="border1 pt-4">

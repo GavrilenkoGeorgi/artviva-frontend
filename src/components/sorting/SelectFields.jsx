@@ -1,15 +1,8 @@
 import React from 'react'
 
 import { Form, Row, Col } from 'react-bootstrap'
-import { useEffect } from 'react'
 
-const SelectFields = ({ clear, filter, selectBy }) => {
-
-	useEffect(() => {
-		console.log('Clear')
-	}, [clear])
-
-
+const SelectFields = ({ filter, selectBy }) => {
 	return (
 		<>
 			<Form.Group as={Row} className="mb-0">

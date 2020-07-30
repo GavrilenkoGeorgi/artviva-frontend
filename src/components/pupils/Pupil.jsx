@@ -140,6 +140,20 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 										}
 									</Card.Text>
 									<Card.Text>
+										Випустився зі школи?&nbsp;
+										{pupil.graduated
+											? <Emoji label="Check Mark" emoji={'✔️'} />
+											: <Emoji label="Cross Mark" emoji={'❌'} />
+										}
+									</Card.Text>
+									<Card.Text>
+										Відрахований?&nbsp;
+										{pupil.suspended
+											? <Emoji label="Check Mark" emoji={'✔️'} />
+											: <Emoji label="Cross Mark" emoji={'❌'} />
+										}
+									</Card.Text>
+									<Card.Text>
 										Пільги: {pupil.hasBenefit}%
 									</Card.Text>
 									{pupil.info

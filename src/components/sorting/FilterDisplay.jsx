@@ -2,6 +2,8 @@ import React from 'react'
 
 const FilterDisplay = ({ labels, settings, currentFilter }) => {
 
+	console.log(labels)
+
 	const rangeGauge = settings => {
 		const { to, from } = settings
 		if (to || from) {
