@@ -15,6 +15,7 @@ import { FilterData as FilterString, ShowFilterSettings,
 import Reset from '../forms/buttons/Reset'
 import { Button } from '../common/buttons'
 import PupilForm from '../forms/PupilForm'
+import CommonLayout from './CommonLayout'
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
 const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) => {
@@ -128,22 +129,22 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	}
 
 	return (
-		<Container className="px-0 d-flex justify-content-center">
-			<Col xs={12} lg={9} className="d-flex justify-content-center">
-				<Row className="border1 border-primary d-flex justify-content-center">
-					<Col xs={12} className="py-2">
-						<h3 className="custom-font text-center border1">
+		<CommonLayout>
+			<Container>
+				<Row>
+					<Col xs={12}>
+						<h4 className="custom-font text-center">
 							{userData.superUser
 								? 'Всі учні школи'
 								: 'Ваши учні'
 							}
-						</h3>
+						</h4>
 					</Col>
-					<Col xs={12} className="pb-3 school-explained1 custom-font-small1">
+					<Col xs={12} className="pb-3">
 						{/*For example: to find out how many pupils are studiying one faculty,
 							enter a few letters from it's title and sort by it.
 							To add new pupil, use the form below.*/}
-						<section className="p-3 border rounded school-explained custom-font-small">
+						<section className="p-3 school-explained custom-font-small">
 							<p>
 								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}
 								введіть кілька літер від його назви та відсортуйте за ним.
@@ -152,8 +153,8 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 								Щоб додати нового учня, заповніть форму натиснув кнопку нижче.
 							</p>
 						</section>
-
 					</Col>
+					{/*controls*/}
 					<Form onReset={() => setFilterSettings({})}>
 						<Col xs={12} className="py-2">
 							<Row>
@@ -187,7 +188,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 								settings={filterSettings}
 							/>
 						</Col>
-						<Col xs={12} className="border1 pt-4">
+						<Col xs={12} className="pt-4">
 							<Row>
 								<Col xs={6}>
 									<Button
@@ -210,7 +211,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						</Col>
 					</Form>
 
-					<Col xs={12} className="py-4 border1">
+					<Col xs={12} className="py-4">
 						<div className="text-right pb-2 ">
 							<em className="text-muted">Загалом: {pupilsList.length}</em>
 						</div>
@@ -234,9 +235,8 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						</LazyEntityEditModal>
 					</Suspense>
 				</Row>
-			</Col>
-
-		</Container>
+			</Container>
+		</CommonLayout>
 	)
 }
 

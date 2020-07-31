@@ -1,40 +1,37 @@
 import React from 'react'
 
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row } from 'react-bootstrap'
+import SortControlColumn from './SortControlColumn'
 
 const SelectFields = ({ filter, selectBy }) => {
-	return (
-		<>
-			<Form.Group as={Row} className="mb-0">
-				{selectBy.map(item =>
-					<Col xs={6} key={item.field}>
-						<Form.Label className="m-0">
-							<small>{item.label}</small>
-						</Form.Label>
-						<Form.Control
-							size="sm"
-							as="select"
-							custom
-							className="mt-1 mb-3 filter-select"
-							id={item.field}
-							name={item.field}
-							onInput={event => filter(event)}
-						>
-							<option value=""
-								className="filter-select-option">
-								Всі наявні
-							</option>
+	return <Form.Group as={Row} className="mb-0">
+		{selectBy.map(item =>
+			<SortControlColumn key={item.field}>
+				<Form.Label className="m-0">
+					<small>{item.label}</small>
+				</Form.Label>
+				<Form.Control
+					size="sm"
+					as="select"
+					custom
+					className="mb-2 filter-select"
+					id={item.field}
+					name={item.field}
+					onInput={event => filter(event)}
+				>
+					<option value=""
+						className="filter-select-option">
+						Всі наявні
+					</option>
 
-							{item.choices.map(choice =>
-								<option value={choice} key={item.field + choice}>
-									{choice}
-								</option>)}
-						</Form.Control>
-					</Col>
-				)}
-			</Form.Group>
-		</>
-	)
+					{item.choices.map(choice =>
+						<option value={choice} key={item.field + choice}>
+							{choice}
+						</option>)}
+				</Form.Control>
+			</SortControlColumn>
+		)}
+	</Form.Group>
 }
 
 export default SelectFields
