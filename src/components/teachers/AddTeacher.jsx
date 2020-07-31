@@ -1,14 +1,12 @@
-import React, { useEffect, Suspense } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
 import { createTeacher } from '../../reducers/teachersReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 
 import { Link } from 'react-router-dom'
-import { CollapseComponent } from '../common'
-import LoadingIndicator from '../common/LoadingIndicator'
 
-const LazyTeacherForm = React.lazy(() => import('../forms/TeacherForm'))
+import TeacherForm from '../forms/TeacherForm'
 
 const AddTeacher = ({
 	setNotification,
@@ -62,22 +60,10 @@ const AddTeacher = ({
 				<Link to="/school/specialties"> спеціальність</Link>,
 				якщо ви цього ще не зробили.
 			</p>
-			<CollapseComponent
-				title="Додати нового вчітеля"
-				ariaControls="school-class-add-form-collapse"
-			>
-				<Suspense
-					fallback={
-						<LoadingIndicator
-							animation="border"
-							variant="primary"
-						/>}>
-					<LazyTeacherForm
-						mode="create"
-						processTeacherData={processTeacherData}
-					/>
-				</Suspense>
-			</CollapseComponent>
+			<TeacherForm
+				mode="create"
+				processTeacherData={processTeacherData}
+			/>
 		</>
 	)
 }

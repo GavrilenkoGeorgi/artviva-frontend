@@ -82,7 +82,7 @@ const SchoolSectionsNav = ({ userData }) => {
 	return (
 		<>
 			<Container className="pb-2">
-				<Row className="px-4 pt-lg-5 d-flex align-items-center">
+				<Row className="px-4 pt-sm-5 d-flex align-items-center">
 					<Col xs={12} sm={5} className="text-right profile-user-name">
 						<Link to="/school">
 							<span className="profile-user-name">

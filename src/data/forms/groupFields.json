@@ -1,66 +1,14 @@
 {
-	"teacherSelectFields": [
+	"filter": [
 		{
-			"field": "gender",
-			"label": "Стать",
-			"choices": ["Чоловіча", "Жіноча"]
+		"field": "teacher",
+		"label": "І'мя вчителя",
+		"choices": ["You can't choose your name"]
 		},
 		{
-			"field": "qualification",
-			"label": "Кваліфікаційна категорія",
-			"choices": ["Немає кваліфікаціїной категорії", "ІІ категорія", "І категорія", "Вища категорія"]
-		},
-		{
-			"field": "educationType",
-			"label": "Освітній рівень",
-			"choices": ["Повна віща освіта", "Базова віща освіта", "Неповна віща освіта"]
-		},
-		{
-			"field": "educationDegree",
-			"label": "Освітньо-кваліфікаційний рівень",
-			"choices": ["Магистр", "Спеціаліст", "Бакалавр", "Молодший спеціаліст"]
-		},
-		{
-			"field": "category",
-			"label": "Розряд",
-			"choices": [9, 10, 11, 12, 13, 14, 15, 16, 17]
-		},
-		{
-			"field": "teacherTitle",
-			"label": "Педагогічне звання",
-			"choices": ["Немає педагогічного звання", "Старший викладач", "Викладач-методист"]
-		},
-		{
-			"field": "employeeType",
-			"label": "Тип співробітника",
-			"choices": ["Штатний співробітник", "Сумісник"]
-		},
-		{
-			"field": "residence",
-			"label": "Місцевість проживання",
-			"choices": ["Місто", "Село"]
-		},
-		{
-			"field": "maritalStatus",
-			"label": "Сімейний стан",
-			"choices": ["Одружений", "Не одружений"]
-		},
-		{
-			"field": "scienceDegree",
-			"label": "Наукова ступинь",
-			"choices": ["Немає наукової ступені", "Доктор наук", "Кандидат наук"]
-		}
-	],
-	"teacherBoolFields": [
-		{
-			"field": "isRetired",
-			"label": "Пенсионер?",
-			"choices": ["Не пенсионер", "На пенсии"]
-		},
-		{
-			"field": "employeeIsAStudent",
-			"label": "Студент?",
-			"choices": ["Не навчается", "Зараз навчается"]
+			"field": "specialty",
+			"label": "Фах",
+			"choices": ["same here"]
 		}
 	]
 }

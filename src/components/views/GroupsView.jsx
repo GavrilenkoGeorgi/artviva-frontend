@@ -4,28 +4,30 @@ import { getGroups } from '../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../reducers/notificationReducer'
 import schoolClassesService from '../../services/schoolClasses'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
+import { filter } from '../../data/forms/groupFields.json'
 
 import { Link } from 'react-router-dom'
-import { Container, Col, Row } from 'react-bootstrap'
+import { Container, Col, Row, Form } from 'react-bootstrap'
 import GroupsList from '../schoolClasses/GroupsList'
-import { CollapseComponent, LoadingIndicator } from '../common'
+import { LoadingIndicator } from '../common'
+import CommonLayout from './CommonLayout'
+import GroupForm from '../forms/GroupForm'
+import Reset from '../forms/buttons/Reset'
+import { Button } from '../common/buttons'
 
-import { FilterData } from '../sorting'
+import { ShowFilterSettings, FilterData } from '../sorting'
 
-const LazySchoolClassForm = React.lazy(() => import('../forms/GroupForm'))
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
 const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 
-	useEffect(() => {
-		setFetchingData(true)
-	}, [])
-
 	const [groupsList, setGroupsList] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
-	// const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
+	const [addModalShow, setAddModalShow] = useState(false)
 
 	useEffect(() => {
 		if (user) {
+			setFetchingData(true)
 			schoolClassesService.setToken(user.token)
 			getGroups(user.superUser, user.teacher)
 				.catch(error => {
@@ -45,7 +47,10 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 
 		const { target } = event
 		const { name: field, value } = target
-		console.log('filed and value ', field, ':', value)
+
+		value ? setFilterSettings({ ...filterSettings, [field]: value }) : setFilterSettings({ [field]: '' })
+
+		/*
 		switch (field) {
 		case 'teacher':
 		case 'specialty': {
@@ -55,7 +60,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 			else {
 				setFilterSettings({ [field]: '' })
 			}
-			// setCurrentlyActiveFilter(field)
 			break
 		}
 		case 'from':
@@ -79,7 +83,7 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 		default: {
 			console.log('default case')
 		}
-		}
+		}*/
 	}
 
 	const sortData = useCallback(settings => {
@@ -103,6 +107,7 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 	}, [groups])
 
 	useEffect(() => {
+		console.log('Filter settings', filterSettings)
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
 			sortData(null)
 		} else {
@@ -111,72 +116,122 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 	}, [filterSettings, sortData])
 
 	return (
-		<Container className="px-0 d-flex justify-content-center">
-			<Col md={9}>
-				<Col xs={12}>
-					{user
-						? <h4 className="pb-3 text-center custom-font">
-							{`${user.superUser ? 'Всі' : 'Ваші'} групи в школи`}
-						</h4>
-						: null
-					}
-				</Col>
-				<Row className="d-flex justify-content-center">
-					{/* Filter by specialty and teacher chars */}
-					<Col xs={6} className="my-2">
-						<FilterData
-							filter={changeFilterSetting}
-							fieldName="specialty"
-							placeholder="Назва фаху"
-						/>
-					</Col>
-					<Col xs={6} className="my-2">
-						<FilterData
-							filter={changeFilterSetting}
-							fieldName="teacher"
-							placeholder="Прізвище вчителя"
-						/>
-					</Col>
-				</Row>
+		<CommonLayout>
+			<Container>
+				<Row className="d-flex align-items-center">
 
-				<Row>
-					<Col xs={12} className="pt-3">
+					<Col xs={12}>
 						{user
-							? <>
-								<GroupsList groups={groupsList}/>
-
-								<Col className="px-0">
-									<p className="py-4 text-muted">
-										Для створення групи, ви повинні бути впевнені, що ви
-										{!user.teacher
-											? <>{' '}
-												заповнили <Link to={`/school/users/${user.id}`}>
-												анкету вчителя</Link>, та </>
-											: ' '}
-										створили <Link to="/school/pupils">учнів</Link> для вашої нової групи.
-									</p>
-								</Col>
-
-								<CollapseComponent
-									title={`Додати нову групу ${user.superUser ? '(як завуч)' : '' }`}
-									ariaControls="school-class-add-form-collapse"
-								>
-									<Suspense
-										fallback={
-											<LoadingIndicator
-												animation="border"
-												variant="primary"
-											/>}>
-										<LazySchoolClassForm mode="create" />
-									</Suspense>
-								</CollapseComponent>
-							</>
-							: <>Just a sec..</>
+							? <h4 className="text-center custom-font">
+								{`${user.superUser ? 'Всі' : 'Ваші'} групи в школи`}
+							</h4>
+							: null
 						}
 					</Col>
+
+					<Col xs={12} className="py-3">
+						{/*For example: to find out how many pupils are studiying one faculty,
+							enter a few letters from it's title and sort by it.
+							To add new pupil, use the form below.*/}
+						<section className="school-explained custom-font-small">
+							<p>
+								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}
+								введіть кілька літер від його назви та відсортуйте за ним.
+							</p>
+							<p>
+							Для створення групи, ви повинні бути впевнені, що ви
+								{user && !user.teacher
+									? <>{' '}
+										заповнили <Link to={`/school/users/${user.id}`}>
+										анкету вчителя</Link>, та </>
+									: ' '}
+								створили <Link to="/school/pupils">учнів</Link> для вашої нової групи.
+							</p>
+						</section>
+					</Col>
+
+					<Col xs={12} className="px-0">
+						<Form onReset={() => setFilterSettings({})}>
+							{/*Filter by specialty and teacher chars */}
+							<Col xs={12}>
+								<Row>
+									<FilterData
+										filter={changeFilterSetting}
+										fieldName="specialty"
+										placeholder="Назва фаху"
+									/>
+									<FilterData
+										filter={changeFilterSetting}
+										fieldName="teacher"
+										placeholder="Прізвище вчителя"
+									/>
+								</Row>
+							</Col>
+							{/* Buttons */}
+							<Col xs={12} className="my-3">
+								<Row>
+									<Col xs={6}>
+										<Button
+											block
+											dataCy="add-new-group"
+											label="Додати нову"
+											onClick={() => setAddModalShow(true)}
+										/>
+									</Col>
+									<Col xs={6}>
+										<Reset
+											label="Показати всі"
+											block
+											variant="outline-success"
+											dataCy="filter-reset-btn"
+											disabled={pureObjectIsEmpty(filterSettings)}
+										/>
+									</Col>
+								</Row>
+							</Col>
+						</Form>
+					</Col>
+
+					{/* Current filter settings display */}
+					<Col xs={12}>
+						<ShowFilterSettings
+							labels={[ ...filter ]}
+							settings={filterSettings}
+						/>
+					</Col>
+					<Col xs={12}>
+						<p className="pb-2 text-right text-muted">
+							<small>
+								<em>
+									Загалом: {groupsList.length}
+								</em>
+							</small>
+						</p>
+					</Col>
+
+					{user
+						? <Col xs={12}>
+							<GroupsList groups={groupsList}/>
+						</Col>
+						: null
+					}
+					<Suspense fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+							size="md"
+						/>}>
+						<LazyEntityEditModal
+							subject="Додати нового вчителя"
+							show={addModalShow}
+							onHide={() => setAddModalShow(false)}
+						>
+							<GroupForm mode='create' />
+						</LazyEntityEditModal>
+					</Suspense>
 				</Row>
-			</Col>
-		</Container>
+			</Container>
+		</CommonLayout>
 	)
 }
 

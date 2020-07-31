@@ -1,5 +1,27 @@
 {
-	"teacherSelectFields": [
+	"filter": [
+		{
+		"field": "name",
+		"label": "І'мя",
+		"choices": ["You can't choose your name"]
+		},
+		{
+			"field": "specialty",
+			"label": "Фах",
+			"choices": ["same here"]
+		}
+	],
+	"range": [
+		{
+		"field": "from",
+		"label": "від"
+		},
+		{
+			"field": "to",
+			"label": "до"
+		}
+	],
+	"select": [
 		{
 			"field": "gender",
 			"label": "Стать",
@@ -51,7 +73,7 @@
 			"choices": ["Немає наукової ступені", "Доктор наук", "Кандидат наук"]
 		}
 	],
-	"teacherBoolFields": [
+	"boolean": [
 		{
 			"field": "isRetired",
 			"label": "Пенсионер?",

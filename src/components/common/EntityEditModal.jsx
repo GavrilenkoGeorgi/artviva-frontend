@@ -13,7 +13,7 @@ const EntityEditModal = (props) => {
 		>
 			<Modal.Header closeButton>
 				<Modal.Title id="entity-edit-modal">
-					Редагувати {props.subject}
+					{props.subject}
 				</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
@@ -25,7 +25,7 @@ const EntityEditModal = (props) => {
 
 EntityEditModal.propTypes = {
 	subject: PropTypes.string.isRequired,
-	subjectid: PropTypes.string.isRequired
+	subjectid: PropTypes.string //??
 }
 
 export default EntityEditModal

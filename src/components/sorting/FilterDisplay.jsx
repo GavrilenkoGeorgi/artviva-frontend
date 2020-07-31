@@ -1,6 +1,8 @@
 import React from 'react'
 
-const FilterDisplay = ({ settings, currentFilter }) => {
+const FilterDisplay = ({ labels, settings, currentFilter }) => {
+
+	console.log(labels)
 
 	const rangeGauge = settings => {
 		const { to, from } = settings
@@ -11,7 +13,7 @@ const FilterDisplay = ({ settings, currentFilter }) => {
 		} else return null
 	}
 
-	const booleanFileds = ({ isRetired, employeeIsAStudent }) => {
+	const booleanFields = ({ isRetired, employeeIsAStudent }) => {
 		if (typeof isRetired === 'boolean' || typeof employeeIsAStudent === 'boolean') {
 			return <span className="filter-setting-value">
 				{isRetired === false
@@ -20,6 +22,10 @@ const FilterDisplay = ({ settings, currentFilter }) => {
 					? 'Зараз не навчаються' : employeeIsAStudent ? 'Студенти' : null }
 			</span>
 		} else return null
+	}
+
+	const benefits = data => {
+		return data === 0 ? <span>Немає пільг </span> : data ? <span>Пільги: {data}% </span> : null
 	}
 
 	const currentFilterSelection = () => {
@@ -31,16 +37,20 @@ const FilterDisplay = ({ settings, currentFilter }) => {
 				</span>
 			</>
 		default: {
-			const { from, to, isRetired, employeeIsAStudent, ...data } = settings
+			const { from, to, isRetired, employeeIsAStudent, hasBenefit, ...data } = settings
 			return <>
 				<span>
-					{booleanFileds({ isRetired, employeeIsAStudent })}
+					{booleanFields({ isRetired, employeeIsAStudent })}
 					{rangeGauge({ to, from })}
+					{benefits(hasBenefit)}
 					{Object.keys(data).map(key =>
 						<span key={key}>
 							{data[key]
 								? <span className="filter-setting-value">
-									<em>{data[key]}</em>
+									<em className="text-muted">
+										{labels.find(item => item.field === key).label}
+									</em>:{' '}
+									<strong>{data[key]}</strong>
 								</span>
 								: null}
 						</span>
