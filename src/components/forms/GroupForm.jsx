@@ -16,8 +16,8 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
-const SchoolClassForm = ({
-	schoolClass,
+const GroupForm = ({
+	group,
 	user,
 	setNotification,
 	createSchoolClass,
@@ -33,6 +33,7 @@ const SchoolClassForm = ({
 		if (mode === 'edit') {
 			setEditMode(true)
 		}
+		console.log(group)
 	// eslint-disable-next-line
 	}, [])
 
@@ -161,7 +162,7 @@ const SchoolClassForm = ({
 	}
 
 	const existingSchoolClass = (values) => {
-		updateSchoolClass(schoolClass.id, values)
+		updateSchoolClass(group.id, values)
 			.then(() => {
 				setNotification({
 					message: 'Зміни успішно збережено.',
@@ -182,10 +183,10 @@ const SchoolClassForm = ({
 	// form data and schema
 	const initialFormValues = () =>
 		editMode
-			? { ...schoolClass,
-				teacher: schoolClass.teacher.name,
-				specialty: schoolClass.specialty.title,
-				pupils: schoolClass.pupils.map(pupil => pupil.name)
+			? { ...group,
+				teacher: group.teacher.name,
+				specialty: group.specialty.title,
+				pupils: group.pupils.map(pupil => pupil.name)
 			}
 			: { title: '', info: '', teacher: '', specialty: '', pupils: [''] }
 
@@ -197,7 +198,6 @@ const SchoolClassForm = ({
 		info: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(255, 'Максимум 255 символів.'),
-		// .required('Введіть опис.'),
 		teacher: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
@@ -242,7 +242,7 @@ const SchoolClassForm = ({
 							<Form.Group
 								controlId={
 									editMode
-										? `school-class-title-input-${schoolClass.id}`
+										? `school-class-title-input-${group.id}`
 										: 'school-class-title-input'}
 								as={Col}
 								className="mb-4"
@@ -272,7 +272,7 @@ const SchoolClassForm = ({
 							<Form.Group
 								controlId={
 									editMode
-										? `school-class-info-input-${schoolClass.id}`
+										? `school-class-info-input-${group.id}`
 										: 'school-class-info-input'}
 								as={Col}
 								className="mb-4"
@@ -302,7 +302,7 @@ const SchoolClassForm = ({
 							<Form.Group
 								controlId={
 									editMode
-										? `school-class-teacher-input-${schoolClass.id}`
+										? `school-class-teacher-input-${group.id}`
 										: 'school-class-teacher-input'}
 								as={Col}
 								className="mb-4"
@@ -315,7 +315,7 @@ const SchoolClassForm = ({
 									type="text"
 									name="teacher"
 									data-cy="teacher-name-input"
-									list={editMode ? `teachers-list-${schoolClass.id}` : 'teachers-list'}
+									list={editMode ? `teachers-list-${group.id}` : 'teachers-list'}
 									autoComplete="off"
 									onChange={handleChange}
 									onKeyUp={event => debounce(search(event.target), 1000)}
@@ -324,7 +324,7 @@ const SchoolClassForm = ({
 									isValid={touched.teacher && !errors.teacher}
 									isInvalid={touched.teacher && !!errors.teacher}
 								/>
-								<datalist id={editMode ? `teachers-list-${schoolClass.id}` : 'teachers-list'}>
+								<datalist id={editMode ? `teachers-list-${group.id}` : 'teachers-list'}>
 									{teachersList.map((name) =>
 										<option key={name} value={name} />
 									)}
@@ -340,7 +340,7 @@ const SchoolClassForm = ({
 							<Form.Group
 								controlId={
 									editMode
-										? `school-class-specialty-input-${schoolClass.id}`
+										? `school-class-specialty-input-${group.id}`
 										: 'school-class-specialty-input'}
 								as={Col}
 								className="mb-4"
@@ -354,7 +354,7 @@ const SchoolClassForm = ({
 									name="specialty"
 									data-cy="specialty-input"
 									list={editMode
-										? `specialties-list-${schoolClass.id}`
+										? `specialties-list-${group.id}`
 										: 'specialties-list'}
 									autoComplete="off"
 									onChange={handleChange}
@@ -365,7 +365,7 @@ const SchoolClassForm = ({
 									isInvalid={touched.specialty && !!errors.specialty}
 								/>
 								<datalist id={editMode
-									? `specialties-list-${schoolClass.id}`
+									? `specialties-list-${group.id}`
 									: 'specialties-list'}>
 									{specialtiesList.map((title) =>
 										<option key={title} value={title} />
@@ -394,7 +394,7 @@ const SchoolClassForm = ({
 														type="text"
 														name={`pupils[${index}]`}
 														list={editMode
-															? `pupils-list-${schoolClass.id}`
+															? `pupils-list-${group.id}`
 															: 'pupils-list'}
 														autoComplete="off"
 														value={values.pupils[index]}
@@ -405,7 +405,7 @@ const SchoolClassForm = ({
 														// isInvalid={touched.specialties && !!errors.specialties}
 													/>
 													<datalist id={editMode
-														? `pupils-list-${schoolClass.id}`
+														? `pupils-list-${group.id}`
 														: 'pupils-list'}>
 														{pupilsList.map(name => (
 															<option key={name} value={name} >{name}</option>
@@ -497,8 +497,8 @@ const SchoolClassForm = ({
 	)
 }
 
-SchoolClassForm.propTypes = {
-	schoolClass: PropTypes.object,
+GroupForm.propTypes = {
+	group: PropTypes.object,
 	user: PropTypes.object.isRequired,
 	setNotification: PropTypes.func.isRequired,
 	createSchoolClass: PropTypes.func.isRequired,
@@ -507,7 +507,7 @@ SchoolClassForm.propTypes = {
 	closeModal: PropTypes.func
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		user: state.user
 	}
@@ -522,4 +522,4 @@ const mapDispatchToProps = {
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(SchoolClassForm)
+)(GroupForm)

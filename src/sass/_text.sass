@@ -61,10 +61,42 @@
 	padding: .5rem
 
 .profile-user-name
-	// color: pink
-	font-size: 170%
+	color: black
+	font-size: 130%
 	font-family: $serif-font
-	// color: $lightGrey
+	letter-spacing: .1em
+	transition: color .2s ease-in
+	&:hover
+		color: $primary-second
 
 .text-small
 	color: $lightGrey
+
+.payment-total-message
+	font-style: italic
+	font-size: 140%
+	color: $primary-second
+
+.total-amount
+	color: $primary-second
+	font-weight: 500
+
+.school-explained
+	color: $primary-second
+	font-weight: 550
+	letter-spacing: .06rem
+	p:first-child
+		font-weight: 550
+		padding-bottom: .75rem
+
+.school-explained-section
+	padding: 1rem 0rem
+	line-height: 1.9
+	p
+		color: $primary-second
+		text-indent: .75rem
+		font-size: 105%
+	p:first-child
+		text-indent: 0
+		font-size: 120%
+		padding-bottom: 1rem

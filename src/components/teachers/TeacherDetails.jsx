@@ -54,13 +54,15 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 					}, 5)
 				})
 		}
-	// eslint-disable-next-line
-	}, [user])
+	}, [user, calcXpToDate, setNotification, match])
 
 	return (
 		<>
 			{teacherDetails
-				? <Container className="pt-3">
+				? <Container>
+					<h4 className="py-4 text-center profile-user-name text-muted">
+						<em>{teacherDetails.name}</em>
+					</h4>
 					<Row>
 						{/* Details section */}
 						<Col xs={12} className="px-0">

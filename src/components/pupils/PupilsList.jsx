@@ -1,65 +1,20 @@
-import React, { useEffect, useState, Suspense, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import pupilsService from '../../services/pupils'
-import { nestedSort } from '../../utils/arrayHelpers'
 
-import { Container, Row, Col, ListGroup } from 'react-bootstrap'
+import { ListGroup } from 'react-bootstrap'
 import Pupil from './Pupil'
 import LoadingIndicator from '../common/LoadingIndicator'
-import CollapseForm from '../common/CollapseForm'
-import SortingControls from '../common/SortingControls'
-
-const LazyPupilForm = React.lazy(() => import('../forms/PupilForm'))
 
 const PupilsList = ({
 	user,
-	pupils,
+	list,
 	getPupils,
 	setNotification }) => {
 
 	const [isLoading, setIsLoading] = useState(true)
-	const [pupilsData, setPupilsData] = useState(null)
 	const componentIsMounted = useRef(true)
-
-	const defaultSortOrder = {
-		name: false,
-		artSchoolClass: false,
-		docsPresent: false,
-		currentlyEnrolled: false
-	}
-
-	const [sortOrder, setSortOrder] = useState(defaultSortOrder)
-
-	const filterBy = [
-		{
-			fieldName: 'name',
-			label: 'Ім\'я учня'
-		},
-		{
-			fieldName: 'specialty',
-			label: 'Фах'
-		}
-	]
-
-	const sortBy = [
-		{
-			fieldName: 'name',
-			label: 'Ім\'я учня'
-		},
-		{
-			fieldName: 'artSchoolClass',
-			label: 'Поточний клас'
-		},
-		{
-			fieldName: 'docsPresent',
-			label: 'Надав усі документи'
-		},
-		{
-			fieldName: 'currentlyEnrolled',
-			label: 'Зарахован до навчання'
-		},
-	]
 
 	useEffect(() => {
 		if (user) {
@@ -78,41 +33,11 @@ const PupilsList = ({
 		}
 	}, [user, getPupils, setNotification])
 
-	useEffect(() => {
-		setPupilsData(pupils)
-	}, [pupils])
-
 	const checkPupilStatus = pupil => {
 		const { currentlyEnrolled, docsPresent } = pupil
 		return (!currentlyEnrolled)
 			? 'danger-background pupil-not-enrolled'
 			: (!docsPresent ? 'warning-background': null)
-	}
-
-	const sort = ({ id: field }) => {
-		setSortOrder({ ...defaultSortOrder, [field]: !sortOrder[field] })
-		const search = {
-			field,
-			sortOrder: sortOrder[field] ? 'desc' : 'asc'
-		}
-		pupilsData.sort(nestedSort(search.field, null, search.sortOrder))
-	}
-
-	const filter = ({ target }) => {
-		const { name, value } = target
-		let result
-		if (name === 'specialty') {
-			result = pupils
-				.filter(pupil => pupil[name]['title'] // data structure ((
-					.toUpperCase()
-					.includes(value.toUpperCase()))
-		} else {
-			result = pupils
-				.filter(pupil => pupil[name]
-					.toUpperCase()
-					.includes(value.toUpperCase()))
-		}
-		setPupilsData([...result])
 	}
 
 	return (
@@ -123,55 +48,23 @@ const PupilsList = ({
 					variant="primary"
 				/>
 				: <>
-					<Container>
-						<Row className="d-flex justify-content-center">
-							<Col xs={12} md={8} xl={6} className="order-xl-1">
-								<CollapseForm
-									title="Додати нового учня"
-									ariaControls="pupil-add-form-collapse"
+					{list.length
+						? <ListGroup>
+							{list.map((pupil, index) =>
+								<ListGroup.Item
+									className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
+									key={pupil.id}
 								>
-									<Suspense
-										fallback={
-											<LoadingIndicator
-												animation="border"
-												variant="primary"
-											/>}>
-										<LazyPupilForm mode="create" />
-									</Suspense>
-								</CollapseForm>
-
-								<SortingControls
-									sortOrder={sortOrder}
-									filter={filter}
-									filterBy={filterBy}
-									sort={sort}
-									sortBy={sortBy}
-								/>
-							</Col>
-
-							<Col xs={12} md={8} xl={6} className="order-xl-0">
-								<h5 className="text-center custom-font">
-									Список вашіх учнів.
-								</h5>
-								{(pupilsData.length > 0)
-									? <ListGroup>
-										{pupilsData.map((pupil, index) =>
-											<ListGroup.Item
-												className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
-												key={pupil.id}
-											>
-												<Pupil pupil={pupil} posInList={index + 1} />
-											</ListGroup.Item>
-										)}
-									</ListGroup>
-									: <h6 className="text-muted" >
-										<em>
-											У вас ще немає учнів, ви можете додати свого першого учня через форму вище.
-										</em>
-									</h6> }
-							</Col>
-						</Row>
-					</Container>
+									<Pupil pupil={pupil} posInList={index + 1} />
+								</ListGroup.Item>
+							)}
+						</ListGroup>
+						: <h6 className="text-muted custom-font">
+							<em>
+								Не знайдено жодного учня, або у вас ще немає учнів,{' '}
+								ви можете додати свого першого учня через форму &apos;Додати нового учня&apos; нижче.
+							</em>
+						</h6> }
 				</>
 			}
 		</>

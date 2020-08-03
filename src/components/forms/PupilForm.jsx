@@ -16,7 +16,7 @@ import { phoneNumber as phonePattern,
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-import { Container, Col, Form } from 'react-bootstrap'
+import { Col, Form } from 'react-bootstrap'
 import { BtnWithSpinner } from '../common/buttons'
 import ResetBtn from './buttons/Reset'
 import { CheckBox, DateInput, Select,
@@ -102,8 +102,6 @@ const PupilForm = ({
 		if (editMode) values = { ...values,
 			schoolClasses: values.schoolClasses.map(item => item.id),
 		}
-
-		console.log('Sending this', values)
 
 		setProcessingForm(true)
 		editMode
@@ -208,7 +206,7 @@ const PupilForm = ({
 			searchService.users(query)
 				.then(users => {
 					setUsersList(users)
-					console.log(users)
+					// console.log(users)
 				})
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -275,6 +273,8 @@ const PupilForm = ({
 				paymentObligationsCheck: false,
 				docsPresent: false,
 				currentlyEnrolled: false,
+				graduated: false,
+				suspended: false,
 				info: ''
 			}
 
@@ -386,13 +386,17 @@ const PupilForm = ({
 			.oneOf([true, false]),
 		currentlyEnrolled: Yup.bool()
 			.oneOf([true, false]),
+		graduated: Yup.bool()
+			.oneOf([true, false]),
+		suspended: Yup.bool()
+			.oneOf([true, false]),
 		info: Yup.string()
 			.min(3, 'Не менш 3 символів.')
 			.max(255, 'Максимум 255 символів.')
 	})
 
 	return (
-		<Container>
+		<>
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
@@ -750,9 +754,24 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id={editMode
+												? `docs-present-checkbox-${pupil.id}`
+												: 'docs-present-checkbox'}
+											label="Надав усі необхідні документи"
+											name="docsPresent"
+											dataCy="docs-present-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.docsPresent}
+											value={values.docsPresent}
+											touched={touched.docsPresent}
+											errors={errors.docsPresent}
+										/>
+										<CheckBox
+											type="checkbox"
+											id={editMode
 												? `currently-enrolled-checkbox-${pupil.id}`
 												: 'currently-enrolled-checkbox'}
-											label="Зарахований до школи на навчання."
+											label="Навчається"
 											name="currentlyEnrolled"
 											dataCy="currently-enrolled-checkbox"
 											onChange={handleChange}
@@ -765,17 +784,32 @@ const PupilForm = ({
 										<CheckBox
 											type="checkbox"
 											id={editMode
-												? `docs-present-checkbox-${pupil.id}`
-												: 'docs-present-checkbox'}
-											label="Надав усі необхідні документи."
-											name="docsPresent"
-											dataCy="docs-present-checkbox"
+												? `graduated-checkbox-${pupil.id}`
+												: 'graduated-checkbox'}
+											label="Випустився зі школи"
+											name="graduated"
+											dataCy="graduated-checkbox"
 											onChange={handleChange}
 											onBlur={handleBlur}
-											checked={values.docsPresent}
-											value={values.docsPresent}
-											touched={touched.docsPresent}
-											errors={errors.docsPresent}
+											checked={values.graduated}
+											value={values.graduated}
+											touched={touched.graduated}
+											errors={errors.graduated}
+										/>
+										<CheckBox
+											type="checkbox"
+											id={editMode
+												? `suspended-checkbox-${pupil.id}`
+												: 'suspended-checkbox'}
+											label="Відрахований зі школи"
+											name="suspended"
+											dataCy="suspended-checkbox"
+											onChange={handleChange}
+											onBlur={handleBlur}
+											checked={values.suspended}
+											value={values.suspended}
+											touched={touched.suspended}
+											errors={errors.suspended}
 										/>
 										<TextAreaInput
 											label="Додаткова інформація/опис"
@@ -827,7 +861,7 @@ const PupilForm = ({
 				show={infoModalVis}
 				onHide={() => setInfoModalVis(!infoModalVis)}
 			/>
-		</Container>
+		</>
 	)
 }
 

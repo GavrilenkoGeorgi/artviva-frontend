@@ -1,0 +1,14 @@
+{
+	"filter": [
+		{
+		"field": "teacher",
+		"label": "І'мя вчителя",
+		"choices": ["You can't choose your name"]
+		},
+		{
+			"field": "specialty",
+			"label": "Фах",
+			"choices": ["same here"]
+		}
+	]
+}

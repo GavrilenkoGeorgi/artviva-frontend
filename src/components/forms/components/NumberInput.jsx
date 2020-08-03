@@ -2,47 +2,32 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Form, Col } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
-const Select = props => {
+const NumberInput = props => {
 	const {
+		dataCy,
 		touched,
-		placeholder,
-		infoBtn,
-		showInfo,
+		className,
 		...other } = props
-
 	return (
 		<Form.Group
 			controlId={`${props.name}-input`}
 			as={Col}
-			xs={12}
+			className= {className ? className : 'px-0' }
 		>
 			<Form.Label>
 				{props.label}
 				{props.required === false
 					? null
 					: <span className="form-required-mark"> *</span>}
-				{infoBtn
-					? <FontAwesomeIcon
-						icon={faQuestionCircle}
-						onClick={showInfo}
-						className="ml-2 text-primary"/>
-					: null}
 			</Form.Label>
 			<Form.Control
-				as="select"
-				custom
-				{ ...other }
+				data-cy={dataCy}
+				type="Number"
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
-			>
-				<option value={0}>{placeholder || 'Виберіть...'}</option>
-				{props.options.map(item =>
-					<option value={item} key={item}>{item}</option>
-				)}
-			</Form.Control>
+				{ ...other }
+			/>
 			<Form.Control.Feedback type="invalid">
 				{props.errors}
 			</Form.Control.Feedback>
@@ -50,15 +35,13 @@ const Select = props => {
 	)
 }
 
-Select.propTypes = {
+NumberInput.propTypes = {
+	type: PropTypes.string,
 	label: PropTypes.string.isRequired,
-	placeholder: PropTypes.string,
-	infoBtn: PropTypes.bool,
-	showInfo: PropTypes.func,
 	name: PropTypes.string.isRequired,
-	options: PropTypes.array.isRequired,
 	onChange: PropTypes.func.isRequired,
-	onBlur: PropTypes.func.isRequired,
+	onBlur: PropTypes.func,
+	onKeyUp: PropTypes.func,
 	value: PropTypes.oneOfType([
 		PropTypes.string.isRequired,
 		PropTypes.number.isRequired
@@ -67,5 +50,4 @@ Select.propTypes = {
 	errors: PropTypes.string
 }
 
-const MemodSelect = React.memo(Select)
-export default MemodSelect
+export default NumberInput

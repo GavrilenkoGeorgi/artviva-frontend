@@ -7,15 +7,15 @@ import schoolClassesService from '../../services/schoolClasses'
 
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDown, faAngleUp, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import SchoolClassForm from '../forms/SchoolClassForm'
+import { faAngleDown, faAngleUp, faClipboardCheck } from '@fortawesome/free-solid-svg-icons'
+import SchoolClassForm from '../forms/GroupForm'
 import LoadingIndicator from '../common/LoadingIndicator'
 import EntityControlButtons from '../common/EntityControlButtons'
 
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
+const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 	const [open, setOpen] = useState(false)
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
@@ -60,7 +60,7 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				className="p-0 d-flex text-left justify-content-between align-items-center"
 			>
 				<span>
-					{schoolClass.title} - {schoolClass.specialty.title}
+					{number}. {group.title} - <em className="text-muted">{group.specialty.title}</em>{' '}
 				</span>
 				{ open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -70,26 +70,26 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 			<Collapse in={open}>
 				<Container>
 					<Row>
-						<Col xs={12} className="py-2 px-0">
-							<strong>
-								{schoolClass.teacher.name}
-							</strong>
-							<Link
-								to={`/school/teachers/${schoolClass.teacher.id}`}
-								className="px-2"
-							>
-								<FontAwesomeIcon icon={faInfoCircle} className="icon-info" />
-							</Link>
+						<Col xs={12} className="py-2 px-0 border1 border-primary">
+							<p>
+								<em>{group.teacher.name}</em>
+								<Link
+									to={`/school/teachers/${group.teacher.id}`}
+									className="px-2"
+								>
+									<FontAwesomeIcon icon={faClipboardCheck} className="icon-info" />
+								</Link>
+							</p>
 						</Col>
 						<Col className="px-0" xs={12}>
-							<p>{schoolClass.specialty.title}</p>
-							{schoolClass.info
-								? <p><strong>{schoolClass.info}</strong></p>
+							{/*<p>{group.specialty.title}</p>*/}
+							{group.info
+								? <p><em className="text-muted">{group.info}</em></p>
 								: null
 							}
-							Учні:
+							<em>Учні:</em>
 							<ol>
-								{schoolClass.pupils.map(pupil => (
+								{group.pupils.map(pupil => (
 									<li key={pupil.id}>
 										<Link to="/school/pupils">{pupil.name}</Link>
 										{pupil.info
@@ -121,8 +121,8 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				/>}>
 				<LazyEntityDeleteModal
 					subject="клас"
-					subjectid={schoolClass.id}
-					valuetoconfirm={schoolClass.title}
+					subjectid={group.id}
+					valuetoconfirm={group.title}
 					show={deleteModalShow}
 					handleDelete={handleDelete}
 					loadingState={isDeleting}
@@ -130,13 +130,13 @@ const SchoolClass = ({ user, schoolClass, deleteSchoolClass }) => {
 				/>
 				<LazyEntityEditModal
 					subject="клас"
-					subjectid={schoolClass.id}
+					subjectid={group.id}
 					show={editModalShow}
 					onHide={() => setEditModalShow(false)}
 				>
 					<SchoolClassForm
 						closeModal={() => setEditModalShow(false)}
-						schoolClass={schoolClass}
+						group={group}
 						mode="edit" />
 				</LazyEntityEditModal>
 			</Suspense>

@@ -102,14 +102,12 @@ const Teacher = ({
 	}
 
 	const showExperience = ({ years, months, days }) => {
-		return (
-			<>
-				<small><em className="text-muted">
-					{/* eslint-disable-next-line */}
-					{years > 0 ? `${years} років` : null} {months > 0 ? `${months} місяців` : null} {days > 0 ? `${days} днів` : null}
-				</em></small>
-			</>
-		)
+		return <small>
+			<em className="text-muted">
+				{/* eslint-disable-next-line */}
+				Стаж {years > 0 ? `${years} років` : null} {months > 0 ? `${months} місяців` : null} {days > 0 ? `${days} днів` : null}
+			</em>
+		</small>
 	}
 
 	return (
@@ -120,17 +118,29 @@ const Teacher = ({
 				aria-controls="teacher-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center text-left"
 			>
-				<span>
-					{number}. {teacher.name} {teacher.experience
-						? showExperience(teacher.experience)
-						: null }
-				</span>
-				{ open
-					? <FontAwesomeIcon icon={faAngleUp} />
-					: <FontAwesomeIcon icon={faAngleDown} />
-				}
+				<Row className="text-left d-flex justify-content-between">
+					<Col xs={10} className="">
+						{number}. {teacher.name}
+					</Col>
+
+					<Col xs={2} className="text-right">
+						{open
+							? <FontAwesomeIcon icon={faAngleUp} />
+							: <FontAwesomeIcon icon={faAngleDown} />
+						}
+					</Col>
+
+					<Col xs={12} className="pl-4">
+						{showExperience(teacher.experience)}
+						<br />
+						<small>
+							<em className="text-muted">
+								Тижневе навантаження {teacher.weekWorkHours} часів
+							</em>
+						</small>
+					</Col>
+				</Row>
 			</Button>
 			<Collapse in={open}>
 				<Container fluid className="text-left">
@@ -139,6 +149,7 @@ const Teacher = ({
 							{teacher.specialties.map(specialty => (
 								<p className="custom-font-small text-muted" key={specialty.id}>{specialty.title}</p>
 							))}
+							<p>{(teacher.weekWorkHours / 18).toFixed(2)} ставки</p>
 							<p className="pt-3">
 								<strong>Груп: {teacher.schoolClasses.length || '0'}</strong>
 							</p>

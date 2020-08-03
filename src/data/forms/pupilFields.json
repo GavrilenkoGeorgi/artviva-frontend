@@ -1,0 +1,58 @@
+{
+	"filter": [
+		{
+		"field": "name",
+		"label": "І'мя",
+		"choices": ["You can't choose your name"]
+		},
+		{
+			"field": "specialty",
+			"label": "Фах",
+			"choices": ["same here"]
+			}
+	],
+	"select": [
+		{
+			"field": "gender",
+			"label": "Стать",
+			"choices": ["Чоловіча", "Жіноча"]
+		},
+		{
+			"field": "mainSchoolClass",
+			"label": "Клас навчання в ЗОШ",
+			"choices": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+		},
+		{
+			"field": "hasBenefit",
+			"label": "Пільги %",
+			"choices": ["Немає пільг", 50, 100]
+		},
+		{
+			"field": "artSchoolClass",
+			"label": "Клас навчання в ДШМ",
+			"choices": [1, 2, 3, 4]
+		}
+	],
+	"boolean": [
+		{
+			"field": "docsPresent",
+			"label": "Документи?",
+			"choices": ["Не надали документи", "Надали усі документи"]
+		},
+		{
+			"field": "currentlyEnrolled",
+			"label": "Навчається?",
+			"choices": ["Не навчаются", "Сейчас навчаются"]
+		},
+		{
+			"field": "graduated",
+			"label": "Випустився зі школи?",
+			"choices": ["Не закінчили школу", "Закінчили школу"]
+		},
+		{
+			"field": "suspended",
+			"label": "Відрахований?",
+			"choices": ["Зараховані", "Відраховані"]
+		}
+	]
+}

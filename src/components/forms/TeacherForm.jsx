@@ -10,7 +10,7 @@ import { teacherAccomplishmentsDscr } from '../../data/formTexts.json'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 
-import { teacherSelectFields as teacherFields } from '../../data/forms/teacherFields.json'
+import { select } from '../../data/forms/teacherFields.json'
 
 import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
@@ -21,6 +21,7 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
+import NumberInput from './components/NumberInput'
 import TextInput from './components/TextInput'
 import DateInput from './components/DateInput'
 import Select from './components/Select'
@@ -48,7 +49,7 @@ const TeacherForm = ({
 
 	const fieldChoices = () => {
 		const result = {}
-		for (let item of teacherFields) {
+		for (let item of select) {
 			const { field, choices } = item
 			result[field] = choices
 		}
@@ -158,6 +159,7 @@ const TeacherForm = ({
 		years: '',
 		months: '',
 		days: '',
+		weekWorkHours: '',
 		phone: '',
 		contactEmail: '',
 		residence: '',
@@ -222,6 +224,10 @@ const TeacherForm = ({
 			.typeError('Повинно бути числом.')
 			.min(0, 'Нуль або більше.')
 			.max(31, 'Забагато.'),
+		weekWorkHours: Yup.number()
+			.typeError('Повинно бути числом.')
+			.min(0, 'Нуль або більше.')
+			.max(100, 'Забагато.'),
 		phone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
@@ -498,6 +504,19 @@ const TeacherForm = ({
 									</strong> днів
 								</div>
 							</Col>
+						</Form.Row>
+
+						<Form.Row>
+							<NumberInput
+								label="Тижневе навантаження. Часів:"
+								name="weekWorkHours"
+								onChange={handleChange}
+								onBlur={handleBlur}
+								value={values.weekWorkHours}
+								touched={touched.weekWorkHours}
+								errors={errors.weekWorkHours}
+								className="px-1"
+							/>
 						</Form.Row>
 
 						<Form.Row>

@@ -1,25 +1,33 @@
-import React, { Suspense } from 'react'
+import React, { useState, useEffect, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { initializeSchoolClasses, getGroups } from '../../reducers/schoolClassesReducer'
+import { getGroups } from '../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../reducers/notificationReducer'
 import schoolClassesService from '../../services/schoolClasses'
+import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
+import { filter } from '../../data/forms/groupFields.json'
 
-import { Container } from 'react-bootstrap'
-import SchoolClassesList from '../schoolClasses/SchoolClassesList'
-import CollapseForm from '../common/CollapseForm'
-import LoadingIndicator from '../common/LoadingIndicator'
-import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Container, Col, Row, Form } from 'react-bootstrap'
+import GroupsList from '../schoolClasses/GroupsList'
+import { LoadingIndicator } from '../common'
+import CommonLayout from './CommonLayout'
+import GroupForm from '../forms/GroupForm'
+import Reset from '../forms/buttons/Reset'
+import { Button } from '../common/buttons'
 
-const LazySchoolClassForm = React.lazy(() => import('../forms/SchoolClassForm'))
+import { ShowFilterSettings, FilterData } from '../sorting'
 
-const GroupsView = ({ user, getGroups, setNotification }) => {
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-	useEffect(() => {
-		setFetchingData(true)
-	}, [])
+const GroupsView = ({ user, getGroups, setNotification, groups }) => {
+
+	const [groupsList, setGroupsList] = useState([])
+	const [filterSettings, setFilterSettings] = useState({})
+	const [addModalShow, setAddModalShow] = useState(false)
 
 	useEffect(() => {
 		if (user) {
+			setFetchingData(true)
 			schoolClassesService.setToken(user.token)
 			getGroups(user.superUser, user.teacher)
 				.catch(error => {
@@ -34,31 +42,196 @@ const GroupsView = ({ user, getGroups, setNotification }) => {
 		}
 	}, [user, setNotification, getGroups])
 
-	return (
-		<Container>
-			{user
-				? <>
-					<h4 className="pb-3 text-center custom-font">
-						{`${user.superUser ? 'Всі' : 'Ваші'} групи в школи`}
-					</h4>
-					<CollapseForm
-						title={`Додати нову групу ${user.superUser ? '(як завуч)' : '' }`}
-						ariaControls="school-class-add-form-collapse"
-					>
-						<Suspense
-							fallback={
-								<LoadingIndicator
-									animation="border"
-									variant="primary"
-								/>}>
-							<LazySchoolClassForm mode="create" />
-						</Suspense>
-					</CollapseForm>
-					<SchoolClassesList />
-				</>
-				: <>Just a sec..</>
+	const changeFilterSetting = (event) => {
+		event.preventDefault()
+
+		const { target } = event
+		const { name: field, value } = target
+
+		value ? setFilterSettings({ ...filterSettings, [field]: value }) : setFilterSettings({ [field]: '' })
+
+		/*
+		switch (field) {
+		case 'teacher':
+		case 'specialty': {
+			if (value) {
+				setFilterSettings({ ...filterSettings, [field]: value })
 			}
-		</Container>
+			else {
+				setFilterSettings({ [field]: '' })
+			}
+			break
+		}
+		case 'from':
+		case 'to': {
+			setFilterSettings({ ...filterSettings, [field]: value || 0 })
+			// setCurrentlyActiveFilter('range')
+			break
+		}
+		case 'isRetired':
+		case 'employeeIsAStudent': {
+			let statement
+			if (value) {
+				statement = JSON.parse(value)
+			} else {
+				statement = ''
+			}
+			setFilterSettings({ ...filterSettings, [field]: statement })
+			// setCurrentlyActiveFilter('booleans')
+			break
+		}
+		default: {
+			console.log('default case')
+		}
+		}*/
+	}
+
+	const sortData = useCallback(settings => {
+		let result = groups
+		if (settings) {
+			const { specialty, teacher } = settings
+			if (specialty) {
+				result =
+					result.filter(item => item.specialty.title.toUpperCase().includes(settings.specialty.toUpperCase()))
+			}
+
+			if (teacher) {
+				result =
+					result.filter(item => item.teacher.name.toUpperCase().includes(settings.teacher.toUpperCase()))
+			}
+			setGroupsList([ ...result ])
+
+		} else {
+			setGroupsList([ ...groups ])
+		}
+	}, [groups])
+
+	useEffect(() => {
+		console.log('Filter settings', filterSettings)
+		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
+			sortData(null)
+		} else {
+			sortData(filterSettings)
+		}
+	}, [filterSettings, sortData])
+
+	return (
+		<CommonLayout>
+			<Container>
+				<Row className="d-flex align-items-center">
+
+					<Col xs={12}>
+						{user
+							? <h4 className="text-center custom-font">
+								{`${user.superUser ? 'Всі' : 'Ваші'} групи в школи`}
+							</h4>
+							: null
+						}
+					</Col>
+
+					<Col xs={12} className="py-3">
+						{/*For example: to find out how many pupils are studiying one faculty,
+							enter a few letters from it's title and sort by it.
+							To add new pupil, use the form below.*/}
+						<section className="school-explained custom-font-small">
+							<p>
+								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}
+								введіть кілька літер від його назви та відсортуйте за ним.
+							</p>
+							<p>
+							Для створення групи, ви повинні бути впевнені, що ви
+								{user && !user.teacher
+									? <>{' '}
+										заповнили <Link to={`/school/users/${user.id}`}>
+										анкету вчителя</Link>, та </>
+									: ' '}
+								створили <Link to="/school/pupils">учнів</Link> для вашої нової групи.
+							</p>
+						</section>
+					</Col>
+
+					<Col xs={12} className="px-0">
+						<Form onReset={() => setFilterSettings({})}>
+							{/*Filter by specialty and teacher chars */}
+							<Col xs={12}>
+								<Row>
+									<FilterData
+										filter={changeFilterSetting}
+										fieldName="specialty"
+										placeholder="Назва фаху"
+									/>
+									<FilterData
+										filter={changeFilterSetting}
+										fieldName="teacher"
+										placeholder="Прізвище вчителя"
+									/>
+								</Row>
+							</Col>
+							{/* Buttons */}
+							<Col xs={12} className="my-3">
+								<Row>
+									<Col xs={6}>
+										<Button
+											block
+											dataCy="add-new-group"
+											label="Додати нову"
+											onClick={() => setAddModalShow(true)}
+										/>
+									</Col>
+									<Col xs={6}>
+										<Reset
+											label="Показати всі"
+											block
+											variant="outline-success"
+											dataCy="filter-reset-btn"
+											disabled={pureObjectIsEmpty(filterSettings)}
+										/>
+									</Col>
+								</Row>
+							</Col>
+						</Form>
+					</Col>
+
+					{/* Current filter settings display */}
+					<Col xs={12}>
+						<ShowFilterSettings
+							labels={[ ...filter ]}
+							settings={filterSettings}
+						/>
+					</Col>
+					<Col xs={12}>
+						<p className="pb-2 text-right text-muted">
+							<small>
+								<em>
+									Загалом: {groupsList.length}
+								</em>
+							</small>
+						</p>
+					</Col>
+
+					{user
+						? <Col xs={12}>
+							<GroupsList groups={groupsList}/>
+						</Col>
+						: null
+					}
+					<Suspense fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+							size="md"
+						/>}>
+						<LazyEntityEditModal
+							subject="Додати нового вчителя"
+							show={addModalShow}
+							onHide={() => setAddModalShow(false)}
+						>
+							<GroupForm mode='create' />
+						</LazyEntityEditModal>
+					</Suspense>
+				</Row>
+			</Container>
+		</CommonLayout>
 	)
 }
 
@@ -71,7 +244,6 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	initializeSchoolClasses,
 	getGroups,
 	setNotification,
 	setFetchingData

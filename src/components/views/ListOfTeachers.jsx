@@ -1,24 +1,47 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, Suspense } from 'react'
 import { connect } from 'react-redux'
 
-import { ListGroup, Container, Row, Col } from 'react-bootstrap'
+import { Form, ListGroup, Container, Row, Col } from 'react-bootstrap'
 import { initializeTeachers, setTeacherExp } from '../../reducers/teachersReducer'
-import { setNotification } from '../../reducers/notificationReducer'
+import { initializeSpecialties } from '../../reducers/specialtiesReducer'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
 import { calcEmployeeExperience } from '../../utils/datesAndTime'
 
-import { teacherSelectFields, teacherBoolFields } from '../../data/forms/teacherFields.json'
+import { filter, select, boolean, range } from '../../data/forms/teacherFields.json'
 import { Teacher, AddTeacher } from '../teachers'
-import { FilterDisplay, FilterData, ExperienceSort, SelectFields, FilterBooleanFields } from '../sorting'
+import { ShowFilterSettings, FilterData, ExperienceSort,
+	SelectFields, FilterBooleanFields } from '../sorting'
+import Reset from '../forms/buttons/Reset'
+import { Button } from '../common/buttons'
+import { LoadingIndicator } from '../common'
+import CommonLayout from './CommonLayout'
 
-const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotification }) => {
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-	const [teacherData, setTeacherData] = useState([])
+const ListOfTeachers = ({ teachers,
+	initializeTeachers,
+	initializeSpecialties,
+	setTeacherExp,
+	setNotification,
+	setFetchingData }) => {
+
+	const [teacherList, setTeacherList] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
-	const [currentlyActiveFilter, setCurrentlyActiveFilter] = useState('')
+	const [addModalShow, setAddModalShow] = useState(false)
 
 	useEffect(() => {
+		setFetchingData(true)
+		initializeSpecialties()
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+		// promise all ?
 		initializeTeachers()
 			.catch(error => {
 				const { message } = { ...error.response.data }
@@ -27,7 +50,8 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 					variant: 'danger'
 				}, 5)
 			})
-	}, [initializeTeachers, setNotification])
+			.finally(() => setFetchingData(false))
+	}, [initializeTeachers, setNotification, initializeSpecialties, setFetchingData])
 
 	const calcExperience = useCallback(teachersData => {
 		const experienceData = []
@@ -35,8 +59,8 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 		// Employment date, plus any other already
 		// existing experience, if there is one
 		for (let teacher of teachersData) {
-			const teacherData = calcEmployeeExperience(teacher)
-			experienceData.push(teacherData)
+			const teacherList = calcEmployeeExperience(teacher)
+			experienceData.push(teacherList)
 		}
 
 		for (let item of experienceData) {
@@ -49,7 +73,7 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 
 	useEffect(() => {
 		if (teachers) {
-			setTeacherData(teachers)
+			setTeacherList(teachers)
 			calcExperience(teachers)
 		}
 	}, [teachers, calcExperience])
@@ -60,7 +84,8 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 		let to = parseInt(range.to)
 
 		if (from > to) {
-			to = from + 1
+			// max i guess
+			to = 99
 		}
 
 		return data.filter(item => item.experience.years >= from &&
@@ -79,13 +104,11 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 			else {
 				setFilterSettings({ name: '' })
 			}
-			setCurrentlyActiveFilter('name')
 			break
 		}
 		case 'from':
 		case 'to': {
 			setFilterSettings({ ...filterSettings, [field]: value || 0 })
-			setCurrentlyActiveFilter('range')
 			break
 		}
 		case 'isRetired':
@@ -97,11 +120,9 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 				statement = ''
 			}
 			setFilterSettings({ ...filterSettings, [field]: statement })
-			setCurrentlyActiveFilter('booleans')
 			break
 		}
 		default: {
-			setCurrentlyActiveFilter('select')
 			setFilterSettings({ ...filterSettings, [field]: value })
 		}
 		}
@@ -140,11 +161,9 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 			if (boolFilter) {
 				result = boolPropsFilter(result, boolFilter)
 			}
-
-			setTeacherData([ ...selectData(result) ])
-
+			setTeacherList([ ...selectData(result) ])
 		} else {
-			setTeacherData([ ...teachers ])
+			setTeacherList([ ...teachers ])
 		}
 	}, [sortByExperienceRange, selectData, teachers])
 
@@ -157,92 +176,142 @@ const ListOfTeachers = ({ teachers, initializeTeachers, setTeacherExp, setNotifi
 	}, [filterSettings, sortData, teachers])
 
 	return (
-		<Container>
-			<Row className="d-flex align-items-center border1">
-				<Col xs={12} className="border1 border-warning">
-					<h4 className="py-3 custom-font text-center">
-						Список усіх вчителів школи
-					</h4>
-				</Col>
-				{/* Select by field */}
-				<Col xs={12} className="py-2 border1 rounded mb-3">
-					<SelectFields
-						selectBy={teacherSelectFields}
-						filter={changeFilterSetting}
-					/>
-				</Col>
-				{/* Filter by name chars */}
-				<Col xs={12} sm={6} className="my-2">
-					<FilterData
-						filter={changeFilterSetting}
-						fieldName="name"
-						placeholder="Прізвище вчителя"
-					/>
-				</Col>
-				{/* Select by experience range */}
-				<Col xs={12} sm={6} className="my-2">
-					<ExperienceSort
-						filter={changeFilterSetting}
-					/>
-				</Col>
-				{/* Select by boolean fields */}
-				<Col xs={12} sm={6} className="my-2">
-					<FilterBooleanFields
-						selectBy={teacherBoolFields}
-						filter={changeFilterSetting}
-					/>
-				</Col>
-				{/* Current filter settings display */}
-				<Col xs={12}>
-					<FilterDisplay
-						settings={filterSettings}
-						currentFilter={currentlyActiveFilter}
-					/>
-				</Col>
-				<Col xs={12}>
-					<p className="pb-2 text-right text-muted">
-						<small>
-							<em>
-								Загалом: {teacherData.length}
-							</em>
-						</small>
-					</p>
-				</Col>
-				{/* Filtered list of teachers */}
-				<Col xs={12}>
-					<ListGroup>
-						{teacherData.map((teacher, index) =>
-							<ListGroup.Item
-								className="px-0 py-1"
-								key={teacher.id}
-							>
-								<Teacher
-									teacher={teacher}
-									number={index + 1}
+		<CommonLayout>
+			<Container>
+				<Row className="d-flex align-items-center">
+					<Col xs={12}>
+						<h4 className="custom-font text-center">
+							Список усіх вчителів школи
+						</h4>
+					</Col>
+					<Col xs={12} className="pb-3">
+						<section className="p-3 school-explained custom-font-small">
+							<p>
+								Наприклад: щоб дізнатись, скільки вчителів зараз на пенсії та мешкає у селі,{' '}
+								виберіть фільтр «На пенсии» та «Місцевість проживання: Село».
+							</p>
+							<p>
+								Щоб додати нового вчителя, заповніть форму натиснув кнопку нижче.
+							</p>
+						</section>
+					</Col>
+					<Form onReset={() => setFilterSettings({})}>
+						<Col xs={12}>
+							<Row>
+								{/* Filter by name chars */}
+								<FilterData
+									filter={changeFilterSetting}
+									fieldName="name"
+									placeholder="Прізвище вчителя"
 								/>
-							</ListGroup.Item>
-						)}
-					</ListGroup>
-				</Col>
-				{/* Add new teacher form */}
-				<Col>
-					<AddTeacher />
-				</Col>
-			</Row>
-		</Container>
+								{/* Select by experience range */}
+								<ExperienceSort
+									filter={changeFilterSetting}
+								/>
+							</Row>
+						</Col>
+						{/* Select by boolean fields */}
+						<Col xs={12} className="my-2">
+							<FilterBooleanFields
+								selectBy={boolean}
+								filter={changeFilterSetting}
+							/>
+						</Col>
+						{/* Select by field */}
+						<Col xs={12} className="py-2 mb-3">
+							<SelectFields
+								selectBy={select}
+								filter={changeFilterSetting}
+							/>
+						</Col>
+						{/* Buttons */}
+						<Col xs={12} className="my-3">
+							<Row>
+								<Col xs={6}>
+									<Button
+										block
+										dataCy="add-new-pupil"
+										label="Додати нового"
+										onClick={() => setAddModalShow(true)}
+									/>
+								</Col>
+								<Col xs={6}>
+									<Reset
+										label="Показати всіх"
+										block
+										variant="outline-success"
+										dataCy="filter-reset-btn"
+										disabled={pureObjectIsEmpty(filterSettings)}
+									/>
+								</Col>
+							</Row>
+						</Col>
+					</Form>
+					{/* Current filter settings display */}
+					<Col xs={12}>
+						<ShowFilterSettings
+							labels={[ ...filter, ...select, ...boolean, ...range ]}
+							settings={filterSettings}
+						/>
+					</Col>
+					<Col xs={12}>
+						<p className="pb-2 text-right text-muted">
+							<small>
+								<em>
+									Загалом: {teacherList.length}
+								</em>
+							</small>
+						</p>
+					</Col>
+					{/* Filtered list of teachers */}
+					<Col xs={12}>
+						<ListGroup>
+							{teacherList.map((teacher, index) =>
+								<ListGroup.Item
+									className="px-0 py-1"
+									key={teacher.id}
+								>
+									<Teacher
+										teacher={teacher}
+										number={index + 1}
+									/>
+								</ListGroup.Item>
+							)}
+						</ListGroup>
+					</Col>
+					<Suspense fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+							size="md"
+						/>}>
+						<LazyEntityEditModal
+							subject="Додати нового вчителя"
+							show={addModalShow}
+							onHide={() => setAddModalShow(false)}
+						>
+							<AddTeacher />
+						</LazyEntityEditModal>
+					</Suspense>
+				</Row>
+			</Container>
+		</CommonLayout>
 	)
 }
 
 const mapStateToProps = state => {
 	return {
-		teachers: state.teachers
+		teachers: state.teachers,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
 	initializeTeachers,
+	initializeSpecialties,
 	setNotification,
-	setTeacherExp
+	setTeacherExp,
+	setFetchingData
 }
 
 export default connect(
