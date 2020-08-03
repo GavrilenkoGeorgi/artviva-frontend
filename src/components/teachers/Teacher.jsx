@@ -136,7 +136,7 @@ const Teacher = ({
 						<br />
 						<small>
 							<em className="text-muted">
-								Тижневе навантаження {teacher.weekWorkHours} часів
+								Тижневе навантаження {teacher.weekWorkHours} годин
 							</em>
 						</small>
 					</Col>
