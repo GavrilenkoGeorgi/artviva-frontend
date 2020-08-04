@@ -4,6 +4,7 @@ import * as data from '../../data/teachers'
 import TeacherCard from '../teachers/TeacherCard'
 import Department from '../teachers/Department'
 import { shuffle } from '../../utils/shuffleArray'
+import CommonLayout from './CommonLayout'
 import PropTypes from 'prop-types'
 
 const TeachersView = ({ match }) => {
@@ -16,35 +17,33 @@ const TeachersView = ({ match }) => {
 	}, [setAdministration, setDepartments])
 
 	return (
-		<Container>
-			<Row className="p111-2 d-flex1 justify-content-center border1 border-primary">
-				<Col xs={12} md={10} className="px212-2">
-					<h3 className="text-center custom-font py-4">
-						Адміністрація
-					</h3>
-					{administration
-						? administration.map(person =>
-							<TeacherCard key={person.id} person={person} />)
-						: null
-					}
-				</Col>
-				<Col xs={12} md={10} className="p111-1">
-					<h3 className="text-center custom-font py-4">
-						Наші вчителі
-					</h3>
-					{departments
-						? departments.map(department =>
-							<Department
-								key={department.id}
-								name={department.name}
-								teachers={shuffle(department.teachers)}
-								scrollTo={match ? match.params.department : 'default'}
-							/>)
-						: null
-					}
-				</Col>
-			</Row>
-		</Container>
+		<CommonLayout className="border">
+			<Col xs={12}>
+				<h1 className="text-center custom-font py-sm-4">
+					Адміністрація
+				</h1>
+				{administration
+					? administration.map(person =>
+						<TeacherCard key={person.id} person={person} />)
+					: null
+				}
+			</Col>
+			<Col xs={12}>
+				<h2 className="text-center custom-font py-4">
+					Наші вчителі
+				</h2>
+				{departments
+					? departments.map(department =>
+						<Department
+							key={department.id}
+							name={department.name}
+							teachers={shuffle(department.teachers)}
+							scrollTo={match ? match.params.department : 'default'}
+						/>)
+					: null
+				}
+			</Col>
+		</CommonLayout>
 	)
 }
 

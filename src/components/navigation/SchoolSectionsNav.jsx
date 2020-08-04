@@ -67,7 +67,11 @@ const SchoolSectionsNav = ({ userData }) => {
 		{
 			to: '/school/pupils',
 			label: 'Учні'
-		}
+		},
+		{
+			to: '/school/teacher/payments',
+			label: 'Платежи'
+		},
 	]
 
 	const chooseLinks = useCallback(superUser => {

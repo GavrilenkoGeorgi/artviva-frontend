@@ -90,7 +90,7 @@ const NavigationBar = ({ user }) => {
 				expand="lg"
 				bg="light"
 				variant="light"
-				className={visibility ? 'navbar-visible' : 'navbar-hidden' }
+				className={`py-sm-0 ${visibility ? 'navbar-visible' : 'navbar-hidden'}`}
 			>
 				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image
@@ -119,13 +119,10 @@ const NavigationBar = ({ user }) => {
 							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							{user
 								? <>
-									{user.superUser
-										? <NavDropdown.Item href="/school">
-												Кабинет
-										</NavDropdown.Item>
-										: null
-									}
 									<NavDropdown.Divider />
+									<NavDropdown.Item href="/school">
+											Кабинет
+									</NavDropdown.Item>
 									<NavDropdown.Item href={`/school/users/${user.id}`}>
 										<span className="nav-list-icon">
 											<FontAwesomeIcon icon={faUser} />

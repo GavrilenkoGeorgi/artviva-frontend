@@ -8,11 +8,10 @@ import { setNotification, setProcessingForm } from '../../reducers/notificationR
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { trimObject } from '../../utils/objectHelpers'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
 import UserDetailsCard from '../users/UserDetailsCard'
-import TeacherDetails from '../teachers/TeacherDetails'
 import TeacherForm from '../forms/TeacherForm'
-import { CollapseComponent } from '../common'
+import CommonLayout from './CommonLayout'
 
 const UserProfileView = ({
 	user,
@@ -27,7 +26,6 @@ const UserProfileView = ({
 	setProcessingForm }) => {
 
 	const [userData, setUserData] = useState(null)
-	const [teacherDataPresent, setTeacherDataPresent] = useState(true)
 	const unmounted = useRef(false)
 
 	useEffect(() => {
@@ -65,7 +63,8 @@ const UserProfileView = ({
 					}, 5)
 				})
 		} else if (userData && !userData.teacher) {
-			setTeacherDataPresent(false)
+			// setTeacherDataPresent(false)
+			// console.log('Invite user to fill teacher data')
 		}
 	}, [userData, getTeacherData, setNotification])
 
@@ -135,41 +134,34 @@ const UserProfileView = ({
 	}
 
 	return (
-		<Container className="py-2">
+		<CommonLayout>
 			{userData
-				? <Row>
-					<Col xs={12} md={7} className="pb-3">
-						<h4 className="text-center custom-font">Профіль</h4>
-						<UserDetailsCard mode="single" userData={userData}/>
-						<div>
-							{teacher
-								? <TeacherDetails />
-								: null
-							}
-						</div>
-					</Col>
-					<Col xs={12} md={5}>
-						<h4 className="text-center custom-font">
-							Ваші дані
-						</h4>
-						<CollapseComponent
-							title={teacherDataPresent ? 'Редагувати дані вчителя' : 'Заповніть дані вчителя'}
-							ariaControls="pupil-add-form-collapse"
-						>
-							{teacher
-								? <TeacherForm
-									processTeacherData={processTeacherData}
-									teacher={teacher}
-									mode={teacher ? 'edit' : 'create'}
-								/>
-								: <>Just a sec..</>
-							}
-						</CollapseComponent>
-					</Col>
-				</Row>
+				? <Tabs defaultActiveKey="teacher-profile" id="user-data-tabs">
+					<Tab eventKey="user-data" title="Ваші дані">
+						<Col className="pt-4">
+							<UserDetailsCard mode="single" userData={userData}/>
+						</Col>
+					</Tab>
+					<Tab eventKey="teacher-profile" title="Ваш профіль вчителя">
+						{teacher
+							? <Container className="py-3">
+								<Row className="d-flex justify-content-center">
+									<Col md={9}>
+										<TeacherForm
+											processTeacherData={processTeacherData}
+											teacher={teacher}
+											mode={teacher ? 'edit' : 'create'}
+										/>
+									</Col>
+								</Row>
+							</Container>
+							: <>Just a sec..</>
+						}
+					</Tab>
+				</Tabs>
 				: null
 			}
-		</Container>
+		</CommonLayout>
 	)
 }
 
@@ -194,4 +186,3 @@ export default connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(UserProfileView)
-

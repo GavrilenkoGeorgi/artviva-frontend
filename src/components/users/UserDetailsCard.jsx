@@ -44,7 +44,7 @@ const UserDetailsCard = ({
 	return (
 		<>
 			<Card className="mb-2" border={userData.superUser ? 'warning' : null}>
-				<Card.Header as="h6" className="text-secondary">
+				<Card.Header as="h4" className="serif-font">
 					<em>{userData.name} {userData.middlename} {userData.lastname}</em>
 				</Card.Header>
 				<Card.Body className="pb-1">
@@ -90,7 +90,7 @@ const UserDetailsCard = ({
 					/>
 				</Card.Body>
 			</Card>
-			{/* Teacher edit and delete modal */}
+			{/* User edit and delete modal */}
 			<Suspense fallback={
 				<LoadingIndicator
 					animation="border"

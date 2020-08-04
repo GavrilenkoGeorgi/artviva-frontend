@@ -18,7 +18,7 @@ import PropTypes from 'prop-types'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
-import { Container, Row, Col, Form, Button } from 'react-bootstrap'
+import { Row, Col, Form, Button } from 'react-bootstrap'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 import NumberInput from './components/NumberInput'
@@ -285,7 +285,7 @@ const TeacherForm = ({
 	})
 
 	return (
-		<Container>
+		<>
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
@@ -689,38 +689,39 @@ const TeacherForm = ({
 								errors={errors.employeeType}
 							/>
 
-							<Col md={6} className="d-flex align-items-end mt-3 mb-4">
-								<CheckBox
-									type="checkbox"
-									id={editMode
-										? `${teacher.id}-admin-employee-checkbox`
-										: 'admin-employee-checkbox'
-									}
-									label="Адміністрація"
-									name="isAdministration"
-									dataCy="admin-employee-checkbox"
-									onChange={handleChange}
-									onBlur={handleBlur}
-									disabled={partTimeEmployee}
-									checked={values.isAdministration}
-									value={values.isAdministration}
-									touched={touched.isAdministration}
-									errors={errors.isAdministration}
-								/>
-							</Col>
-						</Form.Row>
+							{user.superUser
+								? <Col xs={6} className="py-1">
+									<CheckBox
+										type="checkbox"
+										id={editMode
+											? `${teacher.id}-admin-employee-checkbox`
+											: 'admin-employee-checkbox'
+										}
+										label="Адміністрація"
+										name="isAdministration"
+										dataCy="admin-employee-checkbox"
+										onChange={handleChange}
+										onBlur={handleBlur}
+										disabled={partTimeEmployee}
+										checked={values.isAdministration}
+										value={values.isAdministration}
+										touched={touched.isAdministration}
+										errors={errors.isAdministration}
+									/>
+								</Col>
+								: null
+							}
 
-						<Form.Row>
-							<Col md={6} className="py-1">
+							<Col xs={6} className="py-1">
 								<CheckBox
 									type="checkbox"
 									id={editMode
-										? `${teacher.id}-senior-employee-checkbox`
-										: 'senior-employee-checkbox'
+										? `${teacher.id}-retired-employee-checkbox`
+										: 'retired-employee-checkbox'
 									}
 									label="Пенсионер"
 									name="isRetired"
-									dataCy="senior-employee-checkbox"
+									dataCy="retired-employee-checkbox"
 									onChange={handleChange}
 									onBlur={handleBlur}
 									checked={values.isRetired}
@@ -729,7 +730,8 @@ const TeacherForm = ({
 									errors={errors.isRetired}
 								/>
 							</Col>
-							<Col md={6} className="py-1">
+
+							<Col xs={6} className="py-1">
 								<CheckBox
 									type="checkbox"
 									id={editMode
@@ -807,7 +809,7 @@ const TeacherForm = ({
 				show={infoModalVis}
 				onHide={() => setInfoModalVis(!infoModalVis)}
 			/>
-		</Container>
+		</>
 	)
 }
 
