@@ -49,41 +49,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 		const { name: field, value } = target
 
 		value ? setFilterSettings({ ...filterSettings, [field]: value }) : setFilterSettings({ [field]: '' })
-
-		/*
-		switch (field) {
-		case 'teacher':
-		case 'specialty': {
-			if (value) {
-				setFilterSettings({ ...filterSettings, [field]: value })
-			}
-			else {
-				setFilterSettings({ [field]: '' })
-			}
-			break
-		}
-		case 'from':
-		case 'to': {
-			setFilterSettings({ ...filterSettings, [field]: value || 0 })
-			// setCurrentlyActiveFilter('range')
-			break
-		}
-		case 'isRetired':
-		case 'employeeIsAStudent': {
-			let statement
-			if (value) {
-				statement = JSON.parse(value)
-			} else {
-				statement = ''
-			}
-			setFilterSettings({ ...filterSettings, [field]: statement })
-			// setCurrentlyActiveFilter('booleans')
-			break
-		}
-		default: {
-			console.log('default case')
-		}
-		}*/
 	}
 
 	const sortData = useCallback(settings => {
@@ -107,7 +72,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 	}, [groups])
 
 	useEffect(() => {
-		console.log('Filter settings', filterSettings)
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
 			sortData(null)
 		} else {
@@ -130,9 +94,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 					</Col>
 
 					<Col xs={12} className="py-3">
-						{/*For example: to find out how many pupils are studiying one faculty,
-							enter a few letters from it's title and sort by it.
-							To add new pupil, use the form below.*/}
 						<section className="school-explained custom-font-small">
 							<p>
 								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}

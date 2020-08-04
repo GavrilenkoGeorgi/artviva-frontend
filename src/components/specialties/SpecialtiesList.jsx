@@ -1,22 +1,25 @@
-import React, { useEffect, useState, Suspense } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import specialtiesService from '../../services/specialties'
 import PropTypes from 'prop-types'
 
-import { Container, ListGroup, Row, Col } from 'react-bootstrap'
+import { ListGroup, Col } from 'react-bootstrap'
 import { CollapseComponent, LoadingIndicator } from '../common'
 import Specialty from './Specialty'
 
 const LazySpecialtyForm = React.lazy(() => import('../forms/SpecialtyForm'))
 
-const SpecialtiesList = ({ user, initializeSpecialties, specialties, setNotification }) => {
-
-	const [isLoading, setIsLoading] = useState(true)
+const SpecialtiesList = ({ user,
+	initializeSpecialties,
+	specialties,
+	setNotification,
+	setFetchingData }) => {
 
 	useEffect(() => {
 		if (user) {
+			setFetchingData(true)
 			specialtiesService.setToken(user.token)
 			initializeSpecialties()
 				.catch(error => {
@@ -26,65 +29,59 @@ const SpecialtiesList = ({ user, initializeSpecialties, specialties, setNotifica
 						variant: 'danger'
 					}, 5)
 				})
-				.finally(() => setIsLoading(false))
+				.finally(() => setFetchingData(false))
 		}
-	}, [user, initializeSpecialties, setNotification])
+	}, [user, initializeSpecialties, setNotification, setFetchingData])
 
 	return (
-		<Container>
-			<Row className="d-flex justify-content-center">
-				<Col md={10} xl={8}>
-					{isLoading
-						? <LoadingIndicator
-							animation="border"
-							variant="primary"
-						/>
-						: <>
-							<p className="py-3 text-muted">
-								Щоб створити спеціальність, вам потрібна така інформація:
-								<strong> назва спеціальності, вартість</strong>.
-								Додаткова інформація не є обов&apos;язковою.
-							</p>
+		<Col className="border1 border-primary">
+			{specialties.length
+				? <>
+					<p className="py-3 text-muted">
+						Щоб створити спеціальність, вам потрібна така інформація:
+						<strong> назва спеціальності, вартість</strong>.
+						Додаткова інформація не є обов&apos;язковою.
+					</p>
 
-							<CollapseComponent
-								title="Додати новій фах"
-								ariaControls="specialty-add-form-collapse"
+					<CollapseComponent
+						title="Додати новій фах"
+						ariaControls="specialty-add-form-collapse"
+					>
+						<Suspense
+							fallback={
+								<LoadingIndicator
+									animation="border"
+									variant="primary"
+								/>}>
+							<LazySpecialtyForm mode="create" />
+						</Suspense>
+					</CollapseComponent>
+
+					<p className="py-3 text-muted">
+						<em>Список усіх спеціальностей школи.</em>
+					</p>
+					<ListGroup>
+						{specialties.map((specialty, idx) =>
+							<ListGroup.Item
+								className="px-0 py-1"
+								key={specialty.id}
 							>
-								<Suspense
-									fallback={
-										<LoadingIndicator
-											animation="border"
-											variant="primary"
-										/>}>
-									<LazySpecialtyForm mode="create" />
-								</Suspense>
-							</CollapseComponent>
-
-							<p className="py-3 text-muted">
-								<em>Список усіх спеціальностей школи.</em>
-							</p>
-							<ListGroup>
-								{specialties.map(specialty =>
-									<ListGroup.Item
-										className="px-0 py-1"
-										key={specialty.id}
-									>
-										<Specialty specialty={specialty} />
-									</ListGroup.Item>
-								)}
-							</ListGroup>
-						</>
-					}
-				</Col>
-			</Row>
-		</Container>
+								<Specialty orderNumber={idx + 1} specialty={specialty} />
+							</ListGroup.Item>
+						)}
+					</ListGroup>
+				</>
+				: null
+			}
+		</Col>
 	)
 }
 
 SpecialtiesList.propTypes = {
 	user: PropTypes.object,
 	setNotification: PropTypes.func.isRequired,
-	initializeSpecialties: PropTypes.func.isRequired
+	initializeSpecialties: PropTypes.func.isRequired,
+	setFetchingData: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
@@ -96,7 +93,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
 	setNotification,
-	initializeSpecialties
+	initializeSpecialties,
+	setFetchingData
 }
 
 export default connect(

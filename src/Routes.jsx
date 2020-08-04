@@ -5,7 +5,6 @@ import './css/index.css'
 
 import SchoolClassDetails from './components/schoolClasses/SchoolClassDetails'
 import TeacherDetails from './components/teachers/TeacherDetails'
-import SpecialtiesList from './components/specialties/SpecialtiesList'
 import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
 
@@ -18,7 +17,7 @@ import { ScrollToTop, ScrollToTopArrow,
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
-	ShowcaseView, UserProfileView,
+	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
 	GroupsView, PupilsView, ListOfTeachers } from './components/views'
 
 const Routes = ({ user, fetchingData }) => {
@@ -63,6 +62,7 @@ const Routes = ({ user, fetchingData }) => {
 				path="/school"
 				component={() => <SchoolSectionsNav userData={userData} />}/>
 			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
+			<PrivateRoute path="/school/teacher/payments" exact component={TeacherPaymentsView} />
 			<PrivateRoute path="/school/groups" exact component={GroupsView} />
 			<PrivateRoute path="/school/groups/:id" exact component={SchoolClassDetails} />
 			<PrivateRoute path="/school/pupils" component={PupilsView} />
@@ -74,7 +74,7 @@ const Routes = ({ user, fetchingData }) => {
 						<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
 						<PrivateRoute path="/school/teachers" component={ListOfTeachers} />
 					</Switch>
-					<PrivateRoute path="/school/specialties" component={SpecialtiesList} />
+					<PrivateRoute path="/school/specialties" component={Specialties} />
 					<PrivateRoute path="/school/branches" component={BranchesList} />
 					<PrivateRoute path="/school/payments" component={Payments} />
 				</>

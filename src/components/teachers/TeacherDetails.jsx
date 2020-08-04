@@ -7,7 +7,6 @@ import 'moment-precise-range-plugin'
 import { nestedSort } from '../../utils/arrayHelpers'
 
 import { Container, Row, Col } from 'react-bootstrap'
-import TeacherPayments from './TeacherPayments'
 import TeacherInfo from './TeacherInfo'
 import { CollapseComponent } from '../common'
 
@@ -60,9 +59,6 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 		<>
 			{teacherDetails
 				? <Container>
-					<h4 className="py-4 text-center profile-user-name text-muted">
-						<em>{teacherDetails.name}</em>
-					</h4>
 					<Row>
 						{/* Details section */}
 						<Col xs={12} className="px-0">
@@ -73,18 +69,6 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 								<TeacherInfo
 									teacher={teacherDetails}
 									teacherExperience={teacherExperience}
-								/>
-							</CollapseComponent>
-						</Col>
-						{/* Payments section */}
-						<Col xs={12} className="px-0">
-							<CollapseComponent
-								title="Всі платежі"
-								ariaControls="payments-collapse"
-								isOpen
-							>
-								<TeacherPayments
-									payments={teacherDetails.payments}
 								/>
 							</CollapseComponent>
 						</Col>

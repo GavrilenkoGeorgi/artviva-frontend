@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import pupilsService from '../../services/pupils'
 
-import { ListGroup } from 'react-bootstrap'
+import { Container, Row, Col, ListGroup } from 'react-bootstrap'
 import Pupil from './Pupil'
 import LoadingIndicator from '../common/LoadingIndicator'
 
@@ -40,6 +40,16 @@ const PupilsList = ({
 			: (!docsPresent ? 'warning-background': null)
 	}
 
+	const quantity = length => {
+		return length === 0
+			? 'Ще не зачіслен до жодної'
+			: (length === 1)
+				? `${length} група`
+				: (length <= 4)
+					? `${length} групи`
+					: `${length} груп`
+	}
+
 	return (
 		<>
 			{isLoading
@@ -52,10 +62,31 @@ const PupilsList = ({
 						? <ListGroup>
 							{list.map((pupil, index) =>
 								<ListGroup.Item
-									className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
+									className={`p-0 ${checkPupilStatus(pupil)}`}
 									key={pupil.id}
 								>
-									<Pupil pupil={pupil} posInList={index + 1} />
+									<Container>
+										<Row className="pb-2">
+											<Col xs={12} className="px-0">
+												<Pupil pupil={pupil} posInList={index + 1} />
+											</Col>
+											<Col xs={12}>
+												<Row className="d-flex justify-content-around">
+													{pupil.schoolClasses.map(group =>
+														<Col xs={11} md={5} key={group.id} className="pupil-groups">
+															<em>{group.title}</em>
+														</Col>
+													)}
+												</Row>
+
+											</Col>
+											<Col xs={12} className="text-right">
+												<em className="text-muted">
+													{quantity(pupil.schoolClasses.length)}
+												</em>
+											</Col>
+										</Row>
+									</Container>
 								</ListGroup.Item>
 							)}
 						</ListGroup>
@@ -80,7 +111,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
 	setNotification
-	// initializePupils
 }
 
 export default connect(

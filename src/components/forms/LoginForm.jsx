@@ -34,12 +34,6 @@ const LoginForm = ({
 	useEffect(() => {
 		if (loginSuccessful) {
 			history.push('/school')
-			/*
-			if (user.superUser) {
-				history.push('/school/teachers')
-			} else {
-				history.push('/school/pupils')
-			}*/
 		}
 	}, [loginSuccessful, history, user])
 
@@ -86,7 +80,7 @@ const LoginForm = ({
 	}, [login, setNotification, setProcessingForm, clearRecaptchaScore])
 
 	useEffect(() => {
-		if (loginValues && reCaptchaScore >= .5) {
+		if (loginValues && reCaptchaScore >= .3) {
 			loginUser(loginValues)
 		}
 	}, [reCaptchaScore, loginValues, loginUser])
@@ -234,7 +228,7 @@ const LoginForm = ({
 									<BtnWithSpinner
 										type="submit"
 										loadingState={processingForm}
-										disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
+										disabled={reCaptchaScore !==null && reCaptchaScore < .3 ? true : false}
 										label="Логін"
 										variant="primary"
 										dataCy="login-btn"

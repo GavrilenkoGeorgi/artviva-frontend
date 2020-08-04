@@ -141,9 +141,6 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						</h4>
 					</Col>
 					<Col xs={12} className="pb-3">
-						{/*For example: to find out how many pupils are studiying one faculty,
-							enter a few letters from it's title and sort by it.
-							To add new pupil, use the form below.*/}
 						<section className="p-3 school-explained custom-font-small">
 							<p>
 								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}
