@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 import * as data from '../../data/teachers'
 import TeacherCard from '../teachers/TeacherCard'
 import Department from '../teachers/Department'
