@@ -4,7 +4,7 @@ import userService from '../../services/users'
 import loginService from '../../services/login'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../reducers/loginReducer'
-import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
+import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { trimObject } from '../../utils/objectHelpers'
 
@@ -23,6 +23,7 @@ const UserProfileView = ({
 	createTeacherData,
 	setNotification,
 	refreshUserData,
+	setFetchingData,
 	setProcessingForm }) => {
 
 	const [userData, setUserData] = useState(null)
@@ -54,6 +55,7 @@ const UserProfileView = ({
 
 	useEffect(() => {
 		if (userData && userData.teacher) {
+			setFetchingData(true)
 			getTeacherData(userData.teacher)
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -62,11 +64,9 @@ const UserProfileView = ({
 						variant: 'danger'
 					}, 5)
 				})
-		} else if (userData && !userData.teacher) {
-			// setTeacherDataPresent(false)
-			// console.log('Invite user to fill teacher data')
+				.finally(setFetchingData(false))
 		}
-	}, [userData, getTeacherData, setNotification])
+	}, [userData, getTeacherData, setNotification, setFetchingData])
 
 	const processTeacherData = async values => {
 		setProcessingForm(true)
@@ -136,7 +136,7 @@ const UserProfileView = ({
 	return (
 		<CommonLayout>
 			{userData
-				? <Tabs defaultActiveKey="teacher-profile" id="user-data-tabs">
+				? <Tabs defaultActiveKey="user-data" id="user-data-tabs">
 					<Tab eventKey="user-data" title="Ваші дані">
 						<Col className="pt-4">
 							<UserDetailsCard mode="single" userData={userData}/>
@@ -146,6 +146,12 @@ const UserProfileView = ({
 						{teacher
 							? <Container className="py-3">
 								<Row className="d-flex justify-content-center">
+									{!user.teacher
+										? <Col xs={12} className="py-3 text-center text-warning">
+											Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+										</Col>
+										: null
+									}
 									<Col md={9}>
 										<TeacherForm
 											processTeacherData={processTeacherData}
@@ -155,7 +161,9 @@ const UserProfileView = ({
 									</Col>
 								</Row>
 							</Container>
-							: <>Just a sec..</>
+							: <Col xs={12} className="py-3 text-center">
+								Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+							</Col>
 						}
 					</Tab>
 				</Tabs>
@@ -175,6 +183,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	setNotification,
 	setProcessingForm,
+	setFetchingData,
 	getTeacherData,
 	initializeSpecialties,
 	updateTeacherData,
