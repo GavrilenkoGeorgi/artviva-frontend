@@ -4,7 +4,7 @@ import { setNotification,
 	setRecaptchaScore, setProcessingForm } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { personalDataProcessing } from '../../data/formTexts.json'
+import { registrationDataProcessing } from '../../data/formTexts.json'
 
 import { Link } from 'react-router-dom'
 import { Col, Form, InputGroup, Button } from 'react-bootstrap'
@@ -347,7 +347,7 @@ const RegisterForm = ({
 			</Formik>
 			<InfoModal
 				title="Я погоджуюся з умовами використання сайту"
-				text={personalDataProcessing}
+				text={registrationDataProcessing}
 				centered
 				show={infoModalVis}
 				onHide={() => setInfoModalVis(!infoModalVis)}
