@@ -273,7 +273,6 @@ const PaymentForm = ({
 								type="text"
 								name="teacher"
 								list="teachers-list"
-								autoComplete="off"
 								data-cy="teacher-name-input"
 								onChange={handleChange}
 								onKeyUp={event => getTeachers(event.target.value)}

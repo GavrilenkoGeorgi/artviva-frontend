@@ -45,4 +45,19 @@ const getAll = async () => {
 	return response.data
 }
 
-export default { form, getAll, setToken }
+/**
+* Update payment description
+*
+* @returns {Object} - Response data
+*/
+
+const updateDescr = async (id, values) => {
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	const response = await axios.patch(`${baseUrl}/descr/${id}`, values, config)
+	return response.data
+}
+
+export default { form, getAll, updateDescr, setToken }
