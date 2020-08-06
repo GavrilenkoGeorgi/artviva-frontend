@@ -33,7 +33,7 @@ BtnWithIcon.propTypes = {
 	className: PropTypes.string,
 	variant: PropTypes.string.isRequired,
 	type: PropTypes.string.isRequired,
-	handleClick: PropTypes.func,
+	handleClick: PropTypes.func, //?
 	label: PropTypes.string.isRequired,
 	block: PropTypes.bool,
 	disabled: PropTypes.bool,

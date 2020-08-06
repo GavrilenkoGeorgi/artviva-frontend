@@ -71,10 +71,12 @@ const PupilsList = ({
 												<Pupil pupil={pupil} posInList={index + 1} />
 											</Col>
 											<Col xs={12}>
-												<Row className="d-flex justify-content-around">
+												<Row className="justify-content-around py-2">
 													{pupil.schoolClasses.map(group =>
-														<Col xs={11} md={5} key={group.id} className="pupil-groups">
-															<em>{group.title}</em>
+														<Col xs={11} md={5}
+															key={group.id} className="my-2 pupil-groups">
+															<p className="group-title">{group.title}</p>
+															<p className="group-teacher">{group.teacher.name}</p>
 														</Col>
 													)}
 												</Row>

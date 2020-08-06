@@ -4,7 +4,7 @@ import teachersService from '../../services/teachers'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 import { setFetchingData, setNotification } from '../../reducers/notificationReducer'
 
-import { Col } from 'react-bootstrap'
+import { Col, Tab, Tabs } from 'react-bootstrap'
 
 import CommonLayout from './CommonLayout'
 import TeacherPaymentsList from '../payments/TeacherPaymentsList'
@@ -16,7 +16,7 @@ const TeacherPaymentsView = ({
 	setNotification
 }) => {
 
-	const [teacherPayments, setTeacherPayments] = useState([])
+	const [paymentsByPupil, setPaymentsByPupil] = useState([])
 
 	useEffect(() => {
 		if (user) {
@@ -55,29 +55,45 @@ const TeacherPaymentsView = ({
 					}
 					return list
 				}, [])
-				setTeacherPayments([ ...result ])
+				setPaymentsByPupil([ ...result ])
 			}
 		}
 	}, [teacher])
 
 	return (
 		<CommonLayout>
-			<h3 className="custom-font text-center">
-				Список всіх ваших платежів
-			</h3>
-
-			{teacherPayments
-				? <Col>
-					<Col xs={12} className="text-right">
-						Total: {teacherPayments.length} payments <br/>
-					</Col>
-					<Col>
-						<TeacherPaymentsList payments={teacherPayments} />
-					</Col>
-				</Col>
-				: <Col>You ain&apos;t got any payments</Col>
-			}
-
+			<Tabs defaultActiveKey="payments-by-pupil" id="payments-tabs">
+				<Tab eventKey="payments-by-pupil" title="По учням">
+					{paymentsByPupil
+						? <Col>
+							<Col xs={12} className="text-right">
+								Всього: {paymentsByPupil.length} учні <br/>
+							</Col>
+							<Col>
+								<TeacherPaymentsList payments={paymentsByPupil} />
+							</Col>
+						</Col>
+						: <Col>Ви не маєте жодних платежів</Col>
+					}
+				</Tab>
+				<Tab eventKey="all-payments" title="Список всіх платежів">
+					{teacher.payments
+						? <Col>
+							<Col xs={12} className="text-right">
+								Всього: {teacher.payments.length} платежі <br/>
+							</Col>
+							<Col>
+								<TeacherPaymentsList
+									token={user.token}
+									teacherId={'teacher.id'}
+									payments={teacher.payments}
+								/>
+							</Col>
+						</Col>
+						: <Col>Ви не маєте жодних платежів</Col>
+					}
+				</Tab>
+			</Tabs>
 		</CommonLayout>
 	)
 }

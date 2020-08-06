@@ -333,7 +333,6 @@ nav
 	&.highlighted
 		border: 1px solid gren
 		background-color: $paid-month
-		// vertical-align: middle
 
 .payment-pupil-name
 	color: $primary-second
@@ -341,10 +340,14 @@ nav
 	border-bottom: .09rem solid $primary-second
 
 .pupil-groups
-	text-align: center
+	letter-spacing: .065rem
+	p
+		&:nth-child(1)
+			color: $primary-second
+			font-size: 1rem
+			font-weight: 500
 	color: $primary-second
 	font-size: 90%
-	margin: .3rem
 	padding: .4rem 1rem
 	border-radius: .7rem
 	@for $i from 1 through 5
