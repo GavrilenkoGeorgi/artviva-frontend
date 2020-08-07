@@ -47,8 +47,8 @@ const PupilForm = ({
 	const [infoModalText, setInfoModalText] = useState({})
 	const [infoModalTitle, setInfoModalTitle] = useState('')
 	const genders = ['Чоловіча', 'Жіноча']
-	const classNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
+	const classNumbers = ['Дошкільник', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'Студент']
+	const artClassNumbers = [1, 2, 3, 4]
 	const benefits = [50, 100] // %
 
 	// set auth token and mode
@@ -304,10 +304,9 @@ const PupilForm = ({
 			.min(3, 'Не менш 3 символів.')
 			.max(255, 'Максимум 255 символів.')
 			.required('Введіть основну адресу школи.'),
-		mainSchoolClass: Yup.number()
-			.min(1, 'Введіть поточний клас.')
-			.max(11)
-			.required('Введіть поточний клас.'),
+		mainSchoolClass: Yup.string()
+			.oneOf(classNumbers, 'Виберіть поточний клас.')
+			.required('Виберіть поточний клас.'),
 		gender: Yup.string()
 			.oneOf(genders, 'Виберіть стать.')
 			.required('Виберіть стать своєї дитини.'),

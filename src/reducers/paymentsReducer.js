@@ -3,7 +3,7 @@ import paymentService from '../services/payment'
 const paymentsReducer = (state = [], action) => {
 	switch (action.type) {
 	case 'INIT_PAYMENTS':
-		return action.data
+		return action.data.reverse()
 	case 'UPDATE_PAYMENT_DESCR': {
 		return state.map(payment =>
 			payment.paymentDescr.id !== action.data.id

@@ -6,7 +6,7 @@ import paymentService from '../../services/payment'
 import { updatePaymentDescr } from '../../reducers/paymentsReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 
-import { Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import { BtnWithIcon } from '../common/buttons' // fix this btn
 import { LoadingIndicator } from '../common'
 import { PaymentDescrForm } from '../forms'
@@ -58,7 +58,7 @@ const TeacherPaymentsList = ({
 				setProcessingForm(false)
 				setEditModalShow(false)
 			})
-		getTeacherData(id)
+		if (teacher.id) getTeacherData(id)
 	}
 
 	const timeStamp = date => {
@@ -68,47 +68,56 @@ const TeacherPaymentsList = ({
 
 	return <>
 		{payments.map(payment => (
-			<Row key={payment.id} className="my-4 border1 rounded">
-				{/* Title */}
-				<Col xs={10} className="px-0 py-2">
-					<h4 className="d-inline1 custom-font payment-pupil-name">
-						{payment.paymentDescr.pupil} {payment.amount} грн
-					</h4>
-				</Col>
-				{/* Edit button */}
-				<Col xs={2} className="border1 d-flex align-items-center justify-content-center">
-					<BtnWithIcon
-						variant="outline-success"
-						type="button"
-						icon="edit"
-						label="edit"
-						onClick={() => handlePayment(payment)}
-					/>
-				</Col>
-				{/* Timestamp */}
-				<Col xs={12} className="pb-2">
-					<h5 className="small"><em className="text-muted1">
-						{timeStamp(payment.create_date)}
-					</em></h5>
-				</Col>
-				{/* Specialty */}
-				<Col xs={12} className="pb-2">
-					<h6 className="text-muted">
-						{payment.paymentDescr.specialty}
-					</h6>
-				</Col>
-				{/* Months */}
-				{schoolYear.map(month =>
-					<Col key={month}
-						xs={4}
-						sm={3}
-						className="m-0 p-0 border1">
-						<p className={`paid-month ${payment.paymentDescr.months.includes(month) ? 'highlighted' : ''}`}>
-							{month}
+			<Container key={payment.id}>
+				<Row className="my-4 border1 rounded">
+					{/* Title */}
+					<Col xs={10} className="px-0 py-2">
+						<h4 className="d-inline1 custom-font payment-pupil-name">
+							{payment.paymentDescr.pupil} {payment.amount} грн
+						</h4>
+					</Col>
+					{/* Edit button */}
+					<Col xs={2} className="border1 d-flex align-items-center justify-content-center">
+						<BtnWithIcon
+							variant="outline-success"
+							type="button"
+							icon="edit"
+							label="edit"
+							onClick={() => handlePayment(payment)}
+						/>
+					</Col>
+					{/* Timestamp */}
+					<Col xs={12} className="pb-2">
+						<h5 className="small"><em>
+							{timeStamp(payment.create_date)}
+						</em></h5>
+					</Col>
+					{/* Specialty */}
+					<Col xs={12} className="pb-2">
+						<h5 className="text-muted">
+							{payment.paymentDescr.specialty}
+						</h5>
+					</Col>
+					{/* Original payment description */}
+					<Col xs={12} className="py-2 px-3">
+						<p className="original-payment-description">
+							{payment.description}
 						</p>
 					</Col>
-				)}
-			</Row>
+					{/* Months */}
+					{schoolYear.map(month =>
+						<Col key={month}
+							xs={4}
+							sm={3}
+							className="m-0 p-0">
+							{/*eslint-disable-next-line*/}
+							<p className={`paid-month ${payment.paymentDescr.months.includes(month) ? 'highlighted' : ''}`}>
+								{month}
+							</p>
+						</Col>
+					)}
+				</Row>
+			</Container>
 		))}
 		{/* Description edit and delete modal */}
 		<Suspense fallback={

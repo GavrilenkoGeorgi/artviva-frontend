@@ -10,8 +10,6 @@ import ResetBtn from './buttons/Reset'
 
 const PaymentDescrForm = ({ payment, update, processing }) => {
 
-	console.log('Processing', processing)
-
 	const paymentDescrSchema = Yup.object().shape({
 		pupil: Yup.string()
 			.min(2, 'Не менш 2 символів.')
