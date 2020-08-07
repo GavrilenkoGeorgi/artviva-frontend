@@ -8,7 +8,6 @@ import { nestedSort } from '../../utils/arrayHelpers'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import TeacherInfo from './TeacherInfo'
-import { CollapseComponent } from '../common'
 
 const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 
@@ -62,15 +61,10 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 					<Row>
 						{/* Details section */}
 						<Col xs={12} className="px-0">
-							<CollapseComponent
-								title="Детальна інформація про вчителя"
-								ariaControls="teacher-info-collapse"
-							>
-								<TeacherInfo
-									teacher={teacherDetails}
-									teacherExperience={teacherExperience}
-								/>
-							</CollapseComponent>
+							<TeacherInfo
+								teacher={teacherDetails}
+								teacherExperience={teacherExperience}
+							/>
 						</Col>
 					</Row>
 				</Container>

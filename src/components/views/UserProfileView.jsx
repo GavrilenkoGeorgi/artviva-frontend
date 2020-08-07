@@ -12,6 +12,7 @@ import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
 import UserDetailsCard from '../users/UserDetailsCard'
 import TeacherForm from '../forms/TeacherForm'
 import CommonLayout from './CommonLayout'
+import TeacherDetails from '../teachers/TeacherDetails'
 
 const UserProfileView = ({
 	user,
@@ -136,13 +137,13 @@ const UserProfileView = ({
 	return (
 		<CommonLayout>
 			{userData
-				? <Tabs defaultActiveKey="user-data" id="user-data-tabs">
-					<Tab eventKey="user-data" title="Ваші дані">
+				? <Tabs defaultActiveKey="user-account" id="user-data-tabs">
+					<Tab eventKey="user-account" title="Ваш аккаунт">
 						<Col className="pt-4">
 							<UserDetailsCard mode="single" userData={userData}/>
 						</Col>
 					</Tab>
-					<Tab eventKey="teacher-profile" title="Ваш профіль вчителя">
+					<Tab eventKey="teacher-profile" title="Редагувати профіль вчителя">
 						{teacher
 							? <Container className="py-3">
 								<Row className="d-flex justify-content-center">
@@ -165,6 +166,11 @@ const UserProfileView = ({
 								Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
 							</Col>
 						}
+					</Tab>
+					<Tab eventKey="user-data" title="Ваші дані">
+						<Col className="pt-4">
+							<TeacherDetails teacher/>
+						</Col>
 					</Tab>
 				</Tabs>
 				: null

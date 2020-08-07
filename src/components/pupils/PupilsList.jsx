@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import pupilsService from '../../services/pupils'
 
+import { Link } from 'react-router-dom'
 import { Container, Row, Col, ListGroup } from 'react-bootstrap'
 import Pupil from './Pupil'
 import LoadingIndicator from '../common/LoadingIndicator'
@@ -11,13 +12,15 @@ const PupilsList = ({
 	user,
 	list,
 	getPupils,
+	fetchingData,
+	setFetchingData,
 	setNotification }) => {
 
-	const [isLoading, setIsLoading] = useState(true)
 	const componentIsMounted = useRef(true)
 
 	useEffect(() => {
 		if (user) {
+			setFetchingData(true)
 			pupilsService.setToken(user.token)
 			getPupils(user.id)
 				.catch(error => {
@@ -28,10 +31,10 @@ const PupilsList = ({
 					}, 5)
 				})
 				.finally(() => {
-					if (componentIsMounted.current) setIsLoading(false)
+					if (componentIsMounted.current) setFetchingData(false)
 				})
 		}
-	}, [user, getPupils, setNotification])
+	}, [user, getPupils, setNotification, setFetchingData])
 
 	const checkPupilStatus = pupil => {
 		const { currentlyEnrolled, docsPresent } = pupil
@@ -52,7 +55,7 @@ const PupilsList = ({
 
 	return (
 		<>
-			{isLoading
+			{fetchingData
 				? <LoadingIndicator
 					animation="border"
 					variant="primary"
@@ -75,7 +78,9 @@ const PupilsList = ({
 													{pupil.schoolClasses.map(group =>
 														<Col xs={11} md={5}
 															key={group.id} className="my-2 pupil-groups">
-															<p className="group-title">{group.title}</p>
+															<Link to={`/school/groups/${group.id}`}>
+																<p className="group-title">{group.title}</p>
+															</Link>
 															<p className="group-teacher">{group.teacher.name}</p>
 														</Col>
 													)}
@@ -107,11 +112,13 @@ const PupilsList = ({
 const mapStateToProps = (state) => {
 	return {
 		pupils: state.pupils,
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
+	setFetchingData,
 	setNotification
 }
 

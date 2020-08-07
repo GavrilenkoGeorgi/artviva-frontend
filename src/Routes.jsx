@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './css/index.css'
 
-import SchoolClassDetails from './components/schoolClasses/SchoolClassDetails'
+import GroupDetails from './components/schoolClasses/GroupDetails'
 import TeacherDetails from './components/teachers/TeacherDetails'
 import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
@@ -64,7 +64,7 @@ const Routes = ({ user, fetchingData }) => {
 			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
 			<PrivateRoute path="/school/teacher/payments" exact component={TeacherPaymentsView} />
 			<PrivateRoute path="/school/groups" exact component={GroupsView} />
-			<PrivateRoute path="/school/groups/:id" exact component={SchoolClassDetails} />
+			<PrivateRoute path="/school/groups/:id" exact component={GroupDetails} />
 			<PrivateRoute path="/school/pupils" component={PupilsView} />
 			{superUser
 				? <>
