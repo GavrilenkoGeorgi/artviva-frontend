@@ -27,6 +27,16 @@ const getAll = async () => {
 }
 
 /**
+ * Get list of all specialties with current prices
+ *
+ * @returns {Object} - Response data
+ */
+const getPrices = async () => {
+	const response = await axios.get(`${baseUrl}/prices`)
+	return response.data
+}
+
+/**
  * Create new specialty
  * @param {Object} payload - New specialty data
  * @param {string} payload.title - Unique specialty title
@@ -77,4 +87,4 @@ const update = async (id, payload) => {
 	return request.then(response => response.data)
 }
 
-export default { getAll, setToken, create, deleteById, update }
+export default { getAll, setToken, create, deleteById, update, getPrices }

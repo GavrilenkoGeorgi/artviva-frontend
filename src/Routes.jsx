@@ -18,7 +18,7 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
-	GroupsView, PupilsView, ListOfTeachers } from './components/views'
+	GroupsView, PupilsView, ListOfTeachers, PricesView } from './components/views'
 
 const Routes = ({ user, fetchingData }) => {
 
@@ -80,7 +80,8 @@ const Routes = ({ user, fetchingData }) => {
 				</>
 				: null
 			}
-			<Route path="/pay/:status" component={PaymentView} />
+			<Route path="/prices" exact component={PricesView} />
+			<Route path="/pay/:status" exact component={PaymentView} />
 			<Route path="/activate/:email/:uuid" exact component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" exact component={PassResetView} />
 			<Footer />
