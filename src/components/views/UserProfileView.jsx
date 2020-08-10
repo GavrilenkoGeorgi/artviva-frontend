@@ -138,12 +138,12 @@ const UserProfileView = ({
 		<CommonLayout>
 			{userData
 				? <Tabs defaultActiveKey="user-account" id="user-data-tabs">
-					<Tab eventKey="user-account" title="Ваш аккаунт">
+					<Tab eventKey="user-account" title="Аккаунт">
 						<Col className="pt-4">
 							<UserDetailsCard mode="single" userData={userData}/>
 						</Col>
 					</Tab>
-					<Tab eventKey="teacher-profile" title="Редагувати профіль вчителя">
+					<Tab eventKey="teacher-profile" title="Профіль">
 						{teacher
 							? <Container className="py-3">
 								<Row className="d-flex justify-content-center">
