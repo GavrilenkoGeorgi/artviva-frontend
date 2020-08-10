@@ -110,10 +110,13 @@ const TeacherPaymentsList = ({
 							xs={4}
 							sm={3}
 							className="m-0 p-0">
-							{/*eslint-disable-next-line*/}
-							<p className={`paid-month ${payment.paymentDescr.months.includes(month) ? 'highlighted' : ''}`}>
-								{month}
-							</p>
+							{payment.paymentDescr.months.length
+								? <p // eslint-disable-next-line
+									className={`paid-month ${payment.paymentDescr.months.includes(month) ? 'highlighted' : ''}`}>
+									{month}
+								</p>
+								: <>..months here..</>
+							}
 						</Col>
 					)}
 				</Row>

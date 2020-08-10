@@ -49,11 +49,12 @@ const PaymentsList = ({
 
 	const filter = ({ target }) => {
 		const { name, value } = target
-		const result = payments
-			.filter(payment => payment.paymentDescr[name]
-				.toUpperCase()
-				.includes(value.toUpperCase()))
-		setPaymentsData([...result])
+		console.log('Filter includes', name, value)
+		if (name && value) {
+			// eslint-disable-next-line
+			const result = payments.filter(payment => payment.paymentDescr[name].toUpperCase().includes(value.toUpperCase()))
+			setPaymentsData([...result])
+		}
 	}
 
 	return (

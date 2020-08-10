@@ -116,6 +116,7 @@ const NavigationBar = ({ user }) => {
 					<Nav className="ml-auto">
 						<NavDropdown title="Школа" id="school-mgmt-links" className="school-mgmt-links">
 							<NavDropdown.Item href="/pay/form">Оплата</NavDropdown.Item>
+							<NavDropdown.Item href="/prices">Ціни</NavDropdown.Item>
 							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							{user
 								? <>

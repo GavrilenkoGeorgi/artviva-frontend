@@ -48,7 +48,7 @@ const PupilForm = ({
 	const [infoModalTitle, setInfoModalTitle] = useState('')
 	const genders = ['Чоловіча', 'Жіноча']
 	const classNumbers = ['Дошкільник', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'Студент']
-	const artClassNumbers = [1, 2, 3, 4]
+	const artClassNumbers = [1, 2, 3, 4, 5, 6, 7, 8]
 	const benefits = [50, 100] // %
 
 	// set auth token and mode
