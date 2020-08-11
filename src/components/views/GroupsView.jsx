@@ -183,11 +183,11 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 							size="md"
 						/>}>
 						<LazyEntityEditModal
-							subject="Додати нового вчителя"
+							subject="Додати нову групу"
 							show={addModalShow}
 							onHide={() => setAddModalShow(false)}
 						>
-							<GroupForm mode='create' />
+							<GroupForm mode='create' closeModal={() => setAddModalShow(false)}/>
 						</LazyEntityEditModal>
 					</Suspense>
 				</Row>

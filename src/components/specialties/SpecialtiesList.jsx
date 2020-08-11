@@ -38,26 +38,6 @@ const SpecialtiesList = ({ user,
 			{specialties.length
 				? <>
 					<p className="py-3 text-muted">
-						Щоб створити спеціальність, вам потрібна така інформація:
-						<strong> назва спеціальності, вартість</strong>.
-						Додаткова інформація не є обов&apos;язковою.
-					</p>
-
-					<CollapseComponent
-						title="Додати новій фах"
-						ariaControls="specialty-add-form-collapse"
-					>
-						<Suspense
-							fallback={
-								<LoadingIndicator
-									animation="border"
-									variant="primary"
-								/>}>
-							<LazySpecialtyForm mode="create" />
-						</Suspense>
-					</CollapseComponent>
-
-					<p className="py-3 text-muted">
 						<em>Список усіх спеціальностей школи.</em>
 					</p>
 					<ListGroup>
@@ -71,8 +51,29 @@ const SpecialtiesList = ({ user,
 						)}
 					</ListGroup>
 				</>
-				: null
+				: <p className="text-warning">
+					Схоже, у вас ще немає спеціальностей у вашій школі, будь ласка, створіть їх.
+				</p>
 			}
+			<p className="py-3 text-muted">
+				Щоб створити спеціальність, вам потрібна така інформація:
+				<strong> назва спеціальності, вартість</strong>.
+				Додаткова інформація не є обов&apos;язковою.
+			</p>
+
+			<CollapseComponent
+				title="Додати новій фах"
+				ariaControls="specialty-add-form-collapse"
+			>
+				<Suspense
+					fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+						/>}>
+					<LazySpecialtyForm mode="create" />
+				</Suspense>
+			</CollapseComponent>
 		</Col>
 	)
 }

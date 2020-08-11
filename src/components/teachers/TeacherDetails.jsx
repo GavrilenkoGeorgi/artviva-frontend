@@ -68,7 +68,9 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 						</Col>
 					</Row>
 				</Container>
-				: null
+				: <p className="text-warning">
+						Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+				</p>
 			}
 		</>
 	)

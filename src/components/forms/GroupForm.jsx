@@ -33,7 +33,6 @@ const GroupForm = ({
 		if (mode === 'edit') {
 			setEditMode(true)
 		}
-		console.log(group)
 	// eslint-disable-next-line
 	}, [])
 
@@ -123,7 +122,7 @@ const GroupForm = ({
 		if (values.pupils.length === 0) {
 			setPupilError(true)
 			return
-		}
+		} else values.pupils = [...new Set(values.pupils)]
 		// if current form mode is edit or create..
 		editMode
 			? existingSchoolClass(trimObject(values))
@@ -138,6 +137,7 @@ const GroupForm = ({
 					variant: 'success'
 				}, 5)
 				resetForm()
+				closeModal()
 			})
 			.catch(error => {
 				if (error.response) {
@@ -168,7 +168,7 @@ const GroupForm = ({
 					message: 'Зміни успішно збережено.',
 					variant: 'success'
 				}, 5)
-				if (closeModal) closeModal()
+				closeModal()
 			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
@@ -504,7 +504,7 @@ GroupForm.propTypes = {
 	createSchoolClass: PropTypes.func.isRequired,
 	updateSchoolClass: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit']).isRequired,
-	closeModal: PropTypes.func
+	closeModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => {
