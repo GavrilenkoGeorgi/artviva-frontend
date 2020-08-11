@@ -124,6 +124,7 @@ const PupilForm = ({
 				}, 5)
 				setProcessingForm(false)
 				resetForm()
+				closeModal()
 				history.push('/apply/success')
 			})
 			.catch(error => {
@@ -150,6 +151,7 @@ const PupilForm = ({
 					variant: 'success'
 				}, 5)
 				resetForm()
+				closeModal()
 			})
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
@@ -871,7 +873,7 @@ PupilForm.propTypes = {
 	createPupil: PropTypes.func.isRequired,
 	updatePupil: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit', 'public']).isRequired,
-	closeModal: PropTypes.func
+	closeModal: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state) => {
