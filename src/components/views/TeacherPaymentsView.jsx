@@ -19,7 +19,7 @@ const TeacherPaymentsView = ({
 	const [paymentsByPupil, setPaymentsByPupil] = useState([])
 
 	useEffect(() => {
-		if (user) {
+		if (user && user.teacher) {
 			setFetchingData(true)
 			teachersService.setToken(user.token)
 			getTeacherData(user.teacher)
@@ -64,7 +64,7 @@ const TeacherPaymentsView = ({
 		<CommonLayout>
 			<Tabs defaultActiveKey="payments-by-pupil" id="payments-tabs">
 				<Tab eventKey="payments-by-pupil" title="По учням">
-					{paymentsByPupil
+					{paymentsByPupil.length
 						? <Col>
 							<Col xs={12} className="text-right">
 								Всього: {paymentsByPupil.length} учні <br/>
@@ -73,7 +73,9 @@ const TeacherPaymentsView = ({
 								<TeacherPaymentsList payments={paymentsByPupil} />
 							</Col>
 						</Col>
-						: <Col>Ви не маєте жодних платежів</Col>
+						: <Col className="school-explained-section">
+							<p>Ви ще маєте жодного учня</p>
+						</Col>
 					}
 				</Tab>
 				<Tab eventKey="all-payments" title="Список всіх платежів">
@@ -90,7 +92,7 @@ const TeacherPaymentsView = ({
 								/>
 							</Col>
 						</Col>
-						: <Col>Ви не маєте жодних платежів</Col>
+						: <Col className="school-explained-section"><p>Ви ще маєте жодного платежу</p></Col>
 					}
 				</Tab>
 			</Tabs>
