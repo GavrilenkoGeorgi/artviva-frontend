@@ -8,7 +8,7 @@ const pupilsReducer = (state = [], action) => {
 	case 'DELETE_PUPIL':
 		return state.filter(pupil => pupil.id !== action.data)
 	case 'INIT_PUPILS':
-		return action.data
+		return action.data.reverse()
 	case 'UPDATE_PUPIL': {
 		const updatedPupil = action.data
 		return state.map(pupil =>

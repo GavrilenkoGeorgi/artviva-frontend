@@ -6,7 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap'
 const Payment = ({ payment }) => {
 
 	return (
-		<Container>
+		<Container className="border">
 			<Row className="d-flex align-items-center">
 				<Col xs={4}>
 					<small>
@@ -40,6 +40,5 @@ const Payment = ({ payment }) => {
 		</Container>
 	)
 }
-
 
 export default Payment

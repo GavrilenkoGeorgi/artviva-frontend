@@ -3,7 +3,7 @@ import userService from '../services/users'
 const usersReducer = (state = null, action) => {
 	switch (action.type) {
 	case 'GET_USERS_LIST':
-		return action.data
+		return action.data.reverse()
 	case 'UPDATE_USER_DETAILS': {
 		return state.map(user =>
 			user.id !== action.data.id ? user : action.data

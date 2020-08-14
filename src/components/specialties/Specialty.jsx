@@ -15,7 +15,7 @@ import EntityControlButtons from '../common/EntityControlButtons'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const Specialty = ({ user, specialty, deleteSpecialty, setNotification }) => {
+const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotification }) => {
 
 	const [open, setOpen] = useState(false)
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
@@ -71,12 +71,19 @@ const Specialty = ({ user, specialty, deleteSpecialty, setNotification }) => {
 				aria-controls="specialty-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center"
+				className="d-flex justify-content-between text-left align-items-center1"
 			>
-				<span>
-					{specialty.title}
-				</span>
-				{ open
+				<Row className="border1 border-success">
+					<Col xs={12}>{orderNumber}. {specialty.title}</Col>
+					<Col xs={12}>
+						<em className="text-muted">
+							<small>
+								{specialty.teachers.length} вчителів та {specialty.schoolClasses.length} групи
+							</small>
+						</em>
+					</Col>
+				</Row>
+				{open
 					? <FontAwesomeIcon icon={faAngleUp} />
 					: <FontAwesomeIcon icon={faAngleDown} />
 				}
@@ -85,9 +92,8 @@ const Specialty = ({ user, specialty, deleteSpecialty, setNotification }) => {
 				<Container fluid className="text-left">
 					<Row>
 						<Col>
-							<p>Назва: {specialty.title}</p>
 							<p>Вартість: {specialty.cost} грн</p>
-							<p>Інфо: {specialty.info}</p>
+							{specialty.info ? <p>Інфо: {specialty.info}</p> : null}
 						</Col>
 					</Row>
 

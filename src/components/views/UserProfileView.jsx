@@ -4,15 +4,15 @@ import userService from '../../services/users'
 import loginService from '../../services/login'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../reducers/loginReducer'
-import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
+import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { trimObject } from '../../utils/objectHelpers'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
 import UserDetailsCard from '../users/UserDetailsCard'
-import TeacherDetails from '../teachers/TeacherDetails'
 import TeacherForm from '../forms/TeacherForm'
-import { CollapseComponent } from '../common'
+import CommonLayout from './CommonLayout'
+import TeacherDetails from '../teachers/TeacherDetails'
 
 const UserProfileView = ({
 	user,
@@ -24,10 +24,10 @@ const UserProfileView = ({
 	createTeacherData,
 	setNotification,
 	refreshUserData,
+	setFetchingData,
 	setProcessingForm }) => {
 
 	const [userData, setUserData] = useState(null)
-	const [teacherDataPresent, setTeacherDataPresent] = useState(true)
 	const unmounted = useRef(false)
 
 	useEffect(() => {
@@ -56,6 +56,7 @@ const UserProfileView = ({
 
 	useEffect(() => {
 		if (userData && userData.teacher) {
+			setFetchingData(true)
 			getTeacherData(userData.teacher)
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -64,10 +65,9 @@ const UserProfileView = ({
 						variant: 'danger'
 					}, 5)
 				})
-		} else if (userData && !userData.teacher) {
-			setTeacherDataPresent(false)
+				.finally(setFetchingData(false))
 		}
-	}, [userData, getTeacherData, setNotification])
+	}, [userData, getTeacherData, setNotification, setFetchingData])
 
 	const processTeacherData = async values => {
 		setProcessingForm(true)
@@ -135,41 +135,47 @@ const UserProfileView = ({
 	}
 
 	return (
-		<Container className="py-2">
+		<CommonLayout>
 			{userData
-				? <Row>
-					<Col xs={12} md={7} className="pb-3">
-						<h4 className="text-center custom-font">Профіль</h4>
-						<UserDetailsCard mode="single" userData={userData}/>
-						<div>
-							{teacher
-								? <TeacherDetails />
-								: null
-							}
-						</div>
-					</Col>
-					<Col xs={12} md={5}>
-						<h4 className="text-center custom-font">
-							Ваші дані
-						</h4>
-						<CollapseComponent
-							title={teacherDataPresent ? 'Редагувати дані вчителя' : 'Заповніть дані вчителя'}
-							ariaControls="pupil-add-form-collapse"
-						>
-							{teacher
-								? <TeacherForm
-									processTeacherData={processTeacherData}
-									teacher={teacher}
-									mode={teacher ? 'edit' : 'create'}
-								/>
-								: <>Just a sec..</>
-							}
-						</CollapseComponent>
-					</Col>
-				</Row>
+				? <Tabs defaultActiveKey="user-account" id="user-data-tabs">
+					<Tab eventKey="user-account" title="Аккаунт">
+						<Col className="pt-4">
+							<UserDetailsCard mode="single" userData={userData}/>
+						</Col>
+					</Tab>
+					<Tab eventKey="teacher-profile" title="Профіль">
+						{teacher
+							? <Container className="py-3">
+								<Row className="d-flex justify-content-center">
+									{!user.teacher
+										? <Col xs={12} className="py-3 text-center text-warning">
+											Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+										</Col>
+										: null
+									}
+									<Col md={9}>
+										<TeacherForm
+											processTeacherData={processTeacherData}
+											teacher={teacher}
+											mode={teacher ? 'edit' : 'create'}
+										/>
+									</Col>
+								</Row>
+							</Container>
+							: <Col xs={12} className="py-3 text-center">
+								Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+							</Col>
+						}
+					</Tab>
+					<Tab eventKey="user-data" title="Ваші дані">
+						<Col className="pt-4">
+							<TeacherDetails teacher/>
+						</Col>
+					</Tab>
+				</Tabs>
 				: null
 			}
-		</Container>
+		</CommonLayout>
 	)
 }
 
@@ -183,6 +189,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	setNotification,
 	setProcessingForm,
+	setFetchingData,
 	getTeacherData,
 	initializeSpecialties,
 	updateTeacherData,
@@ -194,4 +201,3 @@ export default connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(UserProfileView)
-

@@ -65,7 +65,7 @@
 		{
 			"field": "maritalStatus",
 			"label": "Сімейний стан",
-			"choices": ["Одружений", "Не одружений"]
+			"choices": ["Одружений", "Не одружений", "Вдівець/Вдова"]
 		},
 		{
 			"field": "scienceDegree",

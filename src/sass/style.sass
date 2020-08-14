@@ -322,3 +322,39 @@ nav
 	color: $lightGrey
 	option
 		color: black
+
+.paid-month
+	border-radius: .5rem
+	// border: 1px solid pink
+	margin: .2rem
+	padding: .4rem 0rem
+	text-align: center
+	text-transform: capitalize
+	&.highlighted
+		border: 1px solid gren
+		background-color: $paid-month
+
+.payment-pupil-name
+	color: $primary-second
+	padding-bottom: .1rem
+	border-bottom: .09rem solid $primary-second
+
+.pupil-groups
+	letter-spacing: .065rem
+	p
+		&:nth-child(1)
+			color: $primary-second
+			font-size: 1rem
+			font-weight: 500
+	color: $primary-second
+	font-size: 90%
+	padding: .4rem 1rem
+	border-radius: .7rem
+	@for $i from 1 through 5
+		&:nth-child(#{$i})
+			background-color: color.adjust($top-ten-color, $hue: $i * 50%)
+
+.original-payment-description
+	// color: pink
+
+// .group-pupils-list
