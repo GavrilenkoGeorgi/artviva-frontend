@@ -33,20 +33,4 @@ const GroupsList = ({ groups }) => {
 	)
 }
 
-/*
-const mapStateToProps = state => {
-	return {
-		schoolClasses: state.schoolClasses
-	}
-}
-
-const mapDispatchToProps = {
-	setNotification
-}
-
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(SchoolClassesList)
-*/
 export default GroupsList

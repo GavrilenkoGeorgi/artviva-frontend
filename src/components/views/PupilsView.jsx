@@ -23,7 +23,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const [userData, setUser] = useState({})
 	const [pupilsList, setPupils] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
-	const [editModalShow, setEditModalShow] = useState(false)
+	const [addModalShow, setAddModalShow] = useState(false)
 
 	useEffect(() => {
 		if (user) setUser(user)
@@ -141,9 +141,6 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						</h4>
 					</Col>
 					<Col xs={12} className="pb-3">
-						{/*For example: to find out how many pupils are studiying one faculty,
-							enter a few letters from it's title and sort by it.
-							To add new pupil, use the form below.*/}
 						<section className="p-3 school-explained custom-font-small">
 							<p>
 								Наприклад: щоб дізнатись, скільки студентів навчається на одному факультеті,{' '}
@@ -195,7 +192,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 										block
 										dataCy="add-new-pupil"
 										label="Додати нового"
-										onClick={() => setEditModalShow(true)}
+										onClick={() => setAddModalShow(true)}
 									/>
 								</Col>
 								<Col xs={6}>
@@ -228,10 +225,10 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						/>}>
 						<LazyEntityEditModal
 							subject="Додати нового учня"
-							show={editModalShow}
-							onHide={() => setEditModalShow(false)}
+							show={addModalShow}
+							onHide={() => setAddModalShow(false)}
 						>
-							<PupilForm mode="create" />
+							<PupilForm mode="create" closeModal={() => setAddModalShow(false)}/>
 						</LazyEntityEditModal>
 					</Suspense>
 				</Row>

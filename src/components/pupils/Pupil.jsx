@@ -24,7 +24,7 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 	const [editModalShow, setEditModalShow] = useState(false)
 	const [isDeleting, setIsDeleting] = useState(false)
 	const unmounted = useRef(false)
-	const cardStyle = 'mb-3'
+	const cardStyle = 'my-3'
 
 	// set auth token
 	useEffect(() => {
@@ -55,15 +55,6 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 			})
 	}
 
-	const pupilTitleInfo = pupil => {
-		return `${pupil.name}: ${pupil.specialty
-			? pupil.specialty.title
-			: null}
-			${pupil.artSchoolClass
-		? pupil.artSchoolClass
-		: null } клас`
-	}
-
 	return (
 		<>
 			<Button
@@ -75,9 +66,9 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 				className="d-flex justify-content-between align-items-center"
 			>
 				<span className="text-left">
-					{posInList}. {pupilTitleInfo(pupil)}
+					{posInList}. {pupil.name} <em className="text-muted">{pupil.artSchoolClass} клас</em>
 				</span>
-				{ open
+				{open
 					? <FontAwesomeIcon icon={faAngleUp} />
 					: <FontAwesomeIcon icon={faAngleDown} />
 				}

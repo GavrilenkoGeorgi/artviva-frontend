@@ -44,8 +44,9 @@ const PaymentForm = ({
 	useEffect(() => {
 		specialtyService.getAll()
 			.then(data => {
-				setSpecialtiesData(data)
-				setSpecialtiesNames(data.map(specialty => specialty.title))
+				const list = data.filter(spec => spec.cost > 1)
+				setSpecialtiesData(list)
+				setSpecialtiesNames(list.map(specialty => specialty.title))
 			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
@@ -273,7 +274,6 @@ const PaymentForm = ({
 								type="text"
 								name="teacher"
 								list="teachers-list"
-								autoComplete="off"
 								data-cy="teacher-name-input"
 								onChange={handleChange}
 								onKeyUp={event => getTeachers(event.target.value)}

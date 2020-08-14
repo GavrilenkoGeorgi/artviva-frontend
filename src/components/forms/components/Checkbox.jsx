@@ -8,7 +8,7 @@ const CheckBox = props => {
 	return (
 		<Form.Check
 			custom
-			className="py-3" // where does this belong?
+			className="py-2" // where does this belong?
 			isValid={touched && !props.errors}
 			isInvalid={touched && !!props.errors}
 			data-cy={dataCy}

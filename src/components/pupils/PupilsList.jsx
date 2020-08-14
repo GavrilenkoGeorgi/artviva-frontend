@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import pupilsService from '../../services/pupils'
 
-import { ListGroup } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { Container, Row, Col, ListGroup } from 'react-bootstrap'
 import Pupil from './Pupil'
 import LoadingIndicator from '../common/LoadingIndicator'
 
@@ -11,13 +12,15 @@ const PupilsList = ({
 	user,
 	list,
 	getPupils,
+	fetchingData,
+	setFetchingData,
 	setNotification }) => {
 
-	const [isLoading, setIsLoading] = useState(true)
 	const componentIsMounted = useRef(true)
 
 	useEffect(() => {
 		if (user) {
+			setFetchingData(true)
 			pupilsService.setToken(user.token)
 			getPupils(user.id)
 				.catch(error => {
@@ -28,10 +31,10 @@ const PupilsList = ({
 					}, 5)
 				})
 				.finally(() => {
-					if (componentIsMounted.current) setIsLoading(false)
+					if (componentIsMounted.current) setFetchingData(false)
 				})
 		}
-	}, [user, getPupils, setNotification])
+	}, [user, getPupils, setNotification, setFetchingData])
 
 	const checkPupilStatus = pupil => {
 		const { currentlyEnrolled, docsPresent } = pupil
@@ -40,9 +43,19 @@ const PupilsList = ({
 			: (!docsPresent ? 'warning-background': null)
 	}
 
+	const quantity = length => {
+		return length === 0
+			? 'Ще не зачіслен до жодної'
+			: (length === 1)
+				? `${length} група`
+				: (length <= 4)
+					? `${length} групи`
+					: `${length} груп`
+	}
+
 	return (
 		<>
-			{isLoading
+			{fetchingData
 				? <LoadingIndicator
 					animation="border"
 					variant="primary"
@@ -52,10 +65,35 @@ const PupilsList = ({
 						? <ListGroup>
 							{list.map((pupil, index) =>
 								<ListGroup.Item
-									className={`px-0 py-1 ${checkPupilStatus(pupil)}`}
+									className={`p-0 ${checkPupilStatus(pupil)}`}
 									key={pupil.id}
 								>
-									<Pupil pupil={pupil} posInList={index + 1} />
+									<Container>
+										<Row className="pb-2">
+											<Col xs={12} className="px-0">
+												<Pupil pupil={pupil} posInList={index + 1} />
+											</Col>
+											<Col xs={12}>
+												<Row className="justify-content-around py-2">
+													{pupil.schoolClasses.map(group =>
+														<Col xs={11} md={5}
+															key={group.id} className="my-2 pupil-groups">
+															<Link to={`/school/groups/${group.id}`}>
+																<p className="group-title">{group.title}</p>
+															</Link>
+															<p className="group-teacher">{group.teacher.name}</p>
+														</Col>
+													)}
+												</Row>
+
+											</Col>
+											<Col xs={12} className="text-right">
+												<em className="text-muted">
+													{quantity(pupil.schoolClasses.length)}
+												</em>
+											</Col>
+										</Row>
+									</Container>
 								</ListGroup.Item>
 							)}
 						</ListGroup>
@@ -74,13 +112,14 @@ const PupilsList = ({
 const mapStateToProps = (state) => {
 	return {
 		pupils: state.pupils,
-		user: state.user
+		user: state.user,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
+	setFetchingData,
 	setNotification
-	// initializePupils
 }
 
 export default connect(
