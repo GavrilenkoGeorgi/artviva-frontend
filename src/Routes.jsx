@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import './css/index.css'
 
 import GroupDetails from './components/schoolClasses/GroupDetails'
 import TeacherDetails from './components/teachers/TeacherDetails'
