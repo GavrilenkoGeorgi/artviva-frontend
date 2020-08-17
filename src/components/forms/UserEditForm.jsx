@@ -34,6 +34,8 @@ const UserEditForm = ({
 		}, 5)
 	}
 
+	console.log('user data', userData)
+
 	const errorNotification = useCallback((error, setErrors) => {
 		const { message, cause } = { ...error.response.data }
 		setNotification({
@@ -46,7 +48,9 @@ const UserEditForm = ({
 	useEffect(() => {
 		if (user && userData.teacher) {
 			searchService.setToken(user.token)
-			searchService.teacherNameById(userData.teacher.id)
+			// fix this
+			const id = typeof userData.teacher === 'string' ? userData.teacher : userData.teacher.id
+			searchService.teacherNameById(id)
 				.then(({ name }) => {
 					setCurrentTeacher(name)
 				}).catch(error => {
