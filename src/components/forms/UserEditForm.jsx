@@ -34,8 +34,6 @@ const UserEditForm = ({
 		}, 5)
 	}
 
-	console.log('user data', userData)
-
 	const errorNotification = useCallback((error, setErrors) => {
 		const { message, cause } = { ...error.response.data }
 		setNotification({

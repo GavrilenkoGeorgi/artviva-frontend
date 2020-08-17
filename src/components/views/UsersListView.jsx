@@ -5,9 +5,9 @@ import { setNotification } from '../../reducers/notificationReducer'
 import { getUsersList } from '../../reducers/userReducer'
 import userService from '../../services/users'
 
-import { Container, Row, Col } from 'react-bootstrap'
 import LoadingIndicator from '../common/LoadingIndicator'
 import UserDetailsCard from '../users/UserDetailsCard'
+import CommonLayout from './CommonLayout'
 
 const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 
@@ -39,29 +39,28 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 	}, [user, getUsersList, setNotification])
 
 	return (
-		<Container>
-			<Row className="py-3 justify-content-center">
-				<Col sm={10} lg={8}>
-					{isLoading
-						? <LoadingIndicator
-							animation="border"
-							variant="primary"
-						/>
-						: <>
-							{user.superUser
-								? <>{users.map(user => <UserDetailsCard key={user.id} userData={user} />)}</>
-								: <Redirect
-									to={{
-										pathname: '/school/overview',
-										state: { from: location }
-									}}
-								/>
-							}
+		<CommonLayout>
+			{isLoading
+				? <LoadingIndicator
+					animation="border"
+					variant="primary"
+				/>
+				: <>
+					{user.superUser
+						? <>
+							<h4 className="custom-font text-center">Всі користувачі</h4>
+							{users.map(user => <UserDetailsCard key={user.id} userData={user} />)}
 						</>
+						: <Redirect
+							to={{
+								pathname: '/school/overview',
+								state: { from: location }
+							}}
+						/>
 					}
-				</Col>
-			</Row>
-		</Container>
+				</>
+			}
+		</CommonLayout>
 	)
 }
 

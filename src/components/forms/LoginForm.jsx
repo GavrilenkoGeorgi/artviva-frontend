@@ -232,7 +232,7 @@ const LoginForm = ({
 										label="Вхід"
 										variant="primary"
 										dataCy="login-btn"
-										className="primary-color-shadow px-5"
+										className="max-width-btn primary-color-shadow px-5"
 									/>
 								</Form.Group>
 							</Form.Row>

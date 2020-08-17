@@ -256,8 +256,6 @@ nav
 	width: 100%
 	position: absolute
 
-// .payment-description-container:nth-child(even)
-
 .payment-date
 	font-size: .75rem
 
@@ -325,7 +323,6 @@ nav
 
 .paid-month
 	border-radius: .5rem
-	// border: 1px solid pink
 	margin: .2rem
 	padding: .4rem 0rem
 	text-align: center
@@ -354,7 +351,24 @@ nav
 		&:nth-child(#{$i})
 			background-color: color.adjust($top-ten-color, $hue: $i * 50%)
 
-.original-payment-description
-	// color: pink
+.user-details-email
+	color: $primary-color
+	border-bottom: .1rem solid $primary-color
+	margin-bottom: 1rem
 
-// .group-pupils-list
+	.user-detail-name
+	font-family: $serif-font
+	font-size: 140%
+
+.user-details-info
+	div
+		margin: .4rem 0rem
+	.user-card-timestap
+		color: $lightGrey
+		font-size: 80%
+		margin: 0rem
+	.user-state-detail
+		margin: 0rem
+
+.user-details-highlight
+	background-color: $warn

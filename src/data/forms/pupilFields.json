@@ -42,7 +42,7 @@
 		{
 			"field": "currentlyEnrolled",
 			"label": "Навчається?",
-			"choices": ["Не навчаются", "Сейчас навчаются"]
+			"choices": ["Не навчаються", "Зараз навчаються"]
 		},
 		{
 			"field": "graduated",

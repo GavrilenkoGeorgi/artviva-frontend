@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 
 const PaymentDescr = ({ data, dates } ) => {
 
-	const paymentDate = moment(data.create_date)
+	const paymentDate = moment(data.create_date).locale('uk')
 	let schoolYear = ''
 
 	if (paymentDate.isBetween(dates.startOfSchoolYear, dates.endOfSchoolYear)) {
