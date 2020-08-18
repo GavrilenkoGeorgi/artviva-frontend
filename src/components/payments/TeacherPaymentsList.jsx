@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import 'moment/locale/uk'
 
 import paymentService from '../../services/payment'
 import { updatePaymentDescr } from '../../reducers/paymentsReducer'
@@ -62,7 +63,7 @@ const TeacherPaymentsList = ({
 	}
 
 	const timeStamp = date => {
-		const result = moment(date).format('LLLL')
+		const result = moment(date).locale('uk').format('LLLL')
 		return <>{result}</>
 	}
 

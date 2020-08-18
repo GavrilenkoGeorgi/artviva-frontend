@@ -46,7 +46,9 @@ const UserEditForm = ({
 	useEffect(() => {
 		if (user && userData.teacher) {
 			searchService.setToken(user.token)
-			searchService.teacherNameById(userData.teacher)
+			// fix this
+			const id = typeof userData.teacher === 'string' ? userData.teacher : userData.teacher.id
+			searchService.teacherNameById(id)
 				.then(({ name }) => {
 					setCurrentTeacher(name)
 				}).catch(error => {

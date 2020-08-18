@@ -122,7 +122,7 @@ const NavigationBar = ({ user }) => {
 								? <>
 									<NavDropdown.Divider />
 									<NavDropdown.Item href="/school">
-											Кабинет
+										Вчительська
 									</NavDropdown.Item>
 									<NavDropdown.Item href={`/school/users/${user.id}`}>
 										<span className="nav-list-icon">
@@ -137,7 +137,7 @@ const NavigationBar = ({ user }) => {
 								: <>
 									<NavDropdown.Item href="/register">Реєстрація</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/login" className="text-right">Логін</NavDropdown.Item>
+									<NavDropdown.Item href="/login" className="text-right">Вхід</NavDropdown.Item>
 								</>
 							}
 						</NavDropdown>

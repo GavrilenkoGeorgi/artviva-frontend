@@ -229,10 +229,10 @@ const LoginForm = ({
 										type="submit"
 										loadingState={processingForm}
 										disabled={reCaptchaScore !==null && reCaptchaScore < .3 ? true : false}
-										label="Логін"
+										label="Вхід"
 										variant="primary"
 										dataCy="login-btn"
-										className="primary-color-shadow px-5"
+										className="max-width-btn primary-color-shadow px-5"
 									/>
 								</Form.Group>
 							</Form.Row>

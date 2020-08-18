@@ -73,13 +73,13 @@ const TeacherPaymentsView = ({
 								<TeacherPaymentsList payments={paymentsByPupil} />
 							</Col>
 						</Col>
-						: <Col className="school-explained-section">
-							<p>Ви ще маєте жодного учня</p>
+						: <Col className="school-explained-section text-center">
+							<p>Ви ще маєте жодного платежу</p>
 						</Col>
 					}
 				</Tab>
 				<Tab eventKey="all-payments" title="Список всіх платежів">
-					{teacher.payments
+					{teacher.payments && teacher.payments.length > 0
 						? <Col>
 							<Col xs={12} className="text-right">
 								Всього: {teacher.payments.length} платежі <br/>
@@ -92,7 +92,9 @@ const TeacherPaymentsView = ({
 								/>
 							</Col>
 						</Col>
-						: <Col className="school-explained-section"><p>Ви ще маєте жодного платежу</p></Col>
+						: <Col className="school-explained-section text-center">
+							<p>Ви ще маєте жодного платежу</p>
+						</Col>
 					}
 				</Tab>
 			</Tabs>
