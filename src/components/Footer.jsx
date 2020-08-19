@@ -17,57 +17,69 @@ const Footer = () => {
 
 	const paymentIconsStyle = {
 		maxWidth: '2.3em',
-		margin: '0em .5em'
+		margin: '0rem .5rem'
 	}
 
+	// don't show footer inside certain routes
+	const path = /\/(school+)/
+	if (window.location.pathname.match(path)) return null
+
 	return (
-		<footer className="footer">
-			<Container>
-				<Row className="pt-4 pt-md-5 border1 border-success">
-					<Col className="text-center d-flex align-items-center">
-						<div style={{ width: '100%' }}>
-							<VisaIcon style={paymentIconsStyle} />
-							<MasterCardIcon style={paymentIconsStyle} />
-						</div>
-					</Col>
-
-					<Col className="icons-column text-center">
-						<a
-							href="https://www.facebook.com/myz.shpytky"
-							alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"
-							aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
-						>
-							<FbIcon style={socialIconsStyle} />
-						</a>
-						<a
-							href="https://www.instagram.com/myz_shputky"
-							alt="Інстаграм Шпитьківської Дитячої Школи Мистецтв"
-							aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
-						>
-							<InstIcon style={socialIconsStyle} />
-						</a>
-					</Col>
-				</Row>
-
-				<Row className="py-2 pt-lg-3">
+		<footer className="footer d-flex align-items-center">
+			<Container className="border1 border-primary">
+				<Row className="border1">
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
-						<Row className="text-muted">
-							<Col xs={12}>
-								<strong>
-									&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva.
-								</strong>
+						<Row className="text-muted1">
+							<Col xs={12} className="pb-2">
+								<p className="mb-2">+38 (050) 963-54-38</p>
+								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
+								<em className="text-muted">
+									08122, Київська обл., Києво-Святошинський район, с. Шпитьки, вул. Господарська, 3
+								</em>
+
 							</Col>
-							<Col>
-								<small>
-									{/* eslint-disable-next-line */}
-									Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
-									</a>
-								</small>
+
+							<Col className="py-3 d-flex justify-content-around">
+								<a href="https://artviva.school" >Політика конфіденційності</a>
+								<a href="https://artviva.school" >Публічна оферта</a>
 							</Col>
 						</Row>
 					</Col>
-					<Col xs={12} md={6} className="py-1">
+					<Col xs={12} md={6} className="py-1 border1">
+						<small>
+							{/* eslint-disable-next-line */}
+							Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
+							</a>
+						</small>
 						<ReCaptchaStatement />
+						<Row>
+							<Col>
+								<VisaIcon style={paymentIconsStyle} />
+								<MasterCardIcon style={paymentIconsStyle} />
+							</Col>
+							<Col className="text-right">
+								<a
+									href="https://www.facebook.com/myz.shpytky"
+									alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"
+									aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
+								>
+									<FbIcon style={socialIconsStyle} />
+								</a>
+								<a
+									href="https://www.instagram.com/myz_shputky"
+									alt="Інстаграм Шпитьківської Дитячої Школи Мистецтв"
+									aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
+								>
+									<InstIcon style={socialIconsStyle} />
+								</a>
+							</Col>
+						</Row>
+					</Col>
+
+					<Col xs={12} className="pt-3 border1 border-danger text-center text-muted">
+						<span>
+							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva.
+						</span>
 					</Col>
 				</Row>
 			</Container>
