@@ -13,13 +13,21 @@
 	],
 	"range": [
 		{
-		"field": "from",
-		"label": "від"
+			"field": "from",
+			"label": "Стаж від"
 		},
 		{
 			"field": "to",
-			"label": "до"
-		}
+			"label": "Стаж до"
+		},
+		{
+			"field": "ageFrom",
+			"label": "Вік від"
+			},
+			{
+			"field": "ageTo",
+			"label": "Вік до"
+			}
 	],
 	"select": [
 		{

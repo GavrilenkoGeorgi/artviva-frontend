@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { Form, ListGroup, Container, Row, Col } from 'react-bootstrap'
 import { initializeTeachers, setTeacherExp } from '../../reducers/teachersReducer'
@@ -12,11 +13,12 @@ import { calcEmployeeExperience } from '../../utils/datesAndTime'
 import { filter, select, boolean, range } from '../../data/forms/teacherFields.json'
 import { Teacher, AddTeacher } from '../teachers'
 import { ShowFilterSettings, FilterData, ExperienceSort,
-	SelectFields, FilterBooleanFields } from '../sorting'
+	SelectFields, FilterBooleanFields, AgeFilter } from '../sorting'
 import Reset from '../forms/buttons/Reset'
 import { Button } from '../common/buttons'
 import { LoadingIndicator } from '../common'
 import CommonLayout from './CommonLayout'
+import { CollapseComponent } from '../common'
 
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
@@ -92,6 +94,17 @@ const ListOfTeachers = ({ teachers,
 			item.experience.years <= to)
 	}, [])
 
+	const sortByAge = useCallback((age, data) => {
+
+		const from = parseInt(age.ageFrom)
+		const to = parseInt(age.ageTo) || 99
+
+		return data.filter(item => {
+			const age = moment().diff(item.dateOfBirth, 'years')
+			return age >= from && age <= to
+		})
+	}, [])
+
 	const changeFilterSetting = (event) => {
 		event.preventDefault()
 		const { target } = event
@@ -106,6 +119,8 @@ const ListOfTeachers = ({ teachers,
 			}
 			break
 		}
+		case 'ageFrom':
+		case 'ageTo':
 		case 'from':
 		case 'to': {
 			setFilterSettings({ ...filterSettings, [field]: value || 0 })
@@ -130,14 +145,14 @@ const ListOfTeachers = ({ teachers,
 
 	const selectData = useCallback((arrayOfStuff) => {
 		// eslint-disable-next-line
-		const { name, from, to, ...filterData } = filterSettings
+		const { name, ageFrom, ageTo, from, to, ...filterData } = filterSettings
 		return multiPropsFilter(arrayOfStuff, filterData)
 	}, [filterSettings])
 
 	const sortData = useCallback((settings) => {
 		let result = teachers
 		if (settings) {
-			const { name, from, to, isRetired, employeeIsAStudent } = settings
+			const { name, ageFrom, ageTo, from, to, isRetired, employeeIsAStudent } = settings
 
 			if (name && name.length > 0) {
 				result = result.filter(item => item.name.toUpperCase().includes(settings.name.toUpperCase()))
@@ -151,21 +166,29 @@ const ListOfTeachers = ({ teachers,
 				result = sortByExperienceRange(range, result)
 			}
 
+			if (ageFrom || ageTo) {
+				const age = {
+					ageFrom: ageFrom || 0,
+					ageTo: ageTo || 0
+				}
+				result = sortByAge(age, result)
+			}
+
 			const boolFilter =
 			(typeof isRetired === 'boolean' && typeof employeeIsAStudent === 'boolean')
 				? { isRetired, employeeIsAStudent } :
 				(typeof isRetired === 'boolean') ? { isRetired } :
 					(typeof employeeIsAStudent === 'boolean') ? { employeeIsAStudent } : false
 
-
 			if (boolFilter) {
 				result = boolPropsFilter(result, boolFilter)
 			}
+
 			setTeacherList([ ...selectData(result) ])
 		} else {
 			setTeacherList([ ...teachers ])
 		}
-	}, [sortByExperienceRange, selectData, teachers])
+	}, [sortByExperienceRange, sortByAge, selectData, teachers])
 
 	useEffect(() => {
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
@@ -197,12 +220,18 @@ const ListOfTeachers = ({ teachers,
 					</Col>
 					<Form onReset={() => setFilterSettings({})}>
 						<Col xs={12}>
-							<Row>
+							<Row  className="justify-content-center1">
 								{/* Filter by name chars */}
 								<FilterData
 									filter={changeFilterSetting}
 									fieldName="name"
 									placeholder="Прізвище вчителя"
+								/>
+							</Row>
+							<Row>
+								<AgeFilter
+									filter={changeFilterSetting}
+									values={filterSettings}
 								/>
 								{/* Select by experience range */}
 								<ExperienceSort
@@ -210,6 +239,7 @@ const ListOfTeachers = ({ teachers,
 								/>
 							</Row>
 						</Col>
+
 						{/* Select by boolean fields */}
 						<Col xs={12} className="my-2">
 							<FilterBooleanFields
@@ -217,12 +247,19 @@ const ListOfTeachers = ({ teachers,
 								filter={changeFilterSetting}
 							/>
 						</Col>
-						{/* Select by field */}
-						<Col xs={12} className="py-2 mb-3">
-							<SelectFields
-								selectBy={select}
-								filter={changeFilterSetting}
-							/>
+						<Col xs={12} className="p2-4">
+							<CollapseComponent
+								title="Більше фільтрів"
+								ariaControls="specialty-add-form-collapse"
+							>
+								{/* Select by field */}
+								<Col xs={12} className="py-2 mb-3">
+									<SelectFields
+										selectBy={select}
+										filter={changeFilterSetting}
+									/>
+								</Col>
+							</CollapseComponent>
 						</Col>
 						{/* Buttons */}
 						<Col xs={12} className="my-3">
