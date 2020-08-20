@@ -1,11 +1,15 @@
 ## Frontend for [artviva.school](https://artviva.school) Шпитьківська дитяча школа мистецтв
 
-![Heroku](https://heroku-badge.herokuapp.com/?app=artviva)
+[![jest-tests Actions Status](https://github.com/GavrilenkoGeorgi/artviva-frontend/workflows/jest-tests/badge.svg)](https://github.com/GavrilenkoGeorgi/artviva-frontend/actions)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/87644f91-b3d0-4a87-ac7a-eaecb6e39c5f/deploy-status)](https://app.netlify.com/sites/artviva/deploys)
 
-Work in progress. Current progress deployed on heroku: [artviva.herokuapp.com](https://artviva.herokuapp.com)
-
 ### React, Redux, Redux Thunk, React router, Axios, Cypress, ESLint
+
+Form validaton is done with Formik and Yup
+
+Uses reCaptcha v3
+
+live @ https://artviva.school
 
 ### Build Setup
 
