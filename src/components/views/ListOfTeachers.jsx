@@ -218,72 +218,79 @@ const ListOfTeachers = ({ teachers,
 							</p>
 						</section>
 					</Col>
-					<Form onReset={() => setFilterSettings({})}>
-						<Col xs={12}>
-							<Row  className="justify-content-center1">
+
+					<Col className="px-0">
+						<Form onReset={() => setFilterSettings({})}>
+
+							<Col xs={12} className="px-0">
 								{/* Filter by name chars */}
 								<FilterData
 									filter={changeFilterSetting}
 									fieldName="name"
 									placeholder="Прізвище вчителя"
 								/>
-							</Row>
-							<Row>
-								<AgeFilter
-									filter={changeFilterSetting}
-									values={filterSettings}
-								/>
-								{/* Select by experience range */}
-								<ExperienceSort
-									filter={changeFilterSetting}
-								/>
-							</Row>
-						</Col>
+							</Col>
 
-						{/* Select by boolean fields */}
-						<Col xs={12} className="my-2">
-							<FilterBooleanFields
-								selectBy={boolean}
-								filter={changeFilterSetting}
-							/>
-						</Col>
-						<Col xs={12} className="p2-4">
-							<CollapseComponent
-								title="Більше фільтрів"
-								ariaControls="specialty-add-form-collapse"
-							>
-								{/* Select by field */}
-								<Col xs={12} className="py-2 mb-3">
-									<SelectFields
-										selectBy={select}
-										filter={changeFilterSetting}
-									/>
-								</Col>
-							</CollapseComponent>
-						</Col>
-						{/* Buttons */}
-						<Col xs={12} className="my-3">
-							<Row>
-								<Col xs={6}>
-									<Button
-										block
-										dataCy="add-new-pupil"
-										label="Додати нового"
-										onClick={() => setAddModalShow(true)}
-									/>
-								</Col>
-								<Col xs={6}>
-									<Reset
-										label="Показати всіх"
-										block
-										variant="outline-success"
-										dataCy="filter-reset-btn"
-										disabled={pureObjectIsEmpty(filterSettings)}
-									/>
-								</Col>
-							</Row>
-						</Col>
-					</Form>
+							<Col xs={12} className="pt-2">
+								<CollapseComponent
+									title="Більше фільтрів"
+									ariaControls="specialty-add-form-collapse"
+								>
+									<>
+										<Row>
+											<AgeFilter
+												filter={changeFilterSetting}
+												values={filterSettings}
+											/>
+											{/* Select by experience range */}
+											<ExperienceSort
+												filter={changeFilterSetting}
+											/>
+										</Row>
+
+										{/* Select by boolean fields */}
+										<Col xs={12} className="my-2">
+											<FilterBooleanFields
+												selectBy={boolean}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+
+										{/* Select by field */}
+										<Col xs={12} className="py-2 mb-3">
+											<SelectFields
+												selectBy={select}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+									</>
+								</CollapseComponent>
+							</Col>
+
+							{/* Buttons */}
+							<Col xs={12} className="my-3">
+								<Row>
+									<Col xs={6}>
+										<Button
+											block
+											dataCy="add-new-pupil"
+											label="Додати нового"
+											onClick={() => setAddModalShow(true)}
+										/>
+									</Col>
+									<Col xs={6}>
+										<Reset
+											label="Показати всіх"
+											block
+											variant="outline-success"
+											dataCy="filter-reset-btn"
+											disabled={pureObjectIsEmpty(filterSettings)}
+										/>
+									</Col>
+								</Row>
+							</Col>
+						</Form>
+					</Col>
 					{/* Current filter settings display */}
 					<Col xs={12}>
 						<ShowFilterSettings
