@@ -13,7 +13,7 @@ const ShowFilterSettings = ({ labels, settings }) => {
 				if (typeof value === 'boolean') {
 					value = value ? 'Так' : 'Ні'
 				}
-				currentFilterSettings.push({ label, value })
+				currentFilterSettings.push({ key, label, value })
 			}
 			setSettingsToShow([ ...currentFilterSettings ])
 		}
@@ -24,7 +24,7 @@ const ShowFilterSettings = ({ labels, settings }) => {
 			{settingsToShow.length
 				? <Row className="mx-1">
 					{settingsToShow.map(setting =>
-						<p key={setting.label} className="p-1 border1">
+						<p key={setting.key} className="p-1">
 							<em className="text-muted">{setting.label}</em> <strong>{setting.value}</strong>{' '}
 						</p>
 					)}

@@ -7,7 +7,7 @@ import TeacherDetails from './components/teachers/TeacherDetails'
 import BranchesList from './components/branches/BranchesList'
 import Payments from './components/payments/Payments'
 
-import { PrivateRoute, Notification, MainPage, Footer } from './components'
+import { PrivateRoute, Notification, MainPage } from './components'
 import { LoadingIndicator } from './components/common'
 
 import { ScrollToTop, ScrollToTopArrow,
@@ -83,7 +83,6 @@ const Routes = ({ user, fetchingData }) => {
 			<Route path="/pay/:status" exact component={PaymentView} />
 			<Route path="/activate/:email/:uuid" exact component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" exact component={PassResetView} />
-			<Footer />
 			<ScrollToTopArrow />
 		</Router>
 	)
