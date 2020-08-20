@@ -13,13 +13,21 @@
 	],
 	"range": [
 		{
-		"field": "from",
-		"label": "від"
+			"field": "from",
+			"label": "Стаж від"
 		},
 		{
 			"field": "to",
-			"label": "до"
-		}
+			"label": "Стаж до"
+		},
+		{
+			"field": "ageFrom",
+			"label": "Вік від"
+			},
+			{
+			"field": "ageTo",
+			"label": "Вік до"
+			}
 	],
 	"select": [
 		{
@@ -40,7 +48,7 @@
 		{
 			"field": "educationDegree",
 			"label": "Освітньо-кваліфікаційний рівень",
-			"choices": ["Магистр", "Спеціаліст", "Бакалавр", "Молодший спеціаліст"]
+			"choices": ["Магістр", "Спеціаліст", "Бакалавр", "Молодший спеціаліст"]
 		},
 		{
 			"field": "category",
@@ -65,7 +73,7 @@
 		{
 			"field": "maritalStatus",
 			"label": "Сімейний стан",
-			"choices": ["Одружений", "Не одружений"]
+			"choices": ["Одружений", "Не одружений", "Вдівець/Вдова"]
 		},
 		{
 			"field": "scienceDegree",
@@ -76,8 +84,8 @@
 	"boolean": [
 		{
 			"field": "isRetired",
-			"label": "Пенсионер?",
-			"choices": ["Не пенсионер", "На пенсии"]
+			"label": "Пенсіонер?",
+			"choices": ["Не пенсіонер", "На пенсії"]
 		},
 		{
 			"field": "employeeIsAStudent",

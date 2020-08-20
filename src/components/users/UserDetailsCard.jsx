@@ -3,8 +3,10 @@ import { connect } from 'react-redux'
 import userService from '../../services/users'
 import { deleteUser } from '../../reducers/userReducer'
 import { setNotification,	setProcessingForm } from '../../reducers/notificationReducer'
+import PropTypes from 'prop-types'
+import moment from 'moment'
 
-import { Card } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap'
 import Emoji from '../common/Emoji'
 import EntityControlButtons from '../common/EntityControlButtons'
 import LoadingIndicator from '../common/LoadingIndicator'
@@ -42,55 +44,100 @@ const UserDetailsCard = ({
 	}
 
 	return (
-		<>
-			<Card className="mb-2" border={userData.superUser ? 'warning' : null}>
-				<Card.Header as="h6" className="text-secondary">
-					<em>{userData.name} {userData.middlename} {userData.lastname}</em>
-				</Card.Header>
-				<Card.Body className="pb-1">
-					<Card.Text>
-						<Emoji label="E-Mail" emoji={'📧'} /> <a href={`mailto:${userData.email}`}>{userData.email}</a>
-					</Card.Text>
-					<Card.Text>
+		<Container className="">
+			<Row className="user-details-card py-4">
+				<Col xs={12} className={`user-details-email ${userData.superUser ? 'user-details-highlight' : ''}`}>
+					{userData.superUser
+						?	<Emoji label="Shield" emoji={'🛡️'}/>
+						: null
+					}
+					<span>{userData.email}</span>
+				</Col>
+				<Col xs={12} sm={4} className="user-detail-name">
+					{userData.name} {userData.middlename} {userData.lastname}
+				</Col>
+				<Col xs={12} sm={8}>
+					<Row className="user-details-info">
 						{userData.superUser
-							? <>
+							? <Col xs={12} className="user-state-detail">
 								<Emoji label="Key" emoji={'🔑'} />
 								Користувач &mdash; завуч
-							</>
+							</Col>
 							: null
 						}
-					</Card.Text>
-					<Card.Text>
-						{userData.isActive
-							? <>
-								<Emoji label="Check Mark" emoji={'✔️'} />
-								Обліковий запис активовано
-							</>
-							: <>
-								<Emoji label="Cross Mark" emoji={'❌'} />
-								<span className="text-warning">Обліковий не запис активовано</span>
-							</>
+
+						<Col xs={12} className="user-state-detail">
+							{userData.isActive
+								? <>
+									<Emoji label="Check Mark" emoji={'✔️'} />
+									Обліковий запис активовано
+								</>
+								: <>
+									<Emoji label="Cross Mark" emoji={'❌'} />
+									<span className="text-warning">Обліковий не запис активовано</span>
+								</>
+							}
+						</Col>
+
+						<Col xs={12} className="user-state-detail">
+							{userData.approvedUser
+								? <>
+									<Emoji label="Check Mark" emoji={'✔️'} />
+									Користувача схвалено адміністрацією.
+								</>
+								: <>
+									<Emoji label="Cross Mark" emoji={'❌'} />
+									<span className="text-warning">Користувача не схвалено адміністрацією.</span>
+								</>
+							}
+						</Col>
+
+						<Col xs={12}>
+							<p>
+								<em>
+									Ім&apos;я в анкеті:{' '}
+								</em>
+								{userData.teacher ? userData.teacher.name : 'ще не заповнив'}
+							</p>
+						</Col>
+
+						<Col xs={12}>
+							<em>Групи:</em> {userData.teacher && userData.teacher.schoolClasses
+								? <span>{userData.teacher.schoolClasses.map(group => (
+									<p key={group.id}>
+										{group.specialty.title} {group.title}
+									</p>
+								))}
+								</span>
+								: 'ще не має жодної'}
+						</Col>
+
+						{userData.createdAt
+							? <Col xs={12} className="user-card-timestap">
+								<em>Зареєструвався:</em> {' '}
+								{moment(userData.createdAt).format('LL')}
+							</Col>
+							: null
 						}
-					</Card.Text>
-					<Card.Text>
-						{userData.approvedUser
-							? <>
-								<Emoji label="Check Mark" emoji={'✔️'} />
-								Користувача схвалено адміністрацією.
-							</>
-							: <>
-								<Emoji label="Cross Mark" emoji={'❌'} />
-								<span className="text-warning">Користувача не схвалено адміністрацією.</span>
-							</>
+						{userData.updatedAt
+							? <Col xs={12} className="user-card-timestap">
+								<em>Останнє оновлення профілю:</em> {' '}
+								{moment(userData.createdAt).format('LL')}
+							</Col>
+							: null
 						}
-					</Card.Text>
-					<EntityControlButtons
-						openEditModal={() => setEditModalShow(true)}
-						openDeleteModal={() => setDeleteModalShow(true)}
-					/>
-				</Card.Body>
-			</Card>
-			{/* Teacher edit and delete modal */}
+						<Col xs={12}>
+							<EntityControlButtons
+								openEditModal={() => setEditModalShow(true)}
+								openDeleteModal={() => setDeleteModalShow(true)}
+							/>
+						</Col>
+
+					</Row>
+				</Col>
+			</Row>
+
+			{/* User edit and delete modal */}
 			<Suspense fallback={
 				<LoadingIndicator
 					animation="border"
@@ -119,8 +166,12 @@ const UserDetailsCard = ({
 					onHide={() => setDeleteModalShow(false)}
 				/>
 			</Suspense>
-		</>
+		</Container>
 	)
+}
+
+UserDetailsCard.propTypes = {
+	userData: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({

@@ -18,7 +18,7 @@ const ShowcaseView = () => {
 
 	return (
 		<Container className="border1 border-primary text-center">
-			<h2 className="mb-4 custom-font">На сцені</h2>
+			<h1 className="pt-3 mb-4 custom-font">На сцені</h1>
 			{videos.map(video => (
 				<div key={video.src}>
 					<h6 className="text-muted pb-2">

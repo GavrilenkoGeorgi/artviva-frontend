@@ -17,7 +17,7 @@ const ContactsView = () => {
 	}
 
 	const largePaddingTop = {
-		// that map of googles is somehow absolutely positioned
+		// that map of google's is somehow absolutely positioned
 		paddingTop: '75vh'
 	}
 
@@ -29,7 +29,7 @@ const ContactsView = () => {
 				zoom={11}
 				departments={departments}
 			/>
-			<h1 className="custom-font">Філії</h1>
+			<h1 className="text-center py-2 custom-font">Філії</h1>
 			<Container style={largePaddingTop}>
 				<Row className="d-flex justify-content-around px-2">
 					{departments.map(department =>

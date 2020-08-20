@@ -20,7 +20,9 @@ const App = ({ user, setUserFromLocalStorage }) => {
 	}, [user, setUserFromLocalStorage])
 
 	return (
-		<Routes />
+		<div className="content">
+			<Routes />
+		</div>
 	)
 }
 

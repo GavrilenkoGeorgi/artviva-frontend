@@ -90,7 +90,8 @@ const NavigationBar = ({ user }) => {
 				expand="lg"
 				bg="light"
 				variant="light"
-				className={visibility ? 'navbar-visible' : 'navbar-hidden' }
+				data-cy="navbar"
+				className={`py-sm-0 ${visibility ? 'navbar-visible' : 'navbar-hidden'}`}
 			>
 				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image
@@ -109,23 +110,26 @@ const NavigationBar = ({ user }) => {
 				</Navbar.Brand>
 				<Navbar.Toggle
 					aria-controls="responsive-navbar-nav"
+					data-cy="navbar-toggle"
 				>
 					<NavTogglerIcon type={isExpanded}/>
 				</Navbar.Toggle>
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<Nav className="ml-auto">
-						<NavDropdown title="Школа" id="school-mgmt-links" className="school-mgmt-links">
-							<NavDropdown.Item href="/pay/form">Оплата</NavDropdown.Item>
+						<NavDropdown
+							title="Школа"
+							id="school-mgmt-links"
+							className="school-mgmt-links"
+						>
+							<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
+							<NavDropdown.Item href="/prices">Ціни</NavDropdown.Item>
 							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							{user
 								? <>
-									{user.superUser
-										? <NavDropdown.Item href="/school">
-												Кабинет
-										</NavDropdown.Item>
-										: null
-									}
 									<NavDropdown.Divider />
+									<NavDropdown.Item href="/school">
+										Вчительська
+									</NavDropdown.Item>
 									<NavDropdown.Item href={`/school/users/${user.id}`}>
 										<span className="nav-list-icon">
 											<FontAwesomeIcon icon={faUser} />
@@ -139,7 +143,13 @@ const NavigationBar = ({ user }) => {
 								: <>
 									<NavDropdown.Item href="/register">Реєстрація</NavDropdown.Item>
 									<NavDropdown.Divider />
-									<NavDropdown.Item href="/login" className="text-right">Логін</NavDropdown.Item>
+									<NavDropdown.Item
+										data-cy="navbar-login-link"
+										href="/login"
+										className="text-right"
+									>
+											Вхід
+									</NavDropdown.Item>
 								</>
 							}
 						</NavDropdown>

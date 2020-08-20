@@ -2,6 +2,8 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import userService from '../../services/users'
 import searchService from '../../services/search'
+import loginService from '../../services/login'
+import { refreshUserData } from '../../reducers/loginReducer'
 import { setNotification,
 	setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { updateUser } from '../../reducers/userReducer'
@@ -20,16 +22,16 @@ import { SimpleSpinner } from '../common/spinners'
 const UserEditForm = ({
 	user, userData, updateUser, processingForm, fetchingData,
 	setFetchingData, setNotification, setProcessingForm,
-	closeModal, mode }) => {
+	closeModal, refreshUserData, mode }) => {
 
 	const [teachersList, setTeachersList] = useState([])
 	const [currentTeacher, setCurrentTeacher] = useState('')
 
 	const successNotification = () => {
 		setNotification({
-			message: 'Інформація про користувача оновлена. Вам потрібно вийти та знову увійти, щоб застосувати зміни.',
+			message: 'Інформація про користувача оновлена.',
 			variant: 'success'
-		}, 10)
+		}, 5)
 	}
 
 	const errorNotification = useCallback((error, setErrors) => {
@@ -44,7 +46,9 @@ const UserEditForm = ({
 	useEffect(() => {
 		if (user && userData.teacher) {
 			searchService.setToken(user.token)
-			searchService.teacherNameById(userData.teacher)
+			// fix this
+			const id = typeof userData.teacher === 'string' ? userData.teacher : userData.teacher.id
+			searchService.teacherNameById(id)
 				.then(({ name }) => {
 					setCurrentTeacher(name)
 				}).catch(error => {
@@ -61,6 +65,13 @@ const UserEditForm = ({
 				.then(() => {
 					successNotification()
 					closeModal()
+					// all ok, update current user refs
+					// sort of relogin
+					loginService.setToken(user.token)
+					refreshUserData(user.id)
+						.catch(error => {
+							console.error(error)
+						})
 				})
 				.catch(error => {
 					errorNotification(error, setErrors)
@@ -272,7 +283,6 @@ const UserEditForm = ({
 						}
 					</Form.Row>
 
-
 					{/* Button */}
 					<Form.Row className='pt-4 d-flex justify-content-center text-center'>
 						<Form.Group
@@ -307,7 +317,8 @@ const mapDispatchToProps = {
 	setNotification,
 	setProcessingForm,
 	setFetchingData,
-	updateUser
+	updateUser,
+	refreshUserData
 }
 
 export default connect(

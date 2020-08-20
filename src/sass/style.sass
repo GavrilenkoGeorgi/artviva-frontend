@@ -3,7 +3,7 @@
 @import 'fonts.sass'
 @import 'text.sass'
 @import 'notification.sass'
-@import 'sticky-footer.sass'
+@import 'footer.sass'
 @import 'palette.scss'
 @import 'animations.sass'
 @import 'buttons.sass'
@@ -20,6 +20,9 @@ html
 		font-size: 115%
 	+desktop(96dpi, 640px)
 		font-size: 110%
+
+body
+	padding-top: 5rem // navbar height
 
 p
 	margin: 0
@@ -256,8 +259,6 @@ nav
 	width: 100%
 	position: absolute
 
-// .payment-description-container:nth-child(even)
-
 .payment-date
 	font-size: .75rem
 
@@ -292,6 +293,7 @@ nav
 .recaptcha-statement
 	color: $lightGrey
 	font-size: .7rem
+	padding: .3rem 0rem
 	a
 		padding: 0 .2rem
 
@@ -322,3 +324,55 @@ nav
 	color: $lightGrey
 	option
 		color: black
+
+.paid-month
+	border-radius: .5rem
+	margin: .2rem
+	padding: .4rem 0rem
+	text-align: center
+	text-transform: capitalize
+	&.highlighted
+		border: 1px solid gren
+		background-color: $paid-month
+
+.payment-pupil-name
+	color: $primary-second
+	padding-bottom: .1rem
+	border-bottom: .09rem solid $primary-second
+
+.pupil-groups
+	letter-spacing: .065rem
+	p
+		&:nth-child(1)
+			color: $primary-second
+			font-size: 1rem
+			font-weight: 500
+	color: $primary-second
+	font-size: 90%
+	padding: .4rem 1rem
+	border-radius: .7rem
+	@for $i from 1 through 5
+		&:nth-child(#{$i})
+			background-color: color.adjust($top-ten-color, $hue: $i * 50%)
+
+.user-details-email
+	color: $primary-color
+	border-bottom: .1rem solid $primary-color
+	margin-bottom: 1rem
+
+.user-detail-name
+	font-family: $serif-font
+	font-size: 140%
+
+.user-details-info
+	div
+		margin: .4rem 0rem
+	.user-card-timestap
+		color: $lightGrey
+		font-size: 80%
+		margin: 0rem
+	.user-state-detail
+		margin: 0rem
+
+.user-details-highlight
+	background-color: $warn

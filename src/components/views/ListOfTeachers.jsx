@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { Form, ListGroup, Container, Row, Col } from 'react-bootstrap'
 import { initializeTeachers, setTeacherExp } from '../../reducers/teachersReducer'
@@ -12,11 +13,12 @@ import { calcEmployeeExperience } from '../../utils/datesAndTime'
 import { filter, select, boolean, range } from '../../data/forms/teacherFields.json'
 import { Teacher, AddTeacher } from '../teachers'
 import { ShowFilterSettings, FilterData, ExperienceSort,
-	SelectFields, FilterBooleanFields } from '../sorting'
+	SelectFields, FilterBooleanFields, AgeFilter } from '../sorting'
 import Reset from '../forms/buttons/Reset'
 import { Button } from '../common/buttons'
 import { LoadingIndicator } from '../common'
 import CommonLayout from './CommonLayout'
+import { CollapseComponent } from '../common'
 
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
@@ -92,6 +94,17 @@ const ListOfTeachers = ({ teachers,
 			item.experience.years <= to)
 	}, [])
 
+	const sortByAge = useCallback((age, data) => {
+
+		const from = parseInt(age.ageFrom)
+		const to = parseInt(age.ageTo) || 99
+
+		return data.filter(item => {
+			const age = moment().diff(item.dateOfBirth, 'years')
+			return age >= from && age <= to
+		})
+	}, [])
+
 	const changeFilterSetting = (event) => {
 		event.preventDefault()
 		const { target } = event
@@ -106,6 +119,8 @@ const ListOfTeachers = ({ teachers,
 			}
 			break
 		}
+		case 'ageFrom':
+		case 'ageTo':
 		case 'from':
 		case 'to': {
 			setFilterSettings({ ...filterSettings, [field]: value || 0 })
@@ -130,14 +145,14 @@ const ListOfTeachers = ({ teachers,
 
 	const selectData = useCallback((arrayOfStuff) => {
 		// eslint-disable-next-line
-		const { name, from, to, ...filterData } = filterSettings
+		const { name, ageFrom, ageTo, from, to, ...filterData } = filterSettings
 		return multiPropsFilter(arrayOfStuff, filterData)
 	}, [filterSettings])
 
 	const sortData = useCallback((settings) => {
 		let result = teachers
 		if (settings) {
-			const { name, from, to, isRetired, employeeIsAStudent } = settings
+			const { name, ageFrom, ageTo, from, to, isRetired, employeeIsAStudent } = settings
 
 			if (name && name.length > 0) {
 				result = result.filter(item => item.name.toUpperCase().includes(settings.name.toUpperCase()))
@@ -151,21 +166,29 @@ const ListOfTeachers = ({ teachers,
 				result = sortByExperienceRange(range, result)
 			}
 
+			if (ageFrom || ageTo) {
+				const age = {
+					ageFrom: ageFrom || 0,
+					ageTo: ageTo || 0
+				}
+				result = sortByAge(age, result)
+			}
+
 			const boolFilter =
 			(typeof isRetired === 'boolean' && typeof employeeIsAStudent === 'boolean')
 				? { isRetired, employeeIsAStudent } :
 				(typeof isRetired === 'boolean') ? { isRetired } :
 					(typeof employeeIsAStudent === 'boolean') ? { employeeIsAStudent } : false
 
-
 			if (boolFilter) {
 				result = boolPropsFilter(result, boolFilter)
 			}
+
 			setTeacherList([ ...selectData(result) ])
 		} else {
 			setTeacherList([ ...teachers ])
 		}
-	}, [sortByExperienceRange, selectData, teachers])
+	}, [sortByExperienceRange, sortByAge, selectData, teachers])
 
 	useEffect(() => {
 		if (pureObjectIsEmpty(removeFalsyProps(filterSettings))) {
@@ -188,65 +211,86 @@ const ListOfTeachers = ({ teachers,
 						<section className="p-3 school-explained custom-font-small">
 							<p>
 								Наприклад: щоб дізнатись, скільки вчителів зараз на пенсії та мешкає у селі,{' '}
-								виберіть фільтр «На пенсии» та «Місцевість проживання: Село».
+								виберіть фільтр «На пенсії» та «Місцевість проживання: Село».
 							</p>
 							<p>
 								Щоб додати нового вчителя, заповніть форму натиснув кнопку нижче.
 							</p>
 						</section>
 					</Col>
-					<Form onReset={() => setFilterSettings({})}>
-						<Col xs={12}>
-							<Row>
+
+					<Col className="px-0">
+						<Form onReset={() => setFilterSettings({})}>
+
+							<Col xs={12} className="px-0">
 								{/* Filter by name chars */}
 								<FilterData
 									filter={changeFilterSetting}
 									fieldName="name"
 									placeholder="Прізвище вчителя"
 								/>
-								{/* Select by experience range */}
-								<ExperienceSort
-									filter={changeFilterSetting}
-								/>
-							</Row>
-						</Col>
-						{/* Select by boolean fields */}
-						<Col xs={12} className="my-2">
-							<FilterBooleanFields
-								selectBy={boolean}
-								filter={changeFilterSetting}
-							/>
-						</Col>
-						{/* Select by field */}
-						<Col xs={12} className="py-2 mb-3">
-							<SelectFields
-								selectBy={select}
-								filter={changeFilterSetting}
-							/>
-						</Col>
-						{/* Buttons */}
-						<Col xs={12} className="my-3">
-							<Row>
-								<Col xs={6}>
-									<Button
-										block
-										dataCy="add-new-pupil"
-										label="Додати нового"
-										onClick={() => setAddModalShow(true)}
-									/>
-								</Col>
-								<Col xs={6}>
-									<Reset
-										label="Показати всіх"
-										block
-										variant="outline-success"
-										dataCy="filter-reset-btn"
-										disabled={pureObjectIsEmpty(filterSettings)}
-									/>
-								</Col>
-							</Row>
-						</Col>
-					</Form>
+							</Col>
+
+							<Col xs={12} className="pt-2">
+								<CollapseComponent
+									title="Більше фільтрів"
+									ariaControls="specialty-add-form-collapse"
+								>
+									<>
+										<Row>
+											<AgeFilter
+												filter={changeFilterSetting}
+												values={filterSettings}
+											/>
+											{/* Select by experience range */}
+											<ExperienceSort
+												filter={changeFilterSetting}
+											/>
+										</Row>
+
+										{/* Select by boolean fields */}
+										<Col xs={12} className="my-2">
+											<FilterBooleanFields
+												selectBy={boolean}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+
+										{/* Select by field */}
+										<Col xs={12} className="py-2 mb-3">
+											<SelectFields
+												selectBy={select}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+									</>
+								</CollapseComponent>
+							</Col>
+
+							{/* Buttons */}
+							<Col xs={12} className="my-3">
+								<Row>
+									<Col xs={6}>
+										<Button
+											block
+											dataCy="add-new-pupil"
+											label="Додати нового"
+											onClick={() => setAddModalShow(true)}
+										/>
+									</Col>
+									<Col xs={6}>
+										<Reset
+											label="Показати всіх"
+											block
+											variant="outline-success"
+											dataCy="filter-reset-btn"
+											disabled={pureObjectIsEmpty(filterSettings)}
+										/>
+									</Col>
+								</Row>
+							</Col>
+						</Form>
+					</Col>
 					{/* Current filter settings display */}
 					<Col xs={12}>
 						<ShowFilterSettings
