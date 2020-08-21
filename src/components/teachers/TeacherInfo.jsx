@@ -8,8 +8,6 @@ const TeacherInfo = ({ teacher: teacherDetails, teacherExperience }) => {
 
 	const cardStyle = 'm-1 border border-primary1'
 
-	console.log(teacherDetails)
-
 	const Column = props => {
 		return <Col xs={12} sm={6} className="px-0">
 			{props.children}
