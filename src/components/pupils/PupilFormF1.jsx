@@ -51,7 +51,7 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 	}
 
 	return <CommonLayout>
-		<Container id={'f1-form'} className="f1-form pl-5 pr-4 py-3 border rounded">
+		<Container id={'f1-form'} className="f1-form pl-5 pr-4 py-3 rounded">
 			<h6 className="text-right">Ф-1</h6>
 			<Row className="f1-header">
 				<Col>

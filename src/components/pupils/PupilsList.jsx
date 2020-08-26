@@ -65,7 +65,7 @@ const PupilsList = ({
 						? <ListGroup>
 							{list.map((pupil, index) =>
 								<ListGroup.Item
-									className={`animated slow fadeIn delay-1s p-0 ${checkPupilStatus(pupil)}`}
+									className={`animated slow fadeIn p-0 ${checkPupilStatus(pupil)}`}
 									key={pupil.id}
 								>
 									<Container>
