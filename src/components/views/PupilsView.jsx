@@ -1,9 +1,11 @@
-import React, { Suspense, useState, useEffect, useCallback } from 'react'
+import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react'
+import { useScrollPosition } from '../../hooks/scrollHooks'
 import { connect } from 'react-redux'
 import { initializePupils, initialiseUserPupils } from '../../reducers/pupilsReducer'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
 import PupilsList from '../pupils/PupilsList'
+import { CollapseComponent } from '../common'
 import { LoadingIndicator } from '../common'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
 
@@ -24,6 +26,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	const [pupilsList, setPupils] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
 	const [addModalShow, setAddModalShow] = useState(false)
+	const listRef = useRef(null)
 
 	useEffect(() => {
 		if (user) setUser(user)
@@ -128,6 +131,14 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		}
 	}
 
+	// progressively add more data on scroll
+	const [maxCount, setMaxCount] = useState(5)
+	useScrollPosition(position => {
+		if ((position + window.innerHeight) >= document.body.scrollHeight) {
+			setMaxCount(count => count + 1)
+		}
+	})
+
 	return (
 		<CommonLayout>
 			<Container>
@@ -152,69 +163,82 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 						</section>
 					</Col>
 					{/*controls*/}
-					<Form onReset={() => setFilterSettings({})}>
-						<Col xs={12} className="py-2">
-							<Row>
-								<FilterString
-									filter={changeFilterSetting}
-									fieldName="name"
-									placeholder="І'мя"
-								/>
-								<FilterString
-									filter={changeFilterSetting}
-									fieldName="specialty"
-									placeholder="Назва фаху"
-								/>
-							</Row>
-						</Col>
-						<Col xs={12}>
-							<FilterBooleanFields
-								selectBy={boolean}
-								filter={changeFilterSetting}
-							/>
-						</Col>
-						<Col xs={12}>
-							<SelectFields
-								selectBy={select}
-								filter={changeFilterSetting}
-							/>
-						</Col>
-						<Col xs={12}>
-							<ShowFilterSettings
-								labels={[ ...filter, ...select, ...boolean ]}
-								settings={filterSettings}
-							/>
-						</Col>
-						<Col xs={12} className="pt-4">
-							<Row>
-								<Col xs={6}>
-									<Button
-										block
-										dataCy="add-new-pupil"
-										label="Додати нового"
-										onClick={() => setAddModalShow(true)}
+					<Col xs={12} className="px-0">
+						<Form onReset={() => setFilterSettings({})}>
+							<Col xs={12}>
+								<Row>
+									<FilterString
+										filter={changeFilterSetting}
+										fieldName="name"
+										placeholder="І'мя"
 									/>
-								</Col>
-								<Col xs={6}>
-									<Reset
-										label="Показати всіх"
-										block
-										variant="outline-success"
-										dataCy="filter-reset-btn"
-										disabled={pureObjectIsEmpty(filterSettings)}
+									<FilterString
+										filter={changeFilterSetting}
+										fieldName="specialty"
+										placeholder="Назва фаху"
 									/>
-								</Col>
-							</Row>
-						</Col>
-					</Form>
+								</Row>
+							</Col>
 
-					<Col xs={12} className="py-4">
+							<Col className="my-3">
+								<CollapseComponent
+									title="Більше фільтрів"
+									ariaControls="specialty-add-form-collapse"
+								>
+									<>
+										<Col xs={12}>
+											<FilterBooleanFields
+												selectBy={boolean}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+										<Col xs={12}>
+											<SelectFields
+												selectBy={select}
+												filter={changeFilterSetting}
+											/>
+										</Col>
+									</>
+								</CollapseComponent>
+							</Col>
+
+							<Col xs={12}>
+								<ShowFilterSettings
+									labels={[ ...filter, ...select, ...boolean ]}
+									settings={filterSettings}
+								/>
+							</Col>
+							<Col xs={12} className="pt-4">
+								<Row>
+									<Col xs={6}>
+										<Button
+											block
+											dataCy="add-new-pupil"
+											label="Додати нового"
+											onClick={() => setAddModalShow(true)}
+										/>
+									</Col>
+									<Col xs={6}>
+										<Reset
+											label="Показати всіх"
+											block
+											variant="outline-success"
+											dataCy="filter-reset-btn"
+											disabled={pureObjectIsEmpty(filterSettings)}
+										/>
+									</Col>
+								</Row>
+							</Col>
+						</Form>
+					</Col>
+
+					<Col xs={12} className="py-4" ref={listRef}>
 						<div className="text-right pb-2 ">
 							<em className="text-muted">Загалом: {pupilsList.length}</em>
 						</div>
 						{userData.superUser
-							? <PupilsList list={pupilsList} getPupils={initializePupils} />
-							: <PupilsList list={pupilsList} getPupils={initialiseUserPupils} />
+							? <PupilsList list={pupilsList.slice(0, maxCount)} getPupils={initializePupils} />
+							: <PupilsList list={pupilsList.slice(0, maxCount)} getPupils={initialiseUserPupils} />
 						}
 					</Col>
 					<Suspense fallback={
