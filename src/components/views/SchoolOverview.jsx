@@ -62,10 +62,18 @@ const SchoolOverview =({
 
 	useEffect(() => {
 		if (!pureObjectIsEmpty(schoolStats)) {
+			const listSize = 5
 			const topGroups = schoolStats.schoolClasses.sort((one, other) => {
 				return one.pupils.length - other.pupils.length
 			})
-			setStats(stats => ({ ...stats, topGroups: topGroups.reverse() }))
+			const accomplishments =
+				schoolStats.teachers.map(teacher =>
+					({ id: teacher.id, name: teacher.name, accomplishment: teacher.accomplishmentsDscr }))
+			setStats(stats => ({
+				...stats,
+				topGroups: topGroups.slice(0, listSize).reverse(),
+				accomplishments: accomplishments.slice(0, listSize)
+			}))
 		}
 	}, [schoolStats])
 
@@ -85,21 +93,22 @@ const SchoolOverview =({
 							<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
 									<h6 className="text-muted py-3 pl-0">
-										<Emoji label="Party Popper" emoji={'🎉'} /> Працівник місяця
+										<Emoji label="Trophy" emoji={'🏆'} /> Професійні досягнення
 									</h6>
 								</Col>
 								<Col>
-									{stats.topTen.map(result =>
+									{stats.accomplishments.map(person =>
 										<Row
-											key={result.teacher}
+											key={person.id}
 											className="p-2 mb-2 top-ten-colors animated fadeIn rounded"
 										>
-											<Col xs={12} lg={8}>
-												{result.teacher}
+											<Col xs={12}>
+												<p className="text-muted mb-2">
+													<strong><em>{person.name}</em></strong>
+												</p>
 											</Col>
-											<Col xs={12} lg={4} className="text-right">
-												{result.amount}{' '}
-												<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
+											<Col xs={12} className="">
+												{person.accomplishment}
 											</Col>
 										</Row>
 									)}
@@ -111,7 +120,7 @@ const SchoolOverview =({
 							<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
 									<h6 className="text-muted py-3 pl-0">
-										<Emoji label="Graduation Cap" emoji={'🎓'} /> Групи
+										<Emoji label="Graduation Cap" emoji={'🎓'} /> Найбільші групи
 									</h6>
 								</Col>
 								<Col>
@@ -139,7 +148,32 @@ const SchoolOverview =({
 									)}
 								</Col>
 							</Row>
+
+							<Row className="px-3 d-flex justify-content-center">
+								<Col xs={12}>
+									<h6 className="text-muted py-3 pl-0">
+										<Emoji label="Party Popper" emoji={'🎉'} /> Працівник місяця
+									</h6>
+								</Col>
+								<Col>
+									{stats.topTen.map(result =>
+										<Row
+											key={result.teacher}
+											className="p-2 mb-2 top-ten-colors animated fadeIn rounded"
+										>
+											<Col xs={12} lg={8}>
+												{result.teacher}
+											</Col>
+											<Col xs={12} lg={4} className="text-right">
+												{result.amount}{' '}
+												<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
+											</Col>
+										</Row>
+									)}
+								</Col>
+							</Row>
 						</Col>
+
 					</>
 				}
 			</Row>

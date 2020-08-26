@@ -6,7 +6,7 @@ import moment from 'moment'
 import 'moment-precise-range-plugin'
 import { nestedSort } from '../../utils/arrayHelpers'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 import TeacherInfo from './TeacherInfo'
 
 const TeacherDetails = ({ user, match, teacher, setNotification }) => {
@@ -55,24 +55,19 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 	}, [user, calcXpToDate, setNotification, match])
 
 	return (
-		<>
-			{teacherDetails
-				? <Container>
-					<Row>
-						{/* Details section */}
-						<Col xs={12} className="px-0">
-							<TeacherInfo
-								teacher={teacherDetails}
-								teacherExperience={teacherExperience}
-							/>
-						</Col>
-					</Row>
-				</Container>
-				: <p className="text-warning">
-						Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
-				</p>
-			}
-		</>
+		<Container className="border1 border-success">
+			<Row className="justify-content-center">
+				{teacherDetails
+					? <TeacherInfo
+						teacher={teacherDetails}
+						teacherExperience={teacherExperience}
+					/>
+					: <p className="text-warning">
+							Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+					</p>
+				}
+			</Row>
+		</Container>
 	)
 }
 
