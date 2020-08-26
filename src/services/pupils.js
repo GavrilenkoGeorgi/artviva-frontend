@@ -91,6 +91,38 @@ const deleteById = async id => {
 }
 
 /**
+ * Get single pupil details by id
+ *
+ * @param {string} id - Pupil ID
+ *
+ * @returns {Object} - Response data
+ */
+
+const pupilDetailsById = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const request = axios.get(`${baseUrl}/${id}`, config)
+	return request.then(response => response.data)
+}
+
+/**
+ * Get pupil f1-form by id
+ *
+ * @param {string} id - Pupil ID
+ *
+ * @returns {Object} - Response data
+ */
+
+const pupilF1FormData = async id => {
+	const config = {
+		headers: { Authorization: token }
+	}
+	const request = axios.get(`${baseUrl}/f1/${id}`, config)
+	return request.then(response => response.data)
+}
+
+/**
  * Update pupil's data
  *
  * @param {string} id - Pupil's id
@@ -156,4 +188,7 @@ const publicApply = async payload => {
 	return response.data
 }
 
-export default { getAll, getUserPupils, setToken, create, deleteById, update, publicApply }
+export default {
+	getAll, getUserPupils, pupilDetailsById,
+	pupilF1FormData, setToken, create,
+	deleteById, update, publicApply }

@@ -9,6 +9,7 @@ import Payments from './components/payments/Payments'
 
 import { PrivateRoute, Notification, MainPage } from './components'
 import { LoadingIndicator } from './components/common'
+import { PupilDetails, PupilFormF1 } from './components/pupils'
 
 import { ScrollToTop, ScrollToTopArrow,
 	NavigationBar, SchoolSectionsNav } from './components/navigation'
@@ -64,7 +65,11 @@ const Routes = ({ user, fetchingData }) => {
 			<PrivateRoute path="/school/teacher/payments" exact component={TeacherPaymentsView} />
 			<PrivateRoute path="/school/groups" exact component={GroupsView} />
 			<PrivateRoute path="/school/groups/:id" exact component={GroupDetails} />
-			<PrivateRoute path="/school/pupils" component={PupilsView} />
+			<PrivateRoute path="/school/pupils" exact component={PupilsView} />
+			<Switch>
+				<PrivateRoute path="/school/pupils/f1/:id" component={PupilFormF1} />
+				<PrivateRoute path="/school/pupils/:id" component={PupilDetails} />
+			</Switch>
 			{superUser
 				? <>
 					<PrivateRoute path="/school/overview" component={SchoolOverview} />
