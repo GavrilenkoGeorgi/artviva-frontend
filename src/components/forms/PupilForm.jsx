@@ -121,10 +121,10 @@ const PupilForm = ({
 				setNotification({
 					message: 'Ваша заява була успішно додана.',
 					variant: 'success'
-				}, 5)
+				}, 15)
 				setProcessingForm(false)
-				resetForm()
-				closeModal()
+				// resetForm()
+				// closeModal()
 				history.push('/apply/success')
 			})
 			.catch(error => {
@@ -425,7 +425,7 @@ const PupilForm = ({
 						</p>
 
 						{/* Users email input */}
-						{(user && user.superUser)
+						{(user && user.superUser && (mode !== 'public'))
 							? <Form.Row>
 								<Form.Group
 									controlId={editMode ? `${pupil.id}-assign-email-input` : 'assign-email-input' }
@@ -873,7 +873,7 @@ PupilForm.propTypes = {
 	createPupil: PropTypes.func.isRequired,
 	updatePupil: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit', 'public']).isRequired,
-	closeModal: PropTypes.func.isRequired
+	closeModal: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
