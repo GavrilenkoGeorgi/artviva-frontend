@@ -91,7 +91,7 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 							<ol>
 								{group.pupils.map(pupil => (
 									<li key={pupil.id}>
-										<Link to="/school/pupils">{pupil.name}</Link>
+										<Link to={`/school/pupils/${pupil.id}`}>{pupil.name}</Link>
 										{pupil.info
 											? <em className="text-secondary">: {pupil.info}</em>
 											: null
