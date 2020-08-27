@@ -20,6 +20,9 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
 	GroupsView, PupilsView, ListOfTeachers, PricesView } from './components/views'
 
+import Oferta from './components/views/legal/Oferta'
+import PrivacyPolicy from './components/views/legal/PrivacyPolicy'
+
 const Routes = ({ user, fetchingData }) => {
 
 	const [userData, setUserData] = useState({
@@ -50,6 +53,8 @@ const Routes = ({ user, fetchingData }) => {
 				: null }
 			<Route path="/" exact component={MainPage} />
 			<Route path="/about" component={AboutView} />
+			<Route path="/oferta" component={Oferta} />
+			<Route path="/privacypolicy" component={PrivacyPolicy} />
 			<Route path="/showcase" component={ShowcaseView} />
 			<Route path="/teachers/:department?" component={TeachersView} />
 			<Route path="/login" component={LoginView} />
