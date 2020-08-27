@@ -26,10 +26,10 @@ const Footer = () => {
 
 	return (
 		<footer className="footer d-flex align-items-center">
-			<Container className="border1 border-primary">
-				<Row className="border1">
+			<Container>
+				<Row>
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
-						<Row className="text-muted1">
+						<Row>
 							<Col xs={12} className="pb-2">
 								<p className="mb-2">+38 (050) 963-54-38</p>
 								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
@@ -40,12 +40,12 @@ const Footer = () => {
 							</Col>
 
 							<Col className="py-3 d-flex justify-content-around">
-								<a href="https://artviva.school" >Політика конфіденційності</a>
-								<a href="https://artviva.school" >Публічна оферта</a>
+								<a href="/privacypolicy" >Політика конфіденційності</a>
+								<a href="/oferta" >Публічна оферта</a>
 							</Col>
 						</Row>
 					</Col>
-					<Col xs={12} md={6} className="py-1 border1">
+					<Col xs={12} md={6} className="py-1">
 						<small>
 							{/* eslint-disable-next-line */}
 							Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
@@ -76,9 +76,9 @@ const Footer = () => {
 						</Row>
 					</Col>
 
-					<Col xs={12} className="pt-3 border1 border-danger text-center text-muted">
+					<Col xs={12} className="pt-3 text-center text-muted">
 						<span>
-							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva.
+							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva
 						</span>
 					</Col>
 				</Row>
