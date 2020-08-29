@@ -73,7 +73,7 @@ const ContactForm = ({
 			.min(2, 'Мінімум 2 символи.')
 			.max(30, 'Максимум 30 символів.')
 			.required('Ваше ім\'я?'),
-		email: Yup.string()
+		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		message: Yup.string()

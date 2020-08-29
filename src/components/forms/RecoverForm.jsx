@@ -60,7 +60,7 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 	}*/
 
 	const recoverFormSchema = Yup.object().shape({
-		email: Yup.string()
+		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.')
 	})

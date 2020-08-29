@@ -105,10 +105,10 @@ const PupilForm = ({
 
 		setProcessingForm(true)
 		editMode
-			? editPupil(trimObject(values), setErrors)
+			? editPupil(values, setErrors)
 			: (mode === 'create'
-				? addPupil(trimObject(values), setErrors, resetForm)
-				: publicApply(trimObject(values), setErrors, resetForm))
+				? addPupil(values, setErrors, resetForm)
+				: publicApply(values, setErrors, resetForm))
 	}
 
 	const publicApply = (values, setErrors, resetForm) => {
@@ -208,7 +208,6 @@ const PupilForm = ({
 			searchService.users(query)
 				.then(users => {
 					setUsersList(users)
-					// console.log(users)
 				})
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -281,7 +280,7 @@ const PupilForm = ({
 			}
 
 	const pupilFormSchema = Yup.object().shape({
-		assignedTo: Yup.string()
+		assignedTo: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.'),
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -341,7 +340,7 @@ const PupilForm = ({
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
 			.required('Місто, вулиця, назва організації, посада.'),
-		contactEmail: Yup.string()
+		contactEmail: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть електронну пошту.'),
 		homeAddress: Yup.string()
@@ -402,7 +401,7 @@ const PupilForm = ({
 				initialValues={initialFormValues()}
 				enableReinitialize
 				onSubmit={async (values, { setErrors, resetForm }) => {
-					handlePupil(values, setErrors, resetForm)
+					handlePupil(trimObject(values), setErrors, resetForm)
 				}}
 				validationSchema={pupilFormSchema}
 			>
