@@ -28,6 +28,7 @@ import Select from './components/Select'
 import CheckBox from './components/Checkbox'
 import TextAreaInput from './components/TextAreaInput'
 import { InfoModal } from '../common/modals'
+import FocusError from './components/FocusError'
 
 const TeacherForm = ({
 	processTeacherData,
@@ -92,6 +93,7 @@ const TeacherForm = ({
 
 	// eslint-disable-next-line
 	const handleTeacher = (values, setErrors, resetForm) => {
+		console.log('Handle teacher')
 		// get selected specialties id's
 		const uniqueSpecialties = new Set(values.specialties)
 		let specialtiesIds = []
@@ -198,7 +200,7 @@ const TeacherForm = ({
 		name: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть прізвище, ім’я і по батькові (ПІБ).'),
 		specialties: Yup.array().of(
 			Yup.string()
 				.oneOf(specialtyListData, 'Ви повинні вибрати не менше одного фаху.')
@@ -289,7 +291,8 @@ const TeacherForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={(values, { resetForm, setErrors }) => {
+				onSubmit={(values, { resetForm, setErrors, errors }) => {
+					console.log('onSubmit', errors)
 					handleTeacher(values, setErrors, resetForm)
 				}}
 				onReset={() => {
@@ -311,6 +314,7 @@ const TeacherForm = ({
 					errors,
 				}) => (
 					<Form
+						id="teacher-form"
 						data-cy="teacher-form"
 						noValidate
 						onSubmit={handleSubmit}
@@ -319,7 +323,7 @@ const TeacherForm = ({
 						{/* Teacher name input */}
 						<Form.Row>
 							<TextInput
-								label="Повне ім'я викладача"
+								label="ПІБ (прізвище, ім’я і по батькові)"
 								name="name"
 								onChange={handleChange}
 								onBlur={handleBlur}
@@ -798,6 +802,7 @@ const TeacherForm = ({
 								className="ml-2 default-width-btn"
 							/>
 						</Form.Group>
+						<FocusError formId="teacher-form" />
 					</Form>
 				)}
 			</Formik>
