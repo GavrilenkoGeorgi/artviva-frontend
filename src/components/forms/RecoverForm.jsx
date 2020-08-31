@@ -7,7 +7,6 @@ import { Col, Form } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
 
-// import ReCaptchaComp from '../common/ReCaptchaComp'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
 const RecoverForm = ({ setNotification, setEmailSent }) => {
@@ -28,7 +27,7 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 				setNotification({
 					message: 'Інструкції щодо відновлення пароля були надіслані на вашу електронну адресу.',
 					variant: 'success'
-				}, 5)
+				}, 15)
 				setEmailSent(true)
 			})
 			.catch(error => {
@@ -43,22 +42,6 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 			})
 	}
 
-	// const reCaptchaRef = React.createRef()
-	// const [score, setScore] = useState(null)
-
-	/*
-	const setRecaptchaScore = score => {
-		if (componentIsMounted.current) {
-			if (score <= .1) {
-				setNotification({
-					message: `Ваша оцінка recaptcha занизька: ${score}, спробуйте оновити сторінку.`,
-					variant: 'warning'
-				}, 5)
-			}
-			setScore(score)
-		}
-	}*/
-
 	const recoverFormSchema = Yup.object().shape({
 		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
@@ -71,9 +54,8 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 				initialValues={{
 					email: ''
 				}}
-				onSubmit={async (values, { resetForm }) => {
+				onSubmit={async (values) => {
 					await handleRecover(values)
-					resetForm()
 				}}
 				validationSchema={recoverFormSchema}
 			>
@@ -121,21 +103,11 @@ const RecoverForm = ({ setNotification, setEmailSent }) => {
 								className="primary-color-shadow default-width-btn"
 								label="Надіслати"
 								loadingState={processingForm}
-								// disabled={score <= .1 ? true : false}
-								// waitingState={!score}
 							/>
 						</Form.Row>
 					</Form>
 				)}
 			</Formik>
-			{/*<ReCaptchaComp
-				ref={reCaptchaRef}
-				size="invisible"
-				render="explicit"
-				badge="bottomleft"
-				hl="uk"
-				setScore={setRecaptchaScore}
-			/>*/}
 		</>
 	)
 }
