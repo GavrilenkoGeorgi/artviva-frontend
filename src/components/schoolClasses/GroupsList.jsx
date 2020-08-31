@@ -17,7 +17,7 @@ const GroupsList = ({ groups }) => {
 						</Col>
 						<Col xs={3} className="pl-4">
 							<small className="text-muted">
-								<em>{group.pupils.length} учів</em>
+								<em>{group.pupils.length} учнів</em>
 							</small>
 						</Col>
 						<Col xs={9}>

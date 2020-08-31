@@ -23,6 +23,7 @@ import { CheckBox, DateInput, Select,
 	TextAreaInput, TextInput } from './components'
 import { InfoModal } from '../common/modals'
 import { SimpleSpinner } from '../common/spinners'
+import FocusError from './components/FocusError'
 
 const PupilForm = ({
 	pupil,
@@ -111,6 +112,7 @@ const PupilForm = ({
 				: publicApply(values, setErrors, resetForm))
 	}
 
+	// eslint-disable-next-line
 	const publicApply = (values, setErrors, resetForm) => {
 		// this one is a little different
 		// remove assignedTo, as it is a public form
@@ -415,6 +417,7 @@ const PupilForm = ({
 					errors
 				}) => (
 					<Form
+						id="pupil-form"
 						data-cy="pupil-form"
 						noValidate
 						onSubmit={handleSubmit}
@@ -851,6 +854,7 @@ const PupilForm = ({
 								className="ml-2 default-width-btn"
 							/>
 						</Form.Group>
+						<FocusError formId={'pupil-form'} />
 					</Form>
 				)}
 			</Formik>

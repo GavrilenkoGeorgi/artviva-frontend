@@ -1,16 +1,17 @@
 import React from 'react'
-import { connect } from 'react-redux'
+
+import CommonLayout from '../views/CommonLayout'
 import PassResetForm from '../forms/PassResetForm'
 import { Container, Row, Col } from 'react-bootstrap'
 
 const PassResetView = ({ match }) => {
-	return (
+	return <CommonLayout>
+		<h2 className="mt-4 mt-lg-5 text-center custom-font">
+			Введіть новий пароль
+		</h2>
 		<Container>
-			<Row>
-				<Col xs={12}>
-					<h1 className="text-center custom-font py-2">
-						Введіть новий пароль
-					</h1>
+			<Row className="mb-5 justify-content-center">
+				<Col lg={7}>
 					<PassResetForm
 						passResetToken={match.params.uuid}
 						email={match.params.email}
@@ -18,15 +19,7 @@ const PassResetView = ({ match }) => {
 				</Col>
 			</Row>
 		</Container>
-	)
+	</CommonLayout>
 }
 
-const mapStateToProps = (state) => {
-	return {
-		user: state.user
-	}
-}
-
-export default connect(
-	mapStateToProps
-)(PassResetView)
+export default PassResetView
