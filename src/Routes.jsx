@@ -9,6 +9,7 @@ import Payments from './components/payments/Payments'
 
 import { PrivateRoute, Notification, MainPage } from './components'
 import { LoadingIndicator } from './components/common'
+import { PupilDetails, PupilFormF1 } from './components/pupils'
 
 import { ScrollToTop, ScrollToTopArrow,
 	NavigationBar, SchoolSectionsNav } from './components/navigation'
@@ -18,6 +19,9 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
 	GroupsView, PupilsView, ListOfTeachers, PricesView } from './components/views'
+
+import Oferta from './components/views/legal/Oferta'
+import PrivacyPolicy from './components/views/legal/PrivacyPolicy'
 
 const Routes = ({ user, fetchingData }) => {
 
@@ -49,6 +53,8 @@ const Routes = ({ user, fetchingData }) => {
 				: null }
 			<Route path="/" exact component={MainPage} />
 			<Route path="/about" component={AboutView} />
+			<Route path="/oferta" component={Oferta} />
+			<Route path="/privacypolicy" component={PrivacyPolicy} />
 			<Route path="/showcase" component={ShowcaseView} />
 			<Route path="/teachers/:department?" component={TeachersView} />
 			<Route path="/login" component={LoginView} />
@@ -64,7 +70,11 @@ const Routes = ({ user, fetchingData }) => {
 			<PrivateRoute path="/school/teacher/payments" exact component={TeacherPaymentsView} />
 			<PrivateRoute path="/school/groups" exact component={GroupsView} />
 			<PrivateRoute path="/school/groups/:id" exact component={GroupDetails} />
-			<PrivateRoute path="/school/pupils" component={PupilsView} />
+			<PrivateRoute path="/school/pupils" exact component={PupilsView} />
+			<Switch>
+				<PrivateRoute path="/school/pupils/f1/:id" component={PupilFormF1} />
+				<PrivateRoute path="/school/pupils/:id" component={PupilDetails} />
+			</Switch>
 			{superUser
 				? <>
 					<PrivateRoute path="/school/overview" component={SchoolOverview} />

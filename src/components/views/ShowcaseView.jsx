@@ -7,7 +7,11 @@ const ShowcaseView = () => {
 
 	const videos = [
 		{
-			title: 'Конкурс Ms&Mr Talent ArtViva 2019',
+			title: '29! В ритмі серця України!',
+			src: 'https://www.youtube.com/embed/eWV_SISJMFs'
+		},
+		{
+			title: 'Тізер конкурсу Ms&Mr Talent ArtViva 2019',
 			src: 'https://www.youtube.com/embed/HIJqTx0oA9A'
 		},
 		{

@@ -93,7 +93,7 @@ const RegisterForm = ({
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 
 	const registerFormSchema = Yup.object().shape({
-		email: Yup.string()
+		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		name: Yup.string()

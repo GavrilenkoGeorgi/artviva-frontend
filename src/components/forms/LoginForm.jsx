@@ -89,7 +89,7 @@ const LoginForm = ({
 	const mediumStrPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 
 	const loginFormSchema = Yup.object().shape({
-		email: Yup.string()
+		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		password: Yup.string()

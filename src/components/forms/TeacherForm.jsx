@@ -233,7 +233,7 @@ const TeacherForm = ({
 			.max(19, 'Максимум 19 символів.')
 			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
 			.required('Введіть номер телефону.'),
-		contactEmail: Yup.string()
+		contactEmail: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть електронну пошту.'),
 		residence: Yup.string()
