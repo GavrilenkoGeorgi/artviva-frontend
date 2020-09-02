@@ -47,7 +47,7 @@ const GroupDetails = ({ user, match, setNotification }) => {
 									<Row key={pupil.id} className="py-2 my-2 border rounded">
 										<Col xs={12} className="border1">
 											{`${idx + 1}. `}
-											<Link to="/school/pupils">
+											<Link to={`/school/pupils/${pupil.id}`}>
 												{pupil.name}</Link>{' '}
 											<em className="text-muted">{pupil.artSchoolClass} клас</em>
 										</Col>
