@@ -155,7 +155,7 @@ const PaymentForm = ({
 		// compile payment data
 		const paymentData = {
 			action: 'pay',
-			amount: total,
+			amount: (total + (total/100 * 2.75)).toFixed(3),
 			currency: 'UAH',
 			// eslint-disable-next-line
 			description: `Оплата:${months.map(month => ` ${month}`)}. Викладач: ${teacher.trim()}. Учень: ${pupil.trim()}. Предмет: ${specialty}.`,
