@@ -153,9 +153,11 @@ const PaymentForm = ({
 	// Send payment data to liqpay
 	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
+		const percent = parseFloat(process.env.REACT_APP_LIQPAY_API_PERCENT)
+		const amountToSend = total + (total/100 * percent)
 		const paymentData = {
 			action: 'pay',
-			amount: (total + (total/100 * 3.5)).toFixed(3),
+			amount: amountToSend,
 			currency: 'UAH',
 			// eslint-disable-next-line
 			description: `Оплата:${months.map(month => ` ${month}`)}. Викладач: ${teacher.trim()}. Учень: ${pupil.trim()}. Предмет: ${specialty}.`,
@@ -164,6 +166,7 @@ const PaymentForm = ({
 			language: 'uk',
 			result_url: process.env.REACT_APP_LIQPAY_RESULT_URL
 		}
+
 		// make a payment
 		paymentService.form(paymentData)
 			.then(({ data, signature }) => {
