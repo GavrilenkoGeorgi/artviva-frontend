@@ -11,6 +11,7 @@ import { pureObjectIsEmpty } from '../../utils/objectHelpers'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col } from 'react-bootstrap'
+import CommonLayout from './CommonLayout'
 import LoadingIndicator from '../common/LoadingIndicator'
 import Emoji from '../common/Emoji'
 
@@ -62,25 +63,29 @@ const SchoolOverview =({
 
 	useEffect(() => {
 		if (!pureObjectIsEmpty(schoolStats)) {
-			const listSize = 5
+			const listSize = 6
 			const topGroups = schoolStats.schoolClasses.sort((one, other) => {
 				return one.pupils.length - other.pupils.length
 			})
+
 			const accomplishments =
 				schoolStats.teachers.map(teacher =>
 					({ id: teacher.id, name: teacher.name, accomplishment: teacher.accomplishmentsDscr }))
+
 			setStats(stats => ({
 				...stats,
-				topGroups: topGroups.slice(0, listSize).reverse(),
-				accomplishments: accomplishments.slice(0, listSize)
+				topGroups: topGroups.reverse().slice(0, listSize),
+				accomplishments: accomplishments
+					.filter(teacher => teacher.accomplishment.length)
+					.slice(0, listSize)
 			}))
 		}
 	}, [schoolStats])
 
-	return (
+	return <CommonLayout>
 		<Container>
 			<Row className="d-flex justify-content-center">
-				<h5 className="py-3 custom-font text-center">
+				<h5 className="my-3 custom-font text-center">
 						Списки вчителів, учнів та філій, оплата та інша інформація
 				</h5>
 				{isLoading
@@ -89,10 +94,10 @@ const SchoolOverview =({
 						variant="primary"
 					/>
 					: <>
-						<Col xs={12} md={6}>
+						<Col md={6}>
 							<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
-									<h6 className="text-muted py-3 pl-0">
+									<h6 className="text-muted my-3 pl-0">
 										<Emoji label="Trophy" emoji={'🏆'} /> Професійні досягнення
 									</h6>
 								</Col>
@@ -119,7 +124,7 @@ const SchoolOverview =({
 						<Col xs={12} md={6}>
 							<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
-									<h6 className="text-muted py-3 pl-0">
+									<h6 className="text-muted my-3 pl-0">
 										<Emoji label="Graduation Cap" emoji={'🎓'} /> Найбільші групи
 									</h6>
 								</Col>
@@ -151,7 +156,7 @@ const SchoolOverview =({
 
 							<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
-									<h6 className="text-muted py-3 pl-0">
+									<h6 className="text-muted my-3 pl-0">
 										<Emoji label="Party Popper" emoji={'🎉'} /> Працівник місяця
 									</h6>
 								</Col>
@@ -178,7 +183,7 @@ const SchoolOverview =({
 				}
 			</Row>
 		</Container>
-	)
+	</CommonLayout>
 }
 
 const mapStateToProps = state => {

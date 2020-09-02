@@ -229,16 +229,19 @@ const PassResetForm = ({
 				</Form.Group>
 
 				{/* Button */}
-				<Form.Group className="d-flex justify-content-center" >
-					<BtnWithSpinner
-						type="submit"
-						loadingState={processingForm}
-						disabled={reCaptchaScore !==null && reCaptchaScore < .3 ? true : false}
-						label="Змінити пароль"
-						variant="primary"
-						dataCy="pass-reset-btn"
-						className="primary-color-shadow px-5 mt-4"
-					/>
+				<Form.Group as={Col} className="d-flex justify-content-center" >
+					<Col md={8} className="px-0">
+						<BtnWithSpinner
+							type="submit"
+							block
+							loadingState={processingForm}
+							disabled={reCaptchaScore !==null && reCaptchaScore < .3 ? true : false}
+							label="Змінити пароль"
+							variant="primary"
+							dataCy="pass-reset-btn"
+							className="primary-color-shadow px-5 mt-4"
+						/>
+					</Col>
 				</Form.Group>
 			</Form>
 		)}
