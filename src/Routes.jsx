@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import GroupDetails from './components/schoolClasses/GroupDetails'
 import TeacherDetails from './components/teachers/TeacherDetails'
 import BranchesList from './components/branches/BranchesList'
-import Payments from './components/payments/Payments'
+import LiqPayPayments from './components/views/payments/LiqPayPayments'
 
 import { PrivateRoute, Notification, MainPage } from './components'
 import { LoadingIndicator } from './components/common'
@@ -85,7 +85,7 @@ const Routes = ({ user, fetchingData }) => {
 					</Switch>
 					<PrivateRoute path="/school/specialties" component={Specialties} />
 					<PrivateRoute path="/school/branches" component={BranchesList} />
-					<PrivateRoute path="/school/payments" component={Payments} />
+					<PrivateRoute path="/school/payments" component={LiqPayPayments} />
 				</>
 				: null
 			}
