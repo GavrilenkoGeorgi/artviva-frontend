@@ -83,3 +83,36 @@ export const calcEmployeeExperience = ({ id, employmentDate, experienceToDate })
 		return ({ ...user, result: experienceToDate })
 	}
 }
+
+/**
+ * Sort list of months in given locale
+ *
+ * @param {string} - Locale string
+ * @param {Array} - List of months to sort
+ *
+ * @return {Array} - Array of months
+ */
+
+export const sortMonthsNames = (data, locale) => {
+
+	// https://github.com/nodejs/node/issues/8500
+	// hence this two arrays with months names
+	// eslint-disable-next-line
+	const uaMonths = ['вересень', 'жовтень', 'листопад', 'грудень', 'січень', 'лютий', 'березень', 'квітень', 'травень', 'червень', 'липень', 'серпень']
+	// eslint-disable-next-line
+	const ruMonths = ['сентябрь', 'октябрь', 'ноябрь', 'декабрь', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август']
+
+	let listOfAllMonths
+
+	switch (locale) {
+	case 'uk-UA':
+		listOfAllMonths = uaMonths
+		break
+	case 'ru-RU':
+		listOfAllMonths = ruMonths
+		break
+	default: // default to ua
+		listOfAllMonths = uaMonths
+	}
+	return data.sort((a, b) => listOfAllMonths.indexOf(a) - listOfAllMonths.indexOf(b))
+}

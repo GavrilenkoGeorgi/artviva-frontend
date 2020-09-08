@@ -5,6 +5,7 @@ import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 import teachersService from '../../services/teachers'
 
+import { Link } from 'react-router-dom'
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
@@ -153,9 +154,11 @@ const Teacher = ({
 							<p className="pt-3">
 								<strong>Груп: {teacher.schoolClasses.length || '0'}</strong>
 							</p>
-							{teacher.schoolClasses.map((item, index) => (
-								<p key={index}>{item.title}</p>
-							))}
+							{teacher.schoolClasses.map((item, index) =>
+								<span key={index} className="d-block my-2">
+									<Link to={`/school/groups/${item.id}`}>{item.title}</Link>
+								</span>
+							)}
 						</Col>
 					</Row>
 					<Row>
@@ -180,7 +183,7 @@ const Teacher = ({
 					size="md"
 				/>}>
 				<LazyEntityEditModal
-					subject="вчітеля"
+					subject="Редагувати дані вчітеля"
 					subjectid={teacher.id}
 					show={editModalShow}
 					onHide={() => setEditModalShow(false)}
@@ -191,7 +194,7 @@ const Teacher = ({
 						mode="edit" />
 				</LazyEntityEditModal>
 				<LazyEntityDeleteModal
-					subject="вчітеля"
+					subject="Видалити вчітеля"
 					subjectid={teacher.id}
 					valuetoconfirm={teacher.name}
 					show={deleteModalShow}

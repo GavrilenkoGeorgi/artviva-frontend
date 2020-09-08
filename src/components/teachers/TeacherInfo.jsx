@@ -1,12 +1,13 @@
 import React from 'react'
 import moment from 'moment'
 
+import { Link } from 'react-router-dom'
 import { Row, Col, Card } from 'react-bootstrap'
 import Emoji from '../common/Emoji'
 
 const TeacherInfo = ({ teacher: teacherDetails, teacherExperience }) => {
 
-	const cardStyle = 'm-1 border border-primary1'
+	const cardStyle = 'm-1'
 
 	const Column = props => {
 		return <Col xs={12} sm={6} className="px-0">
@@ -16,7 +17,7 @@ const TeacherInfo = ({ teacher: teacherDetails, teacherExperience }) => {
 
 	return (
 		<Col xs={12}>
-			<Row className="justify-content-center border1">
+			<Row className="justify-content-center">
 				<Col xs={12} className="text-center">
 					<h4 className="custom-font">
 						Детальна інформація про вчителя
@@ -133,6 +134,25 @@ const TeacherInfo = ({ teacher: teacherDetails, teacherExperience }) => {
 							</Card.Text>
 							<Card.Text>
 								Освітньо-кваліфікаційний рівень: {teacherDetails.educationDegree}
+							</Card.Text>
+						</Card.Body>
+					</Card>
+
+					{/* Groups info */}
+					<Card className={cardStyle}>
+						<Card.Body>
+							<Card.Subtitle className="mb-2 text-muted">
+								<Emoji label="Graduation Cap" emoji={'🎓'} />{' '}
+									Групи
+							</Card.Subtitle>
+							<Card.Text>
+								{teacherDetails.schoolClasses.map(group =>
+									<span key={group.id} className="my-3 d-block">
+										<Link to={`/school/groups/${group.id}`}>
+											{group.title}
+										</Link>
+									</span>
+								)}
 							</Card.Text>
 						</Card.Body>
 					</Card>

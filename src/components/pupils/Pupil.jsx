@@ -13,15 +13,12 @@ import LoadingIndicator from '../common/LoadingIndicator'
 import PupilForm from '../forms/PupilForm'
 import EntityControlButtons from '../common/EntityControlButtons'
 
-const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
+const Pupil = ({ user, pupil, posInList }) => {
 
 	const [open, setOpen] = useState(false)
-	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
-	const [isDeleting, setIsDeleting] = useState(false)
 	const unmounted = useRef(false)
 
 	// set auth token
@@ -29,29 +26,6 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 		pupilsService.setToken(user.token)
 		return () => { unmounted.current = true }
 	}, [user])
-
-	const handleDelete = id => {
-		setIsDeleting(true)
-		deletePupil(id)
-			.then(() => {
-				setNotification({
-					message: 'Учень успішно видален.',
-					variant: 'success'
-				}, 5)
-			})
-			.catch(error => {
-				const { message } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-				setIsDeleting(false)
-				setDeleteModalShow(false)
-			})
-			.finally(() => {
-				if (!unmounted) setIsDeleting(false)
-			})
-	}
 
 	return (
 		<>
@@ -63,8 +37,13 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 				variant="link"
 				className="d-flex justify-content-between align-items-center"
 			>
-				<span className="text-left">
-					{posInList}. {pupil.name} <em className="text-muted">{pupil.artSchoolClass} клас</em>
+				<span>
+					<em className="text-secondary">
+						{posInList}.{' '}
+					</em>
+					<em>
+						{pupil.name}
+					</em>
 				</span>
 				{open
 					? <FontAwesomeIcon icon={faAngleUp} />
@@ -75,7 +54,7 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 				<Container>
 					{/* Control buttons */}
 					<Row>
-						<Col className="d-flex align-items-center">
+						<Col className="my-4 d-flex align-items-center">
 							<Link to={`/school/pupils/f1/${pupil.id}`}>
 								Форма Ф-1
 							</Link>
@@ -84,7 +63,6 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 						<EntityControlButtons
 							route={`/school/pupils/${pupil.id}`}
 							openEditModal={() => setEditModalShow(true)}
-							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
 					</Row>
 				</Container>
@@ -98,7 +76,7 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 					size="md"
 				/>}>
 				<LazyEntityEditModal
-					subject="учня"
+					subject="Редагувати дані учня"
 					subjectid={pupil.id}
 					show={editModalShow}
 					onHide={() => setEditModalShow(false)}
@@ -108,15 +86,6 @@ const Pupil = ({ user, pupil, posInList, deletePupil, setNotification }) => {
 						pupil={pupil}
 						mode="edit" />
 				</LazyEntityEditModal>
-				<LazyEntityDeleteModal
-					subject="учня"
-					subjectid={pupil.id}
-					valuetoconfirm={pupil.name}
-					show={deleteModalShow}
-					handleDelete={handleDelete}
-					loadingState={isDeleting}
-					onHide={() => setDeleteModalShow(false)}
-				/>
 			</Suspense>
 		</>
 	)
