@@ -1,7 +1,7 @@
 {
   "name": "artviva-frontend",
   "description": "ArtViva school site",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "private": false,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
