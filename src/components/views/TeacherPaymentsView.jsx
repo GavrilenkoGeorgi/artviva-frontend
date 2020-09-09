@@ -16,6 +16,7 @@ const TeacherPaymentsView = ({
 	setNotification
 }) => {
 
+	// eslint-disable-next-line
 	const [paymentsByPupil, setPaymentsByPupil] = useState([])
 
 	useEffect(() => {
@@ -38,6 +39,8 @@ const TeacherPaymentsView = ({
 		if (teacher && teacher.payments) {
 
 			const payments = teacher.payments
+
+			console.log('payments', payments)
 
 			if (payments.length > 0) {
 				let result = payments.reduce((list, item) => {
@@ -62,8 +65,8 @@ const TeacherPaymentsView = ({
 
 	return (
 		<CommonLayout>
-			<Tabs defaultActiveKey="payments-by-pupil" id="payments-tabs">
-				<Tab eventKey="payments-by-pupil" title="По учням">
+			<Tabs defaultActiveKey="all-payments" id="payments-tabs">
+				{/*<Tab eventKey="payments-by-pupil" title="По учням">
 					{paymentsByPupil.length
 						? <Col>
 							<Col xs={12} className="text-right">
@@ -77,7 +80,7 @@ const TeacherPaymentsView = ({
 							<p>Ви ще маєте жодного платежу</p>
 						</Col>
 					}
-				</Tab>
+				</Tab>*/}
 				<Tab eventKey="all-payments" title="Список всіх платежів">
 					{teacher.payments && teacher.payments.length > 0
 						? <Col>

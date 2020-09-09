@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import paymentService from '../../../services/payment'
 import { setNotification, setFetchingData } from '../../../reducers/notificationReducer'
+import { getLiqPayData } from '../../../reducers/liqPayDataReducer'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { toHumanReadable } from '../../../utils/datesAndTime'
 import getPaymentDataFromString from '../../../utils/parsePaymentDescr'
 
+import { Container, Row, Col } from 'react-bootstrap'
 import CommonLayout from '../CommonLayout'
 import DateRangeInput from './DateRangeInput'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Button } from '../../../components/common/buttons'
+import { FilterData } from '../../sorting'
 
 const LiqPayPayments = ({
-	user, setNotification, setFetchingData }) => {
+	user, liqPayData, setNotification, setFetchingData, getLiqPayData }) => {
 
 	const today = moment()
 	// last month shown by default
@@ -24,6 +27,8 @@ const LiqPayPayments = ({
 			date_to: date.valueOf() }
 	}
 
+	const [filter, setFilter] = useState('')
+	const [hideSuccessful, setHideSuccessful] = useState(false)
 	const [range, setRange] = useState(defaultLiqPayDateRange(today))
 	const [paymentsList, setPaymentsList] = useState([])
 	const schoolYear =
@@ -49,25 +54,49 @@ const LiqPayPayments = ({
 	}
 
 	useEffect(() => {
+		if (filter) {
+			const result = liqPayData.filter(item => item.description.toUpperCase().includes(filter.toUpperCase()))
+			setPaymentsList([ ...result ])
+		} else {
+			setPaymentsList(liqPayData)
+		}
+	},[filter, liqPayData])
+
+	useEffect(() => {
+		if (hideSuccessful) {
+			const result = liqPayData.filter(item => item.status !== 'success')
+			setPaymentsList([ ...result ])
+		} else {
+			setPaymentsList(liqPayData)
+		}
+	}, [hideSuccessful, liqPayData])
+
+	useEffect(() => {
+		setPaymentsList(liqPayData)
+	}, [liqPayData])
+
+	useEffect(() => {
 		if (user) {
 			paymentService.setToken(user.token)
 		}
 	}, [user])
 
 	useEffect(() => {
-		setFetchingData(true)
-		paymentService.getLiqPayResults(range)
-			.then(result => {
-				setPaymentsList(result.data.reverse())
-			})
-			.catch(error => {
-				setNotification({
-					message: error.message,
-					variant: 'danger'
-				}, 5)
-			})
-			.finally(() => setFetchingData(false))
-	}, [range, setNotification, setFetchingData])
+		if (user) {
+			setFetchingData(true)
+			getLiqPayData(range)
+				.then(() => {
+					console.log('Reducer payments set')
+				})
+				.catch(error => {
+					setNotification({
+						message: error.message,
+						variant: 'danger'
+					}, 5)
+				})
+				.finally(() => setFetchingData(false))
+		}
+	}, [range, user, setNotification, setFetchingData, getLiqPayData])
 
 	// progressively add more data on scroll
 	const [maxCount, setMaxCount] = useState(15)
@@ -111,29 +140,53 @@ const LiqPayPayments = ({
 					<h1 className="text-center custom-font">Платежі</h1>
 					<h6 className="text-muted text-center">(дані з бази даніх liqpay)</h6>
 				</Col>
-				<Col>
+				<Col xs={12}>
 					<DateRangeInput
 						range={range}
 						setRange={setRange} />
 				</Col>
+
+				<Col xs={12} className="d-flex align-items-center justify-content-center">
+					<FilterData
+						filter={e => setFilter(e.target.value)}
+						fieldName="query"
+						placeholder="Пошук по опису платежа (викладач, учень, предмет)"
+					/>
+				</Col>
+				<Col xs={12} className="mt-4 d-flex align-items-center justify-content-center">
+					<Button
+						label={hideSuccessful ? 'Показати всі' : 'Сховати успішни'}
+						dataCy="filter-by-status-btn"
+						onClick={() => setHideSuccessful(!hideSuccessful)}
+						type="button"
+						variant={hideSuccessful ? 'outline-primary' : 'primary'}
+					/>
+				</Col>
+
 				{paymentsList.length
 					? <Container className="mx-2">
 						<Col className="my-4 text-right">
 							<em>Загалом <span>за {humanReadableRange(range)}</span>:{' '}
 								<strong>{paymentsList.length}</strong> шт.</em>
 						</Col>
-						{paymentsList.slice(0, maxCount).map(payment => (
+						{paymentsList.slice(0, maxCount).map((payment, index) => (
 							<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
-								<Col xs={6}>
+								<Col sm={3}>
+									ID: {payment.order_id.slice(0, 8)}
+								</Col>
+								<Col sm={3}>
 									{toHumanReadable('uk-ua', payment.create_date)}
 								</Col>
-								<Col xs={6}>
+								<Col sm={3}>
 									{payment.status === 'success'
 										? <span className="text-success">{payment.status}</span>
 										: <span className="text-warning">
 											{payment.status}: {payment.err_description}
 										</span>
 									}
+								</Col>
+								<Col sm={2} className="text-right">
+									<span>{index + 1}</span>
 								</Col>
 								<Col sm={9} className="mt-3 text-muted">
 									<small><em>{payment.description}</em></small>
@@ -162,13 +215,15 @@ const LiqPayPayments = ({
 
 const mapStateToProps = state => {
 	return {
-		user: state.user
+		user: state.user,
+		liqPayData: state.liqPayData
 	}
 }
 
 const mapDispatchToProps = {
 	setNotification,
-	setFetchingData
+	setFetchingData,
+	getLiqPayData
 }
 
 export default connect (

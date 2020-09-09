@@ -8,8 +8,8 @@ import { setNotification } from '../../reducers/notificationReducer'
 import { nestedSort } from '../../utils/arrayHelpers'
 import { pureObjectIsEmpty } from '../../utils/objectHelpers'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col } from 'react-bootstrap'
 import CommonLayout from './CommonLayout'
 import LoadingIndicator from '../common/LoadingIndicator'
@@ -154,7 +154,7 @@ const SchoolOverview =({
 								</Col>
 							</Row>
 
-							<Row className="px-3 d-flex justify-content-center">
+							{/*<Row className="px-3 d-flex justify-content-center">
 								<Col xs={12}>
 									<h6 className="text-muted my-3 pl-0">
 										<Emoji label="Party Popper" emoji={'🎉'} /> Працівник місяця
@@ -173,12 +173,11 @@ const SchoolOverview =({
 												{result.amount}{' '}
 												<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
 											</Col>
-										</Row>
+									</Row>
 									)}
 								</Col>
-							</Row>
+							</Row>*/}
 						</Col>
-
 					</>
 				}
 			</Row>

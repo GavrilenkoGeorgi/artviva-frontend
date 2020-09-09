@@ -163,10 +163,7 @@ const Teacher = ({
 					</Row>
 					<Row>
 						<EntityControlButtons
-							route={teacher.linkedUserAccountId
-								? `users/${teacher.linkedUserAccountId}`
-								: `teachers/${teacher.id}`
-							}
+							route={`teachers/${teacher.id}`}
 							fetchingTeacherData={fetchingData}
 							openEditModal={() => openEditModal(teacher.id)}
 							openDeleteModal={() => setDeleteModalShow(true)}

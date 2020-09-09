@@ -70,10 +70,10 @@ const TeacherPaymentsList = ({
 	return <>
 		{payments.map(payment => (
 			<Container key={payment.id}>
-				<Row className="my-4 border1 rounded">
+				<Row className="my-4">
 					{/* Title */}
 					<Col xs={10} className="px-0 py-2">
-						<h4 className="d-inline1 custom-font payment-pupil-name">
+						<h4 className="custom-font payment-pupil-name">
 							{payment.paymentDescr.pupil} {payment.amount} грн
 						</h4>
 					</Col>
@@ -89,9 +89,14 @@ const TeacherPaymentsList = ({
 					</Col>
 					{/* Timestamp */}
 					<Col xs={12} className="pb-2">
-						<h5 className="small"><em>
+						<span className="d-block">ID: {payment.order_id.slice(0, 8)}</span>
+						<span className="d-block"><em>
+							Статус: <span className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
+								{payment.status}</span>
+						</em></span>
+						<span className="small"><em>
 							{timeStamp(payment.create_date)}
-						</em></h5>
+						</em></span>
 					</Col>
 					{/* Specialty */}
 					<Col xs={12} className="pb-2">

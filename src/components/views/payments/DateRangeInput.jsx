@@ -21,7 +21,7 @@ const DateRangeInput = ({ range, setRange }) => {
 	})
 
 	const InputColumn = (props) => {
-		return <Col sm={6}
+		return <Col
 			className="d-flex align-items-start justify-content-center"
 		>
 			{props.children}
@@ -29,7 +29,7 @@ const DateRangeInput = ({ range, setRange }) => {
 	}
 
 	const BtnColumn = (props) => {
-		return <Col sm={12}
+		return <Col
 			className="mt-3 d-flex align-items-center justify-content-center"
 		>
 			{props.children}
@@ -92,7 +92,7 @@ const DateRangeInput = ({ range, setRange }) => {
 					<BtnColumn>
 						<BtnWithSpinner
 							type="submit"
-							label="Знайти"
+							label="Завантажити"
 							variant="success"
 							loadingState={false}
 							dataCy="search-payments-btn"

@@ -31,7 +31,6 @@ const Footer = () => {
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
 						<Row>
 							<Col xs={12} className="pb-2">
-								<p className="mb-2">+38 (050) 963-54-38</p>
 								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
 								<em className="text-muted">
 									08122, Київська обл., Києво-Святошинський район, с. Шпитьки, вул. Господарська, 3

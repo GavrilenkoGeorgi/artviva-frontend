@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
 import userService from '../../services/users'
 import { deleteUser } from '../../reducers/userReducer'
@@ -6,11 +6,13 @@ import { setNotification,	setProcessingForm } from '../../reducers/notificationR
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
+import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import Emoji from '../common/Emoji'
 import EntityControlButtons from '../common/EntityControlButtons'
 import LoadingIndicator from '../common/LoadingIndicator'
 import UserEditForm from '../forms/UserEditForm'
+import { useEffect } from 'react'
 
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
@@ -24,13 +26,23 @@ const UserDetailsCard = ({
 	setNotification,
 	setProcessingForm }) => {
 
+	const unmounted = useRef(false)
+	const history = useHistory()
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
+	const [deleteSuccessful, setDeleteSuccessful] = useState(false)
+
+	useEffect(() => {
+		if (deleteSuccessful) history.push('/school/users')
+	}, [deleteSuccessful, history])
 
 	const handleDelete = () => {
 		setProcessingForm(true)
 		userService.setToken(user.token)
 		deleteUser(userData.id)
+			.then(() => {
+				setDeleteSuccessful(true)
+			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
 				setNotification({
@@ -39,7 +51,10 @@ const UserDetailsCard = ({
 				}, 5)
 			})
 			.finally(() => {
-				setProcessingForm(false)
+				if (!unmounted.current) {
+					setDeleteModalShow(false)
+					setProcessingForm(false)
+				}
 			})
 	}
 
@@ -105,7 +120,10 @@ const UserDetailsCard = ({
 							<em>Групи:</em> {userData.teacher && userData.teacher.schoolClasses
 								? <span>{userData.teacher.schoolClasses.map(group => (
 									<p key={group.id}>
-										{group.specialty.title} {group.title}
+										{group.specialty.title} &mdash;{' '}
+										<Link to={`/school/groups/${group.id}`}>
+											{group.title}
+										</Link>
 									</p>
 								))}
 								</span>
@@ -128,6 +146,7 @@ const UserDetailsCard = ({
 						}
 						<Col xs={12}>
 							<EntityControlButtons
+								route={`/school/users/${userData.id}`}
 								openEditModal={() => setEditModalShow(true)}
 								openDeleteModal={() => setDeleteModalShow(true)}
 							/>
