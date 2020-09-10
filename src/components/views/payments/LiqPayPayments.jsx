@@ -31,6 +31,7 @@ const LiqPayPayments = ({
 	const [hideSuccessful, setHideSuccessful] = useState(false)
 	const [range, setRange] = useState(defaultLiqPayDateRange(today))
 	const [paymentsList, setPaymentsList] = useState([])
+	const [totals, setTotals] = useState({ success: 0, failure: 0 })
 	const schoolYear =
 		['вересень', 'жовтень', 'листопад', 'грудень', 'січень', 'лютий', 'березень', 'квітень', 'травень']
 
@@ -73,6 +74,7 @@ const LiqPayPayments = ({
 
 	useEffect(() => {
 		setPaymentsList(liqPayData)
+		setTotals(calcTotals(liqPayData))
 	}, [liqPayData])
 
 	useEffect(() => {
@@ -105,6 +107,16 @@ const LiqPayPayments = ({
 			setMaxCount(count => count + 3)
 		}
 	})
+
+	const calcTotals = data => {
+		const total = data.reduce((a, b) => a + (b.amount || 0), 0)
+		const successfulPayments = data.filter(item => item.status === 'success')
+		const success = successfulPayments.reduce((acc, item) => acc + (item.amount || 0), 0)
+		return {
+			success,
+			failure: total - success
+		}
+	}
 
 	const ParsedDescription = ({ descr }) => {
 		if (descr) {
@@ -165,10 +177,23 @@ const LiqPayPayments = ({
 
 				{paymentsList.length
 					? <Container className="mx-2">
-						<Col className="my-4 text-right">
-							<em>Загалом <span>за {humanReadableRange(range)}</span>:{' '}
-								<strong>{paymentsList.length}</strong> шт.</em>
-						</Col>
+						<Row className="my-4 py-3 text-right border rounded">
+							<Col sm={6} className="mb-2111">
+								<em>Платежів <span>за {humanReadableRange(range)}</span>:{' '}
+									<strong>{paymentsList.length}</strong> шт.</em>
+							</Col>
+							<Col sm={6}>
+								{hideSuccessful
+									? <span className='text-warning'>
+										<em>Невдали платежі <span> за {humanReadableRange(range)}
+										</span>:{' '}
+										<strong>{totals.failure}</strong> грн.</em></span>
+									: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
+									</span>:{' '}
+									<strong>{totals.success}</strong> грн.</em>
+								}
+							</Col>
+						</Row>
 						{paymentsList.slice(0, maxCount).map((payment, index) => (
 							<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
 								<Col sm={3}>
