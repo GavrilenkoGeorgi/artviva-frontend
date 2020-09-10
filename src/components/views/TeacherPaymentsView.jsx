@@ -37,11 +37,7 @@ const TeacherPaymentsView = ({
 
 	useEffect(() => {
 		if (teacher && teacher.payments) {
-
 			const payments = teacher.payments
-
-			console.log('payments', payments)
-
 			if (payments.length > 0) {
 				let result = payments.reduce((list, item) => {
 
