@@ -8,6 +8,7 @@ import 'moment-precise-range-plugin'
 import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { toHumanReadable } from '../../../utils/datesAndTime'
 import getPaymentDataFromString from '../../../utils/parsePaymentDescr'
+import { substractLiqPayPercent } from '../../../utils/paymentsHelper'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import CommonLayout from '../CommonLayout'
@@ -73,8 +74,10 @@ const LiqPayPayments = ({
 	}, [hideSuccessful, liqPayData])
 
 	useEffect(() => {
-		setPaymentsList(liqPayData)
-		setTotals(calcTotals(liqPayData))
+		const adjustedForPercent =
+			liqPayData.map(item => ({ ...item, amount: substractLiqPayPercent(item.amount) }) )
+		setPaymentsList(adjustedForPercent)
+		setTotals(calcTotals(adjustedForPercent))
 	}, [liqPayData])
 
 	useEffect(() => {
@@ -187,10 +190,10 @@ const LiqPayPayments = ({
 									? <span className='text-warning'>
 										<em>Невдали платежі <span> за {humanReadableRange(range)}
 										</span>:{' '}
-										<strong>{totals.failure}</strong> грн.</em></span>
+										<strong>{totals.failure.toFixed(2)}</strong> грн.</em></span>
 									: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
 									</span>:{' '}
-									<strong>{totals.success}</strong> грн.</em>
+									<strong>{totals.success.toFixed(2)}</strong> грн.</em>
 								}
 							</Col>
 						</Row>
@@ -217,7 +220,7 @@ const LiqPayPayments = ({
 									<small><em>{payment.description}</em></small>
 								</Col>
 								<Col sm={3} className="d-flex align-items-center justify-content-center">
-									<strong>{payment.amount}<em>&nbsp;грн</em></strong>
+									<strong>{payment.amount.toFixed(2)}<em>&nbsp;грн</em></strong>
 								</Col>
 								<Col xs={12} className="mt-4">
 									<ParsedDescription descr={payment.description} />

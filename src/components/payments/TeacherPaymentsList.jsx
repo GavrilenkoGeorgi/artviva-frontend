@@ -76,7 +76,7 @@ const TeacherPaymentsList = ({
 					{/* Title */}
 					<Col xs={12} className="px-0 py-2">
 						<h4 className="custom-font payment-pupil-name">
-							{payment.paymentDescr.pupil} {payment.amount} грн
+							{payment.paymentDescr.pupil} {payment.amount.toFixed(2)} грн
 						</h4>
 					</Col>
 					{/* Edit button
