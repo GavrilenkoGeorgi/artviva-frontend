@@ -8,7 +8,7 @@ import 'moment-precise-range-plugin'
 import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { toHumanReadable } from '../../../utils/datesAndTime'
 import getPaymentDataFromString from '../../../utils/parsePaymentDescr'
-import { substractLiqPayPercent } from '../../../utils/paymentsHelper'
+// import { substractLiqPayPercent } from '../../../utils/paymentsHelper'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import CommonLayout from '../CommonLayout'
@@ -74,10 +74,8 @@ const LiqPayPayments = ({
 	}, [hideSuccessful, liqPayData])
 
 	useEffect(() => {
-		const adjustedForPercent =
-			liqPayData.map(item => ({ ...item, amount: substractLiqPayPercent(item.amount) }) )
-		setPaymentsList(adjustedForPercent)
-		setTotals(calcTotals(adjustedForPercent))
+		setPaymentsList(liqPayData)
+		setTotals(calcTotals(liqPayData))
 	}, [liqPayData])
 
 	useEffect(() => {

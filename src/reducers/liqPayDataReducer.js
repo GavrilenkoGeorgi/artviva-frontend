@@ -1,4 +1,5 @@
 import paymentService from '../services/payment'
+import { substractLiqPayPercent } from '../utils/paymentsHelper'
 
 const liqPayDataReducer = (state = [], action) => {
 	switch (action.type) {
@@ -17,7 +18,7 @@ export const getLiqPayData = (range) => {
 		const payments = await paymentService.getLiqPayResults(range)
 		dispatch ({
 			type: 'INIT_LIQPAY_DATA',
-			data: payments.data
+			data: payments.data.map(item => ({ ...item, amount: substractLiqPayPercent(item.amount) }))
 		})
 	}
 }
