@@ -90,9 +90,6 @@ const LiqPayPayments = ({
 		if (user) {
 			setFetchingData(true)
 			getLiqPayData(range)
-				.then(() => {
-					console.log('Reducer payments set')
-				})
 				.catch(error => {
 					setNotification({
 						message: error.message,
