@@ -86,6 +86,9 @@ const GroupDetails = ({ user, match, setNotification, deleteSchoolClass }) => {
 						<Col xs={12}>
 							<h6 className="mt-3 text-muted text-center">{groupDetails.title}</h6>
 						</Col>
+						<Col xs={12} className="my-3">
+							<em className="text-muted">{groupDetails.info}</em>
+						</Col>
 						<Col>
 							<Container>
 								{groupDetails.pupils.map((pupil, idx) => (
@@ -99,27 +102,26 @@ const GroupDetails = ({ user, match, setNotification, deleteSchoolClass }) => {
 										<Col>
 											<em className="text-muted">{pupil.info}</em>
 										</Col>
-										{pupil.assignedTo && user.superUser
-											? <Col xs={12} className="mt-3 d-flex justify-content-end text-muted">
-												<Link to={`/school/users/${pupil.assignedTo.id}`}>
-													<small>
-														<span className="text-muted">Відповідальний</span>{' '}
-														{pupil.assignedTo.name} {pupil.assignedTo.lastname}
+										{ user.superUser
+											? <>{pupil.assignedTo
+												? <Col xs={12} className="mt-3 d-flex justify-content-end text-muted">
+													<Link to={`/school/users/${pupil.assignedTo.id}`}>
+														<small>
+															<span className="text-muted">Відповідальний</span>{' '}
+															{pupil.assignedTo.name} {pupil.assignedTo.lastname}
+														</small>
+													</Link>
+												</Col>
+												: <Col xs={12} className="mt-3 d-flex justify-content-end">
+													<small className="text-warning">
+														<em>Відповідальний за учня не обран!</em>
 													</small>
-												</Link>
-											</Col>
-											: <Col xs={12} className="mt-3 d-flex justify-content-end">
-												<small className="text-warning">
-													<em>Відповідальний за учня не обран!</em>
-												</small>
-											</Col>
-										}
+												</Col>}
+											</>
+											: null }
 									</Row>
 								))}
 							</Container>
-						</Col>
-						<Col xs={12} className="my-3">
-							<em className="text-muted">{groupDetails.info}</em>
 						</Col>
 					</Row>
 					<Row>
