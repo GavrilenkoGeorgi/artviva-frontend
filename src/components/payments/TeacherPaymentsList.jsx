@@ -8,6 +8,7 @@ import { updatePaymentDescr } from '../../reducers/paymentsReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 
 import { Container, Row, Col } from 'react-bootstrap'
+// eslint-disable-next-line
 import { BtnWithIcon } from '../common/buttons' // fix this btn
 import { LoadingIndicator } from '../common'
 import { PaymentDescrForm } from '../forms'
@@ -34,6 +35,7 @@ const TeacherPaymentsList = ({
 		if (token) paymentService.setToken(token)
 	}, [token, teacher])
 
+	// eslint-disable-next-line
 	const handlePayment = payment => {
 		setPaymentToEdit(payment)
 		setEditModalShow(true)
@@ -72,13 +74,13 @@ const TeacherPaymentsList = ({
 			<Container key={payment.id}>
 				<Row className="my-4">
 					{/* Title */}
-					<Col xs={10} className="px-0 py-2">
+					<Col xs={12} className="px-0 py-2">
 						<h4 className="custom-font payment-pupil-name">
 							{payment.paymentDescr.pupil} {payment.amount} грн
 						</h4>
 					</Col>
-					{/* Edit button */}
-					<Col xs={2} className="border1 d-flex align-items-center justify-content-center">
+					{/* Edit button
+					<Col xs={2} className="d-flex align-items-center justify-content-center">
 						<BtnWithIcon
 							variant="outline-success"
 							type="button"
@@ -86,7 +88,7 @@ const TeacherPaymentsList = ({
 							label="edit"
 							onClick={() => handlePayment(payment)}
 						/>
-					</Col>
+					</Col> */}
 					{/* Timestamp */}
 					<Col xs={12} className="pb-2">
 						<span className="d-block">ID: {payment.order_id.slice(0, 8)}</span>
