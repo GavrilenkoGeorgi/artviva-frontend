@@ -6,6 +6,7 @@ import 'moment/locale/uk'
 import paymentService from '../../services/payment'
 import { updatePaymentDescr } from '../../reducers/paymentsReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
+import liqpayStatusCodes from '../../data/liqpayStatusCodes'
 
 import { Container, Row, Col } from 'react-bootstrap'
 // eslint-disable-next-line
@@ -93,8 +94,8 @@ const TeacherPaymentsList = ({
 					<Col xs={12} className="pb-2">
 						<span className="d-block">ID: {payment.order_id.slice(0, 8)}</span>
 						<span className="d-block"><em>
-							Статус: <span className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
-								{payment.status}</span>
+							<span className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
+								{liqpayStatusCodes[payment.status]}</span>
 						</em></span>
 						<span className="small"><em>
 							{timeStamp(payment.create_date)}

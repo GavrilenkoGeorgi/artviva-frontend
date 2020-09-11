@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import { Form, Col } from 'react-bootstrap'
 import SortControlColumn from './SortControlColumn'
 
-const FilterData = ({ filter, fieldName, placeholder }) => {
+const FilterData = ({ filter, fieldName, placeholder, size }) => {
 
 	return (
-		<SortControlColumn>
+		<SortControlColumn size={size}>
 			<Form.Label htmlFor={`${fieldName}-filter-input`} srOnly>
 				<Col xs={12} className="px-0">
 					{placeholder}

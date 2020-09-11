@@ -80,7 +80,7 @@ const TeacherPaymentsView = ({
 				<Tab eventKey="all-payments" title="Список всіх платежів">
 					{teacher.payments && teacher.payments.length > 0
 						? <Col>
-							<Col xs={12} className="text-right">
+							<Col xs={12} className="mt-3 text-right">
 								Всього: {teacher.payments.length} платежі <br/>
 							</Col>
 							<Col>
@@ -114,7 +114,9 @@ const mapDispatchToProps = {
 	setNotification
 }
 
+const MemodTeacherPaymentsView = React.memo(TeacherPaymentsView)
+
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(TeacherPaymentsView)
+)(MemodTeacherPaymentsView)

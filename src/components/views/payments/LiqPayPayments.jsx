@@ -8,13 +8,14 @@ import 'moment-precise-range-plugin'
 import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { toHumanReadable } from '../../../utils/datesAndTime'
 import getPaymentDataFromString from '../../../utils/parsePaymentDescr'
-// import { substractLiqPayPercent } from '../../../utils/paymentsHelper'
+import liqpayStatusCodes from '../../../data/liqpayStatusCodes'
 
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
 import CommonLayout from '../CommonLayout'
 import DateRangeInput from './DateRangeInput'
-import { Button } from '../../../components/common/buttons'
 import { FilterData } from '../../sorting'
+import PupilsReport from './PupilsReport'
+import CheckBox from './CheckBox'
 
 const LiqPayPayments = ({
 	user, liqPayData, setNotification, setFetchingData, getLiqPayData }) => {
@@ -151,86 +152,101 @@ const LiqPayPayments = ({
 					<h6 className="text-muted text-center">(дані з бази даніх liqpay)</h6>
 				</Col>
 				<Col xs={12}>
-					<DateRangeInput
-						range={range}
-						setRange={setRange} />
-				</Col>
-
-				<Col xs={12} className="d-flex align-items-center justify-content-center">
-					<FilterData
-						filter={e => setFilter(e.target.value)}
-						fieldName="query"
-						placeholder="Пошук по опису платежа (викладач, учень, предмет)"
-					/>
-				</Col>
-				<Col xs={12} className="mt-4 d-flex align-items-center justify-content-center">
-					<Button
-						label={hideSuccessful ? 'Показати всі' : 'Сховати успішни'}
-						dataCy="filter-by-status-btn"
-						onClick={() => setHideSuccessful(!hideSuccessful)}
-						type="button"
-						variant={hideSuccessful ? 'outline-primary' : 'primary'}
-					/>
-				</Col>
-
-				{paymentsList.length
-					? <Container className="mx-2">
-						<Row className="my-4 py-3 text-right border rounded">
-							<Col sm={6} className="mb-2111">
-								<em>Платежів <span>за {humanReadableRange(range)}</span>:{' '}
-									<strong>{paymentsList.length}</strong> шт.</em>
+					<Tabs defaultActiveKey="liqpay" id="reports-tabs">
+						<Tab eventKey="liqpay" title="LIQPAY">
+							<Col xs={12}>
+								<DateRangeInput
+									range={range}
+									setRange={setRange} />
 							</Col>
-							<Col sm={6}>
-								{hideSuccessful
-									? <span className='text-warning'>
-										<em>Невдали платежі <span> за {humanReadableRange(range)}
-										</span>:{' '}
-										<strong>{totals.failure.toFixed(2)}</strong> грн.</em></span>
-									: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
-									</span>:{' '}
-									<strong>{totals.success.toFixed(2)}</strong> грн.</em>
-								}
-							</Col>
-						</Row>
-						{paymentsList.slice(0, maxCount).map((payment, index) => (
-							<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
-								<Col sm={3}>
-									ID: {payment.order_id.slice(0, 8)}
+
+							<Row className="my-3">
+								<Col sm={8} className="px-0">
+									<FilterData
+										size="full"
+										filter={e => setFilter(e.target.value)}
+										fieldName="query"
+										placeholder="Пошук по опису платежа (викладач, учень, предмет)"
+									/>
 								</Col>
-								<Col sm={3}>
-									{toHumanReadable('uk-ua', payment.create_date)}
-								</Col>
-								<Col sm={3}>
-									{payment.status === 'success'
-										? <span className="text-success">{payment.status}</span>
-										: <span className="text-warning">
-											{payment.status}: {payment.err_description}
-										</span>
-									}
-								</Col>
-								<Col sm={2} className="text-right">
-									<span>{index + 1}</span>
-								</Col>
-								<Col sm={9} className="mt-3 text-muted">
-									<small><em>{payment.description}</em></small>
-								</Col>
-								<Col sm={3} className="d-flex align-items-center justify-content-center">
-									<strong>{payment.amount.toFixed(2)}<em>&nbsp;грн</em></strong>
-								</Col>
-								<Col xs={12} className="mt-4">
-									<ParsedDescription descr={payment.description} />
+								<Col
+									sm={4}
+									// eslint-disable-next-line
+									className="px-0 mt-3 mt-sm-0 d-flex align-items-center justify-content-center justify-content-sm-start">
+									<CheckBox
+										checked={hideSuccessful}
+										label={hideSuccessful ? 'Успішни приховані' : 'Сховати успішни'}
+										onChange={() => setHideSuccessful(!hideSuccessful)}
+									/>
 								</Col>
 							</Row>
-						))}
-					</Container>
-					: <Container>
-						<Col className="my-3 text-center">
-							<p>
-								Не вдається знайти платежі за певний діапазон, спробуйте відкоригувати його.
-							</p>
-						</Col>
-					</Container>
-				}
+							{paymentsList.length
+								? <Container>
+									<Row className="mt-3 py-3 text-right border rounded">
+										<Col sm={6}>
+											<em>Платежів <span>за {humanReadableRange(range)}</span>:{' '}
+												<strong>{paymentsList.length}</strong> шт.</em>
+										</Col>
+										<Col sm={6}>
+											{hideSuccessful
+												? <span className='text-warning'>
+													<em>Невдали платежі <span> за {humanReadableRange(range)}
+													</span>:{' '}
+													<strong>{totals.failure.toFixed(2)}</strong> грн.</em></span>
+												: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
+												</span>:{' '}
+												<strong>{totals.success.toFixed(2)}</strong> грн.</em>
+											}
+										</Col>
+									</Row>
+									{paymentsList.slice(0, maxCount).map((payment, index) => (
+										<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
+											<Col sm={3}>
+												ID: {payment.order_id.slice(0, 8)}
+											</Col>
+											<Col sm={3}>
+												{toHumanReadable('uk-ua', payment.create_date)}
+											</Col>
+											<Col sm={3}>
+												{/* eslint-disable-next-line */}
+												<em className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
+													{liqpayStatusCodes[payment.status]}
+												</em>
+											</Col>
+											<Col sm={2} className="text-right">
+												<span>{index + 1}</span>
+											</Col>
+											<Col sm={9} className="mt-3 text-muted">
+												<small><em>{payment.description}</em></small>
+											</Col>
+											<Col sm={3} className="d-flex align-items-center justify-content-center">
+												<strong>{payment.amount.toFixed(2)}<em>&nbsp;грн</em></strong>
+											</Col>
+											<Col xs={12} className="mt-4">
+												<ParsedDescription descr={payment.description} />
+											</Col>
+										</Row>
+									))}
+								</Container>
+								: <Container>
+									<Col className="my-3 text-center">
+										<p>
+											Не вдається знайти платежі за певний діапазон, спробуйте відкоригувати його.
+										</p>
+									</Col>
+								</Container>
+							}
+						</Tab>
+						<Tab eventKey="pupils-total" title="Звіт учні pdf">
+							<Col xs={12} className="px-0">
+								<PupilsReport data={paymentsList} />
+							</Col>
+						</Tab>
+						{/*<Tab eventKey="teachers-total" title="Звіт вчителі pdf">
+							Teachers
+						</Tab>*/}
+					</Tabs>
+				</Col>
 			</Row>
 		</Container>
 	</CommonLayout>
