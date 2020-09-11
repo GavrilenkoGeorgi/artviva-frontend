@@ -45,7 +45,7 @@ const PupilsList = ({
 
 	const quantity = length => {
 		return length === 0
-			? 'Ще не зачіслен до жодної групи'
+			? 'Ще не зачислен до жодної групи'
 			: (length === 1)
 				? `${length} група`
 				: (length <= 4)
