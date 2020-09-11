@@ -55,7 +55,7 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 	}, [user, calcXpToDate, setNotification, match])
 
 	return (
-		<Container className="border1 border-success">
+		<Container>
 			<Row className="justify-content-center">
 				{teacherDetails
 					? <TeacherInfo

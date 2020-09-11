@@ -11,6 +11,7 @@ import { Formik, FieldArray, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import PropTypes from 'prop-types'
 
+import { useHistory } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import { Container, Row, Col, Form, Button } from 'react-bootstrap'
@@ -28,6 +29,7 @@ const GroupForm = ({
 	const [editMode, setEditMode] = useState(false)
 	const [pupilError, setPupilError] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
+	const history = useHistory()
 
 	useEffect(() => {
 		if (mode === 'edit') {
@@ -169,6 +171,9 @@ const GroupForm = ({
 					variant: 'success'
 				}, 5)
 				closeModal()
+				if (history.location.pathname === `/school/groups/${group.id}`) {
+					history.go(0)
+				}
 			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
@@ -426,7 +431,7 @@ const GroupForm = ({
 													/>
 												</Col>
 
-												<Col xs={4} className="my-2 align-items-end border1 border-secondary">
+												<Col xs={4} className="my-2 align-items-end">
 													<Row className="d-flex justify-content-center">
 														<Col className="pr-1">
 															{/* remove pupil from the list */}

@@ -45,7 +45,7 @@ const PupilsList = ({
 
 	const quantity = length => {
 		return length === 0
-			? 'Ще не зачіслен до жодної'
+			? 'Ще не зачислен до жодної групи'
 			: (length === 1)
 				? `${length} група`
 				: (length <= 4)
@@ -65,7 +65,7 @@ const PupilsList = ({
 						? <ListGroup>
 							{list.map((pupil, index) =>
 								<ListGroup.Item
-									className={`animated slow fadeIn p-0 ${checkPupilStatus(pupil)}`}
+									className={`animated slow fadeIn p-0 p-sm-3 ${checkPupilStatus(pupil)}`}
 									key={pupil.id}
 								>
 									<Container>
@@ -79,19 +79,33 @@ const PupilsList = ({
 														<Col xs={11} md={5}
 															key={group.id} className="my-2 pupil-groups">
 															<Link to={`/school/groups/${group.id}`}>
-																<p className="group-title">{group.title}</p>
+																<p className="group-title">{group.specialty.title}</p>
 															</Link>
-															<p className="group-teacher">{group.teacher.name}</p>
+															<p className="group-teacher">
+																{group.teacher.name}
+															</p>
+															<em className="text-muted"><small>{group.title}</small></em>
 														</Col>
 													)}
 												</Row>
 
 											</Col>
-											<Col xs={12} className="text-right">
-												<em className="text-muted">
-													{quantity(pupil.schoolClasses.length)}
-												</em>
-											</Col>
+											<Container>
+												<Row>
+													<Col sm={12}>
+														<Link to={`/school/pupils/f1/${pupil.id}`}>
+															<em className="text-secondary">Фах:{' '}
+																{pupil.specialty.title}</em>
+														</Link><br />
+														<em className="text-muted1">{pupil.artSchoolClass} клас ДШМ</em>
+													</Col>
+													<Col xs={12} className="text-right">
+														<em className="text-muted">
+															{quantity(pupil.schoolClasses.length)}
+														</em>
+													</Col>
+												</Row>
+											</Container>
 										</Row>
 									</Container>
 								</ListGroup.Item>

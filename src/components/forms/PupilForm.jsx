@@ -36,9 +36,10 @@ const PupilForm = ({
 	closeModal }) => {
 
 	const history = useHistory()
-	const unmounted = useRef(false)
+	const isMounted = useRef(false)
 	const [usersList, setUsersList] = useState([])
 	const [assignedTo, setAssignedTo] = useState('')
+	const [assignedUser, setAssignedUser] = useState({})
 	const [editMode, setEditMode] = useState(false)
 	const [createMode, setCreateMode] = useState(false)
 	const [processingForm, setProcessingForm] = useState(false)
@@ -63,9 +64,21 @@ const PupilForm = ({
 	}, [user, mode])
 
 	useEffect(() => {
+		isMounted.current = true
+	}, [])
+
+	useEffect(() => {
+		return () => {
+			isMounted.current = false
+		}
+	}, [])
+
+	useEffect(() => {
 		if (pupil && pupil.assignedTo) {
 			searchService.userEmailById(pupil.assignedTo)
-				.then(email => {
+				.then(userData => {
+					const { email } = userData
+					setAssignedUser(userData)
 					setAssignedTo(email)
 				})
 				.catch(error => {
@@ -81,7 +94,6 @@ const PupilForm = ({
 				setSpecialtiesNames(data.map(specialty => specialty.title))
 			})
 			.catch(error => console.error(error))
-		return () => { unmounted.current = true }
 	}, [])
 
 	// handle edit or create
@@ -96,8 +108,22 @@ const PupilForm = ({
 		// all this looks ugly
 		if (values.assignedTo) {
 			const users = await searchService.users({ value: values.assignedTo })
-			const { id: assignedTo } = users.find(user => user.email === values.assignedTo)
-			if (assignedTo) values = { ...values, assignedTo }
+			const found = users.find(user => user.email === values.assignedTo)
+
+			if (found) {
+				values = { ...values, assignedTo: found.id }
+			} else {
+				const message = 'Будь ласка, перевірте електронну адресу вчителя цього учня.'
+
+				setErrors({ assignedTo: message })
+				setNotification({
+					message,
+					variant: 'warning'
+				}, 60)
+				return
+			}
+		} else {
+			values.assignedTo = null
 		}
 
 		if (editMode) values = { ...values,
@@ -112,8 +138,7 @@ const PupilForm = ({
 				: publicApply(values, setErrors, resetForm))
 	}
 
-	// eslint-disable-next-line
-	const publicApply = (values, setErrors, resetForm) => {
+	const publicApply = (values, setErrors) => {
 		// this one is a little different
 		// remove assignedTo, as it is a public form
 		// eslint-disable-next-line
@@ -125,8 +150,6 @@ const PupilForm = ({
 					variant: 'success'
 				}, 15)
 				setProcessingForm(false)
-				// resetForm()
-				// closeModal()
 				history.push('/apply/success')
 			})
 			.catch(error => {
@@ -138,7 +161,7 @@ const PupilForm = ({
 					message,
 					variant: 'danger'
 				}, 5)
-				if (!unmounted.current) {
+				if (isMounted.current) {
 					setProcessingForm(false)
 				}
 			})
@@ -166,7 +189,7 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => {
-				if (!unmounted.current) {
+				if (isMounted.current) {
 					setProcessingForm(false)
 				}
 			})
@@ -185,6 +208,9 @@ const PupilForm = ({
 					variant: 'success'
 				}, 5)
 				closeModal()
+				if (history.location.pathname === `/school/pupils/${pupil.id}`) {
+					history.go(0)
+				}
 			})
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }
@@ -197,7 +223,7 @@ const PupilForm = ({
 				}, 5)
 			})
 			.finally(() => {
-				if (!unmounted.current) {
+				if (isMounted.current) {
 					setProcessingForm(false)
 				}
 			})
@@ -220,6 +246,11 @@ const PupilForm = ({
 				})
 				.finally(() => setFetchingData(false))
 		}
+	}
+
+	const showUserName = (email, users) => {
+		const user = users.find(user => user.email === email)
+		return <span>{user ? <>{user.name} {user.lastname}</> : ''}</span>
 	}
 
 	const openInfoModal = type => {
@@ -465,9 +496,22 @@ const PupilForm = ({
 											</option>
 										)}
 									</datalist>
-									<Form.Control.Feedback type="invalid">
-										{errors.assignedTo}
-									</Form.Control.Feedback>
+									{!errors.assignedTo
+										? <>
+											<Form.Text className="text-muted">
+												{assignedTo
+													? <>{assignedUser.name} {assignedUser.lastname}</>
+													: <>{usersList.length
+														? <>{showUserName(values.assignedTo, usersList)}</>
+														: 'Наразі цей учень ще не призначений жодному вчителю'}
+													</>
+												}
+											</Form.Text>
+										</>
+										: <Form.Control.Feedback type="invalid">
+											{errors.assignedTo}
+										</Form.Control.Feedback>
+									}
 								</Form.Group>
 							</Form.Row>
 							: null

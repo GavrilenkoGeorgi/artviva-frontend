@@ -60,4 +60,24 @@ const updateDescr = async (id, values) => {
 	return response.data
 }
 
-export default { form, getAll, updateDescr, setToken }
+/**
+* Get payments from liqpay server
+*
+* @param {object} range - Data date range to get
+* @param {string} range.date_from - Start date
+* @param {string} range.date_to - End date
+*
+* @returns {Object} - Response data
+*/
+
+const getLiqPayResults = async range => {
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	const response = await axios.post(`${baseUrl}/reports`, range, config)
+	return response.data
+}
+
+
+export default { setToken, form, getAll, updateDescr, getLiqPayResults }
