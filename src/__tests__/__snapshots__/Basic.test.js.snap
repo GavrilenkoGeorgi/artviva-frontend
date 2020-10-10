@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`renders correctly react-test-renderer 1`] = `
-<div>
-  <h1>
-     Basic Test
-  </h1>
-</div>
-`;
