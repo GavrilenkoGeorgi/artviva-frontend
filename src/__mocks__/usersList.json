@@ -1,0 +1,31 @@
+
+[
+	{
+		"isActive": true,
+		"approvedUser": true,
+		"superUser": true,
+		"email": "test@example.com",
+		"name": "Joe",
+		"middlename": "Tester",
+		"lastname": "Doe",
+		"activationHash": null,
+		"teacher": null,
+		"createdAt": "2020-09-09T10:42:10.702Z",
+		"updatedAt": "2020-09-09T11:07:35.647Z",
+		"id": "5f58b17c64ec0c0c88b78dec"
+	},
+	{
+		"isActive": true,
+		"approvedUser": false,
+		"superUser": false,
+		"email": "user@example.com",
+		"name": "Mary",
+		"middlename": "Tester",
+		"lastname": "Doe",
+		"activationHash": null,
+		"teacher": null,
+		"createdAt": "2020-09-09T10:42:11.702Z",
+		"updatedAt": "2020-09-09T11:07:36.647Z",
+		"id": "5f58b17c64ec0c0c88b78ded"
+	}
+]
