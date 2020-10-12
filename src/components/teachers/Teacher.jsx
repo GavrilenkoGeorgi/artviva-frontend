@@ -13,7 +13,6 @@ import TeacherForm from '../forms/TeacherForm'
 import LoadingIndicator from '../common/LoadingIndicator'
 import EntityControlButtons from '../common/EntityControlButtons'
 
-const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
 const Teacher = ({
@@ -21,7 +20,6 @@ const Teacher = ({
 	teacher,
 	number,
 	fetchingData,
-	deleteTeacher,
 	updateTeacher,
 	getTeacherData,
 	setNotification,
@@ -30,9 +28,7 @@ const Teacher = ({
 }) => {
 
 	const [open, setOpen] = useState(false)
-	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
-	const [isDeleting, setIsDeleting] = useState(false)
 	const unmounted = useRef(false)
 
 	// set auth token
@@ -40,29 +36,6 @@ const Teacher = ({
 		teachersService.setToken(user.token)
 		return () => { unmounted.current = true }
 	}, [user])
-
-	const handleDelete = id => {
-		setIsDeleting(true)
-		deleteTeacher(id)
-			.then(() => {
-				setNotification({
-					message: 'Вчітель успішно видален.',
-					variant: 'success'
-				}, 5)
-			})
-			.catch(error => {
-				const { message } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-				setIsDeleting(false)
-				setDeleteModalShow(false)
-			})
-			.finally(() => {
-				if (!unmounted) setIsDeleting(false)
-			})
-	}
 
 	const saveTeacherEdits = values => {
 		setProcessingForm(true)
@@ -163,10 +136,9 @@ const Teacher = ({
 					</Row>
 					<Row>
 						<EntityControlButtons
-							route={`teachers/${teacher.id}`}
+							route={`/school/teachers/${teacher.id}`}
 							fetchingTeacherData={fetchingData}
 							openEditModal={() => openEditModal(teacher.id)}
-							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
 					</Row>
 				</Container>
@@ -190,15 +162,6 @@ const Teacher = ({
 						teacherData={teacher}
 						mode="edit" />
 				</LazyEntityEditModal>
-				<LazyEntityDeleteModal
-					subject="Видалити вчітеля"
-					subjectid={teacher.id}
-					valuetoconfirm={teacher.name}
-					show={deleteModalShow}
-					handleDelete={handleDelete}
-					loadingState={isDeleting}
-					onHide={() => setDeleteModalShow(false)}
-				/>
 			</Suspense>
 		</>
 	)
