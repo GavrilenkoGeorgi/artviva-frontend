@@ -3,8 +3,11 @@
 // https://mochajs.org/#arrow-functions
 
 describe('Artviva public app view', function() {
-	it.only('front page can be opened and footer is visible', function() {
+	beforeEach(function () {
 		cy.visit('/')
+	})
+
+	it('front page can be opened and footer is visible', function() {
 		cy.contains('ArtViva')
 		cy.contains('КПНЗ Шпитьківська ДШМ')
 	})
@@ -62,10 +65,22 @@ describe('Artviva public app view', function() {
 		cy.contains('Подати заяву на навчання')
 	})
 
-	it.only('register form can be opened', function() {
+	it('register form can be opened', function() {
 		cy.contains('Школа').click()
 		cy.contains('Реєстрація').click()
 		cy.location('pathname').should('equal', '/register')
 		cy.contains('Реєстрація')
+	})
+
+	it('public apply button routes to the apply form', function() {
+		// eslint-disable-next-line
+		cy.contains('Подати заяву').scrollIntoView().wait(750).click()
+		cy.location('pathname').should('equal', '/apply')
+	})
+
+	it.only('pay button routes to the payment form', function() {
+		// eslint-disable-next-line
+		cy.contains('Оплатити').scrollIntoView().wait(750).click()
+		cy.location('pathname').should('equal', '/pay/form')
 	})
 })

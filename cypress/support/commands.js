@@ -23,20 +23,21 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+import '@testing-library/cypress/add-commands'
 
 Cypress.Commands.add('createUser', () => {
-		// reset test db
-		cy.request('POST', '/api/testing/reset')
-		// create new user
-		cy.request({
-			method: 'POST',
-			url: '/api/users',
-			body: {
-				email: Cypress.env('email'),
-				username: Cypress.env('username'),
-				password: Cypress.env('password')
-			}
-		})
+	// reset test db
+	cy.request('POST', '/api/testing/reset')
+	// create new user
+	cy.request({
+		method: 'POST',
+		url: '/api/users',
+		body: {
+			email: Cypress.env('email'),
+			username: Cypress.env('username'),
+			password: Cypress.env('password')
+		}
+	})
 })
 
 Cypress.Commands.add('login', () => {
@@ -44,13 +45,13 @@ Cypress.Commands.add('login', () => {
 		method: 'POST',
 		url: 'http://localhost:3000/api/login',
 		body: {
-				email: Cypress.env('email'),
-				password: Cypress.env('password'),
-			}
+			email: Cypress.env('email'),
+			password: Cypress.env('password'),
+		}
 	})
-	.then((resp) => {
-		window.localStorage.setItem('loggedUserJSON', JSON.stringify(resp.body))
-	})
+		.then((resp) => {
+			window.localStorage.setItem('loggedUserJSON', JSON.stringify(resp.body))
+		})
 })
 
 Cypress.Commands.add('createBlog', () => {

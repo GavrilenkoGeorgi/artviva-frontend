@@ -334,7 +334,7 @@ const ListOfTeachers = ({ teachers,
 							show={addModalShow}
 							onHide={() => setAddModalShow(false)}
 						>
-							<AddTeacher />
+							<AddTeacher showModal={setAddModalShow} />
 						</LazyEntityEditModal>
 					</Suspense>
 				</Row>

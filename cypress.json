@@ -1,10 +1,10 @@
 {
 	"env": {
-		"email": "hank@aol.com",
-		"username": "Hank tester Hill",
+		"email": "test@example.com",
+		"username": "Joe Tester Doe",
 		"password": "TestPassword1"
 		},
 	"baseUrl": "http://localhost:3000",
-	"viewportWidth": 1280,
-	"viewportHeight": 1024
+	"viewportWidth": 1024,
+	"viewportHeight": 1280
 }
