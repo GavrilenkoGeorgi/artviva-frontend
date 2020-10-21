@@ -10,7 +10,8 @@ const EntityControlButtons = ({
 	route,
 	openEditModal,
 	openDeleteModal,
-	processingForm
+	processingForm,
+	entity
 }) => {
 
 	const history = useHistory()
@@ -38,6 +39,7 @@ const EntityControlButtons = ({
 				/>
 			}
 			<BtnWithIcon
+				dataCy={`edit-${entity}`}
 				label="Редагувати"
 				icon="edit"
 				variant="outline-success"

@@ -25,19 +25,18 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands'
 
-Cypress.Commands.add('createUser', () => {
-	// reset test db
+Cypress.Commands.add('resetDb', () => {
 	cy.request('POST', '/api/testing/reset')
-	// create new user
-	cy.request({
-		method: 'POST',
-		url: '/api/users',
-		body: {
-			email: Cypress.env('email'),
-			username: Cypress.env('username'),
-			password: Cypress.env('password')
-		}
-	})
+})
+
+Cypress.Commands.add('createTeachers', () => {
+	// create test teachers
+	cy.request('POST', '/api/testing/create/teachers')
+})
+
+Cypress.Commands.add('createSpecialties', () => {
+	// create test specialties
+	cy.request('POST', '/api/testing/create/specialties')
 })
 
 Cypress.Commands.add('login', () => {

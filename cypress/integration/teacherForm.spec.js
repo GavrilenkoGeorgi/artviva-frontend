@@ -1,6 +1,7 @@
 describe('Adding new teacher through the form', () => {
 	beforeEach(function() {
-		cy.request('POST', '/api/testing/reset')
+		cy.resetDb()
+		cy.createSpecialties()
 		cy.login()
 	})
 
@@ -15,7 +16,20 @@ describe('Adding new teacher through the form', () => {
 		cy.contains('Додати нового вчителя')
 	})
 
-	it.only('form can be filled and teacher is added successfully', function() {
+	it.only('teacher profile can be edited', function() {
+		cy.createTeachers()
+		cy.visit('/school/teachers')
+		cy.contains('John Tester Doe').click()
+		cy.get('[data-cy=edit-teacher]').first().click()
+		cy.contains('div', 'ПІБ (прізвище, ім’я і по батькові)')
+			.find('input').first().type(' Updated')
+
+		cy.contains('Зберегти').click()
+		cy.contains('Зміни успішно збережено')
+		cy.contains('John Tester Doe Updated')
+	})
+
+	it('form can be filled and teacher is added successfully', function() {
 		cy.visit('/school/teachers')
 		cy.contains('Додати нового').click()
 

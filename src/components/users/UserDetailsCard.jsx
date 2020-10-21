@@ -147,6 +147,7 @@ const UserDetailsCard = ({
 						<Col xs={12}>
 							<EntityControlButtons
 								route={`/school/users/${userData.id}`}
+								entity="user"
 								openEditModal={() => setEditModalShow(true)}
 								openDeleteModal={() => setDeleteModalShow(true)}
 							/>

@@ -4,6 +4,7 @@ import userService from '../../services/users'
 import loginService from '../../services/login'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../reducers/loginReducer'
+import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { trimObject } from '../../utils/objectHelpers'
 
@@ -16,8 +17,10 @@ import TeacherDetails from '../teachers/TeacherDetails'
 const UserProfileView = ({
 	user,
 	teacher,
+	specialties,
 	match,
 	getTeacherData,
+	initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	setNotification,
@@ -31,6 +34,21 @@ const UserProfileView = ({
 	useEffect(() => {
 		return () => { unmounted.current = true }
 	}, [])
+
+	useEffect(() => {
+		if (!specialties.length) {
+			setFetchingData(true)
+			initializeSpecialties()
+				.catch(error => {
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'danger'
+					}, 5)
+				})
+				.finally(() => setFetchingData(false))
+		}
+	}, [specialties, initializeSpecialties, setNotification, setFetchingData])
 
 	useEffect(() => {
 		if (user) {
@@ -138,7 +156,7 @@ const UserProfileView = ({
 							<UserDetailsCard mode="single" userData={userData}/>
 						</Col>
 					</Tab>
-					<Tab eventKey="teacher-profile" title="Профіль">
+					<Tab eventKey="teacher-profile" title="Редагувати">
 						{teacher
 							? <Container className="py-3">
 								<Row className="d-flex justify-content-center">
@@ -177,7 +195,8 @@ const UserProfileView = ({
 const mapStateToProps = state => {
 	return {
 		user: state.user,
-		teacher: state.teacher
+		teacher: state.teacher,
+		specialties: state.specialties
 	}
 }
 
@@ -186,7 +205,7 @@ const mapDispatchToProps = {
 	setProcessingForm,
 	setFetchingData,
 	getTeacherData,
-	// initializeSpecialties,
+	initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	refreshUserData

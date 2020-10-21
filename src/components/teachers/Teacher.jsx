@@ -137,6 +137,7 @@ const Teacher = ({
 					<Row>
 						<EntityControlButtons
 							route={`/school/teachers/${teacher.id}`}
+							entity="teacher"
 							fetchingTeacherData={fetchingData}
 							openEditModal={() => openEditModal(teacher.id)}
 						/>
