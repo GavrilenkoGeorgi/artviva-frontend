@@ -97,15 +97,15 @@ const RegisterForm = ({
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		name: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть ім\'я.'),
 		middlename: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть по батькові.'),
 		lastname: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть прізвище.'),
 		password: Yup.string()
@@ -335,7 +335,7 @@ const RegisterForm = ({
 									block
 									loadingState={processingForm}
 									disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
-									label="Реєстрація"
+									label="Зареєструватися"
 									variant="primary"
 									dataCy="register-btn"
 									className="primary-color-shadow my-3"
