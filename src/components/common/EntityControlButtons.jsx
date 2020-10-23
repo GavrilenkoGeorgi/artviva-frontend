@@ -10,8 +10,7 @@ const EntityControlButtons = ({
 	route,
 	openEditModal,
 	openDeleteModal,
-	fetchingTeacherData,
-	user
+	processingForm
 }) => {
 
 	const history = useHistory()
@@ -22,7 +21,7 @@ const EntityControlButtons = ({
 
 	return (
 		<Col className="my-2 d-flex justify-content-end align-items-center">
-			{route
+			{history.location.pathname !== route
 				? <BtnWithIcon
 					label="Детальніше"
 					icon="info"
@@ -30,39 +29,36 @@ const EntityControlButtons = ({
 					type="button"
 					onClick={routeChange}
 				/>
-				: null
-			}
-			<BtnWithIcon
-				label="Редагувати"
-				icon="edit"
-				variant="outline-success"
-				type="button"
-				loading={fetchingTeacherData}
-				onClick={() => openEditModal()}
-			/>
-			{user.superUser ?
-				<BtnWithIcon
+				: <BtnWithIcon
 					label="Видалити"
 					icon="trash"
 					variant="outline-danger"
 					type="button"
 					onClick={() => openDeleteModal()}
 				/>
-				: null }
+			}
+			<BtnWithIcon
+				label="Редагувати"
+				icon="edit"
+				variant="outline-success"
+				type="button"
+				loading={processingForm}
+				onClick={() => openEditModal()}
+			/>
 		</Col>
 	)
 }
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user
+		processingForm: state.notification.processingForm
 	}
 }
 
 EntityControlButtons.propTypes = {
 	route: PropTypes.string,
 	openEditModal: PropTypes.func.isRequired,
-	openDeleteModal: PropTypes.func.isRequired
+	openDeleteModal: PropTypes.func
 }
 
 export default connect(

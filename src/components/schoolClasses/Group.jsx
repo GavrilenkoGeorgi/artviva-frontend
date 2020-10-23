@@ -70,7 +70,7 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 			<Collapse in={open}>
 				<Container>
 					<Row>
-						<Col xs={12} className="py-2 px-0 border1 border-primary">
+						<Col xs={12} className="py-2 px-0">
 							<p>
 								<em>{group.teacher.name}</em>
 								<Link
@@ -82,9 +82,8 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 							</p>
 						</Col>
 						<Col className="px-0" xs={12}>
-							{/*<p>{group.specialty.title}</p>*/}
 							{group.info
-								? <p><em className="text-muted">{group.info}</em></p>
+								? <p className="my-3"><em className="text-muted">{group.info}</em></p>
 								: null
 							}
 							<em>Учні:</em>
@@ -104,6 +103,7 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 
 					<Row>
 						<EntityControlButtons
+							route={`/school/groups/${group.id}`}
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>

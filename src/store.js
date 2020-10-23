@@ -14,7 +14,7 @@ import schoolStatsReducer from './reducers/schoolStatsReducer'
 import schoolClassesReducer from './reducers/schoolClassesReducer'
 import paymentsReducer from './reducers/paymentsReducer'
 import teacherDataReducer from './reducers/teacherDataReducer'
-// import { teacherDataReducer } from './reducers'
+import liqPayDataReducer from './reducers/liqPayDataReducer'
 
 const reducer = combineReducers({
 	user: loginReducer,
@@ -27,7 +27,8 @@ const reducer = combineReducers({
 	schoolStats: schoolStatsReducer,
 	schoolClasses: schoolClassesReducer,
 	payments: paymentsReducer,
-	teacher: teacherDataReducer
+	teacher: teacherDataReducer,
+	liqPayData: liqPayDataReducer
 })
 
 const store = createStore(

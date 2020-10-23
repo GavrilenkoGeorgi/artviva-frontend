@@ -5,7 +5,6 @@ import loginService from '../../services/login'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../reducers/loginReducer'
 import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
-import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import { trimObject } from '../../utils/objectHelpers'
 
 import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
@@ -19,7 +18,6 @@ const UserProfileView = ({
 	teacher,
 	match,
 	getTeacherData,
-	initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	setNotification,
@@ -35,10 +33,7 @@ const UserProfileView = ({
 	}, [])
 
 	useEffect(() => {
-		if (user && (user.id === match.params.id)) {
-			setUserData(user)
-			initializeSpecialties()
-		} else if (user) {
+		if (user) {
 			userService.setToken(user.token)
 			userService.getById(match.params.id)
 				.then(user => {
@@ -52,12 +47,12 @@ const UserProfileView = ({
 					}, 5)
 				})
 		}
-	}, [user, match.params.id, setNotification, initializeSpecialties])
+	}, [user, match.params.id, setNotification])
 
 	useEffect(() => {
 		if (userData && userData.teacher) {
 			setFetchingData(true)
-			getTeacherData(userData.teacher)
+			getTeacherData(userData.teacher.id)
 				.catch(error => {
 					const { message } = { ...error.response.data }
 					setNotification({
@@ -147,7 +142,7 @@ const UserProfileView = ({
 						{teacher
 							? <Container className="py-3">
 								<Row className="d-flex justify-content-center">
-									{!user.teacher
+									{!userData.teacher
 										? <Col xs={12} className="py-3 text-center text-warning">
 											Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
 										</Col>
@@ -167,7 +162,7 @@ const UserProfileView = ({
 							</Col>
 						}
 					</Tab>
-					<Tab eventKey="user-data" title="Ваші дані">
+					<Tab eventKey="user-data" title="Дані вчителя">
 						<Col className="pt-4">
 							<TeacherDetails teacher/>
 						</Col>
@@ -191,7 +186,7 @@ const mapDispatchToProps = {
 	setProcessingForm,
 	setFetchingData,
 	getTeacherData,
-	initializeSpecialties,
+	// initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	refreshUserData

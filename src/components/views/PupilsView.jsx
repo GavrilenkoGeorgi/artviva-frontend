@@ -132,10 +132,10 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 	}
 
 	// progressively add more data on scroll
-	const [maxCount, setMaxCount] = useState(5)
+	const [maxCount, setMaxCount] = useState(10)
 	useScrollPosition(position => {
 		if ((position + window.innerHeight) >= document.body.scrollHeight) {
-			setMaxCount(count => count + 1)
+			setMaxCount(count => count + 3)
 		}
 	})
 

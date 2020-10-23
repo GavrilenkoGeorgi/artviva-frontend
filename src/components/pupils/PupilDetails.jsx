@@ -1,29 +1,53 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
+import { deletePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import moment from 'moment'
 
+import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col, Card } from 'react-bootstrap'
-import { CommonLayout } from '../views'
-import { useState } from 'react'
-import Emoji from '../common/Emoji'
 
-const PupilDetails = ({ user, setFetchingData, setNotification, match }) => {
+import { CommonLayout } from '../views'
+import LoadingIndicator from '../common/LoadingIndicator'
+import PupilForm from '../forms/PupilForm'
+import Emoji from '../common/Emoji'
+import EntityControlButtons from '../common/EntityControlButtons'
+
+const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+
+const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, match }) => {
 
 	const cardStyle = 'my-3'
 
-	const componentIsMounted = useRef(true)
+	const isMounted = useRef(false)
+	const history = useHistory()
 	const [pupil, setPupil] = useState({})
+	const [deleteModalShow, setDeleteModalShow] = useState(false)
+	const [editModalShow, setEditModalShow] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
+
+	useEffect(() => {
+		if (user) pupilsService.setToken(user.token)
+	}, [user])
+
+	useEffect(() => {
+		isMounted.current = true
+	}, [])
+
+	useEffect(() => {
+		return () => {
+			isMounted.current = false
+		}
+	}, [])
 
 	useEffect(() => {
 		if (user) {
 			setFetchingData(true)
-			pupilsService.setToken(user.token)
 			pupilsService.pupilDetailsById(match.params.id)
 				.then((pupil) => {
 					setPupil(pupil)
-
 				})
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -33,11 +57,37 @@ const PupilDetails = ({ user, setFetchingData, setNotification, match }) => {
 					}, 5)
 				})
 				.finally(() => {
-					if (componentIsMounted.current) setFetchingData(false)
+					if (isMounted.current) setFetchingData(false)
 				})
 		}
 
 	},[user, match.params.id, setNotification, setFetchingData])
+
+	const handleDelete = id => {
+		setIsDeleting(true)
+		deletePupil(id)
+			.then(() => {
+				setNotification({
+					message: 'Учень успішно видален.',
+					variant: 'success'
+				}, 5)
+				history.push('/school/pupils')
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+				setIsDeleting(false)
+			})
+			.finally(() => {
+				if (isMounted.current) {
+					setDeleteModalShow(false)
+					setIsDeleting(false)
+				}
+			})
+	}
 
 	return <CommonLayout>
 		<h1 className="text-center custom-font">Детали учня</h1>
@@ -146,9 +196,9 @@ const PupilDetails = ({ user, setFetchingData, setNotification, match }) => {
 							{pupil.schoolClasses
 								?
 								<Card.Text>
-									Класи ДШМ: {pupil.schoolClasses.map(item =>
-										<span className="pl-3 d-block" key={item.id}>
-											{item.title}
+									Класи ДШМ: {pupil.schoolClasses.map(group =>
+										<span className="pl-3 d-block" key={group.id}>
+											<Link to={`/school/groups/${group.id}`}>{group.title}</Link>
 										</span>
 									)}
 								</Card.Text>
@@ -178,6 +228,55 @@ const PupilDetails = ({ user, setFetchingData, setNotification, match }) => {
 				</Col>
 			</Row>
 		</Container>
+		{/* Pupil edit and delete modal */}
+		{pupil.id
+			? <>
+				<Container>
+					{/* Control buttons */}
+					<Row>
+						<Col className="my-4 d-flex align-items-center">
+							<Link to={`/school/pupils/f1/${pupil.id}`}>
+								Форма Ф-1
+							</Link>
+						</Col>
+
+						<EntityControlButtons
+							route={`/school/pupils/${pupil.id}`}
+							openEditModal={() => setEditModalShow(true)}
+							openDeleteModal={() => setDeleteModalShow(true)}
+						/>
+					</Row>
+				</Container>
+				<Suspense fallback={
+					<LoadingIndicator
+						animation="border"
+						variant="primary"
+						size="md"
+					/>}>
+					<LazyEntityEditModal
+						subject="Редагувати дані учня"
+						subjectid={pupil.id}
+						show={editModalShow}
+						onHide={() => setEditModalShow(false)}
+					>
+						<PupilForm
+							closeModal={() => setEditModalShow(false)}
+							pupil={pupil}
+							mode="edit" />
+					</LazyEntityEditModal>
+					<LazyEntityDeleteModal
+						subject="Видалити учня"
+						subjectid={pupil.id}
+						valuetoconfirm={pupil.name}
+						show={deleteModalShow}
+						handleDelete={handleDelete}
+						loadingState={isDeleting}
+						onHide={() => setDeleteModalShow(false)}
+					/>
+				</Suspense>
+			</>
+			: null
+		}
 	</CommonLayout>
 }
 
@@ -190,7 +289,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
 	setFetchingData,
-	setNotification
+	setNotification,
+	deletePupil
 }
 
 export default connect(

@@ -1,4 +1,5 @@
 import teachersService from '../services/teachers'
+import { substractLiqPayPercent } from '../utils/paymentsHelper'
 
 const teacherDataReducer = (state = {}, action) => {
 	switch (action.type) {
@@ -23,9 +24,10 @@ const teacherDataReducer = (state = {}, action) => {
 export const getTeacherData = id => {
 	return async dispatch => {
 		const teacher = await teachersService.getById(id)
+		const minusPercent = teacher.payments.map(item => ({ ...item, amount: substractLiqPayPercent(item.amount) }))
 		dispatch ({
 			type: 'GET_TEACHER_DATA',
-			data: teacher
+			data: { ...teacher, payments: minusPercent }
 		})
 	}
 }
