@@ -29,6 +29,32 @@ describe('Register form', function() {
 	})
 
 	// password input
+	it('toogles password visibility', function() {
+		cy.contains('div', 'Ваш пароль')
+			.find('input').type('TestPass1')
+		// text
+		cy.get('[data-cy=toggle-pass-visibility]').click()
+		cy.contains('div', 'Ваш пароль')
+			.find('input').should('have.attr', 'type', 'text' )
+		// password
+		cy.get('[data-cy=toggle-pass-visibility]').click()
+		cy.contains('div', 'Ваш пароль')
+			.find('input').should('have.attr', 'type', 'password' )
+	})
+
+	it('toogles password confirmation visibility', function() {
+		cy.contains('div', 'Підтвердження пароля')
+			.find('input').type('TestPass1')
+		// text
+		cy.get('[data-cy=toggle-pass-confirm-visibility]').click()
+		cy.contains('div', 'Підтвердження пароля')
+			.find('input').should('have.attr', 'type', 'text' )
+		// password confirmation
+		cy.get('[data-cy=toggle-pass-confirm-visibility]').click()
+		cy.contains('div', 'Підтвердження пароля')
+			.find('input').should('have.attr', 'type', 'password' )
+	})
+
 	it('shows an error if password is too short', function() {
 		cy.contains('div', 'Ваш пароль')
 			.find('input').type('Test').blur()

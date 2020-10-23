@@ -256,6 +256,7 @@ const RegisterForm = ({
 									<InputGroup.Append>
 										<Button
 											variant="outline-secondary border rounded-right"
+											data-cy="toggle-pass-visibility"
 											onClick={() => togglePassFieldType('pass')}
 										>
 											{passHidden
@@ -295,6 +296,7 @@ const RegisterForm = ({
 									<InputGroup.Append>
 										<Button
 											variant="outline-secondary border rounded-right"
+											data-cy="toggle-pass-confirm-visibility"
 											onClick={() => togglePassFieldType('passConfirm')}
 										>
 											{passConfirmHidden
