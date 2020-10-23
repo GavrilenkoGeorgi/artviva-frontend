@@ -23,7 +23,7 @@ const RecoverView = () => {
 				</>
 				: <>
 					<h3 className="text-center custom-font">
-						Надіслати скидання пароля
+						Cкидання пароля
 					</h3>
 					<p className="mb-4 text-muted text-center">
 						<em>

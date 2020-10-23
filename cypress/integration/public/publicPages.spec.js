@@ -78,9 +78,14 @@ describe('Artviva public app view', function() {
 		cy.location('pathname').should('equal', '/apply')
 	})
 
-	it.only('pay button routes to the payment form', function() {
+	it('pay button routes to the payment form', function() {
 		// eslint-disable-next-line
 		cy.contains('Оплатити').scrollIntoView().wait(750).click()
 		cy.location('pathname').should('equal', '/pay/form')
+	})
+
+	it('unauthorized user can\'t access /school route', function() {
+		cy.visit('/school')
+		cy.location('pathname').should('equal', '/login')
 	})
 })
