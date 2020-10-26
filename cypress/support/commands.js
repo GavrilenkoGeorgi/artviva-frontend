@@ -39,6 +39,11 @@ Cypress.Commands.add('createSpecialties', () => {
 	cy.request('POST', '/api/testing/create/specialties')
 })
 
+Cypress.Commands.add('createPupils', () => {
+	// create test pupils
+	cy.request('POST', '/api/testing/create/pupils')
+})
+
 Cypress.Commands.add('login', () => {
 	cy.request({
 		method: 'POST',
