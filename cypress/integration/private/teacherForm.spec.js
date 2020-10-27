@@ -16,7 +16,7 @@ describe('Adding new teacher through the form', () => {
 		cy.contains('Додати нового вчителя')
 	})
 
-	it.only('teacher profile can be edited', function() {
+	it('teacher profile can be edited', function() {
 		cy.createTeachers()
 		cy.visit('/school/teachers')
 		cy.contains('John Tester Doe').click()
