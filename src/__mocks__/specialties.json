@@ -1,0 +1,18 @@
+[
+	{
+		"title": "Spec title",
+		"cost:": 200,
+		"info": "",
+		"teachers": "",
+		"schoolClasses": "",
+		"id": "test_id_1"
+	},
+	{
+		"title": "Test Spec",
+		"cost:": 250,
+		"info": "Some info",
+		"teachers": "",
+		"schoolClasses": "",
+		"id": "test_id_2"
+	}
+]

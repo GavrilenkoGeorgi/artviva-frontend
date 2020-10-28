@@ -35,7 +35,8 @@ const SchoolSectionsNav = ({ userData }) => {
 		},
 		{
 			to: '/school/teachers',
-			label: 'Вчителі'
+			label: 'Вчителі',
+			dataCy: 'teachers-section'
 		},
 		{
 			to: '/school/pupils',
@@ -109,6 +110,7 @@ const SchoolSectionsNav = ({ userData }) => {
 						? links.map(link =>
 							<SectionLink
 								key={link.label}
+								dataCy={link.dataCy}
 								className="px-3 pt-1 school-nav-link"
 								to={link.to}
 								label={link.label}

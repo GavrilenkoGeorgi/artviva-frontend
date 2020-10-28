@@ -30,7 +30,7 @@ const ScrollToTopArrow = () => {
 		<>
 			<Fade in={isVisible}>
 				<button
-					className="scroll-to-top"
+					className="scroll-to-top elevated-z-index"
 					onClick={() => scrollToTop()}
 				>
 					<FontAwesomeIcon icon={faArrowUp} className={'fa-2x'}/>

@@ -62,6 +62,7 @@ const Pupil = ({ user, pupil, posInList }) => {
 
 						<EntityControlButtons
 							route={`/school/pupils/${pupil.id}`}
+							entity="pupil"
 							openEditModal={() => setEditModalShow(true)}
 						/>
 					</Row>

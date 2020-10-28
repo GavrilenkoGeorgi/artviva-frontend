@@ -1,5 +1,12 @@
 {
-  "id": 8739,
-  "name": "Jane",
-  "email": "jane@example.com"
+	"token": "eyJhbGciOiJIUzI1NiIsInR4cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhdnJpbGVua28uZ2VvcmdpQGdtYWlsLmNvbSIsImlkIjoiNWYwODQxYWI2ZjRmMmQwMDA0NjhhMDY3IiwiaWF0IjoxNjAyNzY3OTc2fQ.9-Lhuo0ns3EaLkfGsBhKDk6RKw4qYBjcI4UpTvH1Cko",
+	"name": "Joe",
+	"middlename": "Tester",
+	"lastname": "Doe",
+	"email": "email@example.com",
+	"approvedUser": true,
+	"superUser": true,
+	"isActive": true,
+	"teacher": null,
+	"id": "5f0841ab9f4f2d000468a067"
 }

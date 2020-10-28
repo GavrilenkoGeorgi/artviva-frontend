@@ -42,17 +42,24 @@ const LoginForm = ({
 	}, [])
 
 	const getRecaptchaScore = () => {
-		executeRecaptcha('login')
-			.then(token => {
-				setRecaptchaScore(token)
-			})
-			.catch(error => {
-				const { message, variant } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: variant ? variant : 'danger'
-				}, 5)
-			})
+		if (window.Cypress) {
+			// we are running in Cypress
+			// so do something different here
+			setRecaptchaScore()
+		} else {
+			// we are running in a regular ol' browser
+			executeRecaptcha('login')
+				.then(token => {
+					setRecaptchaScore(token)
+				})
+				.catch(error => {
+					const { message, variant } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: variant ? variant : 'danger'
+					}, 5)
+				})
+		}
 	}
 
 	const loginUser = useCallback(loginValues => {

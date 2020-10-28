@@ -17,6 +17,6 @@ describe('Teachers view', () => {
 		const { getByText } = render(
 			<TeachersView />
 		)
-		expect(getByText(/наші вчітели/i)).toBeInTheDocument()
+		expect(getByText(/Адміністрація/i)).toBeInTheDocument()
 	})
 })

@@ -9,7 +9,7 @@ import { SimpleSpinner } from '../spinners'
 
 const BtnWithIcon = props => {
 
-	const { label, icon, className, loading, ...other } = props
+	const { dataCy, label, icon, className, loading, ...other } = props
 	const chooseIcon = () => {
 		if (icon === 'trash') return <FontAwesomeIcon icon={faTrash} />
 		if (icon === 'edit') return <FontAwesomeIcon icon={faEdit} />
@@ -19,6 +19,7 @@ const BtnWithIcon = props => {
 	return (
 		<Button
 			{ ...other }
+			data-cy={dataCy}
 			className={`${className} ml-2 py-2 btn-with-icon d-flex align-items-center justify-content-center`}
 		>
 			{loading
@@ -30,6 +31,7 @@ const BtnWithIcon = props => {
 }
 
 BtnWithIcon.propTypes = {
+	dataCy: PropTypes.string,
 	className: PropTypes.string,
 	variant: PropTypes.string.isRequired,
 	type: PropTypes.string.isRequired,

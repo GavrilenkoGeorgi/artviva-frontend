@@ -39,7 +39,7 @@ const FocusError = ({ formId }) => {
 						input.focus()
 					}, 1500)
 				}
-				scrollAndFocus(input)
+				if (input) scrollAndFocus(input)
 			}
 		}
 	}, [isSubmitting, isValidating, errors, formId])
