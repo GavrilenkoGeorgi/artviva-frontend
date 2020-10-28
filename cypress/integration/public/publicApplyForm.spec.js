@@ -1,6 +1,7 @@
-describe('Public app form', function() {
+describe('Public apply form', function() {
 	it('pupil can be added successfully', function() {
-		cy.request('POST', '/api/testing/reset')
+		cy.resetDb()
+		cy.createSpecialties()
 		cy.visit('/apply')
 
 		cy.contains('div', 'Прізвище та повне ім\'я учня')

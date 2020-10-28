@@ -35,17 +35,19 @@ const RegisterForm = ({
 	}, [])
 
 	const getRecaptchaScore = () => {
-		executeRecaptcha('submit')
-			.then(token => {
-				setRecaptchaScore(token)
-			})
-			.catch(error => {
-				const { message, variant } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: variant ? variant : 'danger'
-				}, 5)
-			})
+		window.Cypress
+			? setRecaptchaScore()
+			: executeRecaptcha('submit')
+				.then(token => {
+					setRecaptchaScore(token)
+				})
+				.catch(error => {
+					const { message, variant } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: variant ? variant : 'danger'
+					}, 5)
+				})
 	}
 
 	const handleRegister = useCallback(() => {

@@ -67,7 +67,7 @@ describe('Register form', function() {
 		cy.contains('Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
 	})
 
-	it('shows an error if password doesn\'t contain at least one uppercase letter and a numner', function() {
+	it('shows an error if password doesn\'t contain at least one uppercase letter and a number', function() {
 		cy.contains('div', 'Ваш пароль')
 			.find('input').type('weakpass1').blur()
 		cy.contains('Мінімум 8 символів, принаймні одна велика літера, одна маленька літера та одне число.')
@@ -90,7 +90,7 @@ describe('Register form', function() {
 		cy.contains('Обидва паролі повинні бути однаковими')
 	})
 
-	it('correctly vaidates matching passwords', function() {
+	it('correctly validates matching passwords', function() {
 		cy.contains('div', 'Ваш пароль')
 			.find('input').type('TestPass1').blur()
 
