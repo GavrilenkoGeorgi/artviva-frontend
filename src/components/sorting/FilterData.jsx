@@ -18,6 +18,7 @@ const FilterData = ({ filter, fieldName, placeholder, size }) => {
 				<Form.Control
 					onChange={event => filter(event)}
 					id={`${fieldName}-filter-input`}
+					data-cy={`${fieldName}-filter-input`}
 					autoComplete="off"
 					name={fieldName}
 					size="sm"

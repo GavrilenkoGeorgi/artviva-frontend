@@ -8,16 +8,22 @@ import { ReactComponent as FbIcon } from '../svg/facebook.svg'
 import { ReactComponent as InstIcon } from '../svg/instagram.svg'
 import { ReactComponent as MasterCardIcon } from '../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../svg/visa-logo.svg'
+import { ReactComponent as LiqPayLogoIcon } from '../svg/logo-liqpay-main.svg'
 
 const Footer = () => {
 	const socialIconsStyle = {
-		maxWidth: '1.4em',
+		width: '1.4em',
 		margin: '0em .5em'
 	}
 
 	const paymentIconsStyle = {
 		maxWidth: '2.3em',
-		margin: '0rem .5rem'
+		margin: '1rem 0rem'
+	}
+
+	const LiqPayLogoStyle = {
+		maxWidth: '6em',
+		margin: '1rem'
 	}
 
 	// don't show footer inside certain routes
@@ -52,11 +58,12 @@ const Footer = () => {
 						</small>
 						<ReCaptchaStatement />
 						<Row>
-							<Col>
+							<Col xs={8} className="pr-0">
 								<VisaIcon style={paymentIconsStyle} />
 								<MasterCardIcon style={paymentIconsStyle} />
+								<LiqPayLogoIcon style={LiqPayLogoStyle} />
 							</Col>
-							<Col className="text-right">
+							<Col xs={4} className="d-flex align-items-center justify-content-center">
 								<a
 									href="https://www.facebook.com/myz.shpytky"
 									alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"

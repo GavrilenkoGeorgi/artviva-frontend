@@ -49,17 +49,19 @@ const ContactForm = ({
 	}, [setNotification, setProcessingForm])
 
 	const getRecaptchaScore = () => {
-		executeRecaptcha('homepage')
-			.then(token => {
-				setRecaptchaScore(token)
-			})
-			.catch(error => {
-				const { message, variant } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: variant ? variant : 'danger'
-				}, 5)
-			})
+		window.Cypress
+			? setRecaptchaScore()
+			: executeRecaptcha('homepage')
+				.then(token => {
+					setRecaptchaScore(token)
+				})
+				.catch(error => {
+					const { message, variant } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: variant ? variant : 'danger'
+					}, 5)
+				})
 	}
 
 	useEffect(() => {

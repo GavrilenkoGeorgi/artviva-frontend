@@ -1,13 +1,11 @@
 {
 	"env": {
-		"email": "hank@aol.com",
-		"username": "Hank tester Hill",
-		"password": "Propane1",
-		"blogTitle": "Blog test title",
-		"blogAuthor": "Cypress",
-		"blogUrl": "cypress.io"
+		"email": "test@example.com",
+		"username": "Joe Tester Doe",
+		"password": "TestPassword1"
 		},
 	"baseUrl": "http://localhost:3000",
-	"viewportWidth": 720,
-	"viewportHeight": 1280
+	"viewportWidth": 1024,
+	"viewportHeight": 1280,
+	"defaultCommandTimeout": 7500
 }

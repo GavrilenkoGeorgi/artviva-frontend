@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 
 import { NavLink } from 'react-router-dom'
 
-const SectionLink = ({ to, label, className }) => {
+const SectionLink = ({ to, label, className, dataCy }) => {
 	return (
 		<NavLink
 			className={className}
 			activeClassName="is-active"
 			to={to}
+			data-cy={dataCy}
 		>
 			{label}
 		</NavLink>

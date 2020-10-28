@@ -1,7 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
 import teachersService from '../../services/teachers'
-import { setNotification } from '../../reducers/notificationReducer'
+import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
+import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
+import { getTeacherData } from '../../reducers/teacherDataReducer'
+import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 import { nestedSort } from '../../utils/arrayHelpers'
@@ -9,10 +12,31 @@ import { nestedSort } from '../../utils/arrayHelpers'
 import { Container, Row } from 'react-bootstrap'
 import TeacherInfo from './TeacherInfo'
 
-const TeacherDetails = ({ user, match, teacher, setNotification }) => {
+import TeacherForm from '../forms/TeacherForm'
+import LoadingIndicator from '../common/LoadingIndicator'
+import EntityControlButtons from '../common/EntityControlButtons'
+
+const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
+const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+
+const TeacherDetails = ({
+	user,
+	match,
+	teacher,
+	fetchingData,
+	getTeacherData,
+	updateTeacher,
+	setProcessingForm,
+	initializeSpecialties,
+	setFetchingData,
+	setNotification }) => {
 
 	const [teacherDetails, setTeacherDetails] = useState(null)
 	const [teacherExperience, setTeacherExperience] = useState({})
+	const [deleteModalShow, setDeleteModalShow] = useState(false)
+	const [editModalShow, setEditModalShow] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
+	const unmounted = useRef(false)
 
 	const calcXpToDate = useCallback(({ employmentDate, experienceToDate }) => {
 		const date = moment()
@@ -24,20 +48,28 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 
 	useEffect(() => {
 		if (teacher.id) {
-			setTeacherDetails(teacher)
 			setTeacherDetails({
 				...teacher,
 				payments: teacher.payments.sort(nestedSort('create_date', null, 'desc'))
 			})
 			calcXpToDate(teacher)
+			initializeSpecialties()
+				.catch(error => {
+					const { message } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: 'danger'
+					}, 5)
+				})
 		}
-	}, [teacher, calcXpToDate])
+	}, [teacher, calcXpToDate, initializeSpecialties, setNotification])
 
 	useEffect(() => {
 		if (user && match) {
 			teachersService.setToken(user.token)
 			teachersService.getById(match.params.id)
 				.then((data) => {
+					console.log('Data to edit', data)
 					setTeacherDetails({
 						...data,
 						payments: data.payments.sort(nestedSort('create_date', null, 'desc'))
@@ -54,6 +86,68 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 		}
 	}, [user, calcXpToDate, setNotification, match])
 
+	const saveTeacherEdits = values => {
+		setProcessingForm(true)
+		updateTeacher(teacher.id, values)
+			.then(() => {
+				setNotification({
+					message: 'Зміни успішно збережено.',
+					variant: 'success'
+				}, 5)
+				setEditModalShow(false)
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => setProcessingForm(false))
+	}
+
+	const openEditModal = id => {
+		console.log('Opening edit modal for ID', id)
+		setFetchingData(true)
+		getTeacherData(id)
+			.then(() => {
+				setEditModalShow(true)
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+			})
+			.finally(() => {
+				setFetchingData(false)
+			})
+	}
+
+	const handleDelete = id => {
+		setIsDeleting(true)
+		deleteTeacher(id)
+			.then(() => {
+				setNotification({
+					message: 'Вчітель успішно видален.',
+					variant: 'success'
+				}, 5)
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+				setIsDeleting(false)
+				setDeleteModalShow(false)
+			})
+			.finally(() => {
+				if (!unmounted) setIsDeleting(false)
+			})
+	}
+
 	return (
 		<Container>
 			<Row className="justify-content-center">
@@ -67,6 +161,51 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 					</p>
 				}
 			</Row>
+
+			{teacherDetails
+				? <>
+					{/* Control buttons */}
+					<Row>
+						<EntityControlButtons
+							route={`/school/teachers/${teacherDetails.id}`}
+							fetchingTeacherData={fetchingData}
+							openEditModal={() => openEditModal(teacherDetails.id)}
+							openDeleteModal={() => setDeleteModalShow(true)}
+						/>
+					</Row>
+					<Row>
+						{/* Teacher edit and delete modal */}
+						<Suspense fallback={
+							<LoadingIndicator
+								animation="border"
+								variant="primary"
+								size="md"
+							/>}>
+							<LazyEntityEditModal
+								subject="Редагувати дані вчітеля"
+								subjectid={teacherDetails.id}
+								show={editModalShow}
+								onHide={() => setEditModalShow(false)}
+							>
+								<TeacherForm
+									processTeacherData={saveTeacherEdits}
+									teacherData={teacherDetails}
+									mode="edit" />
+							</LazyEntityEditModal>
+							<LazyEntityDeleteModal
+								subject="Видалити вчітеля"
+								subjectid={teacherDetails.id}
+								valuetoconfirm={teacherDetails.name}
+								show={deleteModalShow}
+								handleDelete={handleDelete}
+								loadingState={isDeleting}
+								onHide={() => setDeleteModalShow(false)}
+							/>
+						</Suspense>
+					</Row>
+				</>
+				: null
+			}
 		</Container>
 	)
 }
@@ -74,12 +213,19 @@ const TeacherDetails = ({ user, match, teacher, setNotification }) => {
 const mapStateToProps = state => {
 	return {
 		user: state.user,
-		teacher: state.teacher
+		teacher: state.teacher,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
-	setNotification
+	setNotification,
+	setProcessingForm,
+	setFetchingData,
+	deleteTeacher,
+	updateTeacher,
+	getTeacherData,
+	initializeSpecialties
 }
 
 export default connect(

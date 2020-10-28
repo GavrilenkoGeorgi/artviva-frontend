@@ -12,7 +12,8 @@ const AddTeacher = ({
 	setNotification,
 	initializeSpecialties,
 	setProcessingForm,
-	createTeacher
+	createTeacher,
+	showModal,
 }) => {
 
 	useEffect(() => {
@@ -39,6 +40,7 @@ const AddTeacher = ({
 					variant: 'success'
 				}, 5)
 				resetForm()
+				showModal(false)
 			})
 			.catch(error => {
 				const { message, cause } = { ...error.response.data }

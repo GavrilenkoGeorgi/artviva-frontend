@@ -99,6 +99,7 @@ const PaymentForm = ({
 		benefits: 0
 	})
 	const [total, setTotal] = useState(null)
+	const [liqpayCommission, setLiqpayCommission] = useState(0)
 
 	// calculate total to show on input
 	const processOrderData = ({ target }) => {
@@ -146,6 +147,11 @@ const PaymentForm = ({
 				: setTotal(cost * months.length)
 		}
 	}, [orderData])
+
+	useEffect(() => {
+		// set liqpay commission info
+		setLiqpayCommission(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total).toFixed(2))
+	}, [total])
 
 	const paymentFormEl = useRef(null)
 	const [liqpayData, setLiqpayData] = useState({})
@@ -199,10 +205,10 @@ const PaymentForm = ({
 
 	// Form schema
 	const paymentFormSchema = Yup.object().shape({
-		teacher: Yup.string()
+		teacher: Yup.string().trim()
 			.oneOf(teachersList, 'Виберіть ім\'я викладача')
 			.required('Виберіть ім\'я викладача'),
-		pupil: Yup.string()
+		pupil: Yup.string().trim()
 			.min(2, 'Не менш 3 символів')
 			.max(45, 'Максимум 45 символів')
 			.required('Введіть прізвище учня'),
@@ -277,9 +283,10 @@ const PaymentForm = ({
 								type="text"
 								name="teacher"
 								list="teachers-list"
+								autoComplete="off"
 								data-cy="teacher-name-input"
 								onChange={handleChange}
-								onKeyUp={event => getTeachers(event.target.value)}
+								onKeyUp={event => getTeachers(event.target.value.trim())}
 								onBlur={handleBlur}
 								value={values.teacher}
 								isValid={touched.teacher && !errors.teacher}
@@ -417,6 +424,12 @@ const PaymentForm = ({
 								</Col>
 								<Col xs={1} className="d-flex align-items-center">
 									<FontAwesomeIcon icon={faHryvnia} />
+								</Col>
+								<Col xs={12} className="text-right">
+									<em className="text-muted small">
+										Плюс відсотки платіжної системи (2.85%):{' '}
+										{liqpayCommission} <FontAwesomeIcon size="sm" icon={faHryvnia} />
+									</em>
 								</Col>
 							</>
 							: <p className="payment-total-message">

@@ -35,17 +35,19 @@ const RegisterForm = ({
 	}, [])
 
 	const getRecaptchaScore = () => {
-		executeRecaptcha('submit')
-			.then(token => {
-				setRecaptchaScore(token)
-			})
-			.catch(error => {
-				const { message, variant } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: variant ? variant : 'danger'
-				}, 5)
-			})
+		window.Cypress
+			? setRecaptchaScore()
+			: executeRecaptcha('submit')
+				.then(token => {
+					setRecaptchaScore(token)
+				})
+				.catch(error => {
+					const { message, variant } = { ...error.response.data }
+					setNotification({
+						message,
+						variant: variant ? variant : 'danger'
+					}, 5)
+				})
 	}
 
 	const handleRegister = useCallback(() => {
@@ -97,15 +99,15 @@ const RegisterForm = ({
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		name: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть ім\'я.'),
 		middlename: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть по батькові.'),
 		lastname: Yup.string()
-			.min(2, 'Не менш 3 символів.')
+			.min(3, 'Не менш 3 символів.')
 			.max(45, 'Максимум 45 символів.')
 			.required('Введіть прізвище.'),
 		password: Yup.string()
@@ -256,6 +258,7 @@ const RegisterForm = ({
 									<InputGroup.Append>
 										<Button
 											variant="outline-secondary border rounded-right"
+											data-cy="toggle-pass-visibility"
 											onClick={() => togglePassFieldType('pass')}
 										>
 											{passHidden
@@ -295,6 +298,7 @@ const RegisterForm = ({
 									<InputGroup.Append>
 										<Button
 											variant="outline-secondary border rounded-right"
+											data-cy="toggle-pass-confirm-visibility"
 											onClick={() => togglePassFieldType('passConfirm')}
 										>
 											{passConfirmHidden
@@ -335,7 +339,7 @@ const RegisterForm = ({
 									block
 									loadingState={processingForm}
 									disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
-									label="Реєстрація"
+									label="Зареєструватися"
 									variant="primary"
 									dataCy="register-btn"
 									className="primary-color-shadow my-3"

@@ -352,6 +352,7 @@ const TeacherForm = ({
 													as="select"
 													className="mb-2"
 													name={`specialties[${index}]`}
+													data-cy={`specialties-${index}`}
 													value={values.specialties[index]}
 													onChange={handleChange}
 													isValid={touched.specialties && !errors.specialties}
