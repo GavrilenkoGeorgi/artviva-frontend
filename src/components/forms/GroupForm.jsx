@@ -398,6 +398,7 @@ const GroupForm = ({
 													<Form.Control
 														type="text"
 														name={`pupils[${index}]`}
+														data-cy={`pupil-${index}`}
 														list={editMode
 															? `pupils-list-${group.id}`
 															: 'pupils-list'}
@@ -437,6 +438,7 @@ const GroupForm = ({
 															{/* remove pupil from the list */}
 															<Button
 																block
+																data-cy={`remove-pupil-${index}`}
 																variant="outline-danger" size="sm"
 																onClick={() => {
 																	arrayHelpers.remove(index)
@@ -450,6 +452,7 @@ const GroupForm = ({
 															{/* add an empty pupil input */}
 															<Button
 																block
+																data-cy={`add-pupil-${index}`}
 																variant="outline-success" size="sm"
 																onClick={() => { arrayHelpers.push('')
 																	checkSubmitBtnState(arrayHelpers.form.values)
@@ -486,10 +489,10 @@ const GroupForm = ({
 								className="pt-4"
 							>
 								<BtnWithSpinner
-									className="default-width-btn"
+									className="max-width-btn"
 									variant={editMode ? 'success' : 'primary'}
 									type="submit"
-									label={editMode ? 'Зберегти' : 'Додати'}
+									label={editMode ? 'Зберегти групу' : 'Додати групу'}
 									dataCy="add-class-btn"
 									loadingState={processingForm}
 								/>
