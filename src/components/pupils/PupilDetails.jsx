@@ -242,6 +242,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 
 						<EntityControlButtons
 							route={`/school/pupils/${pupil.id}`}
+							entity="pupil"
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
@@ -265,7 +266,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 							mode="edit" />
 					</LazyEntityEditModal>
 					<LazyEntityDeleteModal
-						subject="Видалити учня"
+						subject="учня"
 						subjectid={pupil.id}
 						valuetoconfirm={pupil.name}
 						show={deleteModalShow}
