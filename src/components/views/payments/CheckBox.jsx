@@ -1,10 +1,7 @@
 import React from 'react'
-
 import { Form } from 'react-bootstrap'
 
 const CheckBox = (props) => {
-	console.log('Im a chackbox!', props)
-
 	return <Form>
 		<Form.Check
 			custom
@@ -18,5 +15,4 @@ const CheckBox = (props) => {
 }
 
 const MemodCheckBox = React.memo(CheckBox)
-
 export default MemodCheckBox

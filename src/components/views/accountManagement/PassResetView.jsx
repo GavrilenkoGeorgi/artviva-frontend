@@ -1,7 +1,7 @@
 import React from 'react'
 
-import CommonLayout from '../views/CommonLayout'
-import PassResetForm from '../forms/PassResetForm'
+import CommonLayout from '../../CommonLayout'
+import PassResetForm from '../../forms/PassResetForm'
 import { Container, Row, Col } from 'react-bootstrap'
 
 const PassResetView = ({ match }) => {

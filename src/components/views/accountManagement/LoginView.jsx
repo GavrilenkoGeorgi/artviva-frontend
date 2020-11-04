@@ -1,5 +1,5 @@
 import React from 'react'
-import LoginForm from '../forms/LoginForm'
+import LoginForm from '../../forms/LoginForm'
 import { Container, Row, Col, Image } from 'react-bootstrap'
 
 const LoginView = () => {

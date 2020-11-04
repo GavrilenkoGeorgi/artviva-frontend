@@ -11,7 +11,7 @@ import getPaymentDataFromString from '../../../utils/parsePaymentDescr'
 import liqpayStatusCodes from '../../../data/liqpayStatusCodes'
 
 import { Container, Row, Col, Tabs, Tab } from 'react-bootstrap'
-import CommonLayout from '../CommonLayout'
+import CommonLayout from '../../CommonLayout'
 import DateRangeInput from './DateRangeInput'
 import { FilterData } from '../../sorting'
 import PupilsReport from './PupilsReport'

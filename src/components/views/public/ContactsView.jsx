@@ -1,8 +1,8 @@
 import React from 'react'
-import ContactMap from '../common/ContactMap'
-import { departments } from '../../data/departments.json'
+import ContactMap from '../../common/ContactMap'
+import { departments } from '../../../data/departments.json'
 import { Container, Row } from 'react-bootstrap'
-import DepartmentCard from '../common/DepartmentCard'
+import DepartmentCard from '../../common/DepartmentCard'
 
 const ContactsView = () => {
 	const mapStyles = {

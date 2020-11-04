@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Col } from 'react-bootstrap'
-import * as data from '../../data/teachers'
-import TeacherCard from '../teachers/TeacherCard'
-import Department from '../teachers/Department'
-import { shuffle } from '../../utils/shuffleArray'
-import CommonLayout from './CommonLayout'
+import * as data from '../../../data/teachers'
+import TeacherCard from '../../teachers/TeacherCard'
+import Department from '../../teachers/Department'
+import { shuffle } from '../../../utils/shuffleArray'
+import CommonLayout from '../../CommonLayout'
 import PropTypes from 'prop-types'
 
 const TeachersView = ({ match }) => {

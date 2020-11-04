@@ -1,24 +1,24 @@
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react'
-import { useScrollPosition } from '../../hooks/scrollHooks'
+import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { connect } from 'react-redux'
-import { initializePupils, initialiseUserPupils } from '../../reducers/pupilsReducer'
+import { initializePupils, initialiseUserPupils } from '../../../reducers/pupilsReducer'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
-import PupilsList from '../pupils/PupilsList'
-import { CollapseComponent } from '../common'
-import { LoadingIndicator } from '../common'
-import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
+import PupilsList from '../../pupils/PupilsList'
+import { CollapseComponent } from '../../common'
+import { LoadingIndicator } from '../../common'
+import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
 
-import { filter, select, boolean } from '../../data/forms/pupilFields.json'
-import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
+import { filter, select, boolean } from '../../../data/forms/pupilFields.json'
+import { multiPropsFilter, boolPropsFilter } from '../../../utils/arrayHelpers'
 import { FilterData as FilterString, ShowFilterSettings,
-	SelectFields, FilterBooleanFields } from '../sorting'
+	SelectFields, FilterBooleanFields } from '../../sorting'
 
-import Reset from '../forms/buttons/Reset'
-import { Button } from '../common/buttons'
-import PupilForm from '../forms/PupilForm'
-import CommonLayout from './CommonLayout'
-const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+import Reset from '../../forms/buttons/Reset'
+import { Button } from '../../common/buttons'
+import PupilForm from '../../forms/PupilForm'
+import CommonLayout from '../../CommonLayout'
+const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModal'))
 
 const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) => {
 

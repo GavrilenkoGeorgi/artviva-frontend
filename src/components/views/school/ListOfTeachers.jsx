@@ -3,24 +3,24 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 
 import { Form, ListGroup, Container, Row, Col } from 'react-bootstrap'
-import { initializeTeachers, setTeacherExp } from '../../reducers/teachersReducer'
-import { initializeSpecialties } from '../../reducers/specialtiesReducer'
-import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
-import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
-import { multiPropsFilter, boolPropsFilter } from '../../utils/arrayHelpers'
-import { calcEmployeeExperience } from '../../utils/datesAndTime'
+import { initializeTeachers, setTeacherExp } from '../../../reducers/teachersReducer'
+import { initializeSpecialties } from '../../../reducers/specialtiesReducer'
+import { setNotification, setFetchingData } from '../../../reducers/notificationReducer'
+import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
+import { multiPropsFilter, boolPropsFilter } from '../../../utils/arrayHelpers'
+import { calcEmployeeExperience } from '../../../utils/datesAndTime'
 
-import { filter, select, boolean, range } from '../../data/forms/teacherFields.json'
-import { Teacher, AddTeacher } from '../teachers'
+import { filter, select, boolean, range } from '../../../data/forms/teacherFields.json'
+import { Teacher, AddTeacher } from '../../teachers'
 import { ShowFilterSettings, FilterData, ExperienceSort,
-	SelectFields, FilterBooleanFields, AgeFilter } from '../sorting'
-import Reset from '../forms/buttons/Reset'
-import { Button } from '../common/buttons'
-import { LoadingIndicator } from '../common'
-import CommonLayout from './CommonLayout'
-import { CollapseComponent } from '../common'
+	SelectFields, FilterBooleanFields, AgeFilter } from '../../sorting'
+import Reset from '../../forms/buttons/Reset'
+import { Button } from '../../common/buttons'
+import { LoadingIndicator } from '../../common'
+import CommonLayout from '../../CommonLayout'
+import { CollapseComponent } from '../../common'
 
-const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModal'))
 
 const ListOfTeachers = ({ teachers,
 	initializeTeachers,

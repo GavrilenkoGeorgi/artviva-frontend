@@ -5,7 +5,7 @@ import store from './store'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 
 import App from './App'
-import { Footer } from './components'
+import { Footer } from './components/views'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import './css/index.css'

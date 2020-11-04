@@ -4,8 +4,8 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faReceipt } from '@fortawesome/free-solid-svg-icons'
 
-import PaymentForm from '../forms/PaymentForm'
-import CommonLayout from './CommonLayout'
+import PaymentForm from '../../forms/PaymentForm'
+import CommonLayout from '../../CommonLayout'
 
 const PaymentView = ({ match }) => {
 	const { status } = { ...match.params }

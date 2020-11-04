@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
-import AboutTextImage from '../common/AboutTextImage'
+import AboutTextImage from '../../common/AboutTextImage'
 
 const AboutView = () => {
 	return (

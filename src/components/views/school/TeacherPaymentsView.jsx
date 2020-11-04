@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import teachersService from '../../services/teachers'
-import { getTeacherData } from '../../reducers/teacherDataReducer'
-import { setFetchingData, setNotification } from '../../reducers/notificationReducer'
+import teachersService from '../../../services/teachers'
+import { getTeacherData } from '../../../reducers/teacherDataReducer'
+import { setFetchingData, setNotification } from '../../../reducers/notificationReducer'
 
 import { Col, Tab, Tabs } from 'react-bootstrap'
 
-import CommonLayout from './CommonLayout'
-import TeacherPaymentsList from '../payments/TeacherPaymentsList'
+import CommonLayout from '../../CommonLayout'
+import TeacherPaymentsList from '../../payments/TeacherPaymentsList'
 
 const TeacherPaymentsView = ({
 	user, teacher,

@@ -1,14 +1,14 @@
 import React from 'react'
-import { footerDate } from '../services/dateAndTime'
+import { footerDate } from '../../../services/dateAndTime'
 
 import { Container, Row, Col } from 'react-bootstrap'
-import { ReCaptchaStatement } from './common'
+import { ReCaptchaStatement } from '../../common'
 
-import { ReactComponent as FbIcon } from '../svg/facebook.svg'
-import { ReactComponent as InstIcon } from '../svg/instagram.svg'
-import { ReactComponent as MasterCardIcon } from '../svg/MasterCard_Logo.svg'
-import { ReactComponent as VisaIcon } from '../svg/visa-logo.svg'
-import { ReactComponent as LiqPayLogoIcon } from '../svg/logo-liqpay-main.svg'
+import { ReactComponent as FbIcon } from '../../../svg/facebook.svg'
+import { ReactComponent as InstIcon } from '../../../svg/instagram.svg'
+import { ReactComponent as MasterCardIcon } from '../../../svg/MasterCard_Logo.svg'
+import { ReactComponent as VisaIcon } from '../../../svg/visa-logo.svg'
+import { ReactComponent as LiqPayLogoIcon } from '../../../svg/logo-liqpay-main.svg'
 
 const Footer = () => {
 	const socialIconsStyle = {

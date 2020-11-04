@@ -8,7 +8,7 @@ import moment from 'moment'
 import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col, Card } from 'react-bootstrap'
 
-import { CommonLayout } from '../views'
+import CommonLayout from '../CommonLayout'
 import LoadingIndicator from '../common/LoadingIndicator'
 import PupilForm from '../forms/PupilForm'
 import Emoji from '../common/Emoji'

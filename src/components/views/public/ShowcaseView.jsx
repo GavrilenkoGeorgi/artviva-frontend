@@ -1,5 +1,5 @@
 import React from 'react'
-import YoutubeVideo from '../common/YoutubeVideo'
+import YoutubeVideo from '../../common/YoutubeVideo'
 
 import { Container } from 'react-bootstrap'
 

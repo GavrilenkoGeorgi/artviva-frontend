@@ -78,7 +78,7 @@ const GroupForm = ({
 			default:
 				return false
 			}
-		} else console.warn('Перевірте формат data.value.')
+		}
 	}
 
 	const searchTeachers = query => {

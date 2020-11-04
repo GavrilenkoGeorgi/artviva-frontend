@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Container, Spinner, Col } from 'react-bootstrap'
-import { setNotification } from '../../reducers/notificationReducer'
-import userService from '../../services/users'
+import { setNotification } from '../../../reducers/notificationReducer'
+import userService from '../../../services/users'
 
 const ActivateAccountView = ({ match, setNotification }) => {
 

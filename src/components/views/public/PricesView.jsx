@@ -1,8 +1,8 @@
 import React from 'react'
 
 import { Col, Tabs, Tab } from 'react-bootstrap'
-import CommonLayout from './CommonLayout'
-import { Prices, Benefits, Conditions } from '../prices'
+import CommonLayout from '../../CommonLayout'
+import { Prices, Benefits, Conditions } from '../../prices'
 
 const PricesView = () => {
 

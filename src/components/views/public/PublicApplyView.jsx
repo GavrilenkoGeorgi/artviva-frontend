@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { Container, Col } from 'react-bootstrap'
-import PupilForm from '../forms/PupilForm'
-import PublicApplyStatus from '../pupils/PublicApplyStatus'
-import CommonLayout from './CommonLayout'
+import PupilForm from '../../forms/PupilForm'
+import PublicApplyStatus from '../../pupils/PublicApplyStatus'
+import CommonLayout from '../../CommonLayout'
 
 const PublicApplyView = ({ match }) => {
 	return (

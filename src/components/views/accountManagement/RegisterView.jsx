@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
-import RegisterForm from '../forms/RegisterForm'
+import RegisterForm from '../../forms/RegisterForm'
 
 const RegisterView = () => {
 

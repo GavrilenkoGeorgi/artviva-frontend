@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 import { Col } from 'react-bootstrap'
-import RecoverForm from '../forms/RecoverForm'
-import CommonLayout from './CommonLayout'
+import RecoverForm from '../../forms/RecoverForm'
+import CommonLayout from '../../CommonLayout'
 
 
 const RecoverView = () => {

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Redirect, useLocation } from 'react-router-dom'
-import { setNotification } from '../../reducers/notificationReducer'
-import { getUsersList } from '../../reducers/userReducer'
-import userService from '../../services/users'
+import { setNotification } from '../../../reducers/notificationReducer'
+import { getUsersList } from '../../../reducers/userReducer'
+import userService from '../../../services/users'
 
-import LoadingIndicator from '../common/LoadingIndicator'
-import UserDetailsCard from '../users/UserDetailsCard'
-import CommonLayout from './CommonLayout'
+import LoadingIndicator from '../../common/LoadingIndicator'
+import UserDetailsCard from '../../users/UserDetailsCard'
+import CommonLayout from '../../CommonLayout'
 
 const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 

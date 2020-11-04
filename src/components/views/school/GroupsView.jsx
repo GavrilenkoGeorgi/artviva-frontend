@@ -1,23 +1,23 @@
 import React, { useState, useEffect, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { getGroups } from '../../reducers/schoolClassesReducer'
-import { setNotification,  setFetchingData } from '../../reducers/notificationReducer'
-import schoolClassesService from '../../services/schoolClasses'
-import { removeFalsyProps, pureObjectIsEmpty } from '../../utils/objectHelpers'
-import { filter } from '../../data/forms/groupFields.json'
+import { getGroups } from '../../../reducers/schoolClassesReducer'
+import { setNotification,  setFetchingData } from '../../../reducers/notificationReducer'
+import schoolClassesService from '../../../services/schoolClasses'
+import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
+import { filter } from '../../../data/forms/groupFields.json'
 
 import { Link } from 'react-router-dom'
 import { Container, Col, Row, Form } from 'react-bootstrap'
-import GroupsList from '../schoolClasses/GroupsList'
-import { LoadingIndicator } from '../common'
-import CommonLayout from './CommonLayout'
-import GroupForm from '../forms/GroupForm'
-import Reset from '../forms/buttons/Reset'
-import { Button } from '../common/buttons'
+import GroupsList from '../../schoolClasses/GroupsList'
+import { LoadingIndicator } from '../../common'
+import CommonLayout from '../../CommonLayout'
+import GroupForm from '../../forms/GroupForm'
+import Reset from '../../forms/buttons/Reset'
+import { Button } from '../../common/buttons'
 
-import { ShowFilterSettings, FilterData } from '../sorting'
+import { ShowFilterSettings, FilterData } from '../../sorting'
 
-const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModal'))
 
 const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 

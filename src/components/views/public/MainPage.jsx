@@ -3,17 +3,17 @@ import { connect } from 'react-redux'
 
 import { ParallaxProvider } from 'react-scroll-parallax'
 import { ParallaxBanner } from 'react-scroll-parallax'
-import ParallaxCache from './common/ParallaxCache'
+import ParallaxCache from '../../common/ParallaxCache'
 import ScrollAnimation from 'react-animate-on-scroll'
 
 import { Container, Row, Col, Image } from 'react-bootstrap'
-import Carousel from './common/MainViewCarousel'
-import ContactForm from './forms/ContactForm'
-import ButtonLink from './common/buttons/ButtonLink'
-import { ReactComponent as OrigamiIcon } from '../svg/origami.svg'
-import { ReactComponent as EditIcon } from '../svg/edit.svg'
-import { ReactComponent as LoveSongIcon } from '../svg/love-song.svg'
-import { ReactComponent as Enrollment } from '../svg/enrollment.svg'
+import Carousel from '../../common/MainViewCarousel'
+import ContactForm from '../../forms/ContactForm'
+import ButtonLink from '../../common/buttons/ButtonLink'
+import { ReactComponent as OrigamiIcon } from '../../../svg/origami.svg'
+import { ReactComponent as EditIcon } from '../../../svg/edit.svg'
+import { ReactComponent as LoveSongIcon } from '../../../svg/love-song.svg'
+import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
 
 const MainPage = () => {
 	return (

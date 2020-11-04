@@ -7,7 +7,7 @@ import { deleteSchoolClass } from '../../reducers/schoolClassesReducer'
 import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col } from 'react-bootstrap'
 import LoadingIndicator from '../common/LoadingIndicator'
-import CommonLayout from '../views/CommonLayout'
+import CommonLayout from '../CommonLayout'
 import SchoolClassForm from '../forms/GroupForm'
 import EntityControlButtons from '../common/EntityControlButtons'
 

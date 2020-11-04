@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { initialiseUserPupils } from '../../reducers/pupilsReducer'
+import { initialiseUserPupils } from '../../../reducers/pupilsReducer'
 
-import PupilsList from '../pupils/PupilsList'
+import PupilsList from '../../pupils/PupilsList'
 
 const TeacherPupilsView = ({ initialiseUserPupils }) => {
 	return (
