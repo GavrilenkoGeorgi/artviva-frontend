@@ -8,7 +8,7 @@ import moment from 'moment'
 import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col, Card } from 'react-bootstrap'
 
-import { CommonLayout } from '../views'
+import CommonLayout from '../CommonLayout'
 import LoadingIndicator from '../common/LoadingIndicator'
 import PupilForm from '../forms/PupilForm'
 import Emoji from '../common/Emoji'
@@ -242,6 +242,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 
 						<EntityControlButtons
 							route={`/school/pupils/${pupil.id}`}
+							entity="pupil"
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>
@@ -265,7 +266,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 							mode="edit" />
 					</LazyEntityEditModal>
 					<LazyEntityDeleteModal
-						subject="Видалити учня"
+						subject="учня"
 						subjectid={pupil.id}
 						valuetoconfirm={pupil.name}
 						show={deleteModalShow}

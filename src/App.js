@@ -19,11 +19,10 @@ const App = ({ user, setUserFromLocalStorage }) => {
 		}
 	}, [user, setUserFromLocalStorage])
 
-	return (
-		<div className="content">
-			<Routes />
-		</div>
-	)
+	// div responsible for sticky footer, looks ugly
+	return <div className="content">
+		<Routes />
+	</div>
 }
 
 const mapStateToProps = state => {

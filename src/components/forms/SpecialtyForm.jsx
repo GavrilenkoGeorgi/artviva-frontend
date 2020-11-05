@@ -92,7 +92,7 @@ const SpecialtyForm = ({
 		title: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повну назву філії.'),
+			.required('Введіть повну назву спеціальності.'),
 		cost: Yup.number()
 			.typeError('Повинно бути числом.')
 			.max(9999, 'Не більше 9999 грн.')
@@ -129,7 +129,7 @@ const SpecialtyForm = ({
 				>
 					{/* Specialty title input*/}
 					<TextInput
-						label="Полна назва спеціальності"
+						label="Повна назва спеціальності"
 						name="title"
 						onChange={handleChange}
 						onBlur={handleBlur}
@@ -171,7 +171,7 @@ const SpecialtyForm = ({
 							variant={editMode ? 'success' : 'primary'}
 							type="submit"
 							label={editMode ? 'Зберегти' : 'Додати'}
-							dataCy="add-class-btn"
+							dataCy="add-specialty-btn"
 							loadingState={processingForm}
 						/>
 						<ResetBtn

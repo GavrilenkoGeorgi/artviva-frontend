@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { history } from '../../Routes'
 import { connect } from 'react-redux'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { login } from '../../reducers/loginReducer'
@@ -16,7 +17,6 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { BtnWithSpinner } from '../common/buttons'
 
 const LoginForm = ({
-	user,
 	login,
 	reCaptchaScore,
 	processingForm,
@@ -26,7 +26,6 @@ const LoginForm = ({
 	setProcessingForm }) => {
 
 	const unmounted = useRef(false)
-	const history = useHistory()
 	const [loginSuccessful, setLoginSuccessful] = useState(false)
 	const [loginValues, setLoginValues] = useState(null)
 	const { executeRecaptcha } = useGoogleReCaptcha()
@@ -35,7 +34,7 @@ const LoginForm = ({
 		if (loginSuccessful) {
 			history.push('/school')
 		}
-	}, [loginSuccessful, history, user])
+	}, [loginSuccessful])
 
 	useEffect(() => {
 		return () => { unmounted.current = true }
@@ -253,7 +252,6 @@ const LoginForm = ({
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user,
 		reCaptchaScore: state.notification.reCaptchaScore,
 		processingForm: state.notification.processingForm
 	}

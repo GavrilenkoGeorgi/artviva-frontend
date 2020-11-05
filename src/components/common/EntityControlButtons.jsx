@@ -24,6 +24,7 @@ const EntityControlButtons = ({
 		<Col className="my-2 d-flex justify-content-end align-items-center">
 			{history.location.pathname !== route
 				? <BtnWithIcon
+					dataCy={`show-info-${entity}`}
 					label="Детальніше"
 					icon="info"
 					variant="outline-primary"
@@ -31,6 +32,7 @@ const EntityControlButtons = ({
 					onClick={routeChange}
 				/>
 				: <BtnWithIcon
+					dataCy={`delete-${entity}`}
 					label="Видалити"
 					icon="trash"
 					variant="outline-danger"
