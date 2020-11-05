@@ -7,6 +7,14 @@ const ShowcaseView = () => {
 
 	const videos = [
 		{
+			title: 'The Sixsters – Крила (official video 2020)',
+			src: 'https://www.youtube.com/embed/9-GkJHPO2Qc'
+		},
+		{
+			title: 'РАЙСЬКИЙ САД 2020 реж. Олена Завгородня',
+			src: 'https://www.youtube.com/embed/IFYIU5LOZic'
+		},
+		{
 			title: '29! В ритмі серця України!',
 			src: 'https://www.youtube.com/embed/eWV_SISJMFs'
 		},
