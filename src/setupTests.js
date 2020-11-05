@@ -2,6 +2,7 @@ import '@testing-library/jest-dom/extend-expect'
 // mock the backend response with the list of blogs
 // jest.mock('./services/blogs')
 import { configure } from '@testing-library/react'
+import 'jest-canvas-mock'
 
 // i already have cypress data tags on the elements
 configure({ testIdAttribute: 'data-cy' })
