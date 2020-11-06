@@ -152,10 +152,14 @@ const LoginForm = ({
 							{/* Message sender email input */}
 							<Form.Row>
 								<Form.Group as={Col}>
-									<Form.Label>
+									<Form.Label
+										htmlFor="email"
+										aria-labelledby="email"
+									>
 										Ваша електронна пошта
 									</Form.Label>
 									<Form.Control
+										id="email"
 										type="email"
 										name="email"
 										data-cy="email-input"
@@ -174,7 +178,10 @@ const LoginForm = ({
 							{/* User password input */}
 							<Form.Row>
 								<Form.Group as={Col}>
-									<Form.Label>
+									<Form.Label
+										htmlFor="login-pass"
+										aria-labelledby="login-pass"
+									>
 										Ваш пароль
 									</Form.Label>
 									<InputGroup>

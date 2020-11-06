@@ -59,9 +59,9 @@ const GroupForm = ({
 		}
 
 		// then
-		if (data.value <= 2 ) {
+		/* if (data.value <= 2 ) {
 			return console.warn('Потрібно більше даних для пошуку.')
-		}
+		} */
 
 		const queryPattern = /^[A-ZА-ЯҐЄІЇ]{2,64}$/i
 		if (queryPattern.exec(data.value)) {
@@ -206,10 +206,12 @@ const GroupForm = ({
 		teacher: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
+			.oneOf(teachersList, 'Перевірте ім\'я викладача')
 			.required('Введіть ім\'я викладача.'),
 		specialty: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
+			.oneOf(specialtiesList, 'Перевірте назву фаху класу')
 			.required('Введіть назву спеціальності.'),
 		pupils: Yup.array().of(
 			Yup.string()

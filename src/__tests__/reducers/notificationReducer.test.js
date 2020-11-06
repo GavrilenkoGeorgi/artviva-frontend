@@ -1,4 +1,4 @@
-import notificationReducer from '../reducers/notificationReducer'
+import notificationReducer from '../../reducers/notificationReducer'
 
 const initialState = {
 	message: null,
