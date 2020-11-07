@@ -16,6 +16,18 @@ describe('School class form', function() {
 		cy.contains('Не менш 2 символів')
 	})
 
+	it('shows error on invalid teacher name input', function() {
+		cy.contains('div', 'Викладач')
+			.find('input').type('Unknown Teacher').blur()
+		cy.contains('Перевірте ім\'я викладача')
+	})
+
+	it('shows error on invalid specilaty title input', function() {
+		cy.contains('div', 'Фах групи')
+			.find('input').type('Unknown Spec').blur()
+		cy.contains('Перевірте назву фаху класу')
+	})
+
 	it('shows error if pupil name input is empty', function() {
 		cy.get('[data-cy=pupil-0]').click().blur()
 		cy.contains('Це поле є обов\'язковим')
@@ -31,12 +43,6 @@ describe('School class form', function() {
 		cy.contains('Додати учня').click()
 		cy.get('[data-cy=pupil-0]').should('exist')
 	})
-
-	/*it.only('shown error on invalid teacher name input', function() {
-		cy.contains('div', 'Викладач')
-			.find('input').type('Unknown Teacher')
-		cy.contains('Введіть ім\'я викладача')
-	})*/
 
 	it('can be filled', function() {
 		// cy.contains('Додати нову').click()
