@@ -79,6 +79,7 @@ const ContactForm = ({
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
 		message: Yup.string()
+			.min(8, 'Мінімум 8 символів.')
 			.max(280, 'Максимум 280 символів.')
 			.required('Будь ласка, введіть своє повідомлення.')
 	})
@@ -116,8 +117,10 @@ const ContactForm = ({
 
 								{/* Message sender name input */}
 								<Form.Row>
-									<Form.Group controlId="name-input" as={Col}>
-										<Form.Label>
+									<Form.Group controlId="name" as={Col}>
+										<Form.Label
+											aria-labelledby="name"
+										>
 											Ваше ім&apos;я
 											<span className="required-text">*</span>
 										</Form.Label>
@@ -139,8 +142,10 @@ const ContactForm = ({
 
 								{/* Message sender email input */}
 								<Form.Row>
-									<Form.Group controlId="email-input" as={Col}>
-										<Form.Label>
+									<Form.Group controlId="email" as={Col}>
+										<Form.Label
+											aria-labelledby="email"
+										>
 											Ваша електронна пошта
 											<span className="required-text">*</span>
 										</Form.Label>
@@ -162,13 +167,16 @@ const ContactForm = ({
 
 								{/* Message body input */}
 								<Form.Row>
-									<Form.Group controlId="message-input" as={Col}>
-										<Form.Label>
+									<Form.Group controlId="message" as={Col}>
+										<Form.Label
+											aria-labelledby="message"
+										>
 											Ваше повідомлення
 											<span className="required-text">*</span>
 										</Form.Label>
 										<Form.Control
 											as="textarea"
+											type="textarea"
 											name="message"
 											rows="6"
 											data-cy="message-input"
