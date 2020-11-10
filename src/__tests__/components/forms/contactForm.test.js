@@ -1,6 +1,5 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { BrowserRouter as Router } from 'react-router-dom'
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import ContactForm from '../../../components/forms/ContactForm'
 import store from '../../../store'
@@ -67,7 +66,7 @@ describe('Login form', () => {
 		fireEvent.change(nameInput, { target: { value: '' } })
 		fireEvent.blur(nameInput)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Ваше ім'я?/)).toBeInTheDocument()
+			expect(contactForm.getByText(/Ваше ім'я\?/)).toBeInTheDocument()
 		})
 	})
 
@@ -103,6 +102,16 @@ describe('Login form', () => {
 		fireEvent.change(messageInput, { target: { value: '' } })
 		fireEvent.blur(messageInput)
 		await waitFor(() => {
+			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
+		})
+	})
+
+	it('shows errors if trying to send an empty form', async () => {
+		fireEvent.click(contactForm.getByText('Відправити'))
+
+		await waitFor(() => {
+			expect(contactForm.getByText(/Ваше ім'я\?/)).toBeInTheDocument()
+			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
 			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})
