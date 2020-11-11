@@ -15,6 +15,7 @@ const BtnWithSpinner = props => {
 			size="sm"
 			role="status"
 			aria-hidden="true"
+			data-cy="loading-spinner"
 		/>
 		const waitingSpinner = () => <Spinner
 			as="span"
@@ -22,6 +23,7 @@ const BtnWithSpinner = props => {
 			size="sm"
 			role="status"
 			aria-hidden="true"
+			data-cy="waiting-spinner"
 		/>
 		return waitingState ? waitingSpinner() : loadingState ? loadingSpinner() : null
 	}

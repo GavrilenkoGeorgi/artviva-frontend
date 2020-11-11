@@ -1,56 +1,62 @@
 import React from 'react'
-import { Provider } from 'react-redux'
 import { render, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import ContactForm from '../../../components/forms/ContactForm'
-import store from '../../../store'
 import { thirtyOneCharacter, twoHundredAndEightyOneCharacters } from '../../../__mocks__/strings'
+
+const mockHandleContactMessage = jest.fn()
+const testValues = {
+	name: 'Joe Doe',
+	email: 'test@example.com',
+	message: 'Test message'
+}
 
 afterEach(cleanup)
 
-describe('Login form', () => {
+describe('<ContactForm /> component', () => {
 	let contactForm
+	let nameInput
+	let emailInput
+	let messageInput
+	let button
 
 	beforeEach(() => {
 		contactForm = render(
-			<Provider store={store}>
-				<ContactForm />
-			</Provider>
+			<ContactForm
+				handleContactMessage={mockHandleContactMessage}
+				processing={false}
+				score={null}
+			/>
 		)
+
+		nameInput = contactForm.getByLabelText(/Ваше ім'я/)
+		emailInput = contactForm.getByLabelText(/Ваша електронна пошта/)
+		messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
+		button = contactForm.getByText('Відправити')
 	})
 
 	it('renders correctly', () => {
-		const { getByText, getByLabelText } = contactForm
-		expect(getByText('Зворотній зв\'язок')).toBeInTheDocument()
-
-		const nameInput = getByLabelText(/Ваше ім'я/)
 		expect(nameInput).toHaveAttribute('type', 'text')
-
-		const emailInput = getByLabelText(/Ваша електронна пошта/)
 		expect(emailInput).toHaveAttribute('type', 'email')
-
-		const messageInput = getByLabelText(/Ваше повідомлення/)
 		expect(messageInput).toHaveAttribute('type', 'textarea')
-
-		const button = getByText('Відправити')
 		expect(button).toHaveAttribute('type', 'submit')
 	})
 
 	it('inputs can by filled correctly', () => {
-		const emailInput = contactForm.getByLabelText(/Ваше ім'я/)
+		// const emailInput = contactForm.getByLabelText(/Ваше ім'я/)
 		fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
 		expect(emailInput.value).toBe('test@example.com')
 
-		const nameInput = contactForm.getByLabelText(/Ваша електронна пошта/)
+		// const nameInput = contactForm.getByLabelText(/Ваша електронна пошта/)
 		fireEvent.change(nameInput, { target: { value: 'Joe Doe' } })
 		expect(emailInput.value).toBe('test@example.com')
 
-		const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
+		// const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
 		fireEvent.change(messageInput, { target: { value: 'Test' } })
 		expect(messageInput.value).toBe('Test')
 	})
 
 	it('name field shows errors on invalid input', async () => {
-		const nameInput = contactForm.getByLabelText(/Ваше ім'я/)
+		// const nameInput = contactForm.getByLabelText(/Ваше ім'я/)
 		fireEvent.change(nameInput, { target: { value: 'A' } })
 		fireEvent.blur(nameInput)
 		await waitFor(() => {
@@ -71,7 +77,7 @@ describe('Login form', () => {
 	})
 
 	it('email field shows errors on invalid input', async () => {
-		const emailInput = contactForm.getByLabelText(/Ваша електронна пошта/)
+		// const emailInput = contactForm.getByLabelText(/Ваша електронна пошта/)
 		fireEvent.change(emailInput, { target: { value: 'test' } })
 		fireEvent.blur(emailInput)
 		await waitFor(() => {
@@ -86,7 +92,7 @@ describe('Login form', () => {
 	})
 
 	it('message field shows errors on invalid input', async () => {
-		const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
+		// const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
 		fireEvent.change(messageInput, { target: { value: 'Test' } })
 		fireEvent.blur(messageInput)
 		await waitFor(() => {
@@ -107,12 +113,56 @@ describe('Login form', () => {
 	})
 
 	it('shows errors if trying to send an empty form', async () => {
-		fireEvent.click(contactForm.getByText('Відправити'))
+		fireEvent.click(button)
 
 		await waitFor(() => {
 			expect(contactForm.getByText(/Ваше ім'я\?/)).toBeInTheDocument()
 			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
 			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
+		})
+	})
+
+	it('button doesn\'t submit empty form', async () => {
+		fireEvent.click(button)
+		await waitFor(() => {
+			expect(mockHandleContactMessage).toHaveBeenCalledTimes(0)
+		})
+	})
+
+	it('button is disabled if reCaptcha score it low', () => {
+		const { rerender } = contactForm
+
+		rerender(<ContactForm
+			handleContactMessage={mockHandleContactMessage}
+			processing={false}
+			score={.1}
+		/>)
+		expect(button).toHaveAttribute('disabled')
+	})
+
+	it('button shows spinner while processing form', async () => {
+		// this really a button test, not a form
+		const { rerender } = contactForm
+
+		rerender(<ContactForm
+			handleContactMessage={mockHandleContactMessage}
+			processing={true}
+			score={.9}
+		/>)
+		expect(contactForm.getByTestId('loading-spinner')).toBeInTheDocument()
+	})
+
+	it('button submits form data', async () => {
+		fireEvent.change(nameInput, { target: { value: 'Joe Doe' } })
+		fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+		fireEvent.change(messageInput, { target: { value: 'Test message' } })
+		fireEvent.click(button)
+		await waitFor(() => {
+			expect(mockHandleContactMessage).toHaveBeenCalledTimes(1)
+			expect(mockHandleContactMessage).toHaveBeenCalledWith({
+				values: testValues,
+				resetForm: expect.any(Function)
+			})
 		})
 	})
 
