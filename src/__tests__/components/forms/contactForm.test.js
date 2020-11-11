@@ -42,21 +42,17 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('inputs can by filled correctly', () => {
-		// const emailInput = contactForm.getByLabelText(/Ваше ім'я/)
 		fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
 		expect(emailInput.value).toBe('test@example.com')
 
-		// const nameInput = contactForm.getByLabelText(/Ваша електронна пошта/)
 		fireEvent.change(nameInput, { target: { value: 'Joe Doe' } })
 		expect(emailInput.value).toBe('test@example.com')
 
-		// const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
 		fireEvent.change(messageInput, { target: { value: 'Test' } })
 		expect(messageInput.value).toBe('Test')
 	})
 
 	it('name field shows errors on invalid input', async () => {
-		// const nameInput = contactForm.getByLabelText(/Ваше ім'я/)
 		fireEvent.change(nameInput, { target: { value: 'A' } })
 		fireEvent.blur(nameInput)
 		await waitFor(() => {
@@ -77,7 +73,6 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('email field shows errors on invalid input', async () => {
-		// const emailInput = contactForm.getByLabelText(/Ваша електронна пошта/)
 		fireEvent.change(emailInput, { target: { value: 'test' } })
 		fireEvent.blur(emailInput)
 		await waitFor(() => {
@@ -92,7 +87,6 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('message field shows errors on invalid input', async () => {
-		// const messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
 		fireEvent.change(messageInput, { target: { value: 'Test' } })
 		fireEvent.blur(messageInput)
 		await waitFor(() => {
