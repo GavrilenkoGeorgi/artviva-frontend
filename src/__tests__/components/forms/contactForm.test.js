@@ -1,5 +1,6 @@
 import React from 'react'
-import { render, fireEvent, waitFor, cleanup } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import ContactForm from '../../../components/forms/ContactForm'
 import { thirtyOneCharacter, twoHundredAndEightyOneCharacters } from '../../../__mocks__/strings'
 
@@ -9,8 +10,6 @@ const testValues = {
 	email: 'test@example.com',
 	message: 'Test message'
 }
-
-afterEach(cleanup)
 
 describe('<ContactForm /> component', () => {
 	let contactForm
@@ -28,10 +27,10 @@ describe('<ContactForm /> component', () => {
 			/>
 		)
 
-		nameInput = contactForm.getByLabelText(/Ваше ім'я/)
-		emailInput = contactForm.getByLabelText(/Ваша електронна пошта/)
-		messageInput = contactForm.getByLabelText(/Ваше повідомлення/)
-		button = contactForm.getByText('Відправити')
+		nameInput = contactForm.getByRole('textbox', { name: /Ваше ім'я/ })
+		emailInput = contactForm.getByRole('textbox', { name: /Ваша електронна пошта/ })
+		messageInput = contactForm.getByRole('textbox', { name: /Ваше повідомлення/ })
+		button = contactForm.getByRole('button', /Відправити/)
 	})
 
 	it('renders correctly', () => {
@@ -42,85 +41,77 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('inputs can by filled correctly', () => {
-		fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
+		userEvent.type(nameInput, 'Joe Doe')
+		expect(nameInput.value).toBe('Joe Doe')
+
+		userEvent.type(emailInput, 'test@example.com')
 		expect(emailInput.value).toBe('test@example.com')
 
-		fireEvent.change(nameInput, { target: { value: 'Joe Doe' } })
-		expect(emailInput.value).toBe('test@example.com')
-
-		fireEvent.change(messageInput, { target: { value: 'Test' } })
-		expect(messageInput.value).toBe('Test')
+		userEvent.type(messageInput, 'Test message')
+		expect(messageInput.value).toBe('Test message')
 	})
 
 	it('name field shows errors on invalid input', async () => {
-		fireEvent.change(nameInput, { target: { value: 'A' } })
-		fireEvent.blur(nameInput)
+		userEvent.type(nameInput, 'A')
 		await waitFor(() => {
 			expect(contactForm.getByText(/Мінімум 2 символи/)).toBeInTheDocument()
 		})
 
-		fireEvent.change(nameInput, { target: { value: thirtyOneCharacter } })
-		fireEvent.blur(nameInput)
+		userEvent.clear(nameInput)
+		userEvent.type(nameInput, thirtyOneCharacter)
 		await waitFor(() => {
 			expect(contactForm.getByText(/Максимум 30 символів/)).toBeInTheDocument()
 		})
 
-		fireEvent.change(nameInput, { target: { value: '' } })
-		fireEvent.blur(nameInput)
+		userEvent.clear(nameInput)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Ваше ім'я\?/)).toBeInTheDocument()
+			expect(contactForm.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
 		})
 	})
 
 	it('email field shows errors on invalid input', async () => {
-		fireEvent.change(emailInput, { target: { value: 'test' } })
-		fireEvent.blur(emailInput)
+		userEvent.type(emailInput, 'test')
 		await waitFor(() => {
 			expect(contactForm.getByText(/Адреса електронної пошти недійсна/)).toBeInTheDocument()
 		})
 
-		fireEvent.change(emailInput, { target: { value: '' } })
-		fireEvent.blur(emailInput)
+		userEvent.clear(emailInput)
 		await waitFor(() => {
 			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
 		})
 	})
 
 	it('message field shows errors on invalid input', async () => {
-		fireEvent.change(messageInput, { target: { value: 'Test' } })
-		fireEvent.blur(messageInput)
+		userEvent.type(messageInput, 'Test')
 		await waitFor(() => {
 			expect(contactForm.getByText(/Мінімум 8 символів/)).toBeInTheDocument()
 		})
 
-		fireEvent.change(messageInput, { target: { value: twoHundredAndEightyOneCharacters } })
-		fireEvent.blur(messageInput)
+		userEvent.clear(messageInput)
+		userEvent.type(messageInput, twoHundredAndEightyOneCharacters)
 		await waitFor(() => {
 			expect(contactForm.getByText(/Максимум 280 символів/)).toBeInTheDocument()
 		})
 
-		fireEvent.change(messageInput, { target: { value: '' } })
-		fireEvent.blur(messageInput)
+		userEvent.clear(messageInput)
 		await waitFor(() => {
 			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})
 
 	it('shows errors if trying to send an empty form', async () => {
-		fireEvent.click(button)
+		userEvent.click(button)
 
 		await waitFor(() => {
-			expect(contactForm.getByText(/Ваше ім'я\?/)).toBeInTheDocument()
+			expect(contactForm.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
 			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
 			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})
 
-	it('button doesn\'t submit empty form', async () => {
-		fireEvent.click(button)
-		await waitFor(() => {
-			expect(mockHandleContactMessage).toHaveBeenCalledTimes(0)
-		})
+	it('button doesn\'t submit empty form', () => {
+		userEvent.click(button)
+		expect(mockHandleContactMessage).toHaveBeenCalledTimes(0)
 	})
 
 	it('button is disabled if reCaptcha score it low', () => {
@@ -134,7 +125,7 @@ describe('<ContactForm /> component', () => {
 		expect(button).toBeDisabled()
 	})
 
-	it('button shows spinner while processing form', async () => {
+	it('button shows spinner while processing form', () => {
 		// this really a button test, not a form
 		const { rerender } = contactForm
 
@@ -147,10 +138,10 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('button submits form data', async () => {
-		fireEvent.change(nameInput, { target: { value: 'Joe Doe' } })
-		fireEvent.change(emailInput, { target: { value: 'test@example.com' } })
-		fireEvent.change(messageInput, { target: { value: 'Test message' } })
-		fireEvent.click(button)
+		userEvent.type(nameInput, 'Joe Doe')
+		userEvent.type(emailInput, 'test@example.com')
+		userEvent.type(messageInput, 'Test message')
+		userEvent.click(button)
 		await waitFor(() => {
 			expect(mockHandleContactMessage).toHaveBeenCalledTimes(1)
 			expect(mockHandleContactMessage).toHaveBeenCalledWith({

@@ -1,5 +1,6 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import BtnWithSpinner from '../../../components/common/buttons/BtnWithSpinner'
 
 const mockOnClick = jest.fn()
@@ -28,7 +29,6 @@ describe('<BtnWithSpinner /> component', () => {
 	})
 
 	it('renders correctly', () => {
-		view.debug(button)
 		expect(button).toHaveAttribute('type', 'button')
 		expect(button).toContainHTML('test button')
 		expect(button).toBeEnabled()
@@ -48,11 +48,11 @@ describe('<BtnWithSpinner /> component', () => {
 				dataCy="test-btn"
 			/>
 		</>)
-		expect(button).toHaveAttribute('disabled')
+		expect(button).toBeDisabled()
 	})
 
 	it('calls onclick function', () => {
-		fireEvent.click(button)
+		userEvent.click(button)
 		expect(mockOnClick).toHaveBeenCalledTimes(1)
 	})
 

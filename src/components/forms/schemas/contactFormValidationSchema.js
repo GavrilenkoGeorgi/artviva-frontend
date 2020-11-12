@@ -5,7 +5,7 @@ export default function contactFormValidationSchema() {
 		name: Yup.string().trim()
 			.min(2, 'Мінімум 2 символи.')
 			.max(30, 'Максимум 30 символів.')
-			.required('Ваше ім\'я?'),
+			.required('Введіть ваше ім\'я.'),
 		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть свою електронну пошту.'),
