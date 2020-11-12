@@ -131,7 +131,7 @@ describe('<ContactForm /> component', () => {
 			processing={false}
 			score={.1}
 		/>)
-		expect(button).toHaveAttribute('disabled')
+		expect(button).toBeDisabled()
 	})
 
 	it('button shows spinner while processing form', async () => {
