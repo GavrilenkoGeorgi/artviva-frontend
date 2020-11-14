@@ -80,7 +80,7 @@ const RegisterForm = ({
 	}, [setNotification, setProcessingForm, registrationData])
 
 	useEffect(() => {
-		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+		if (reCaptchaScore !== 0 && reCaptchaScore < .3) {
 			setNotification({
 				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
 				variant: 'warning'

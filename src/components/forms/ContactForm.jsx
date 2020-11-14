@@ -84,7 +84,7 @@ const ContactForm = ({
 					<BtnWithSpinner
 						type="submit"
 						loadingState={processing}
-						disabled={score !==null && score <= .3 ? true : false}
+						disabled={score !== 0 && score <= .3 ? true : false}
 						label="Відправити"
 						variant="primary"
 						dataCy="contact-msg-btn"
