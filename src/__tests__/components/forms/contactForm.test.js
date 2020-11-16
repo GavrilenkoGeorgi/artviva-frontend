@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ContactForm from '../../../components/forms/ContactForm'
 import { thirtyOneCharacter, twoHundredAndEightyOneCharacters } from '../../../__mocks__/strings'
@@ -12,25 +12,25 @@ const testValues = {
 }
 
 describe('<ContactForm /> component', () => {
-	let contactForm
+	let view
 	let nameInput
 	let emailInput
 	let messageInput
 	let button
 
 	beforeEach(() => {
-		contactForm = render(
+		view = render(
 			<ContactForm
 				handleContactMessage={mockHandleContactMessage}
 				processing={false}
-				score={null}
+				score={0}
 			/>
 		)
 
-		nameInput = contactForm.getByRole('textbox', { name: /Ваше ім'я/ })
-		emailInput = contactForm.getByRole('textbox', { name: /Ваша електронна пошта/ })
-		messageInput = contactForm.getByRole('textbox', { name: /Ваше повідомлення/ })
-		button = contactForm.getByRole('button', /Відправити/)
+		nameInput = screen.getByRole('textbox', { name: /Ваше ім'я/ })
+		emailInput = screen.getByRole('textbox', { name: /Ваша електронна пошта/ })
+		messageInput = screen.getByRole('textbox', { name: /Ваше повідомлення/ })
+		button = screen.getByRole('button', /Відправити/)
 	})
 
 	it('renders correctly', () => {
@@ -54,48 +54,48 @@ describe('<ContactForm /> component', () => {
 	it('name field shows errors on invalid input', async () => {
 		userEvent.type(nameInput, 'A')
 		await waitFor(() => {
-			expect(contactForm.getByText(/Мінімум 2 символи/)).toBeInTheDocument()
+			expect(screen.getByText(/Мінімум 2 символи/)).toBeInTheDocument()
 		})
 
 		userEvent.clear(nameInput)
 		userEvent.type(nameInput, thirtyOneCharacter)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Максимум 30 символів/)).toBeInTheDocument()
+			expect(screen.getByText(/Максимум 30 символів/)).toBeInTheDocument()
 		})
 
 		userEvent.clear(nameInput)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
 		})
 	})
 
 	it('email field shows errors on invalid input', async () => {
 		userEvent.type(emailInput, 'test')
 		await waitFor(() => {
-			expect(contactForm.getByText(/Адреса електронної пошти недійсна/)).toBeInTheDocument()
+			expect(screen.getByText(/Адреса електронної пошти недійсна/)).toBeInTheDocument()
 		})
 
 		userEvent.clear(emailInput)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
 		})
 	})
 
 	it('message field shows errors on invalid input', async () => {
 		userEvent.type(messageInput, 'Test')
 		await waitFor(() => {
-			expect(contactForm.getByText(/Мінімум 8 символів/)).toBeInTheDocument()
+			expect(screen.getByText(/Мінімум 8 символів/)).toBeInTheDocument()
 		})
 
 		userEvent.clear(messageInput)
 		userEvent.type(messageInput, twoHundredAndEightyOneCharacters)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Максимум 280 символів/)).toBeInTheDocument()
+			expect(screen.getByText(/Максимум 280 символів/)).toBeInTheDocument()
 		})
 
 		userEvent.clear(messageInput)
 		await waitFor(() => {
-			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
+			expect(screen.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})
 
@@ -103,9 +103,9 @@ describe('<ContactForm /> component', () => {
 		userEvent.click(button)
 
 		await waitFor(() => {
-			expect(contactForm.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
-			expect(contactForm.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
-			expect(contactForm.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
+			expect(screen.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})
 
@@ -115,7 +115,7 @@ describe('<ContactForm /> component', () => {
 	})
 
 	it('button is disabled if reCaptcha score it low', () => {
-		const { rerender } = contactForm
+		const { rerender } = view
 
 		rerender(<ContactForm
 			handleContactMessage={mockHandleContactMessage}
@@ -127,14 +127,14 @@ describe('<ContactForm /> component', () => {
 
 	it('button shows spinner while processing form', () => {
 		// this really a button test, not a form
-		const { rerender } = contactForm
+		const { rerender } = view
 
 		rerender(<ContactForm
 			handleContactMessage={mockHandleContactMessage}
 			processing={true}
 			score={.9}
 		/>)
-		expect(contactForm.getByTestId('loading-spinner')).toBeInTheDocument()
+		expect(screen.getByTestId('loading-spinner')).toBeInTheDocument()
 	})
 
 	it('button submits form data', async () => {
