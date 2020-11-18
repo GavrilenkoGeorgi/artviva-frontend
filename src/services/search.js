@@ -132,6 +132,48 @@ const userEmailById = async id => {
 	}
 }
 
+/**
+ * Get full user name by lastname fulltext search
+ * @param {Object} payload
+ * @param {string} payload.value - Part of the lastname string to search
+ *
+ * @returns {Object} - Response data
+ */
+const fullUserNameSearch = async payload => {
+	// console.log('Searach', typeof payload)
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	try {
+		const response = await axios.post(`${baseUrl}/users/lastname`, payload, config)
+		return response.data
+	} catch (error) {
+		return Promise.reject(error.response)
+	}
+}
+
+/**
+ * Get user ID by email
+ * @param {Object} payload
+ * @param {string} payload.email - User email to search
+ *
+ * @returns {Object} - Response data
+ */
+const getIdByEmail = async payload => {
+	console.log('Get id by email', payload)
+	const config = {
+		headers: { Authorization: token }
+	}
+
+	try {
+		const response = await axios.post(`${baseUrl}/users/idbyemail`, payload, config)
+		return response.data
+	} catch (error) {
+		return Promise.reject(error.response)
+	}
+}
+
 export default {
 	pupils,
 	teachers,
@@ -139,5 +181,7 @@ export default {
 	specialties,
 	teacherNameById,
 	userEmailById,
+	fullUserNameSearch,
+	getIdByEmail,
 	setToken
 }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getUserJWTToken } from '../services/localStorage'
 
 const showNotification = (store, message, variant) => {
 	store.dispatch ({
@@ -29,6 +30,9 @@ const interceptor = store => {
 	})
 
 	axios.interceptors.request.use(config => {
+		config.headers = {
+			'Authorization': `Bearer ${getUserJWTToken()}`
+		}
 		return config
 	}, (error) => {
 		console.log('Request error: ', error.message)
