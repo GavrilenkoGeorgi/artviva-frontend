@@ -2,7 +2,7 @@ import searchService from '../../services/search'
 import { history } from '../../Routes'
 
 export const updatePupilData = async (
-	{ values, userId, specialties },
+	{ values, userId },
 	{ updatePupil, setNotification, setProcessingForm,
 		setErrors, closeModal }) => {
 	setProcessingForm(true)
@@ -21,10 +21,8 @@ export const updatePupilData = async (
 	} else {
 		assignedTo = userId
 	}
-	// replace human readable specialty title with ID
-	const { id: specialty } = specialties.find(specialty => specialty.title === values.specialty)
 
-	updatePupil(values.id, { ...valuesToSend, specialty, assignedTo })
+	updatePupil(values.id, { ...valuesToSend, assignedTo })
 		.then(() => {
 			setNotification({
 				message: 'Зміни успішно збережено.',

@@ -65,8 +65,7 @@ const PupilDetails = ({
 	const handleUpdate = (values, setErrors) => {
 		const data = {
 			values,
-			userId: user.id,
-			specialties
+			userId: user.id
 		}
 		const utils = {
 			updatePupil,

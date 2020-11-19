@@ -6,7 +6,6 @@ import userService from '../../services/users'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { registrationDataProcessing } from '../../data/formTexts.json'
 
-import { Link } from 'react-router-dom'
 import { Col, Form, InputGroup, Button } from 'react-bootstrap'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -130,7 +129,13 @@ const RegisterForm = ({
 	})
 
 	const checkboxLabel = () =>
-		<>Я погоджуюся з <Link to="#" onClick={() => setInfoModalVis(true)}>умовами</Link> використання сайту</>
+		<>
+			Я погоджуюся з{' '}
+			<span className="checkbox-link" onClick={() => setInfoModalVis(true)}>
+				умовами
+			</span>{' '}
+			використання сайту
+		</>
 
 	// password visibility
 	const [passHidden, setPassVis] = useState(false)
@@ -338,7 +343,7 @@ const RegisterForm = ({
 									type="submit"
 									block
 									loadingState={processingForm}
-									disabled={reCaptchaScore !==null && reCaptchaScore <= .5 ? true : false}
+									disabled={reCaptchaScore !== 0 && reCaptchaScore <= .3 ? true : false}
 									label="Зареєструватися"
 									variant="primary"
 									dataCy="register-btn"

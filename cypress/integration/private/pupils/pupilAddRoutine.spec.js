@@ -11,7 +11,10 @@ describe('Pupil routines', function() {
 		cy.contains('Додати нового').click()
 
 		cy.contains('div', 'Електронна адреса користувача, якому призначено цього учня')
-			.find('input').type(Cypress.env('email'))
+			// 1. get list of users for validation
+			// 2. enter needed email by hand
+			// somehow cypress won't select from datalist
+			.find('input').type('Doe').clear().type('test@example.com')
 
 		cy.contains('div', 'Прізвище та повне ім\'я учня')
 			.find('input').type('Test Pupil One')

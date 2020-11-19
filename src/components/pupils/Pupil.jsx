@@ -15,7 +15,7 @@ import EntityControlButtons from '../common/EntityControlButtons'
 
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessingForm }) => {
+const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessingForm, setNotification }) => {
 
 	const [open, setOpen] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
@@ -30,8 +30,7 @@ const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessing
 	const handleUpdate = async (values, setErrors) => {
 		const data = {
 			values,
-			userId: user.id,
-			specialties
+			userId: user.id
 		}
 		const utils = {
 			updatePupil,

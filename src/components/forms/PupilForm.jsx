@@ -42,7 +42,7 @@ const PupilForm = ({
 
 	useEffect(() => {
 		if (mode === 'edit') setEditMode(true)
-		if (pupil && pupil.assignedTo.email)
+		if (pupil && pupil.assignedTo)
 			setUsersList([{ email: pupil.assignedTo.email }])
 	}, [mode, pupil])
 
@@ -69,7 +69,7 @@ const PupilForm = ({
 			? { ...pupil,
 				specialty: pupil.specialty.title,
 				dateOfBirth: moment(pupil.dateOfBirth).format('YYYY-MM-DD'),
-				assignedTo: pupil.assignedTo.email
+				assignedTo: pupil.assignedTo ? pupil.assignedTo.email : ''
 			}
 			: { assignedTo: '',
 				name: '',
@@ -173,7 +173,7 @@ const PupilForm = ({
 							{!errors.assignedTo
 								? <>
 									<Form.Text className="text-muted">
-										{pupil.assignedTo
+										{pupil && pupil.assignedTo
 											? <>
 												{`${pupil.assignedTo.lastname} `}
 												{`${pupil.assignedTo.name} `}

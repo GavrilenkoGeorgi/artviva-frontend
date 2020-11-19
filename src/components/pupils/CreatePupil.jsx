@@ -40,10 +40,8 @@ const CreatePupil = ({
 		} else {
 			assignedTo = user.id
 		}
-		// replace human readable specialty title with ID
-		const { id: specialty } = specialties.find(specialty => specialty.title === values.specialty)
 
-		createPupil({ ...values, specialty, assignedTo })
+		createPupil({ ...values, assignedTo })
 			.then(() => {
 				setNotification({
 					message: 'Новий учень був успішно додан.',

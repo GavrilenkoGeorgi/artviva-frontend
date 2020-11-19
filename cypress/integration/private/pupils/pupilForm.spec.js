@@ -22,7 +22,7 @@ describe('Public apply form', function() {
 		cy.get('.modal-content').within(() => {
 			cy.contains('div', 'Електронна адреса користувача, якому призначено цього учня')
 				.find('input').type('test').blur()
-			cy.contains('Адреса електронної пошти недійсна')
+			cy.contains(/Шукайте за прізвищем користувача/)
 		})
 	})
 
