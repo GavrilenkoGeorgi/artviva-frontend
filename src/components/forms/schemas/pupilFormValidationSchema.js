@@ -16,7 +16,7 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 		applicantName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть повнe ім\'я особи, яка звертається із заявою.'),
 		specialty: Yup.string()
 			.oneOf(specialtiesNames, 'Виберіть фах учня.')
 			.required('Виберіть фах.'),
@@ -44,29 +44,27 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 		fathersName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть повнe ім\'я батька.'),
 		fathersPhone: Yup.string()
-			.min(3, 'Не менш 19 символів.')
-			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
-			.required('Введіть номер телефону.'),
+			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
+			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX')
+			.required('Введіть номер телефону батька.'),
 		fathersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Місто, вулиця, назва організації, посада.'),
+			.required('Місто, вулиця, назва організації, посада батька.'),
 		mothersName: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Введіть повнe ім\'я.'),
+			.required('Введіть повнe ім\'я матері.'),
 		mothersPhone: Yup.string()
-			.min(3, 'Не менш 19 символів.')
-			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
-			.required('Введіть номер телефону.'),
+			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
+			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX')
+			.required('Введіть номер телефону матері.'),
 		mothersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
-			.required('Місто, вулиця, назва організації, посада.'),
+			.required('Місто, вулиця, назва організації, посада матері.'),
 		contactEmail: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
 			.required('Введіть електронну пошту.'),
@@ -75,9 +73,8 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
 		phoneNumber: Yup.string()
-			.min(3, 'Не менш 19 символів.')
-			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX'),
+			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
+			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form

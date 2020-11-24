@@ -113,13 +113,12 @@ describe('<PupilForm /> component', () => {
 		expect(resetButton).toHaveAttribute('type', 'reset')
 	})
 
-	it('name input value can be changed', () => {
-		// expect all inputs to be able to change their values on user input
+	it('pupil\'s name input value can be changed', () => {
 		userEvent.type(nameInput, 'Joe Doe')
 		expect(nameInput.value).toBe('Joe Doe')
 	})
 
-	it('name input shows errors on invalid input', async () => {
+	it('pupil\'s name input shows errors on invalid input', async () => {
 		userEvent.type(nameInput, 'J')
 		await waitFor(() => {
 			expect(screen.getByText(/Не менш 2 символів/)).toBeInTheDocument()
@@ -259,6 +258,325 @@ describe('<PupilForm /> component', () => {
 		userEvent.clear(homeAddressInput)
 		await waitFor(() => {
 			expect(screen.getByText(/Введіть домашню адресу/)).toBeInTheDocument()
+		})
+	})
+
+	it('pupil\'s phone number input value can be changed', () => {
+		userEvent.type(phoneNumberInput, '0505555555')
+		expect(phoneNumberInput.value).toBe('+38 (050) 555-55-55')
+	})
+
+	it('pupil\'s phone number input shows errors on invalid input', async () => {
+		userEvent.type(phoneNumberInput, 'qwertyuiopasdfghjkl')
+		await waitFor(() => { // somehow can't find it using regex
+			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(phoneNumberInput)
+		userEvent.type(phoneNumberInput, 'as')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(phoneNumberInput)
+		userEvent.type(phoneNumberInput, '12345678901')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('applicant\'s name input value can be changed', () => {
+		userEvent.type(applicantNameInput, 'Joe Doe')
+		expect(applicantNameInput.value).toBe('Joe Doe')
+	})
+
+	it('applicant\'s name input shows errors on invalid input', async () => {
+		userEvent.type(applicantNameInput, 'A')
+		await waitFor(() => {
+			expect(screen.getByText(/Не менш 2 символів/)).toBeInTheDocument()
+			userEvent.clear(applicantNameInput)
+		})
+
+		userEvent.clear(applicantNameInput)
+		userEvent.type(applicantNameInput, oneHundredAndTwentyNineCharacters)
+		await waitFor(() => {
+			expect(screen.getByText(/Максимум 128 символів/)).toBeInTheDocument()
+		})
+
+		userEvent.clear(applicantNameInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Введіть повнe ім'я особи, яка звертається із заявою/)).toBeInTheDocument()
+		})
+	})
+
+	it('contact email input value can be changed', () => {
+		userEvent.type(contactEmailInput, 'test@example.com')
+		expect(contactEmailInput.value).toBe('test@example.com')
+	})
+
+	it('contact email input shows errors on invalid input', async () => {
+		userEvent.type(contactEmailInput, 'a')
+		await waitFor(() => {
+			expect(screen.getByText(/Адреса електронної пошти недійсна/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.type(contactEmailInput, 'test@example.')
+		await waitFor(() => {
+			expect(screen.getByText(/Адреса електронної пошти недійсна/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(contactEmailInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Введіть електронну пошту/))
+				.toBeInTheDocument()
+		})
+	})
+
+	// parents info inputs
+
+	it('father\'s name input value can be changed', () => {
+		userEvent.type(fathersNameInput, 'Joe Doe')
+		expect(fathersNameInput.value).toBe('Joe Doe')
+	})
+
+	it('father\'s name input shows errors on invalid input', async () => {
+		userEvent.type(fathersNameInput, 'a')
+		await waitFor(() => {
+			expect(screen.getByText(/Не менш 2 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.type(fathersNameInput, oneHundredAndTwentyNineCharacters)
+		await waitFor(() => {
+			expect(screen.getByText(/Максимум 128 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(fathersNameInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Введіть повнe ім'я батька/))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('father\'s phone number input value can be changed', () => {
+		userEvent.type(fathersPhoneInput, '0505555555')
+		expect(fathersPhoneInput.value).toBe('+38 (050) 555-55-55')
+	})
+
+	it('father\'s phone number input shows errors on invalid input', async () => {
+		userEvent.type(fathersPhoneInput, 'qwertyuiopasdfghjkl')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(fathersPhoneInput)
+		userEvent.type(fathersPhoneInput, 'as')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(fathersPhoneInput)
+		userEvent.type(fathersPhoneInput, '12345678901')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('father\'s employment info input value can be changed', () => {
+		userEvent.type(fathersEmploymentInfoInput, 'Strickland Propane')
+		expect(fathersEmploymentInfoInput.value).toBe('Strickland Propane')
+	})
+
+	it('father\'s employment info input shows errors on invalid input', async () => {
+		userEvent.type(fathersEmploymentInfoInput, 'a')
+		await waitFor(() => {
+			expect(screen.getByText(/Не менш 2 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.type(fathersEmploymentInfoInput, oneHundredAndTwentyNineCharacters)
+		await waitFor(() => {
+			expect(screen.getByText(/Максимум 128 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(fathersEmploymentInfoInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Місто, вулиця, назва організації, посада батька/))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('mother\'s name input value can be changed', () => {
+		userEvent.type(mothersNameInput, 'Mary Doe')
+		expect(mothersNameInput.value).toBe('Mary Doe')
+	})
+
+	it('mother\'s name input shows errors on invalid input', async () => {
+		userEvent.type(mothersNameInput, 'a')
+		await waitFor(() => {
+			expect(screen.getByText(/Не менш 2 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.type(mothersNameInput, oneHundredAndTwentyNineCharacters)
+		await waitFor(() => {
+			expect(screen.getByText(/Максимум 128 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(mothersNameInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Введіть повнe ім'я матері/))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('mother\'s phone number input value can be changed', () => {
+		userEvent.type(mothersPhoneInput, '0505555555')
+		expect(mothersPhoneInput.value).toBe('+38 (050) 555-55-55')
+	})
+
+	it('mother\'s phone number input shows errors on invalid input', async () => {
+		userEvent.type(mothersPhoneInput, 'qwertyuiopasdfghjkl')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(mothersPhoneInput)
+		userEvent.type(mothersPhoneInput, 'as')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(mothersPhoneInput)
+		userEvent.type(mothersPhoneInput, '12345678901')
+		await waitFor(() => {
+			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
+				.toBeInTheDocument()
+		})
+	})
+
+	it('mother\'s employment info input value can be changed', () => {
+		userEvent.type(mothersEmploymentInfoInput, 'Arlen Elementary')
+		expect(mothersEmploymentInfoInput.value).toBe('Arlen Elementary')
+	})
+
+	it('mother\'s employment info input shows errors on invalid input', async () => {
+		userEvent.type(mothersEmploymentInfoInput, 'a')
+		await waitFor(() => {
+			expect(screen.getByText(/Не менш 2 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.type(mothersEmploymentInfoInput, oneHundredAndTwentyNineCharacters)
+		await waitFor(() => {
+			expect(screen.getByText(/Максимум 128 символів/))
+				.toBeInTheDocument()
+		})
+
+		userEvent.clear(mothersEmploymentInfoInput)
+		await waitFor(() => {
+			expect(screen.getByText(/Місто, вулиця, назва організації, посада матері/))
+				.toBeInTheDocument()
+		})
+	})
+
+	// checkboxes
+
+	it('docs check can be checked', () => {
+		expect(docsCheck.value).toBe('false')
+		userEvent.click(docsCheck)
+		expect(docsCheck.value).toBe('true')
+	})
+
+	it('process personal data check can be checked', () => {
+		expect(processDataCheck.value).toBe('false')
+		userEvent.click(processDataCheck)
+		expect(processDataCheck.value).toBe('true')
+	})
+
+	it('payment obligations check can be checked', () => {
+		expect(paymentObligationsCheck.value).toBe('false')
+		userEvent.click(paymentObligationsCheck)
+		expect(paymentObligationsCheck.value).toBe('true')
+	})
+
+	// buttons
+
+	it('submit button doesn\'t submit empty form', () => {
+		userEvent.click(submitButton)
+		expect(mockHandleFormData).not.toHaveBeenCalled()
+	})
+
+	it('reset button clears form', () => {
+		userEvent.type(nameInput, 'Joe Doe')
+		userEvent.click(resetButton)
+		expect(nameInput.value).toBe('')
+	})
+
+	// info modals
+
+	it('process personal data info modal can be opened', () => {
+		userEvent.click(screen.getByText('збір та обробку'))
+		expect(mockOpenInfoModal).toBeCalled()
+	})
+
+	it('payment obligations info modal can be opened', () => {
+		userEvent.click(screen.getByText('Зобов\'язання'))
+		expect(mockOpenInfoModal).toBeCalled()
+	})
+
+	// properly filled form can be submitted
+
+	it('"send" button submits form data', async () => {
+		const [ specialty ] = specOptions
+		const [ gender ] = genders
+		const date = moment().subtract(5, 'years').format('YYYY-MM-DD')
+		const [ classNumber ] = classNumbers
+		const [ benefitValue ] = benefits
+
+		// pupil data
+		userEvent.type(nameInput, 'Joe Doe')
+		userEvent.selectOptions(specialtyInput, specialty)
+		userEvent.selectOptions(genderInput, gender)
+		fireEvent.change(birthDateInput, { target: { value: date } })
+		userEvent.selectOptions(mainSchoolClassInput, classNumber)
+		userEvent.selectOptions(benefitsInput, benefitValue.toString())
+		userEvent.type(mainSchoolInput, 'Elementary School')
+		userEvent.type(homeAddressInput, '13, Elm str.')
+		userEvent.type(phoneNumberInput, '0505555555')
+		userEvent.type(applicantNameInput, 'Joe Doe')
+		userEvent.type(contactEmailInput, 'test@example.com')
+
+		// parents data
+		userEvent.type(fathersNameInput, 'Joe Doe')
+		userEvent.type(fathersPhoneInput, '0505555555')
+		userEvent.type(fathersEmploymentInfoInput, 'Strickland Propane')
+
+		userEvent.type(mothersNameInput, 'Mary Doe')
+		userEvent.type(mothersPhoneInput, '0505555555')
+		userEvent.type(mothersEmploymentInfoInput, 'Arlen Elementary')
+
+		// checkboxes
+		userEvent.click(docsCheck)
+		userEvent.click(processDataCheck)
+		userEvent.click(paymentObligationsCheck)
+
+		userEvent.click(submitButton)
+		await waitFor(() => {
+			expect(mockHandleFormData).toHaveBeenCalled()
 		})
 	})
 
