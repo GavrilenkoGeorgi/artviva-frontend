@@ -12,12 +12,11 @@ describe('Pupil assign routine', function() {
 	it('correctly assigns pupil to a user account', function() {
 		cy.contains('First Test Pupil').click()
 		cy.contains('div', 'First Test Pupil')
-			// eslint-disable-next-line
-			.within($div => {
+			.within(() => {
 				cy.get('[data-cy=edit-pupil]').click()
 			})
 		cy.contains('div', 'Електронна адреса користувача, якому призначено цього учня')
-			.parent('div').find('input').type('Doe').clear().type('test@example.com')
+			.find('input').type('Doe').clear().type('test@example.com').blur()
 
 		cy.contains('Зберегти').click()
 		cy.contains('Зміни успішно збережено')
