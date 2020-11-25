@@ -1,4 +1,4 @@
-import notificationReducer from '../reducers/notificationReducer'
+import notificationReducer from '../../reducers/notificationReducer'
 
 const initialState = {
 	message: null,
@@ -6,7 +6,7 @@ const initialState = {
 	processingForm: false,
 	fetchingData: false,
 	searching: false,
-	reCaptchaScore: null
+	reCaptchaScore: 0
 }
 
 describe('Notification reducer', () => {

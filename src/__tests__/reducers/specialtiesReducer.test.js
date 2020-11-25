@@ -1,5 +1,5 @@
-import specialtiesReducer from '../reducers/specialtiesReducer'
-import specialties from '../__mocks__/specialties'
+import specialtiesReducer from '../../reducers/specialtiesReducer'
+import specialties from '../../__mocks__/specialties'
 
 describe('Specialties reducer', () => {
 	test('returns default state', () => {

@@ -1,5 +1,5 @@
-import userReducer from '../reducers/userReducer'
-import usersList from '../__mocks__/usersList'
+import userReducer from '../../reducers/userReducer'
+import usersList from '../../__mocks__/usersList'
 
 describe('Users reducer', () => {
 	test('returns default state', () => {

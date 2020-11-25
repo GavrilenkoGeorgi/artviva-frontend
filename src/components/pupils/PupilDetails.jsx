@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
-import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
-import { deletePupil } from '../../reducers/pupilsReducer'
+import { setNotification, setFetchingData, setProcessingForm } from '../../reducers/notificationReducer'
+import { deletePupil, updatePupil } from '../../reducers/pupilsReducer'
 import pupilsService from '../../services/pupils'
 import moment from 'moment'
+import { updatePupilData } from './updatePupilData'
 
 import { Link, useHistory } from 'react-router-dom'
 import { Container, Row, Col, Card } from 'react-bootstrap'
@@ -17,11 +18,19 @@ import EntityControlButtons from '../common/EntityControlButtons'
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
-const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, match }) => {
+const PupilDetails = ({
+	user,
+	specialties,
+	deletePupil,
+	updatePupil,
+	setFetchingData,
+	setNotification,
+	setProcessingForm,
+	match }) => {
 
 	const cardStyle = 'my-3'
 
-	const isMounted = useRef(false)
+	const unmounted = useRef(false)
 	const history = useHistory()
 	const [pupil, setPupil] = useState({})
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
@@ -29,17 +38,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 	const [isDeleting, setIsDeleting] = useState(false)
 
 	useEffect(() => {
-		if (user) pupilsService.setToken(user.token)
-	}, [user])
-
-	useEffect(() => {
-		isMounted.current = true
-	}, [])
-
-	useEffect(() => {
-		return () => {
-			isMounted.current = false
-		}
+		return () => { unmounted.current = true }
 	}, [])
 
 	useEffect(() => {
@@ -57,11 +56,25 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 					}, 5)
 				})
 				.finally(() => {
-					if (isMounted.current) setFetchingData(false)
+					if (!unmounted.current) setFetchingData(false)
 				})
 		}
 
 	},[user, match.params.id, setNotification, setFetchingData])
+
+	const handleUpdate = (values, setErrors) => {
+		const data = {
+			values,
+			userId: user.id
+		}
+		const utils = {
+			updatePupil,
+			setNotification,
+			setProcessingForm,
+			setErrors
+		}
+		updatePupilData(data, utils)
+	}
 
 	const handleDelete = id => {
 		setIsDeleting(true)
@@ -82,7 +95,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 				setIsDeleting(false)
 			})
 			.finally(() => {
-				if (isMounted.current) {
+				if (!unmounted.current) {
 					setDeleteModalShow(false)
 					setIsDeleting(false)
 				}
@@ -261,8 +274,10 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 						onHide={() => setEditModalShow(false)}
 					>
 						<PupilForm
-							closeModal={() => setEditModalShow(false)}
+							// closeModal={() => setEditModalShow(false)}
+							handleFormData={handleUpdate}
 							pupil={pupil}
+							specialties={specialties.map(spec => spec.title)}
 							mode="edit" />
 					</LazyEntityEditModal>
 					<LazyEntityDeleteModal
@@ -284,6 +299,7 @@ const PupilDetails = ({ user, deletePupil, setFetchingData, setNotification, mat
 const mapStateToProps = state => {
 	return {
 		user: state.user,
+		specialties: state.specialties,
 		fetchingData: state.notification.fetchingData
 	}
 }
@@ -291,7 +307,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
 	setFetchingData,
 	setNotification,
-	deletePupil
+	setProcessingForm,
+	deletePupil,
+	updatePupil
 }
 
 export default connect(

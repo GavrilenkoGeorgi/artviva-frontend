@@ -8,7 +8,7 @@ import ScrollAnimation from 'react-animate-on-scroll'
 
 import { Container, Row, Col, Image } from 'react-bootstrap'
 import Carousel from '../../common/MainViewCarousel'
-import ContactForm from '../../forms/ContactForm'
+import SendContactMessage from '../../contactMessage/SendContactMessage'
 import ButtonLink from '../../common/buttons/ButtonLink'
 import { ReactComponent as OrigamiIcon } from '../../../svg/origami.svg'
 import { ReactComponent as EditIcon } from '../../../svg/edit.svg'
@@ -120,9 +120,7 @@ const MainPage = () => {
 				>
 				</ParallaxBanner>
 			</ParallaxProvider>
-			<Container>
-				<ContactForm />
-			</Container>
+			<SendContactMessage />
 		</>
 	)
 }

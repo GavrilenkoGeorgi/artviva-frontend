@@ -16,7 +16,7 @@ import { FilterData as FilterString, ShowFilterSettings,
 
 import Reset from '../../forms/buttons/Reset'
 import { Button } from '../../common/buttons'
-import PupilForm from '../../forms/PupilForm'
+import CreatePupil from '../../pupils/CreatePupil'
 import CommonLayout from '../../CommonLayout'
 const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModal'))
 
@@ -252,7 +252,9 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 							show={addModalShow}
 							onHide={() => setAddModalShow(false)}
 						>
-							<PupilForm mode="create" closeModal={() => setAddModalShow(false)}/>
+							<CreatePupil
+								closeModal={() => setAddModalShow(false)}
+							/>
 						</LazyEntityEditModal>
 					</Suspense>
 				</Row>

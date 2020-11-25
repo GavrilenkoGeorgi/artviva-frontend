@@ -4,7 +4,7 @@ import { compareValues } from '../utils/arrayHelpers'
 const pupilsReducer = (state = [], action) => {
 	switch (action.type) {
 	case 'CREATE_PUPIL':
-		return [...state, action.data]
+		return [action.data, ...state]
 	case 'DELETE_PUPIL':
 		return state.filter(pupil => pupil.id !== action.data)
 	case 'INIT_PUPILS':

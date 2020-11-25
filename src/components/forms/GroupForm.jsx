@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createSchoolClass, updateSchoolClass } from '../../reducers/schoolClassesReducer'
 import searchService from '../../services/search'
-import schoolClassesService from '../../services/schoolClasses'
 import { debounce } from '../../utils/debounce'
 import { trimObject } from '../../utils/objectHelpers'
 
@@ -19,7 +18,6 @@ import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 
 const GroupForm = ({
 	group,
-	user,
 	setNotification,
 	createSchoolClass,
 	updateSchoolClass,
@@ -34,14 +32,10 @@ const GroupForm = ({
 	useEffect(() => {
 		if (mode === 'edit') {
 			setEditMode(true)
+			setTeachersList([group.teacher.name])
+			setSpecialtiesList([group.specialty.title])
 		}
-	// eslint-disable-next-line
-	}, [])
-
-	useEffect(() => {
-		searchService.setToken(user.token)
-		schoolClassesService.setToken(user.token)
-	}, [user])
+	}, [mode, group])
 
 	// lists for form input autocomplete suggestions
 	const [teachersList, setTeachersList] = useState([])
@@ -56,11 +50,6 @@ const GroupForm = ({
 		const pupilsPattern = /pupils(\[)(\d{0,2})(])/i
 		if (pupilsPattern.exec(data.name)) {
 			data = { ...data, name: 'pupil' }
-		}
-
-		// then
-		if (data.value <= 2 ) {
-			return console.warn('Потрібно більше даних для пошуку.')
 		}
 
 		const queryPattern = /^[A-ZА-ЯҐЄІЇ]{2,64}$/i
@@ -206,10 +195,12 @@ const GroupForm = ({
 		teacher: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
+			.oneOf(teachersList, 'Перевірте ім\'я викладача')
 			.required('Введіть ім\'я викладача.'),
 		specialty: Yup.string()
 			.min(2, 'Не менш 2 символів.')
 			.max(128, 'Максимум 128 символів.')
+			.oneOf(specialtiesList, 'Перевірте назву фаху класу')
 			.required('Введіть назву спеціальності.'),
 		pupils: Yup.array().of(
 			Yup.string()
@@ -224,8 +215,8 @@ const GroupForm = ({
 			<Formik
 				initialValues={initialFormValues()}
 				enableReinitialize
-				onSubmit={async (values, { resetForm, setErrors }) => {
-					await handleSchoolClass(values, setErrors, resetForm)
+				onSubmit={(values, { resetForm, setErrors }) => {
+					handleSchoolClass(values, setErrors, resetForm)
 				}}
 				validationSchema={schoolClassFormSchema}
 			>
@@ -507,18 +498,11 @@ const GroupForm = ({
 
 GroupForm.propTypes = {
 	group: PropTypes.object,
-	user: PropTypes.object.isRequired,
 	setNotification: PropTypes.func.isRequired,
 	createSchoolClass: PropTypes.func.isRequired,
 	updateSchoolClass: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit']).isRequired,
 	closeModal: PropTypes.func.isRequired
-}
-
-const mapStateToProps = state => {
-	return {
-		user: state.user
-	}
 }
 
 const mapDispatchToProps = {
@@ -528,6 +512,6 @@ const mapDispatchToProps = {
 }
 
 export default connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps
 )(GroupForm)

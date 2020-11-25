@@ -27,6 +27,7 @@ const TextAreaInput = props => {
 			</Form.Label>
 			<Form.Control
 				as="textarea"
+				type="textarea"
 				isValid={touched && !props.errors}
 				isInvalid={touched && !!props.errors}
 				{ ...other }
