@@ -1,26 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react'
-
-import { Link, useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import SectionLink from './SectionLink'
 import Emoji from '../common/Emoji'
-import SchoolExplained from '../help/SchoolExplained'
 
-const SchoolSectionsNav = ({ userData }) => {
+const SchoolSectionsNav = ({ user }) => {
 
-	const [links, setLinks] = useState(null)
-
-	const Home = ({ children }) => {
-		let history = useHistory()
-		return history.location.pathname === '/school' ? <> {children} </> : null
-	}
-
+	const [links, setLinks] = useState([])
 	const superUserLinks = [
-		{
-			to: `/school/users/${userData.id}`,
-			label: 'Профіль'
-		},
 		{
 			to: '/school/users',
 			label: 'Користувачі'
@@ -58,10 +47,6 @@ const SchoolSectionsNav = ({ userData }) => {
 
 	const teacherLinks = [
 		{
-			to: `/school/users/${userData.id}`,
-			label: 'Профіль'
-		},
-		{
 			to: '/school/groups',
 			label: 'Групи'
 		},
@@ -75,55 +60,68 @@ const SchoolSectionsNav = ({ userData }) => {
 		},
 	]
 
-	const chooseLinks = useCallback(superUser => {
-		superUser ? setLinks(superUserLinks) : setLinks(teacherLinks)
-	}, [superUserLinks, teacherLinks])
-
 	useEffect(() => {
-		chooseLinks(userData.superUser)
-	// eslint-disable-next-line
-	}, [])
+		if (user)
+			user.superUser
+				? setLinks(superUserLinks)
+				: setLinks(teacherLinks)
+		// eslint-disable-next-line
+	}, [user])
 
-	return (
-		<>
-			<Container className="pb-2">
-				<Row className="px-4 pt-sm-5 d-flex align-items-center">
-					<Col xs={12} sm={5} className="text-right profile-user-name">
-						<Link to="/school">
-							<span className="profile-user-name">
-								{userData.name} {userData.lastname}
-							</span>
-						</Link>
+	// don't school nav inside public routes
+	const path = /\/(school+)/
+	if (!window.location.pathname.match(path)) return null
+
+	return <>
+		{user && <Container className="pb-2">
+			<Row className="px-4 pt-sm-5 d-flex align-items-center">
+				<Col xs={12} sm={5} className="text-right profile-user-name">
+					<Link to="/school">
+						<span className="profile-user-name">
+							{user.name} {user.lastname}
+						</span>
+					</Link>
+				</Col>
+				{user.superUser
+					? <Col xs={12} sm={2} className="px-0 text-center">
+						<Emoji label="Shield" emoji={'🛡️'} />
 					</Col>
-					{userData.superUser
-						? <Col xs={12} sm={2} className="px-0 text-center">
-							<Emoji label="Shield" emoji={'🛡️'} />
-						</Col>
-						: null
-					}
-					<Col xs={12} sm={5} className="text-left text-muted">
-						<small className="text-small">{userData.email}</small>
-					</Col>
-				</Row>
-				<Row className="py-3 d-flex justify-content-center">
-					{links
-						? links.map(link =>
-							<SectionLink
-								key={link.label}
-								dataCy={link.dataCy}
-								className="px-3 pt-1 school-nav-link"
-								to={link.to}
-								label={link.label}
-							/>)
-						: null
-					}
-				</Row>
-			</Container>
-			<Home>
-				<SchoolExplained />
-			</Home>
-		</>
-	)
+					: null
+				}
+				<Col xs={12} sm={5} className="text-left text-muted">
+					<small className="text-small">{user.email}</small>
+				</Col>
+			</Row>
+			<Row className="py-3 d-flex justify-content-center">
+				{/* User profile link */}
+				<SectionLink
+					dataCy="user-profile-link"
+					className="px-3 pt-1 school-nav-link"
+					to={`/school/users/${user.id}`}
+					label="Профіль"
+				/>
+				{/* User type links */}
+				{links.map(link =>
+					<SectionLink
+						key={link.label}
+						dataCy={link.dataCy}
+						className="px-3 pt-1 school-nav-link"
+						to={link.to}
+						label={link.label}
+					/>
+				)}
+			</Row>
+		</Container>
+		}
+	</>
 }
 
-export default SchoolSectionsNav
+const mapStateToProps = (state) => {
+	return {
+		user: state.user
+	}
+}
+
+export default connect(
+	mapStateToProps
+)(SchoolSectionsNav)

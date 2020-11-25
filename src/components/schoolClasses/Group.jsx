@@ -104,6 +104,7 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 					<Row>
 						<EntityControlButtons
 							route={`/school/groups/${group.id}`}
+							entity="group"
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>

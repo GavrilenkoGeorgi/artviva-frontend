@@ -44,6 +44,11 @@ Cypress.Commands.add('createPupils', () => {
 	cy.request('POST', '/api/testing/create/pupils')
 })
 
+Cypress.Commands.add('createDefaultState', () => {
+	// create default test DB state
+	cy.request('POST', '/api/testing/create/defaultState')
+})
+
 Cypress.Commands.add('login', () => {
 	cy.request({
 		method: 'POST',

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import CommonLayout from '../CommonLayout'
+import CommonLayout from '../../CommonLayout'
 import { Container } from 'react-bootstrap'
 
 const PrivacyPolicy = () => {

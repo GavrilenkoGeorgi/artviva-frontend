@@ -3,11 +3,10 @@ import { Button, Spinner } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 
 const BtnWithSpinner = props => {
-	const { waitingState,
-		loadingState,
-		dataCy,
-		label,
-		...other } = props
+
+	const { waitingState, loadingState,
+		dataCy, label, ...other } = props
+
 	const chooseSpinner = () => {
 		const loadingSpinner = () => <Spinner
 			as="span"
@@ -15,6 +14,7 @@ const BtnWithSpinner = props => {
 			size="sm"
 			role="status"
 			aria-hidden="true"
+			data-cy="loading-spinner"
 		/>
 		const waitingSpinner = () => <Spinner
 			as="span"
@@ -22,6 +22,7 @@ const BtnWithSpinner = props => {
 			size="sm"
 			role="status"
 			aria-hidden="true"
+			data-cy="waiting-spinner"
 		/>
 		return waitingState ? waitingSpinner() : loadingState ? loadingSpinner() : null
 	}
@@ -38,7 +39,7 @@ const BtnWithSpinner = props => {
 
 BtnWithSpinner.propTypes = {
 	type: PropTypes.string.isRequired,
-	handleClick: PropTypes.func,
+	onClick: PropTypes.func,
 	loadingState: PropTypes.bool.isRequired,
 	disabled: PropTypes.bool,
 	waitingState: PropTypes.bool,

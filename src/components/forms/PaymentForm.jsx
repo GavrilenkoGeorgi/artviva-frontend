@@ -192,13 +192,13 @@ const PaymentForm = ({
 	}, [total, setNotification, setProcessingForm])
 
 	useEffect(() => {
-		if (reCaptchaScore !== null && reCaptchaScore < .5) {
+		if (reCaptchaScore !== 0 && reCaptchaScore < .3) {
 			setNotification({
 				message: 'Ваша оцінка reCAPTCHA занизька, спробуйте оновити сторінку.',
 				variant: 'warning'
 			}, 5)
 			setProcessingForm(false)
-		} else if (paymentData && reCaptchaScore >= .5) {
+		} else if (paymentData && reCaptchaScore >= .3) {
 			handlePayment(paymentData)
 		}
 	}, [reCaptchaScore, paymentData, handlePayment, setNotification, setProcessingForm])

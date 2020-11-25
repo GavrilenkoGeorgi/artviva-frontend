@@ -7,7 +7,7 @@ const notificationReducer =
 		processingForm: false,
 		fetchingData: false,
 		searching: false,
-		reCaptchaScore: null
+		reCaptchaScore: 0
 	}, action) => {
 
 		switch (action.type) {

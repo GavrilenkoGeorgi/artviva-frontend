@@ -69,7 +69,6 @@ const TeacherDetails = ({
 			teachersService.setToken(user.token)
 			teachersService.getById(match.params.id)
 				.then((data) => {
-					console.log('Data to edit', data)
 					setTeacherDetails({
 						...data,
 						payments: data.payments.sort(nestedSort('create_date', null, 'desc'))
@@ -107,7 +106,6 @@ const TeacherDetails = ({
 	}
 
 	const openEditModal = id => {
-		console.log('Opening edit modal for ID', id)
 		setFetchingData(true)
 		getTeacherData(id)
 			.then(() => {

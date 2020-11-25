@@ -6,7 +6,7 @@ import { setNotification, setFetchingData } from '../../reducers/notificationRed
 import moment from 'moment'
 import html2pdf from 'html2pdf.js'
 
-import { CommonLayout } from '../views'
+import CommonLayout from '../CommonLayout'
 
 // eslint-disable-next-line1
 import { Container, Row, Col, Button } from 'react-bootstrap'
