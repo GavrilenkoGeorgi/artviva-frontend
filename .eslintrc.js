@@ -10,7 +10,9 @@ module.exports = {
   "extends": [ 
       "eslint:recommended",
       "plugin:react/recommended",
-      "plugin:cypress/recommended"
+      "plugin:cypress/recommended",
+			"plugin:testing-library/react",
+			"plugin:jest-dom/recommended"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
@@ -25,7 +27,9 @@ module.exports = {
       "jest",
       "react-hooks",
       "html",
-      "cypress"
+      "cypress",
+			"testing-library",
+			"jest-dom"
   ],
   "settings": {
     "react": {

@@ -1,4 +1,8 @@
 describe('Login logic', function () {
+	before(function() {
+		cy.resetDb()
+	})
+
 	it('logs in using UI', function() {
 		cy.visit('/login')
 		cy.contains('div', 'Ваша електронна пошта')

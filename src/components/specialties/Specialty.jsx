@@ -99,6 +99,7 @@ const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotificat
 
 					<Row>
 						<EntityControlButtons
+							entity="specialty"
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
 						/>

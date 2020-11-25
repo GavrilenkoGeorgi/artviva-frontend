@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, cleanup } from '@testing-library/react'
-import TeachersView from '../../../components/views/TeachersView'
+import TeachersView from '../../../components/views/public/TeachersView'
 
 afterEach(cleanup)
 

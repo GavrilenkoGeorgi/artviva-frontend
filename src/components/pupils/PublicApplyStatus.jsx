@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Container, Row} from 'react-bootstrap'
-import { CommonLayout } from '../views'
+import { Container, Row } from 'react-bootstrap'
+import CommonLayout from '../CommonLayout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faExclamation } from '@fortawesome/free-solid-svg-icons'
 

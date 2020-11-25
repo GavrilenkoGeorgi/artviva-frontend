@@ -13,7 +13,7 @@ describe('Registering new user', function() {
 
 	it('register terms modal can be opened', function() {
 		cy.visit('/register')
-		cy.contains('a', 'умовами').click()
+		cy.contains('span', 'умовами').click()
 		cy.contains('Мої персональні дані, на обробку яких я даю цю згоду')
 		cy.contains('Я згоден').click()
 		cy.contains('Мої персональні дані, на обробку яких я даю цю згоду')

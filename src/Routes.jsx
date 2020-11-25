@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
 import GroupDetails from './components/schoolClasses/GroupDetails'
 import TeacherDetails from './components/teachers/TeacherDetails'
-import BranchesList from './components/branches/BranchesList'
 import LiqPayPayments from './components/views/payments/LiqPayPayments'
 
-import { PrivateRoute, Notification, MainPage } from './components'
-import { LoadingIndicator } from './components/common'
+import { PrivateRoute, Notification } from './components'
+import { LoadingIndicator, FourZeroFour } from './components/common'
 import { PupilDetails, PupilFormF1 } from './components/pupils'
 
 import { ScrollToTop, ScrollToTopArrow,
@@ -18,40 +18,28 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
-	GroupsView, PupilsView, ListOfTeachers, PricesView } from './components/views'
+	GroupsView, PupilsView, ListOfTeachers, PricesView, MainPage } from './components/views'
 
 import Oferta from './components/views/legal/Oferta'
 import PrivacyPolicy from './components/views/legal/PrivacyPolicy'
+import SchoolExplained from './components/help/SchoolExplained'
 
-const Routes = ({ user, fetchingData }) => {
+export const history = createBrowserHistory({ forceRefresh: true })
 
-	const [userData, setUserData] = useState({
-		id: null,
-		superUser: false
-	})
-
-	const [superUser, setSuperUser] = useState(false)
-
-	useEffect(() => {
-		if (user) {
-			const { email, id, name, lastname, superUser } = user
-			setSuperUser(superUser)
-			setUserData({ email, id, name, lastname, superUser })
-		}
-	}, [user])
-
-	return (
-		<Router>
-			<ScrollToTop />
-			<NavigationBar />
-			<Notification />
-			{fetchingData
-				? <LoadingIndicator
-					animation="border"
-					variant="primary"
-				/>
-				: null }
-			<Route path="/" exact component={MainPage} />
+const Routes = ({ fetchingData }) => {
+	return <Router history={history}>
+		<ScrollToTop />
+		<NavigationBar />
+		<SchoolSectionsNav />
+		<Notification />
+		{fetchingData &&
+			<LoadingIndicator
+				animation="border"
+				variant="primary"
+			/>}
+		<Switch>
+			{/* Public routes */}
+			<Route exact path="/" component={MainPage} />
 			<Route path="/about" component={AboutView} />
 			<Route path="/oferta" component={Oferta} />
 			<Route path="/privacypolicy" component={PrivacyPolicy} />
@@ -63,44 +51,35 @@ const Routes = ({ user, fetchingData }) => {
 			<Route path="/blog" component={BlogView} />
 			<Route path="/contacts" component={ContactsView} />
 			<Route path="/apply/:status?" component={PublicApplyView} />
-			<PrivateRoute
-				path="/school"
-				component={() => <SchoolSectionsNav userData={userData} />}/>
-			<PrivateRoute path="/school/users/:id" exact component={UserProfileView} />
-			<PrivateRoute path="/school/teacher/payments" exact component={TeacherPaymentsView} />
-			<PrivateRoute path="/school/groups" exact component={GroupsView} />
-			<PrivateRoute path="/school/groups/:id" exact component={GroupDetails} />
-			<PrivateRoute path="/school/pupils" exact component={PupilsView} />
-			<Switch>
-				<PrivateRoute path="/school/pupils/f1/:id" component={PupilFormF1} />
-				<PrivateRoute path="/school/pupils/:id" component={PupilDetails} />
-			</Switch>
-			{superUser
-				? <>
-					<PrivateRoute path="/school/overview" component={SchoolOverview} />
-					<Switch>
-						<PrivateRoute path="/school/users" exact component={UsersListView} />
-						<PrivateRoute path="/school/teachers/:id" exact component={TeacherDetails} />
-						<PrivateRoute path="/school/teachers" component={ListOfTeachers} />
-					</Switch>
-					<PrivateRoute path="/school/specialties" component={Specialties} />
-					<PrivateRoute path="/school/branches" component={BranchesList} />
-					<PrivateRoute path="/school/payments" component={LiqPayPayments} />
-				</>
-				: null
-			}
-			<Route path="/prices" exact component={PricesView} />
-			<Route path="/pay/:status" exact component={PaymentView} />
-			<Route path="/activate/:email/:uuid" exact component={ActivateAccountView} />
-			<Route path="/reset/:email/:uuid" exact component={PassResetView} />
-			<ScrollToTopArrow />
-		</Router>
-	)
+			<Route path="/prices" component={PricesView} />
+			<Route path="/pay/:status" component={PaymentView} />
+			<Route path="/activate/:email/:uuid" component={ActivateAccountView} />
+			<Route path="/reset/:email/:uuid" component={PassResetView} />
+			{/* Private teacher routes */}
+			<PrivateRoute exact path="/school" component={SchoolExplained} />
+			<PrivateRoute path="/school/users/:id" component={UserProfileView} />
+			<PrivateRoute path="/school/groups/:id" component={GroupDetails} />
+			<PrivateRoute path="/school/groups" component={GroupsView} />
+			<PrivateRoute path="/school/pupils/f1/:id" component={PupilFormF1} />
+			<PrivateRoute path="/school/pupils/:id" component={PupilDetails} />
+			<PrivateRoute path="/school/pupils" component={PupilsView} />
+			<PrivateRoute path="/school/teacher/payments" component={TeacherPaymentsView} />
+			{/* Private super user routes */}
+			<PrivateRoute path="/school/overview" component={SchoolOverview} />
+			<PrivateRoute path="/school/users" component={UsersListView} />
+			<PrivateRoute path="/school/teachers/:id" component={TeacherDetails} />
+			<PrivateRoute path="/school/teachers" component={ListOfTeachers} />
+			<PrivateRoute path="/school/specialties" component={Specialties} />
+			<PrivateRoute path="/school/payments" component={LiqPayPayments} />
+			{/* Page not found */}
+			<Route path="*" component={FourZeroFour} />
+		</Switch>
+		<ScrollToTopArrow />
+	</Router>
 }
 
 const mapStateToProps = state => {
 	return {
-		user: state.user,
 		fetchingData: state.notification.fetchingData
 	}
 }

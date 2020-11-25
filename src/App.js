@@ -1,10 +1,15 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { setUserFromLocalStorage } from './reducers/loginReducer'
-
+import { initializeSpecialties } from './reducers/specialtiesReducer'
 import Routes from './Routes'
 
-const App = ({ user, setUserFromLocalStorage }) => {
+const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
+
+	useEffect(() => {
+		initializeSpecialties()
+	}, [initializeSpecialties])
+
 	useEffect(() => {
 		if (!user) {
 			const loggedUserJSON = window.localStorage.getItem('loggedUserJSON')
@@ -19,11 +24,10 @@ const App = ({ user, setUserFromLocalStorage }) => {
 		}
 	}, [user, setUserFromLocalStorage])
 
-	return (
-		<div className="content">
-			<Routes />
-		</div>
-	)
+	// div responsible for sticky footer, looks ugly
+	return <div className="content">
+		<Routes />
+	</div>
 }
 
 const mapStateToProps = state => {
@@ -33,7 +37,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-	setUserFromLocalStorage
+	setUserFromLocalStorage,
+	initializeSpecialties // needed everywhere
 }
 
 export default connect(
