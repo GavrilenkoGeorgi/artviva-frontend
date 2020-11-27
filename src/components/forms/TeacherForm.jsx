@@ -19,13 +19,11 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import BtnWithSpinner from '../common/buttons/BtnWithSpinner'
 import ResetBtn from './buttons/Reset'
 import NumberInput from './components/NumberInput'
-import TextInput from './components/TextInput'
-import DateInput from './components/DateInput'
-import Select from './components/Select'
-import CheckBox from './components/Checkbox'
-import TextAreaInput from './components/TextAreaInput'
 import { InfoModal } from '../common/modals'
 import FocusError from './components/FocusError'
+
+import { CheckBox, DateInput, Select,
+	TextAreaInput, TextInput } from './components'
 
 const TeacherForm = ({
 	user,
@@ -33,7 +31,7 @@ const TeacherForm = ({
 	specialties,
 	mode,
 	processingForm,
-	processTeacherData,
+	processTeacherData
 }) => {
 
 	const [editMode, setEditMode] = useState(false)
@@ -237,11 +235,14 @@ const TeacherForm = ({
 												data-cy={`specialties-${index}`}
 												value={values.specialties[index]}
 												onChange={handleChange}
+												onBlur={handleBlur}
+												options={specialtyListData}
 												isValid={touched.specialties && !errors.specialties}
+												isInvalid={touched.specialties && !!errors.specialties}
 											>
 												{editMode
 													? <>
-														<option>Виберіть...</option>
+														<option value={''}>Виберіть...</option>
 														{teacher.specialties.map((specialty) =>
 															<option
 																className="text-primary"
@@ -261,7 +262,7 @@ const TeacherForm = ({
 														)}
 													</>
 													: <>
-														<option>Виберіть...</option>
+														<option value={''}>Виберіть...</option>
 														{specialtyListData.map(specialty =>
 															<option
 																value={specialty}

@@ -136,3 +136,20 @@ export const calcEmployeeExperience = (field, data) => {
 		} else return result || userInputData
 	}
 }
+
+/**
+ * Prepare object with field choices list
+ *
+ * @param {Object[]} selectDataObjects - Array of objects containing field data
+ *
+ * @returns {Object} - Object with property names that correspond to field names
+ * with array of avaliable choices
+ */
+
+export const prepareSelectData = selectDataObjects => {
+	const result = {}
+	for (let item of selectDataObjects) {
+		result[item.field] = item.choices
+	}
+	return result
+}
