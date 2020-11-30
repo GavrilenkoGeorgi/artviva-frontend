@@ -53,8 +53,9 @@ export const initializeSchoolClasses = () => {
 }
 
 /**
- * Initialise teacher groups list
- * @param {string} id - Id of the teacher
+ * Initialise admin or teacher groups array
+ * @param {string} access - Admin user marker
+ * @param {string} id - ID of the teacher
  *
  * @returns {Array} - Array of objects containing group info
  */

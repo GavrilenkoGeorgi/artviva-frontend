@@ -12,7 +12,7 @@ describe('Specialties reducer', () => {
 			type: 'INIT_SPECIALTIES',
 			data: specialties
 		})
-		expect(newState).toHaveLength(2)
+		expect(newState).toHaveLength(specialties.length)
 	})
 
 	test('deletes single specialty', () => {
@@ -23,7 +23,7 @@ describe('Specialties reducer', () => {
 			data: specToDelete.id
 		})
 
-		expect(newState).toHaveLength(1)
+		expect(newState).toHaveLength(specialties.length - 1)
 		expect(newState).not.toEqual(
 			expect.arrayContaining([
 				expect.objectContaining(specToDelete)
@@ -63,7 +63,7 @@ describe('Specialties reducer', () => {
 			data: newSpec
 		})
 
-		expect(newState).toHaveLength(3)
+		expect(newState).toHaveLength(specialties.length + 1)
 		expect(newState).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining(newSpec)
