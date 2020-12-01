@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import { render, fireEvent, cleanup } from '@testing-library/react'
 import App from '../App'
 import store from '../store'
-import user from '../__mocks__/testUser'
+import user from '../__mocks__/adminUser.json'
 // eslint-disable-next-line
 global.scrollTo = jest.fn()
 

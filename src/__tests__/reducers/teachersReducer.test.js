@@ -57,7 +57,7 @@ describe('Teachers reducer', () => {
 		)
 	})
 
-	it.only('deletes teacher', () => {
+	it('deletes teacher', () => {
 		const [ teacher ] = teachers
 
 		const newState = teachersReducer(teachers, {
