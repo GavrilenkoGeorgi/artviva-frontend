@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { setFetchingData } from '../../reducers/notificationReducer'
 import searchService from '../../services/search'
 import moment from 'moment'
-import { formatPhoneNumber } from '../../utils'
+import { formatPhoneNumber, phoneInputFilter } from '../../utils/formsUtils'
 
 import { Formik } from 'formik'
 import { Col, Form } from 'react-bootstrap'
@@ -62,6 +62,18 @@ const PupilForm = ({
 	const showUserName = (email, users) => {
 		const user = users.find(user => user.email === email)
 		return <span>{user ? <>{user.lastname} {user.name} {user.middlename}</> : ''}</span>
+	}
+
+	const setPhoneInputFieldValue = (event, setFieldValue) => {
+		const { target } = event
+		const filter = phoneInputFilter()
+
+		if (filter.indexOf(event.keyCode) < 0) {
+			event.preventDefault()
+		} else {
+			const result = formatPhoneNumber(target.value)
+			setFieldValue(target.name, result)
+		}
 	}
 
 	const initialFormValues = () =>
@@ -308,7 +320,7 @@ const PupilForm = ({
 					name="phoneNumber"
 					required={false}
 					onChange={handleChange}
-					onKeyUp={event => formatPhoneNumber(event, 'phoneNumber', setFieldValue)}
+					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
 					onBlur={handleBlur}
 					value={values.phoneNumber}
 					touched={touched.phoneNumber}
@@ -354,7 +366,7 @@ const PupilForm = ({
 					label="Телефонний номер батька"
 					name="fathersPhone"
 					onChange={handleChange}
-					onKeyUp={event => formatPhoneNumber(event, 'fathersPhone', setFieldValue)}
+					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
 					onBlur={handleBlur}
 					value={values.fathersPhone}
 					touched={touched.fathersPhone}
@@ -385,7 +397,7 @@ const PupilForm = ({
 					label="Телефонний номер матері"
 					name="mothersPhone"
 					onChange={handleChange}
-					onKeyUp={event => formatPhoneNumber(event, 'mothersPhone', setFieldValue)}
+					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
 					onBlur={handleBlur}
 					value={values.mothersPhone}
 					touched={touched.mothersPhone}

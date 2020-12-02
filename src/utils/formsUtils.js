@@ -153,3 +153,46 @@ export const prepareSelectData = selectDataObjects => {
 	}
 	return result
 }
+
+export const phoneInputFilter = () => {
+	const filter = []
+
+	//since we're looking for phone numbers, we need
+	//to allow digits 0 - 9 (they can come from either
+	//the numeric keys or the numpad)
+	const keypadZero = 48
+	const numpadZero = 96
+
+	//add key codes for digits 0 - 9 into this filter
+	for (let i = 0; i <= 9; i++) {
+		filter.push(i + keypadZero)
+		filter.push(i + numpadZero)
+	}
+
+	return filter
+}
+
+export const formatPhoneNumber = string => {
+	if (typeof string !== 'string')
+		throw new Error('Input must be a string.')
+
+	const chars = string.split('')
+	const parsedIntegers = chars.map(char => parseInt(char, 10))
+	const onlyNumbers = parsedIntegers.filter(number => number >= 0)
+
+	// remove prefix numbers '38'
+	const numsWithoutPrefix = onlyNumbers.splice(2, onlyNumbers.length)
+
+	let template = '(___) ___-__-__'
+	let placeholder = '_'
+
+	for (let char of numsWithoutPrefix) {
+		const firstPlaceholder = template.indexOf(placeholder)
+		if (firstPlaceholder > 0) {
+			const firstPart = template.substr(0, firstPlaceholder)
+			const latterPart = template.substr(firstPlaceholder + 1, template.length)
+			template = firstPart + char + latterPart
+		}
+	}
+	return `+38 ${template}`
+}
