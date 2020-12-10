@@ -2,7 +2,6 @@ import React, { useEffect, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import { initializeSpecialties } from '../../reducers/specialtiesReducer'
-import specialtiesService from '../../services/specialties'
 import PropTypes from 'prop-types'
 
 import { ListGroup, Col } from 'react-bootstrap'
@@ -20,7 +19,6 @@ const SpecialtiesList = ({ user,
 	useEffect(() => {
 		if (user) {
 			setFetchingData(true)
-			specialtiesService.setToken(user.token)
 			initializeSpecialties()
 				.catch(error => {
 					setNotification({

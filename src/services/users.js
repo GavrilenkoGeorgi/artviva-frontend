@@ -1,18 +1,6 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/users`
 
-let token = null
-
-/**
-* Set user auth token
-* @param {string} newToken Current user auth token
-*/
-
-// eslint-disable-next-line
-const setToken = newToken => {
-	token = `Bearer ${newToken}`
-}
-
 /**
 * Get the list of all users
 *
@@ -20,10 +8,7 @@ const setToken = newToken => {
 */
 
 const getAll = async () => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.get(baseUrl, config)
+	const response = await axios.get(baseUrl)
 	return response.data
 }
 
@@ -70,10 +55,7 @@ const activate = async data => {
 */
 
 const update = async (id, payload) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.put(`${baseUrl}/${id}`, payload, config)
+	const response = await axios.put(`${baseUrl}/${id}`, payload)
 	return response.data
 }
 
@@ -86,10 +68,7 @@ const update = async (id, payload) => {
  */
 
 const deleteById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.delete(`${baseUrl}/${id}`, config)
+	const response = await axios.delete(`${baseUrl}/${id}`)
 	return response.data
 }
 
@@ -102,11 +81,8 @@ const deleteById = async id => {
  */
 
 const getById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.get(`${baseUrl}/${id}`, config)
+	const response = await axios.get(`${baseUrl}/${id}`)
 	return response.data
 }
 
-export default { getAll, signUp, setToken, activate, update, deleteById, getById }
+export default { getAll, signUp, activate, update, deleteById, getById }

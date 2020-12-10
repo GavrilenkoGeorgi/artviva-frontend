@@ -1,17 +1,6 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/payment`
 
-let token = null
-
-/**
- * Set user auth token
- * @param {string} newToken - Current user auth token
- */
-
-const setToken = newToken => {
-	token = `bearer ${newToken}`
-}
-
 /**
 * Get data for the payment form
 * @param {Object} data - Data for the form
@@ -37,11 +26,7 @@ const form = async data => {
 */
 
 const getAll = async () => {
-	const config = {
-		headers: { Authorization: token }
-	}
-
-	const response = await axios.get(`${baseUrl}/list`, config)
+	const response = await axios.get(`${baseUrl}/list`)
 	return response.data
 }
 
@@ -52,11 +37,7 @@ const getAll = async () => {
 */
 
 const updateDescr = async (id, values) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-
-	const response = await axios.patch(`${baseUrl}/descr/${id}`, values, config)
+	const response = await axios.patch(`${baseUrl}/descr/${id}`, values)
 	return response.data
 }
 
@@ -71,13 +52,9 @@ const updateDescr = async (id, values) => {
 */
 
 const getLiqPayResults = async range => {
-	const config = {
-		headers: { Authorization: token }
-	}
-
-	const response = await axios.post(`${baseUrl}/reports`, range, config)
+	const response = await axios.post(`${baseUrl}/reports`, range)
 	return response.data
 }
 
 
-export default { setToken, form, getAll, updateDescr, getLiqPayResults }
+export default { form, getAll, updateDescr, getLiqPayResults }

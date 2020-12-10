@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import paymentService from '../../../services/payment'
 import { setNotification, setFetchingData } from '../../../reducers/notificationReducer'
 import { getLiqPayData } from '../../../reducers/liqPayDataReducer'
 import moment from 'moment'
@@ -78,12 +77,6 @@ const LiqPayPayments = ({
 		setPaymentsList(liqPayData)
 		setTotals(calcTotals(liqPayData))
 	}, [liqPayData])
-
-	useEffect(() => {
-		if (user) {
-			paymentService.setToken(user.token)
-		}
-	}, [user])
 
 	useEffect(() => {
 		if (user) {

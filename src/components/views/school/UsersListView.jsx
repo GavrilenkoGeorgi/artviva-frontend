@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Redirect, useLocation } from 'react-router-dom'
 import { setNotification } from '../../../reducers/notificationReducer'
 import { getUsersList } from '../../../reducers/userReducer'
-import userService from '../../../services/users'
 
 import LoadingIndicator from '../../common/LoadingIndicator'
 import UserDetailsCard from '../../users/UserDetailsCard'
@@ -23,7 +22,6 @@ const UsersListView = ({ user, users, setNotification, getUsersList }) => {
 
 	useEffect(() => {
 		if (user) {
-			userService.setToken(user.token)
 			getUsersList()
 				.catch(error => {
 					const { message } = { ...error.response.data }

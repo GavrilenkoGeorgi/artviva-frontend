@@ -4,7 +4,6 @@ import { Redirect } from 'react-router-dom'
 
 import { initializeSchoolStats } from '../../../reducers/schoolStatsReducer'
 import { initialisePayments } from '../../../reducers/paymentsReducer'
-import paymentService from '../../../services/payment'
 import { setNotification } from '../../../reducers/notificationReducer'
 import { nestedSort } from '../../../utils/arrayHelpers'
 import { pureObjectIsEmpty } from '../../../utils/objectHelpers'
@@ -26,7 +25,6 @@ const SchoolOverview =({
 
 	useEffect(() => {
 		if (user) {
-			paymentService.setToken(user.token)
 			initialisePayments()
 				.catch(error => {
 					setNotification({

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createSpecialty, updateSpecialty } from '../../reducers/specialtiesReducer'
-import specialtyService from '../../services/specialties'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -29,7 +28,6 @@ const SpecialtyForm = ({
 
 	// set auth token and mode
 	useEffect(() => {
-		specialtyService.setToken(user.token)
 		if (mode === 'edit') {
 			setEditMode(true)
 		}

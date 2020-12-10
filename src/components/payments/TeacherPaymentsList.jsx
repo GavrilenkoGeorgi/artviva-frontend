@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import moment from 'moment'
 import 'moment/locale/uk'
 
-import paymentService from '../../services/payment'
 import { updatePaymentDescr } from '../../reducers/paymentsReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
 import liqpayStatusCodes from '../../data/liqpayStatusCodes'
@@ -33,7 +32,6 @@ const TeacherPaymentsList = ({
 
 	useEffect(() => {
 		if (teacher) setId(teacher.id)
-		if (token) paymentService.setToken(token)
 	}, [token, teacher])
 
 	// eslint-disable-next-line

@@ -150,7 +150,8 @@ const PaymentForm = ({
 
 	useEffect(() => {
 		// set liqpay commission info
-		setLiqpayCommission(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total).toFixed(2))
+		if (total)
+			setLiqpayCommission(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total).toFixed(2))
 	}, [total])
 
 	const paymentFormEl = useRef(null)
