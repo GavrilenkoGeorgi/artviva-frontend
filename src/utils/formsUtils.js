@@ -154,16 +154,22 @@ export const prepareSelectData = selectDataObjects => {
 	return result
 }
 
+/**
+ * Filter user input to allow only digits
+ *
+ * @returns {Array} Array of aloowed key codes
+ */
+
 export const phoneInputFilter = () => {
 	const filter = []
 
-	//since we're looking for phone numbers, we need
-	//to allow digits 0 - 9 (they can come from either
-	//the numeric keys or the numpad)
+	// since we're looking for phone numbers, we need
+	// to allow digits 0 - 9 (they can come from either
+	// the numeric keys or the numpad)
 	const keypadZero = 48
 	const numpadZero = 96
 
-	//add key codes for digits 0 - 9 into this filter
+	// add key codes for digits 0 - 9 into this filter
 	for (let i = 0; i <= 9; i++) {
 		filter.push(i + keypadZero)
 		filter.push(i + numpadZero)
@@ -172,21 +178,34 @@ export const phoneInputFilter = () => {
 	return filter
 }
 
+/**
+ * Format user input based on the template
+ * @param {string} string - User input
+ * @throws Will throw error if input isn't a string
+ *
+ * @returns {string} formatted phone number string
+ */
+
 export const formatPhoneNumber = string => {
 	if (typeof string !== 'string')
 		throw new Error('Input must be a string.')
 
 	const chars = string.split('')
-	const parsedIntegers = chars.map(char => parseInt(char, 10))
-	const onlyNumbers = parsedIntegers.filter(number => number >= 0)
 
-	// remove prefix numbers '38'
-	const numsWithoutPrefix = onlyNumbers.splice(2, onlyNumbers.length)
+	let numbers
+	if (string.startsWith('+', 0)) {
+		const parsedIntegers = chars.map(char => parseInt(char, 10))
+		const onlyNumbers = parsedIntegers.filter(number => number >= 0)
+		// remove prefix numbers '38'
+		numbers = onlyNumbers.splice(2, onlyNumbers.length)
+	} else {
+		numbers = chars
+	}
 
 	let template = '(___) ___-__-__'
 	let placeholder = '_'
 
-	for (let char of numsWithoutPrefix) {
+	for (let char of numbers) {
 		const firstPlaceholder = template.indexOf(placeholder)
 		if (firstPlaceholder > 0) {
 			const firstPart = template.substr(0, firstPlaceholder)
@@ -195,4 +214,23 @@ export const formatPhoneNumber = string => {
 		}
 	}
 	return `+38 ${template}`
+}
+
+/**
+ * Set formatted phone input value
+ *
+ * @param {Object} event - User input event
+ * @callback setFieldValue - Formik function to set field value
+ */
+
+export const setPhoneInputFieldValue = (event, setFieldValue) => {
+	const { target } = event
+	const filter = phoneInputFilter()
+
+	if (filter.indexOf(event.keyCode) < 0) {
+		event.preventDefault()
+	} else {
+		const result = formatPhoneNumber(target.value)
+		setFieldValue(target.name, result)
+	}
 }

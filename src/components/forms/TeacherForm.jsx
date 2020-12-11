@@ -5,7 +5,7 @@ import 'moment-precise-range-plugin'
 
 import teacherFormSchema from './schemas/teacherFormValidationSchema'
 import { trimObject } from '../../utils/objectHelpers'
-import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
+import { setPhoneInputFieldValue } from '../../utils/formsUtils'
 import { fullTimeEmployee, parseIntegerValue, currentExperience,
 	calcEmployeeExperience, fieldChoices } from '../../utils/formsUtils'
 import { teacherAccomplishmentsDscr } from '../../data/formTexts.json'
@@ -412,7 +412,7 @@ const TeacherForm = ({
 							label="Телефонний номер"
 							name="phone"
 							onChange={handleChange}
-							onKeyUp={event => formatPhoneNumber(event, 'phone', setFieldValue)}
+							onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
 							onBlur={handleBlur}
 							value={values.phone}
 							touched={touched.phone}

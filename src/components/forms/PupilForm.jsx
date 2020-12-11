@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { setFetchingData } from '../../reducers/notificationReducer'
 import searchService from '../../services/search'
 import moment from 'moment'
-import { formatPhoneNumber, phoneInputFilter } from '../../utils/formsUtils'
+import { setPhoneInputFieldValue } from '../../utils/formsUtils'
 
 import { Formik } from 'formik'
 import { Col, Form } from 'react-bootstrap'
@@ -62,18 +62,6 @@ const PupilForm = ({
 	const showUserName = (email, users) => {
 		const user = users.find(user => user.email === email)
 		return <span>{user ? <>{user.lastname} {user.name} {user.middlename}</> : ''}</span>
-	}
-
-	const setPhoneInputFieldValue = (event, setFieldValue) => {
-		const { target } = event
-		const filter = phoneInputFilter()
-
-		if (filter.indexOf(event.keyCode) < 0) {
-			event.preventDefault()
-		} else {
-			const result = formatPhoneNumber(target.value)
-			setFieldValue(target.name, result)
-		}
 	}
 
 	const initialFormValues = () =>
