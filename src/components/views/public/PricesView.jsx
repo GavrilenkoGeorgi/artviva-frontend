@@ -8,7 +8,11 @@ const PricesView = () => {
 
 	return <CommonLayout>
 		<h1 className="text-center custom-font">Інформація про освітні послуги</h1>
-		<Tabs defaultActiveKey="prices" id="prices-tabs" className="text-center">
+		<Tabs defaultActiveKey="prices"
+			id="prices-tabs"
+			className="text-center"
+			aria-label="Вкладки з інформацією про ціни"
+		>
 			<Tab eventKey="prices" title="Ціни">
 				<Col className="pt-4">
 					<Prices />
