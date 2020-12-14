@@ -1,75 +1,62 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { connect } from 'react-redux'
 import { Redirect, useLocation } from 'react-router-dom'
-import { setNotification } from '../../../reducers/notificationReducer'
+import { setNotification, setFetchingData } from '../../../reducers/notificationReducer'
 import { getUsersList } from '../../../reducers/userReducer'
 
-import LoadingIndicator from '../../common/LoadingIndicator'
 import UserDetailsCard from '../../users/UserDetailsCard'
 import CommonLayout from '../../CommonLayout'
 
-const UsersListView = ({ user, users, setNotification, getUsersList }) => {
+import UserDataContext from '../../../context/UserDataContext'
 
-	const [isLoading, setIsLoading] = useState(true)
-	const componentIsMounted = useRef(true)
+const UsersListView = ({
+	users,
+	setFetchingData,
+	getUsersList }) => {
+
 	const location = useLocation()
+	const userData = useContext(UserDataContext)
 
 	useEffect(() => {
-		return () => {
-			componentIsMounted.current = false
-		}
-	}, [])
-
-	useEffect(() => {
-		if (user) {
+		if (userData) {
+			setFetchingData(true) //?
 			getUsersList()
-				.catch(error => {
-					const { message } = { ...error.response.data }
-					setNotification({
-						message,
-						variant: 'danger'
-					}, 5)
-				})
-				.finally(() => {
-					if (componentIsMounted.current) setIsLoading(false)
-				})
+			setFetchingData(false) //?
 		}
-	}, [user, getUsersList, setNotification])
+	}, [userData, getUsersList, setFetchingData])
 
-	return (
-		<CommonLayout>
-			{isLoading
-				? <LoadingIndicator
-					animation="border"
-					variant="primary"
-				/>
-				: <>
-					{user.superUser
-						? <>
-							<h4 className="custom-font text-center">Всі користувачі</h4>
-							{users.map(user => <UserDetailsCard key={user.id} userData={user} />)}
-						</>
-						: <Redirect
-							to={{
-								pathname: '/school/overview',
-								state: { from: location }
-							}}
-						/>
-					}
-				</>
-			}
-		</CommonLayout>
-	)
+	return userData && <CommonLayout>
+		{userData.superUser
+			? <>
+				<h4 className="custom-font text-center">
+					Всі користувачі
+				</h4>
+				{users && users.map(user =>
+					<UserDetailsCard
+						key={user.id}
+						userData={user}
+					/>
+				)}
+			</>
+			: <Redirect
+				to={{
+					pathname: '/school/overview',
+					state: { from: location }
+				}}
+			/>
+		}
+	</CommonLayout>
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		user: state.user,
-		users: state.users
+		users: state.users,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
 const mapDispatchToProps = {
+	setFetchingData,
 	setNotification,
 	getUsersList
 }
