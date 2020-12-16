@@ -3,6 +3,10 @@ describe('Login logic', function () {
 		cy.resetDb()
 	})
 
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+	})
+
 	it('logs in using UI', function() {
 		cy.visit('/login')
 		cy.contains('div', 'Ваша електронна пошта')

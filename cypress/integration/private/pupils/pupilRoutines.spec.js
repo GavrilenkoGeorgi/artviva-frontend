@@ -5,6 +5,7 @@ describe('Pupil routines', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/pupils')
 		cy.contains('div', 'First Test Pupil').click()

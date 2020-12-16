@@ -5,6 +5,7 @@ describe('User profile', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school')
 		cy.contains('Профіль').click()
@@ -28,7 +29,7 @@ describe('User profile', function() {
 		cy.contains('a', 'Редагувати').should('have.class', 'active')
 
 		cy.contains('div', 'ПІБ (прізвище, ім’я і по батькові)')
-			.find('input').first().type('Test Teacher')
+			.find('input').first().type('Cypress User Filled Teacher')
 
 		cy.get('[data-cy=specialties-0]').select('Java')
 

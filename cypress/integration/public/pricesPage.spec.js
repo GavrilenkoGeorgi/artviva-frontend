@@ -1,4 +1,9 @@
 describe('Prices page', function() {
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+		cy.intercept('/api/specialties/prices', { fixture: 'specialtiesPrices.json' })
+	})
+
 	it('prices page can be open with prices tab active', function() {
 		cy.visit('/')
 		cy.contains('Школа').click()
