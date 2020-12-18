@@ -1,0 +1,26 @@
+[
+	{
+			"teachers": [],
+			"schoolClasses": [],
+			"title": "Basic programming language",
+			"cost": 300,
+			"info": "",
+			"id": "5fbe3eb4aa7b852f58374b42"
+	},
+	{
+			"teachers": [],
+			"schoolClasses": [],
+			"title": "Java",
+			"cost": 350,
+			"info": "Some info",
+			"id": "5fbe3eb4aa7b852f58374b43"
+	},
+	{
+			"teachers": [],
+			"schoolClasses": [],
+			"title": "Java advanced",
+			"cost": 450,
+			"info": "",
+			"id": "5fbe3eb4aa7b852f58374b44"
+	}
+]

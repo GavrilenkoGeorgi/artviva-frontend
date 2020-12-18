@@ -5,6 +5,7 @@ describe('Pupil assign routine', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/pupils')
 	})

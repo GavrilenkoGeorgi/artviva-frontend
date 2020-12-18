@@ -1,0 +1,130 @@
+[
+	{
+			"currentlyEnrolled": false,
+			"graduated": false,
+			"suspended": false,
+			"hasBenefit": 50,
+			"docsPresent": true,
+			"schoolClasses": [
+					{
+							"title": "Лісова кваліметрія",
+							"teacher": {
+									"name": "Вчитель Тестировщик Reassigned",
+									"id": "5f3a9009741dd2301001c985"
+							},
+							"specialty": {
+									"title": "Саксофон",
+									"id": "5f5256f121149c2c84c06428"
+							},
+							"id": "5f3a9045741dd2301001c986"
+					},
+					{
+							"title": "Basic",
+							"teacher": {
+									"name": "Dale Gribble 111",
+									"id": "5f3cf95ddbb60902b4eeb242"
+							},
+							"specialty": {
+									"title": "Basic",
+									"id": "5f3272aacdb8f61acc156d59"
+							},
+							"id": "5f3fdf28216d622134b13cfe"
+					}
+			],
+			"teachers": [
+					{
+							"name": "Dale Gribble 111",
+							"id": "5f3cf95ddbb60902b4eeb242"
+					}
+			],
+			"assignedTo": {
+					"email": "gavrilenko.georgi@gmail.com",
+					"name": "Георгій",
+					"middlename": "Костянтинович",
+					"lastname": "Hillman",
+					"id": "5f314c7ea8a18f11bc2f97a3"
+			},
+			"name": "Bobby Hill",
+			"applicantName": "Luanne Platter",
+			"specialty": {
+					"title": "Spanish",
+					"id": "5f326d3bcdb8f61acc156d53"
+			},
+			"artSchoolClass": 1,
+			"dateOfBirth": "2008-12-31T00:00:00.000Z",
+			"mainSchool": "Arlen Elementary School",
+			"mainSchoolClass": "Дошкільник",
+			"gender": "Чоловіча",
+			"fathersName": "Hank Hill",
+			"fathersPhone": "+38 (123) 546-76-89",
+			"fathersEmploymentInfo": "Strickland",
+			"mothersName": "Peggy Hill",
+			"mothersPhone": "+38 (878) 878-87-88",
+			"mothersEmploymentInfo": "Home",
+			"contactEmail": "lucky@example.com",
+			"homeAddress": "Arlen",
+			"phoneNumber": "+38 (232) 332-23-32",
+			"info": "Some additional info to show, long one.",
+			"createdAt": "2020-08-11T10:11:45.635Z",
+			"updatedAt": "2020-09-10T11:38:55.881Z",
+			"id": "5f326ee1cdb8f61acc156d56"
+	},
+	{
+			"currentlyEnrolled": true,
+			"graduated": false,
+			"suspended": false,
+			"hasBenefit": 50,
+			"docsPresent": true,
+			"schoolClasses": [
+					{
+							"title": "Basic",
+							"teacher": {
+									"name": "Dale Gribble 111",
+									"id": "5f3cf95ddbb60902b4eeb242"
+							},
+							"specialty": {
+									"title": "Basic",
+									"id": "5f3272aacdb8f61acc156d59"
+							},
+							"id": "5f3fdf28216d622134b13cfe"
+					}
+			],
+			"teachers": [
+					{
+							"name": "Peggy Hill",
+							"id": "5f326db6cdb8f61acc156d54"
+					}
+			],
+			"assignedTo": {
+					"email": "gavrilenko.georgi@gmail.com",
+					"name": "Георгій",
+					"middlename": "Костянтинович",
+					"lastname": "Hillman",
+					"id": "5f314c7ea8a18f11bc2f97a3"
+			},
+			"name": "Dale",
+			"applicantName": "Luanne Platter",
+			"specialty": {
+					"title": "Spanish",
+					"id": "5f326d3bcdb8f61acc156d53"
+			},
+			"artSchoolClass": 1,
+			"dateOfBirth": "2017-12-31T00:00:00.000Z",
+			"mainSchool": "Arlen Elementary School",
+			"mainSchoolClass": "1",
+			"gender": "Чоловіча",
+			"fathersName": "Hank Hill",
+			"fathersPhone": "+38 (123) 546-76-89",
+			"fathersEmploymentInfo": "Strickland",
+			"mothersName": "Peggy Hill",
+			"mothersPhone": "+38 (878) 878-87-88",
+			"mothersEmploymentInfo": "Home",
+			"contactEmail": "lucky@example.com",
+			"homeAddress": "Arlen",
+			"phoneNumber": "+38 (232) 332-23-32",
+			"info": "",
+			"createdAt": "2020-08-11T10:13:32.692Z",
+			"updatedAt": "2020-09-10T11:13:00.454Z",
+			"id": "5f326f4ccdb8f61acc156d57"
+	}
+]

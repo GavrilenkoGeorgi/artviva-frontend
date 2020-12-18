@@ -6,6 +6,7 @@ describe('School classes routines', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/groups')
 	})

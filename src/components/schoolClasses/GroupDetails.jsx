@@ -35,7 +35,6 @@ const GroupDetails = ({ user, match, setNotification, deleteSchoolClass }) => {
 
 	useEffect(() => {
 		if (user) {
-			schoolClassesService.setToken(user.token)
 			schoolClassesService.getById(match.params.id)
 				.then((data) => {
 					setGroupDetails(data)

@@ -1,6 +1,5 @@
 import React, { useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
-import userService from '../../services/users'
 import { deleteUser } from '../../reducers/userReducer'
 import { setNotification,	setProcessingForm } from '../../reducers/notificationReducer'
 import PropTypes from 'prop-types'
@@ -19,7 +18,6 @@ const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal')
 
 const UserDetailsCard = ({
 	userData,
-	user,
 	mode,
 	processingForm,
 	deleteUser,
@@ -38,7 +36,6 @@ const UserDetailsCard = ({
 
 	const handleDelete = () => {
 		setProcessingForm(true)
-		userService.setToken(user.token)
 		deleteUser(userData.id)
 			.then(() => {
 				setDeleteSuccessful(true)
@@ -195,7 +192,6 @@ UserDetailsCard.propTypes = {
 }
 
 const mapStateToProps = state => ({
-	user: state.user,
 	processingForm: state.notification.processingForm
 })
 

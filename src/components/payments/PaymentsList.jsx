@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { initialisePayments } from '../../reducers/paymentsReducer'
-import paymentService from '../../services/payment'
 import { nestedSort } from '../../utils/arrayHelpers'
 
 import { Container, Col, Form } from 'react-bootstrap'
@@ -30,8 +29,6 @@ const PaymentsList = ({
 
 	useEffect(() => {
 		if (user) {
-			// set token
-			paymentService.setToken(user.token)
 			// get list of payments
 			initialisePayments()
 				.catch(error => {

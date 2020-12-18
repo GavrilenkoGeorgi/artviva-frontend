@@ -1,0 +1,44 @@
+[
+	{
+			"isActive": true,
+			"approvedUser": true,
+			"superUser": true,
+			"email": "tester@axample.com",
+			"name": "Joe",
+			"middlename": "Tester",
+			"lastname": "Doe",
+			"activationHash": null,
+			"teacher": null,
+			"updatedAt": "2020-12-07T14:01:46.336Z",
+			"passResetHash": null,
+			"passResetHashExpiresAt": null,
+			"id": "5f314c7ea8a18f11bc2f97a3"
+	},
+	{
+			"isActive": true,
+			"approvedUser": true,
+			"superUser": false,
+			"email": "qa@example.com",
+			"name": "Jane",
+			"middlename": "QA",
+			"lastname": "Plain",
+			"activationHash": null,
+			"createdAt": "2020-09-09T10:42:10.702Z",
+			"updatedAt": "2020-11-16T16:22:48.927Z",
+			"teacher": {
+					"schoolClasses": [
+							{
+									"title": "Лісова кваліметрія",
+									"specialty": {
+											"title": "Саксофон",
+											"id": "5f5256f121149c2c84c06428"
+									},
+									"id": "5f3a9045741dd2301001c986"
+							}
+					],
+					"name": "Tester Teacher",
+					"id": "5f3a9009741dd2301001c985"
+			},
+			"id": "5f58b17c64ec0c0c88b78dec"
+	}
+]

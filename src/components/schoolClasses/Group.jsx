@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { setNotification } from '../../reducers/notificationReducer'
 import { deleteSchoolClass } from '../../reducers/schoolClassesReducer'
-import schoolClassesService from '../../services/schoolClasses'
 
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -24,7 +23,6 @@ const SchoolClass = ({ user, group, number, deleteSchoolClass }) => {
 
 	// set auth token
 	useEffect(() => {
-		schoolClassesService.setToken(user.token)
 		return () => { unmounted.current = true }
 	}, [user])
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { connect } from 'react-redux'
 import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
-import pupilsService from '../../services/pupils'
 
 import { Link } from 'react-router-dom'
 import { Container, Row, Col, ListGroup } from 'react-bootstrap'
@@ -21,7 +20,6 @@ const PupilsList = ({
 	useEffect(() => {
 		if (user) {
 			setFetchingData(true)
-			pupilsService.setToken(user.token)
 			getPupils(user.id)
 				.catch(error => {
 					const { message } = { ...error.response.data }

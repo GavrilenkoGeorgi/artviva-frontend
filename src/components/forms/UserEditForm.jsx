@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { connect } from 'react-redux'
 import userService from '../../services/users'
 import searchService from '../../services/search'
-import loginService from '../../services/login'
 import { refreshUserData } from '../../reducers/loginReducer'
 import { setNotification,
 	setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
@@ -45,7 +44,6 @@ const UserEditForm = ({
 
 	useEffect(() => {
 		if (user && userData.teacher) {
-			searchService.setToken(user.token)
 			// fix this
 			const id = typeof userData.teacher === 'string' ? userData.teacher : userData.teacher.id
 			searchService.teacherNameById(id)
@@ -59,7 +57,6 @@ const UserEditForm = ({
 
 	const handleUserDetailsEdit = (values, setErrors) => {
 		setProcessingForm(true)
-		userService.setToken(user.token)
 		if (mode === 'single') {
 			userService.update(user.id, values)
 				.then(() => {
@@ -67,7 +64,6 @@ const UserEditForm = ({
 					closeModal()
 					// all ok, update current user refs
 					// sort of relogin
-					loginService.setToken(user.token)
 					refreshUserData(user.id)
 						.catch(error => {
 							console.error(error)

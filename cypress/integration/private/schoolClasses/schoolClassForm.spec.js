@@ -5,6 +5,7 @@ describe('School class form', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/groups')
 		cy.contains('Додати нову').click()

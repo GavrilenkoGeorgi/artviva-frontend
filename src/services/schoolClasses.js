@@ -1,28 +1,14 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/schoolclasses`
 
-let token = null
-
-/**
- * Set user auth token
- * @param {string} newToken - Current user auth token
- */
-
-const setToken = newToken => {
-	token = `bearer ${newToken}`
-}
-
 /**
  * Get list of all classes
  *
  * @returns {Object} - Response data
  */
 const getAll = async () => {
-	const config = {
-		headers: { Authorization: token }
-	}
 	try {
-		const response = await axios.get(baseUrl, config)
+		const response = await axios.get(baseUrl)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -37,10 +23,7 @@ const getAll = async () => {
  */
 
 const getById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.post(`${baseUrl}/${id}`, null, config)
+	const request = axios.post(`${baseUrl}/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -52,10 +35,7 @@ const getById = async id => {
  */
 
 const getTeacherGroups = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.get(`${baseUrl}/teacher/${id}`, config)
+	const response = await axios.get(`${baseUrl}/teacher/${id}`)
 	return response.data
 }
 
@@ -71,10 +51,7 @@ const getTeacherGroups = async id => {
  * @returns {Object} - Response data
  */
 const create = async payload => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.post(baseUrl, payload, config)
+	const response = await axios.post(baseUrl, payload)
 	return response.data
 }
 
@@ -86,10 +63,7 @@ const create = async payload => {
  */
 
 const deleteById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.delete(`${baseUrl}/${id}`, config)
+	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -107,11 +81,8 @@ const deleteById = async id => {
  */
 
 const update = async (id, payload) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.put(`${baseUrl}/${id}`, payload, config)
+	const request = axios.put(`${baseUrl}/${id}`, payload)
 	return request.then(response => response.data)
 }
 
-export default { getAll, getById, getTeacherGroups, setToken, create, deleteById, update }
+export default { getAll, getById, getTeacherGroups, create, deleteById, update }

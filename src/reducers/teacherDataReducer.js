@@ -1,7 +1,7 @@
 import teachersService from '../services/teachers'
 import { substractLiqPayPercent } from '../utils/paymentsHelper'
 
-const teacherDataReducer = (state = {}, action) => {
+const teacherDataReducer = (state = null, action) => {
 	switch (action.type) {
 	case 'GET_TEACHER_DATA': {
 		return action.data

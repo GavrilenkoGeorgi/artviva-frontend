@@ -5,6 +5,10 @@ describe('Specialty form', function() {
 		cy.contains('Додати новій фах').click()
 	})
 
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+	})
+
 	it('can be opened', function() {
 		cy.contains('Повна назва спеціальності')
 		cy.contains('Вартість навчання за місяць')
