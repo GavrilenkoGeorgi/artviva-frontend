@@ -88,7 +88,7 @@ export const updateTeacher = (id, payload) => {
  * @param {Object} payload - Teacher's data
  * @param {Object} payload.name - Teacher's unique name
  */
-
+// I guess we don't use this anymore?
 export const setTeacherExp = (payload) => {
 	return async dispatch => {
 		// const updatedTeacher = await teachersService.update(id, payload)

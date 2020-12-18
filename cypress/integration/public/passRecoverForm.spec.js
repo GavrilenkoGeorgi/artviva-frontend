@@ -1,6 +1,7 @@
 describe('Password recover form', function() {
 	beforeEach(function() {
 		cy.visit('/recover')
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 	})
 
 	it('shows an error if no email was entered', function() {

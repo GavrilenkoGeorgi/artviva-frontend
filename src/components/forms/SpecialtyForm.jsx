@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createSpecialty, updateSpecialty } from '../../reducers/specialtiesReducer'
-import specialtyService from '../../services/specialties'
 
 import { Formik } from 'formik'
 import * as Yup from 'yup'
@@ -17,7 +16,7 @@ import ResetBtn from './buttons/Reset'
 
 const SpecialtyForm = ({
 	specialty,
-	user,
+	// user,
 	setNotification,
 	createSpecialty,
 	updateSpecialty,
@@ -29,11 +28,10 @@ const SpecialtyForm = ({
 
 	// set auth token and mode
 	useEffect(() => {
-		specialtyService.setToken(user.token)
 		if (mode === 'edit') {
 			setEditMode(true)
 		}
-	}, [user, mode])
+	}, [mode])
 
 	// edit or save
 	const handleSpecialty = (values, setErrors, resetForm) => {
@@ -190,18 +188,18 @@ const SpecialtyForm = ({
 
 SpecialtyForm.propTypes = {
 	specialty: PropTypes.object,
-	user: PropTypes.object.isRequired,
+	// user: PropTypes.object.isRequired,
 	setNotification: PropTypes.func.isRequired,
 	createSpecialty: PropTypes.func.isRequired,
 	updateSpecialty: PropTypes.func.isRequired,
 	mode: PropTypes.oneOf(['create', 'edit']).isRequired
 }
 
-const mapStateToProps = (state) => {
+/* const mapStateToProps = (state) => {
 	return {
 		user: state.user
 	}
-}
+} */
 
 const mapDispatchToProps = {
 	setNotification,
@@ -210,6 +208,7 @@ const mapDispatchToProps = {
 }
 
 export default connect(
-	mapStateToProps,
+	// mapStateToProps,
+	null,
 	mapDispatchToProps
 )(SpecialtyForm)

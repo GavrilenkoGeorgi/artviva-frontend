@@ -4,6 +4,8 @@ import { setUserFromLocalStorage } from './reducers/loginReducer'
 import { initializeSpecialties } from './reducers/specialtiesReducer'
 import Routes from './Routes'
 
+import UserDataContext from './context/UserDataContext'
+
 const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 
 	useEffect(() => {
@@ -26,7 +28,9 @@ const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 
 	// div responsible for sticky footer, looks ugly
 	return <div className="content">
-		<Routes />
+		<UserDataContext.Provider value={user}>
+			<Routes />
+		</UserDataContext.Provider>
 	</div>
 }
 

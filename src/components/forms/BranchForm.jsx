@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { createBranch, updateBranch } from '../../reducers/branchesReducer'
 import { formatPhoneNumber } from '../../utils/formatPhoneNumber'
-import branchesService from '../../services/branches'
 import { trimObject } from '../../utils/objectHelpers'
 
 import { Formik } from 'formik'
@@ -27,7 +26,6 @@ const BranchForm = ({
 
 	// set auth token and mode
 	useEffect(() => {
-		branchesService.setToken(user.token)
 		if (mode === 'edit') {
 			setEditMode(true)
 		}

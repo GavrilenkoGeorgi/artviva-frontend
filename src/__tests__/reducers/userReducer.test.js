@@ -13,7 +13,7 @@ describe('Users reducer', () => {
 			data: usersList
 		})
 
-		expect(usersListState).toHaveLength(2)
+		expect(usersListState).toHaveLength(usersList.length)
 	})
 
 	test('updates user details', () => {
@@ -35,7 +35,7 @@ describe('Users reducer', () => {
 			data: userToDelete.id
 		})
 
-		expect(newState).toHaveLength(1)
+		expect(newState).toHaveLength(usersList.length - 1)
 		expect(newState).not.toEqual(
 			expect.arrayContaining([
 				expect.objectContaining(userToDelete)

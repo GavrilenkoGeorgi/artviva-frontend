@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { deleteBranch } from '../../reducers/branchesReducer'
-import branchService from '../../services/branches'
 import { setNotification } from '../../reducers/notificationReducer'
 
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
@@ -25,7 +24,6 @@ const Branch = ({ user, branch, deleteBranch }) => {
 
 	// set auth token
 	useEffect(() => {
-		branchService.setToken(user.token)
 		return () => { unmounted.current = true }
 	}, [user])
 

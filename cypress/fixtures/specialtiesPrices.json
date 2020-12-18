@@ -1,0 +1,22 @@
+[
+	{
+			"title": "Spanish",
+			"cost": 250,
+			"id": "5f326d3bcdb8f61acc156d53"
+	},
+	{
+			"title": "Basic",
+			"cost": 300,
+			"id": "5f3272aacdb8f61acc156d59"
+	},
+	{
+			"title": "Senior Paradigm",
+			"cost": 200,
+			"id": "5f4faaf04271b11b90a3f3bd"
+	},
+	{
+			"title": "Саксофон",
+			"cost": 250,
+			"id": "5f5256f121149c2c84c06428"
+	}
+]

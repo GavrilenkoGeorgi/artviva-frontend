@@ -1,0 +1,92 @@
+[
+	{
+			"pupils": [
+					{
+							"name": "Bobby Hill",
+							"info": "Some additional info to show, long one.",
+							"id": "5f326ee1cdb8f61acc156d56"
+					},
+					{
+							"name": "Dale Gribble",
+							"info": "",
+							"id": "5f3a8fc8741dd2301001c984"
+					},
+					{
+							"name": "Luanne Platter",
+							"info": "",
+							"id": "5f3a630d2d7c921910800e60"
+					},
+					{
+							"name": "Bill Jackson",
+							"info": "Pupil created by user",
+							"id": "5f4658cc33b3862b9860e9ca"
+					},
+					{
+							"name": "Last test",
+							"info": "",
+							"id": "5f5a0e02ef923c2c1079dade"
+					}
+			],
+			"title": "Лісова кваліметрія",
+			"info": "Some more text Сьогодні Шпитьківська ДШМ на чолі з Іванчук Оленою Анатоліївною — сучасний заклад естетичного виховання, де на музичному",
+			"teacher": {
+					"name": "Вчитель Тестировщик Reassigned",
+					"id": "5f3a9009741dd2301001c985"
+			},
+			"specialty": {
+					"title": "Саксофон",
+					"id": "5f5256f121149c2c84c06428"
+			},
+			"id": "5f3a9045741dd2301001c986"
+	},
+	{
+			"pupils": [
+					{
+							"name": "Dale",
+							"info": "",
+							"id": "5f326f4ccdb8f61acc156d57"
+					},
+					{
+							"name": "Bobby Hill",
+							"info": "Some additional info to show, long one.",
+							"id": "5f326ee1cdb8f61acc156d56"
+					},
+					{
+							"name": "Luanne Platter",
+							"info": "",
+							"id": "5f3a630d2d7c921910800e60"
+					}
+			],
+			"title": "Basic",
+			"info": "",
+			"teacher": {
+					"name": "Dale Gribble 111",
+					"id": "5f3cf95ddbb60902b4eeb242"
+			},
+			"specialty": {
+					"title": "Basic",
+					"id": "5f3272aacdb8f61acc156d59"
+			},
+			"id": "5f3fdf28216d622134b13cfe"
+	},
+	{
+			"pupils": [
+					{
+							"name": "Bill Jackson",
+							"info": "Pupil created by user",
+							"id": "5f4658cc33b3862b9860e9ca"
+					}
+			],
+			"title": "ALPHA group",
+			"info": "",
+			"teacher": {
+					"name": "Peggy Hill",
+					"id": "5f326db6cdb8f61acc156d54"
+			},
+			"specialty": {
+					"title": "Spanish",
+					"id": "5f326d3bcdb8f61acc156d53"
+			},
+			"id": "5f576ef91c101e0b646d7e42"
+	}
+]

@@ -1,6 +1,7 @@
 describe('Password recover page', function() {
 	beforeEach(function() {
 		cy.visit('/recover')
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 	})
 
 	it('can be opened', function() {

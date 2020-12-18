@@ -6,6 +6,7 @@ describe('Teacher filter', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/teachers')
 	})

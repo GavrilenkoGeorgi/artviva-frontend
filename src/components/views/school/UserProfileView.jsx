@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
 import userService from '../../../services/users'
-import loginService from '../../../services/login'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../../reducers/loginReducer'
-import { initializeSpecialties } from '../../../reducers/specialtiesReducer'
 import { setNotification, setProcessingForm, setFetchingData } from '../../../reducers/notificationReducer'
 import { trimObject } from '../../../utils/objectHelpers'
 
@@ -20,12 +18,12 @@ const UserProfileView = ({
 	specialties,
 	match,
 	getTeacherData,
-	initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	setNotification,
 	refreshUserData,
 	setFetchingData,
+	processingForm,
 	setProcessingForm }) => {
 
 	const [userData, setUserData] = useState(null)
@@ -35,68 +33,35 @@ const UserProfileView = ({
 		return () => { unmounted.current = true }
 	}, [])
 
+	// get detailed user data
 	useEffect(() => {
-		if (!specialties.length) {
+		async function getDetailedUserData () {
 			setFetchingData(true)
-			initializeSpecialties()
-				.catch(error => {
-					const { message } = { ...error.response.data }
-					setNotification({
-						message,
-						variant: 'danger'
-					}, 5)
-				})
-				.finally(() => setFetchingData(false))
+			const userDetails = await userService.getById(match.params.id)
+			if (userDetails) {
+				setUserData(userDetails)
+				if (userDetails.teacher) getTeacherData(userDetails.teacher.id)
+			}
+			if (!unmounted.current) setFetchingData(false)
 		}
-	}, [specialties, initializeSpecialties, setNotification, setFetchingData])
-
-	useEffect(() => {
-		if (user) {
-			userService.setToken(user.token)
-			userService.getById(match.params.id)
-				.then(user => {
-					setUserData(user)
-				})
-				.catch(error => {
-					const { message } = { ...error.response.data }
-					setNotification({
-						message,
-						variant: 'danger'
-					}, 5)
-				})
-		}
-	}, [user, match.params.id, setNotification])
-
-	useEffect(() => {
-		if (userData && userData.teacher) {
-			setFetchingData(true)
-			getTeacherData(userData.teacher.id)
-				.catch(error => {
-					const { message } = { ...error.response.data }
-					setNotification({
-						message,
-						variant: 'danger'
-					}, 5)
-				})
-				.finally(setFetchingData(false))
-		}
-	}, [userData, getTeacherData, setNotification, setFetchingData])
+		getDetailedUserData()
+	}, [user, match.params.id, setFetchingData, getTeacherData])
 
 	const processTeacherData = async values => {
 		setProcessingForm(true)
-		if (teacher.id) {
-			update(teacher.id, values)
+		if (teacher) {
+			updateTeacher(teacher.id, values)
 		} else {
 			values = {
 				...values,
 				linkedUserAccountId: userData.id
 			}
 			// create new teacher
-			create(values)
+			createNewTeacher(values)
 		}
 	}
 
-	const update = (id, values) => {
+	const updateTeacher = (id, values) => {
 		updateTeacherData(id, trimObject(values))
 			.then(() => {
 				setNotification({
@@ -104,21 +69,12 @@ const UserProfileView = ({
 					variant: 'success'
 				}, 5)
 			})
-			.catch(error => {
-				const { message } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
-			})
 			.finally(() => {
-				if (!unmounted.current) {
-					setProcessingForm(false)
-				}
+				if (!unmounted.current) setProcessingForm(false)
 			})
 	}
 
-	const create = values => {
+	const createNewTeacher = values => {
 		createTeacherData(trimObject(values))
 			.then(() => {
 				setNotification({
@@ -127,66 +83,56 @@ const UserProfileView = ({
 				}, 5)
 				// all ok, update current user refs
 				// sort of relogin
-				loginService.setToken(user.token)
 				refreshUserData(user.id)
-					.catch(error => {
-						console.error(error)
-					})
-			})
-			.catch(error => {
-				const { message } = { ...error.response.data }
-				setNotification({
-					message,
-					variant: 'danger'
-				}, 5)
 			})
 			.finally(() => {
-				if (!unmounted.current) {
-					setProcessingForm(false)
-				}
+				if (!unmounted.current) setProcessingForm(false)
 			})
 	}
 
 	return (
 		<CommonLayout>
-			{userData
-				? <Tabs defaultActiveKey="user-account" id="user-data-tabs">
-					<Tab eventKey="user-account" title="Аккаунт">
-						<Col className="pt-4">
-							<UserDetailsCard mode="single" userData={userData}/>
-						</Col>
-					</Tab>
-					<Tab eventKey="teacher-profile" title="Редагувати">
-						{teacher
-							? <Container className="py-3">
-								<Row className="d-flex justify-content-center">
-									{!userData.teacher
-										? <Col xs={12} className="py-3 text-center text-warning">
-											Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
-										</Col>
-										: null
-									}
-									<Col md={9}>
-										<TeacherForm
-											processTeacherData={processTeacherData}
-											teacher={teacher}
-											mode={teacher ? 'edit' : 'create'}
-										/>
-									</Col>
-								</Row>
-							</Container>
-							: <Col xs={12} className="py-3 text-center">
-								Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+			{userData && <Tabs defaultActiveKey="user-account" id="user-data-tabs">
+				<Tab eventKey="user-account" title="Аккаунт">
+					<Col className="pt-4">
+						<UserDetailsCard mode="single" userData={userData}/>
+					</Col>
+				</Tab>
+				<Tab eventKey="teacher-profile" title="Редагувати">
+					<Container className="py-3">
+						<Row className="d-flex justify-content-center">
+							<Col md={9} className={`py-3 text-center ${teacher ? 'text-primary' : 'text-warning'}`}>
+								{teacher
+									? <span>Тут ви можете редагувати свій профіль викладача.</span>
+									: <span>
+										Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+									</span>
+								}
 							</Col>
+							<Col md={9}>
+								<TeacherForm
+									user={user}
+									processTeacherData={processTeacherData}
+									teacher={teacher}
+									specialties={specialties}
+									mode={teacher ? 'edit' : 'create'}
+									processingForm={processingForm}
+								/>
+							</Col>
+						</Row>
+					</Container>
+				</Tab>
+				<Tab eventKey="user-data" title="Дані вчителя">
+					<Col className="pt-4">
+						{teacher
+							? <TeacherDetails teacher />
+							: <span className="text-center text-warning">
+								Схоже, ви ще не заповнили дані свого вчителя, будь ласка, заповніть їх.
+							</span>
 						}
-					</Tab>
-					<Tab eventKey="user-data" title="Дані вчителя">
-						<Col className="pt-4">
-							<TeacherDetails teacher/>
-						</Col>
-					</Tab>
-				</Tabs>
-				: null
+					</Col>
+				</Tab>
+			</Tabs>
 			}
 		</CommonLayout>
 	)
@@ -196,7 +142,9 @@ const mapStateToProps = state => {
 	return {
 		user: state.user,
 		teacher: state.teacher,
-		specialties: state.specialties
+		specialties: state.specialties,
+		processingForm: state.notification.processingForm,
+		fetchingData: state.notification.fetchingData
 	}
 }
 
@@ -205,7 +153,6 @@ const mapDispatchToProps = {
 	setProcessingForm,
 	setFetchingData,
 	getTeacherData,
-	initializeSpecialties,
 	updateTeacherData,
 	createTeacherData,
 	refreshUserData

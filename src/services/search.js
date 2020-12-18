@@ -1,17 +1,6 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/search`
 
-let token = null
-
-/**
- * Set user auth token
- * @param {string} newToken Current user auth token
- */
-
-const setToken = newToken => {
-	token = `bearer ${newToken}`
-}
-
 /**
  * Search teachers
  * @param {string} payload - Search term
@@ -20,12 +9,8 @@ const setToken = newToken => {
  */
 const teachers = async payload => {
 
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.post(`${baseUrl}/teachers`, payload, config)
+		const response = await axios.post(`${baseUrl}/teachers`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -39,13 +24,8 @@ const teachers = async payload => {
  * @returns {Object} - Response data
  */
 const users = async payload => {
-
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.post(`${baseUrl}/users`, payload, config)
+		const response = await axios.post(`${baseUrl}/users`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -59,13 +39,8 @@ const users = async payload => {
  * @returns {Object} - Response data
  */
 const pupils = async payload => {
-
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.post(`${baseUrl}/pupils`, payload, config)
+		const response = await axios.post(`${baseUrl}/pupils`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -79,13 +54,8 @@ const pupils = async payload => {
  * @returns {Object} - Response data
  */
 const specialties = async payload => {
-
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.post(`${baseUrl}/specialties`, payload, config)
+		const response = await axios.post(`${baseUrl}/specialties`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -99,13 +69,8 @@ const specialties = async payload => {
  * @returns {Object} - Response data
  */
 const teacherNameById = async id => {
-
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.get(`${baseUrl}/teachers/name/${id}`, config)
+		const response = await axios.get(`${baseUrl}/teachers/name/${id}`)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -119,13 +84,8 @@ const teacherNameById = async id => {
  * @returns {Object} - Response data
  */
 const userEmailById = async id => {
-
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.get(`${baseUrl}/users/email/${id}`, config)
+		const response = await axios.get(`${baseUrl}/users/email/${id}`)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -140,13 +100,9 @@ const userEmailById = async id => {
  * @returns {Object} - Response data
  */
 const fullUserNameSearch = async payload => {
-	// console.log('Searach', typeof payload)
-	const config = {
-		headers: { Authorization: token }
-	}
 
 	try {
-		const response = await axios.post(`${baseUrl}/users/lastname`, payload, config)
+		const response = await axios.post(`${baseUrl}/users/lastname`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -161,13 +117,8 @@ const fullUserNameSearch = async payload => {
  * @returns {Object} - Response data
  */
 const getIdByEmail = async payload => {
-	console.log('Get id by email', payload)
-	const config = {
-		headers: { Authorization: token }
-	}
-
 	try {
-		const response = await axios.post(`${baseUrl}/users/idbyemail`, payload, config)
+		const response = await axios.post(`${baseUrl}/users/idbyemail`, payload)
 		return response.data
 	} catch (error) {
 		return Promise.reject(error.response)
@@ -182,6 +133,5 @@ export default {
 	teacherNameById,
 	userEmailById,
 	fullUserNameSearch,
-	getIdByEmail,
-	setToken
+	getIdByEmail
 }
