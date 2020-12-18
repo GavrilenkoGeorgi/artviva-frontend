@@ -1,7 +1,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import store from '../../../store'
@@ -15,17 +15,17 @@ import { initializeSpecialties } from '../../../reducers/specialtiesReducer'
 describe('<SpecialtiesList /> component', () => {
 	const [ specialty ] = mockSpecialtiesData
 
-	beforeEach(() => {
+	beforeEach(async () => {
 		axiosMock.get.mockResolvedValue({ data: mockSpecialtiesData })
 		store.dispatch(initializeSpecialties())
 
-		render(
+		await waitFor(() => render(
 			<Provider store={store}>
 				<Router>
 					<SpecialtiesList />
 				</Router>
 			</Provider>
-		)
+		))
 	})
 
 	it('renders correctly', () => {

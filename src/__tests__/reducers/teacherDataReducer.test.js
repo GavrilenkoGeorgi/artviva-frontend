@@ -4,7 +4,7 @@ import singleTeacherData from '../../__mocks__/singleTeacherData.json'
 describe('Single teacher data reducer', () => {
 	it('returns default state', () => {
 		const defaultState = teacherDataReducer(undefined, {})
-		expect(defaultState).toEqual({})
+		expect(defaultState).toEqual(null)
 	})
 
 	it('returns existing teacher data', () => {

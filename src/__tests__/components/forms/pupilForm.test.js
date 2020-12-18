@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event'
 import store from '../../../store'
 import moment from 'moment'
 import PupilForm from '../../../components/forms/PupilForm'
-import specialties from '../../../__mocks__/specialties.json'
+import specialties from '../../../fixtures/specialties.json'
 import { oneHundredAndTwentyNineCharacters, twoHundredAndFiftySixCharacters } from '../../../__mocks__/strings'
 import { genders, classNumbers, benefits } from '../../../__mocks__/formOptions'
 
@@ -267,23 +267,9 @@ describe('<PupilForm /> component', () => {
 	})
 
 	it('pupil\'s phone number input shows errors on invalid input', async () => {
-		userEvent.type(phoneNumberInput, 'qwertyuiopasdfghjkl')
-		await waitFor(() => { // somehow can't find it using regex
+		userEvent.type(phoneNumberInput, '123aaaa')
+		await waitFor(() => {
 			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(phoneNumberInput)
-		userEvent.type(phoneNumberInput, 'as')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(phoneNumberInput)
-		userEvent.type(phoneNumberInput, '12345678901')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
 				.toBeInTheDocument()
 		})
 	})
@@ -370,23 +356,9 @@ describe('<PupilForm /> component', () => {
 	})
 
 	it('father\'s phone number input shows errors on invalid input', async () => {
-		userEvent.type(fathersPhoneInput, 'qwertyuiopasdfghjkl')
+		userEvent.type(fathersPhoneInput, '1234aaaa')
 		await waitFor(() => {
 			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(fathersPhoneInput)
-		userEvent.type(fathersPhoneInput, 'as')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(fathersPhoneInput)
-		userEvent.type(fathersPhoneInput, '12345678901')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
 				.toBeInTheDocument()
 		})
 	})
@@ -447,23 +419,9 @@ describe('<PupilForm /> component', () => {
 	})
 
 	it('mother\'s phone number input shows errors on invalid input', async () => {
-		userEvent.type(mothersPhoneInput, 'qwertyuiopasdfghjkl')
+		userEvent.type(mothersPhoneInput, '123sdfsdf')
 		await waitFor(() => {
 			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(mothersPhoneInput)
-		userEvent.type(mothersPhoneInput, 'as')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(mothersPhoneInput)
-		userEvent.type(mothersPhoneInput, '12345678901')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
 				.toBeInTheDocument()
 		})
 	})

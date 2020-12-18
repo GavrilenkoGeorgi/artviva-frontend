@@ -7,7 +7,7 @@ import moment from 'moment'
 import { oneHundredAndTwentyNineCharacters,
 	twoHundredAndFiftySixCharacters } from '../../../__mocks__/strings'
 import TeacherForm from '../../../components/forms/TeacherForm'
-import specialties from '../../../__mocks__/specialties.json'
+import specialties from '../../../fixtures/specialties.json'
 import adminUser from '../../../__mocks__/adminUser.json'
 import { select as selectChoices } from '../../../data/forms/teacherFields.json'
 import { prepareSelectData } from '../../../utils/formsUtils'
@@ -251,23 +251,9 @@ describe('<TeacherForm /> component', () => {
 	})
 
 	it('phone number input shows errors on invalid input', async () => {
-		userEvent.type(phoneNumberInput, 'qwertyuiopasdfghjkl')
+		userEvent.type(phoneNumberInput, '1231aaaa')
 		await waitFor(() => {
 			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(phoneNumberInput)
-		userEvent.type(phoneNumberInput, 'as')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
-				.toBeInTheDocument()
-		})
-
-		userEvent.clear(phoneNumberInput)
-		userEvent.type(phoneNumberInput, '12345678901')
-		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX'))
 				.toBeInTheDocument()
 		})
 	})
