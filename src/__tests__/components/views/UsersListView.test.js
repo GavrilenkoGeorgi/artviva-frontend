@@ -34,7 +34,7 @@ describe('<UsersListView /> component', () => {
 		customRender(<UsersListView />, { providerProps })
 	})
 
-	it.only('renders correctly', async () => {
+	it('renders correctly', async () => {
 		const [ firstUser, secondUser ] = mockedUsersData
 
 		expect(screen.getByText('Всі користувачі')).toBeInTheDocument()
