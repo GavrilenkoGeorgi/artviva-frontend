@@ -3,6 +3,10 @@ describe('Registering new user', function() {
 		cy.resetDb()
 	})
 
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+	})
+
 	it('register page can be opened', function() {
 		cy.visit('/')
 		cy.contains('Школа').click()

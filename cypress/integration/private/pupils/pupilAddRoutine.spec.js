@@ -3,6 +3,7 @@ describe('Pupil routines', function() {
 		cy.resetDb()
 		cy.createSpecialties()
 		cy.login()
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.visit('/school')
 	})
 

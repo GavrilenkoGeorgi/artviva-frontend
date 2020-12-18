@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { setNotification } from '../../reducers/notificationReducer'
 import { deleteSpecialty } from '../../reducers/specialtiesReducer'
-import specialtyService from '../../services/specialties'
 import PropTypes from 'prop-types'
 
 import { Container, Row, Col, Collapse, Button } from 'react-bootstrap'
@@ -25,7 +24,6 @@ const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotificat
 
 	// set auth token
 	useEffect(() => {
-		specialtyService.setToken(user.token)
 		return () => { unmounted.current = true }
 	}, [user])
 

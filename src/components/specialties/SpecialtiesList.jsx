@@ -1,8 +1,5 @@
-import React, { useEffect, Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { connect } from 'react-redux'
-import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
-import { initializeSpecialties } from '../../reducers/specialtiesReducer'
-import specialtiesService from '../../services/specialties'
 import PropTypes from 'prop-types'
 
 import { ListGroup, Col } from 'react-bootstrap'
@@ -11,36 +8,16 @@ import Specialty from './Specialty'
 
 const LazySpecialtyForm = React.lazy(() => import('../forms/SpecialtyForm'))
 
-const SpecialtiesList = ({ user,
-	initializeSpecialties,
-	specialties,
-	setNotification,
-	setFetchingData }) => {
-
-	useEffect(() => {
-		if (user) {
-			setFetchingData(true)
-			specialtiesService.setToken(user.token)
-			initializeSpecialties()
-				.catch(error => {
-					setNotification({
-						message: `Щось пішло не так, спробуйте пізніше:
-							${error.status} ${error.statusText}`,
-						variant: 'danger'
-					}, 5)
-				})
-				.finally(() => setFetchingData(false))
-		}
-	}, [user, initializeSpecialties, setNotification, setFetchingData])
+const SpecialtiesList = ({ specialties }) => {
 
 	return (
-		<Col className="border1 border-primary">
+		<Col>
 			{specialties.length
 				? <>
 					<p className="py-3 text-muted">
 						<em>Список усіх спеціальностей школи.</em>
 					</p>
-					<ListGroup>
+					<ListGroup data-cy="specialties-list">
 						{specialties.map((specialty, idx) =>
 							<ListGroup.Item
 								className="px-0 py-1"
@@ -79,26 +56,16 @@ const SpecialtiesList = ({ user,
 }
 
 SpecialtiesList.propTypes = {
-	user: PropTypes.object,
-	setNotification: PropTypes.func.isRequired,
-	initializeSpecialties: PropTypes.func.isRequired,
-	setFetchingData: PropTypes.func.isRequired
+	specialties: PropTypes.array.isRequired
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
-		user: state.user,
 		specialties: state.specialties
 	}
 }
 
-const mapDispatchToProps = {
-	setNotification,
-	initializeSpecialties,
-	setFetchingData
-}
-
 export default connect(
 	mapStateToProps,
-	mapDispatchToProps
+	null
 )(SpecialtiesList)

@@ -8,6 +8,7 @@ describe('Public apply form', function() {
 	})
 
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.login()
 		cy.visit('/school/pupils')
 		cy.contains('Додати нового').click()

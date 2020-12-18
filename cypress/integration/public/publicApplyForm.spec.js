@@ -1,4 +1,8 @@
 describe('Public apply form', function() {
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+	})
+
 	it('pupil can be added successfully', function() {
 		cy.resetDb()
 		cy.createSpecialties()

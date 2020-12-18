@@ -19,7 +19,6 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 	useEffect(() => {
 		setFetchingData(true)
 		if (user) {
-			pupilsService.setToken(user.token)
 			pupilsService.pupilF1FormData(match.params.id)
 				.then(data => {
 					setF1Data(data)

@@ -1,17 +1,6 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/teachers`
 
-let token = null
-
-/**
- * Set user auth token
- * @param {string} newToken Current user auth token
- */
-
-const setToken = newToken => {
-	token = `bearer ${newToken}`
-}
-
 /**
  * Get list of all teachers
  *
@@ -34,10 +23,7 @@ const getAll = async () => {
  * @returns {Object} - Response data
  */
 const create = async payload => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.post(baseUrl, payload, config)
+	const response = await axios.post(baseUrl, payload)
 	return response.data
 }
 
@@ -49,10 +35,7 @@ const create = async payload => {
  */
 
 const deleteById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.delete(`${baseUrl}/${id}`, config)
+	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -66,10 +49,7 @@ const deleteById = async id => {
  */
 
 const update = async (id, payload) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.put(`${baseUrl}/${id}`, payload, config)
+	const request = axios.put(`${baseUrl}/${id}`, payload)
 	return request.then(response => response.data)
 }
 
@@ -83,10 +63,7 @@ const update = async (id, payload) => {
  */
 
 const updateSingle = async (id, payload) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.put(`${baseUrl}/${id}`, payload, config)
+	const response = await axios.put(`${baseUrl}/${id}`, payload)
 	return response.data
 }
 
@@ -98,11 +75,8 @@ const updateSingle = async (id, payload) => {
  */
 
 const getById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.post(`${baseUrl}/${id}`, null, config)
+	const response = await axios.post(`${baseUrl}/${id}`)
 	return response.data
 }
 
-export default { getAll, setToken, create, deleteById, update, getById, updateSingle }
+export default { getAll, create, deleteById, update, getById, updateSingle }

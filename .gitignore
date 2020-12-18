@@ -17,6 +17,7 @@ debug.log
 /build
 
 # misc
+.vscode
 .DS_Store
 .env
 .env.local

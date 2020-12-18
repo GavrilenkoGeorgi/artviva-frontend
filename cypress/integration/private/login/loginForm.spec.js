@@ -1,5 +1,6 @@
 describe('Login form', function() {
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.visit('/login')
 	})
 

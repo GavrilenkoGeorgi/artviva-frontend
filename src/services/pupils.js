@@ -1,17 +1,6 @@
 import axios from 'axios'
 const baseUrl = `${process.env.REACT_APP_API_URL}/api/pupils`
 
-let token = null
-
-/**
- * Set user auth token
- * @param {string} newToken Current user auth token
- */
-
-const setToken = newToken => {
-	token = `bearer ${newToken}`
-}
-
 /**
  * Get list of all pupils
  *
@@ -19,10 +8,7 @@ const setToken = newToken => {
  */
 
 const getAll = async () => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.get(baseUrl, config)
+	const response = await axios.get(baseUrl)
 	return response.data
 }
 
@@ -34,10 +20,7 @@ const getAll = async () => {
  */
 
 const getUserPupils = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.get(`${baseUrl}/user/${id}`, config)
+	const response = await axios.get(`${baseUrl}/user/${id}`)
 	return response.data
 }
 
@@ -67,10 +50,7 @@ const getUserPupils = async id => {
  */
 
 const create = async payload => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const response = await axios.post(baseUrl, payload, config)
+	const response = await axios.post(baseUrl, payload)
 	return response.data
 }
 
@@ -83,10 +63,7 @@ const create = async payload => {
  */
 
 const deleteById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.delete(`${baseUrl}/${id}`, config)
+	const request = axios.delete(`${baseUrl}/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -99,10 +76,7 @@ const deleteById = async id => {
  */
 
 const pupilDetailsById = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.get(`${baseUrl}/${id}`, config)
+	const request = axios.get(`${baseUrl}/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -115,10 +89,7 @@ const pupilDetailsById = async id => {
  */
 
 const pupilF1FormData = async id => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.get(`${baseUrl}/f1/${id}`, config)
+	const request = axios.get(`${baseUrl}/f1/${id}`)
 	return request.then(response => response.data)
 }
 
@@ -150,10 +121,7 @@ const pupilF1FormData = async id => {
  */
 
 const update = async (id, payload) => {
-	const config = {
-		headers: { Authorization: token }
-	}
-	const request = axios.put(`${baseUrl}/${id}`, payload, config)
+	const request = axios.put(`${baseUrl}/${id}`, payload)
 	return request.then(response => response.data)
 }
 
@@ -190,5 +158,5 @@ const publicApply = async payload => {
 
 export default {
 	getAll, getUserPupils, pupilDetailsById,
-	pupilF1FormData, setToken, create,
+	pupilF1FormData, create,
 	deleteById, update, publicApply }

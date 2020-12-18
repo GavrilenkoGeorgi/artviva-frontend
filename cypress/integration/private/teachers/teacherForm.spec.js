@@ -1,5 +1,6 @@
 describe('Adding new teacher through the form', () => {
 	beforeEach(function() {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
 		cy.resetDb()
 		cy.createSpecialties()
 		cy.login()

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
 import { createTeacher } from '../../reducers/teachersReducer'
@@ -9,24 +9,14 @@ import { Link } from 'react-router-dom'
 import TeacherForm from '../forms/TeacherForm'
 
 const AddTeacher = ({
+	user,
+	specialties,
+	processingForm,
 	setNotification,
-	initializeSpecialties,
 	setProcessingForm,
 	createTeacher,
 	showModal,
 }) => {
-
-	useEffect(() => {
-		// we need human readable specialties titles
-		initializeSpecialties()
-			.catch(error => {
-				setNotification({
-					message: `Щось пішло не так, спробуйте пізніше:
-						${error.status} ${error.statusText}`,
-					variant: 'danger'
-				}, 5)
-			})
-	}, [initializeSpecialties, setNotification])
 
 	const processTeacherData = (values, setErrors, resetForm) => {
 		// no linked teacher id cause we are creating
@@ -55,26 +45,27 @@ const AddTeacher = ({
 			.finally(() => setProcessingForm(false))
 	}
 
-	return (
-		<>
-			<p className="py-3 text-muted">
-				Щоб додати нового викладача, спочатку потрібно створити його
-				<Link to="/school/specialties"> спеціальність</Link>,
-				якщо ви цього ще не зробили.
-			</p>
-			<TeacherForm
-				mode="create"
-				processTeacherData={processTeacherData}
-			/>
-		</>
-	)
+	return <>
+		<p className="py-3 text-muted">
+			Щоб додати нового викладача, спочатку потрібно створити його
+			<Link to="/school/specialties"> спеціальність</Link>,
+			якщо ви цього ще не зробили.
+		</p>
+		<TeacherForm
+			user={user}
+			processingForm={processingForm}
+			mode="create"
+			processTeacherData={processTeacherData}
+			specialties={specialties}
+		/>
+	</>
 }
 
-const mapStateToProps = state => {
-	return {
-		specialties: state.specialties
-	}
-}
+const mapStateToProps = state => ({
+	user: state.user,
+	specialties: state.specialties,
+	processingForm: state.notification.processingForm
+})
 
 const mapDispatchToProps = {
 	setNotification,

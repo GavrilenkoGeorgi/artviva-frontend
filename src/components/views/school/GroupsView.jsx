@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { getGroups } from '../../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../../reducers/notificationReducer'
-import schoolClassesService from '../../../services/schoolClasses'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
 import { filter } from '../../../data/forms/groupFields.json'
 
@@ -28,7 +27,6 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 	useEffect(() => {
 		if (user) {
 			setFetchingData(true)
-			schoolClassesService.setToken(user.token)
 			getGroups(user.superUser, user.teacher)
 				.catch(error => {
 					const { message } = { ...error.response.data }

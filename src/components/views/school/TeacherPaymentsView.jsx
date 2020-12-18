@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import teachersService from '../../../services/teachers'
 import { getTeacherData } from '../../../reducers/teacherDataReducer'
 import { setFetchingData, setNotification } from '../../../reducers/notificationReducer'
 
@@ -22,7 +21,6 @@ const TeacherPaymentsView = ({
 	useEffect(() => {
 		if (user && user.teacher) {
 			setFetchingData(true)
-			teachersService.setToken(user.token)
 			getTeacherData(user.teacher)
 				.catch(error => {
 					const { message } = { ...error.response.data }
@@ -78,7 +76,7 @@ const TeacherPaymentsView = ({
 					}
 				</Tab>*/}
 				<Tab eventKey="all-payments" title="Список всіх платежів">
-					{teacher.payments && teacher.payments.length > 0
+					{teacher && teacher.payments.length
 						? <Col>
 							<Col xs={12} className="mt-3 text-right">
 								Всього: {teacher.payments.length} платежі <br/>

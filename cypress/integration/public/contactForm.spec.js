@@ -1,4 +1,8 @@
 describe('Contact form', function() {
+	beforeEach(() => {
+		cy.intercept('/api/specialties', { fixture: 'specialties.json' })
+	})
+
 	it('a message can be sent through it', function() {
 		cy.visit('/')
 		// eslint-disable-next-line

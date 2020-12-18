@@ -4,7 +4,7 @@ import teachersService from '../../services/teachers'
 import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
-import { initializeSpecialties } from '../../reducers/specialtiesReducer'
+// import { initializeSpecialties } from '../../reducers/specialtiesReducer'
 import moment from 'moment'
 import 'moment-precise-range-plugin'
 import { nestedSort } from '../../utils/arrayHelpers'
@@ -15,6 +15,7 @@ import TeacherInfo from './TeacherInfo'
 import TeacherForm from '../forms/TeacherForm'
 import LoadingIndicator from '../common/LoadingIndicator'
 import EntityControlButtons from '../common/EntityControlButtons'
+// import specialties from '../../services/specialties'
 
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
@@ -23,11 +24,13 @@ const TeacherDetails = ({
 	user,
 	match,
 	teacher,
+	specialties,
 	fetchingData,
 	getTeacherData,
 	updateTeacher,
 	setProcessingForm,
-	initializeSpecialties,
+	processingForm,
+	// initializeSpecialties,
 	setFetchingData,
 	setNotification }) => {
 
@@ -47,26 +50,25 @@ const TeacherDetails = ({
 	}, [])
 
 	useEffect(() => {
-		if (teacher.id) {
+		if (teacher && teacher.id) {
 			setTeacherDetails({
 				...teacher,
 				payments: teacher.payments.sort(nestedSort('create_date', null, 'desc'))
 			})
 			calcXpToDate(teacher)
-			initializeSpecialties()
+			/* initializeSpecialties()
 				.catch(error => {
 					const { message } = { ...error.response.data }
 					setNotification({
 						message,
 						variant: 'danger'
 					}, 5)
-				})
+				}) */
 		}
-	}, [teacher, calcXpToDate, initializeSpecialties, setNotification])
+	}, [teacher, calcXpToDate, setNotification])
 
 	useEffect(() => {
 		if (user && match) {
-			teachersService.setToken(user.token)
 			teachersService.getById(match.params.id)
 				.then((data) => {
 					setTeacherDetails({
@@ -186,8 +188,11 @@ const TeacherDetails = ({
 								onHide={() => setEditModalShow(false)}
 							>
 								<TeacherForm
+									user={user}
+									specialties={specialties}
 									processTeacherData={saveTeacherEdits}
-									teacherData={teacherDetails}
+									teacher={teacherDetails}
+									processingForm={processingForm}
 									mode="edit" />
 							</LazyEntityEditModal>
 							<LazyEntityDeleteModal
@@ -212,7 +217,9 @@ const mapStateToProps = state => {
 	return {
 		user: state.user,
 		teacher: state.teacher,
-		fetchingData: state.notification.fetchingData
+		specialties: state.specialties,
+		fetchingData: state.notification.fetchingData,
+		processingForm: state.notification.processingForm
 	}
 }
 
@@ -222,8 +229,8 @@ const mapDispatchToProps = {
 	setFetchingData,
 	deleteTeacher,
 	updateTeacher,
-	getTeacherData,
-	initializeSpecialties
+	getTeacherData
+	// initializeSpecialties
 }
 
 export default connect(
