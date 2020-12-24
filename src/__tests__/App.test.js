@@ -1,58 +1,67 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { render, fireEvent, cleanup } from '@testing-library/react'
-import App from '../App'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+
 import store from '../store'
-import user from '../__mocks__/adminUser.json'
+import axiosMock from 'axios'
+import mockSpecialtiesData from '../fixtures/specialties'
+
+import App from '../App'
+import user from '../fixtures/user.json'
+
 // eslint-disable-next-line
 global.scrollTo = jest.fn()
 
-afterEach(cleanup)
-
 describe('Artiva main page', () => {
-	it('renders main page correctly', () => {
-		const { getByText } = render(
+	beforeEach(() => {
+		axiosMock.get.mockResolvedValue({ data: mockSpecialtiesData })
+
+		render(
 			<Provider store={store}>
 				<App />
 			</Provider>
 		)
-		expect(getByText(/ArtViva — дитяча школа мистецтв/i)).toBeInTheDocument()
+	})
+
+	it('renders correctly', () => {
+		expect(screen.getByText(/ArtViva — дитяча школа мистецтв/i))
+			.toBeInTheDocument()
 	})
 
 	it('when no user is logged in, login button is present', async () => {
-		const { container, getByText } = render(
+		const button = screen.getByRole('button', { name: 'Школа' })
+		userEvent.click(button)
+
+		expect(screen.getByText('Вхід')).toBeInTheDocument()
+	})
+
+})
+
+describe('when user is logged in', () => {
+	beforeEach(() => {
+		window.localStorage.setItem(
+			'loggedUserJSON', JSON.stringify(user)
+		)
+		store.user = user
+
+		render(
 			<Provider store={store}>
 				<App />
 			</Provider>
 		)
-		fireEvent.click(getByText('Школа'))
-		expect(container).toHaveTextContent('Вхід')
 	})
 
-	describe('when user is logged in', () => {
-		let app = undefined
-		beforeEach(() => {
-			window.localStorage.setItem(
-				'loggedUserJSON', JSON.stringify(user)
-			)
-			store.user = user
+	it('logout button is present', () => {
+		userEvent.click(screen.getByRole('button', { name: 'Школа' }))
 
-			app = render(
-				<Provider store={store}>
-					<App />
-				</Provider>
-			)
-		})
+		expect(screen.getByText('Вийти')).toBeInTheDocument()
+	})
 
-		it('logout button is present', () => {
-			fireEvent.click(app.getByText('Школа'))
-			expect(app.container).toHaveTextContent('Вийти')
-		})
+	it('user can logout', () => {
+		userEvent.click(screen.getByRole('button', { name: 'Школа' }))
+		userEvent.click(screen.getAllByText('Вийти')[0])
 
-		it('user can logout', () => {
-			fireEvent.click(app.getByText('Школа'))
-			fireEvent.click(app.getByText('Вийти'))
-			expect(window.localStorage.getItem('loggedUserJSON')).toBe(undefined)
-		})
+		expect(window.localStorage.getItem('loggedUserJSON')).toBe(undefined)
 	})
 })

@@ -7,12 +7,8 @@ const baseUrl = `${process.env.REACT_APP_API_URL}/api/specialties`
  * @returns {Object} - Response data
  */
 const getAll = async () => {
-	try {
-		const response = await axios.get(baseUrl)
-		return response.data
-	} catch (error) {
-		return Promise.reject(error.response)
-	}
+	const response = await axios.get(baseUrl)
+	return response.data
 }
 
 /**
