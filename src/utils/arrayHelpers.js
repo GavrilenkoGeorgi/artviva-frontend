@@ -1,3 +1,12 @@
+/**
+ * Compare two values. Helper for the sort function.
+ *
+ * @param {string} key - Name of the key to compare
+ * @param {string} order - Order by which to sort
+ *
+ * @returns result of comparison
+ */
+
 export const compareValues = (key, order = 'asc') => {
 	return function innerSort(a, b) {
 		if (!Object.prototype.hasOwnProperty.call(a, key) || !Object.prototype.hasOwnProperty.call(b, key)) {
@@ -51,7 +60,13 @@ export const nestedSort = (prop1, prop2 = null, direction = 'asc') => (e1, e2) =
 export const findByPropertyValue =
 	(value, field, data) => data.find(item => item[field] === value)
 
-
+/**
+ * Filter array of objects by proprety value
+ * @param {Object[]} products - Array of objects
+ * @param {Object} filters - Filters
+ *
+ * @returns {Object[]} - Filterd array of objects
+ */
 export const multiPropsFilter = (products, filters) => {
 	const filterKeys = Object.keys(filters)
 	return products.filter(product => {
@@ -65,6 +80,15 @@ export const multiPropsFilter = (products, filters) => {
 		})
 	})
 }
+
+/**
+ * Filter array of objects by bool property
+ *
+ * @param {Object[]} products - Array of objects
+ * @param {Object} filters - Set of filters
+ *
+ * @returns {Object[]} - filtered array of objects
+ */
 
 export const boolPropsFilter = (products, filters) => {
 	const filterKeys = Object.keys(filters)

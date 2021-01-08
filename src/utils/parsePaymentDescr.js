@@ -10,10 +10,22 @@ import { sortMonthsNames } from './datesAndTime'
  * @param {string} descrStr - Payment description
  * @param {string} locale - Locale used for dates
  *
+ * @throws Will throw an error if description string is missing or malformed
+ *
  * @returns {object} - Payment data object
  */
 
 const getPaymentDataFromString = (descrStr, locale) => {
+
+	if (typeof descrStr !== 'string' || !descrStr.length)
+		throw new Error('Payment description string is required.')
+
+	const requiredMarkers = ['Оплата:', 'Викладач:', 'Учень:', 'Предмет:']
+
+	for (let marker of requiredMarkers) {
+		if (!descrStr.includes(marker))
+			throw new Error(`Payment description string is malformed. Missing marker: ${marker}`)
+	}
 
 	// initial payment data
 	let paymentData = {
