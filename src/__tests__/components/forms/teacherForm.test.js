@@ -8,7 +8,7 @@ import { oneHundredAndTwentyNineCharacters,
 	twoHundredAndFiftySixCharacters } from '../../../__mocks__/strings'
 import TeacherForm from '../../../components/forms/TeacherForm'
 import specialties from '../../../fixtures/specialties.json'
-import adminUser from '../../../__mocks__/adminUser.json'
+import adminUser from '../../../fixtures/user.json'
 import { select as selectChoices } from '../../../data/forms/teacherFields.json'
 import { prepareSelectData } from '../../../utils/formsUtils'
 

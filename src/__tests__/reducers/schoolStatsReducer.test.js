@@ -5,7 +5,7 @@ describe('School stats reducer', () => {
 	it('returns default state', () => {
 		const defaultState = schoolStatsReducer(undefined, {})
 
-		expect(defaultState).toEqual({})
+		expect(defaultState).toEqual(null)
 	})
 
 	it('initialises school stats with data from DB', () => {
