@@ -1,6 +1,6 @@
 import schoolStatsService from '../services/schoolStats'
 
-const schoolStatsReducer = (state = {}, action) => {
+const schoolStatsReducer = (state = null, action) => {
 	switch (action.type) {
 	case 'INIT_SCHOOL_STATS':
 		return action.data
