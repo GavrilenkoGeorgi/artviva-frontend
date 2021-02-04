@@ -35,8 +35,8 @@ const create = async payload => {
  */
 
 const deleteById = async id => {
-	const request = axios.delete(`${baseUrl}/${id}`)
-	return request.then(response => response.data)
+	const response = await axios.delete(`${baseUrl}/${id}`)
+	return response.data
 }
 
 /**
