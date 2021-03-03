@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useCallback, Suspense, useRef } from 'react'
+import React, { useEffect, useState, useCallback, Suspense/* , useRef */ } from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+
+import moment from 'moment'
+import 'moment-precise-range-plugin'
+
 import teachersService from '../../services/teachers'
 import { setNotification, setProcessingForm, setFetchingData } from '../../reducers/notificationReducer'
 import { deleteTeacher, updateTeacher } from '../../reducers/teachersReducer'
 import { getTeacherData } from '../../reducers/teacherDataReducer'
-// import { initializeSpecialties } from '../../reducers/specialtiesReducer'
-import moment from 'moment'
-import 'moment-precise-range-plugin'
+
 import { nestedSort } from '../../utils/arrayHelpers'
 
 import { Container, Row } from 'react-bootstrap'
@@ -15,7 +18,6 @@ import TeacherInfo from './TeacherInfo'
 import TeacherForm from '../forms/TeacherForm'
 import LoadingIndicator from '../common/LoadingIndicator'
 import EntityControlButtons from '../common/EntityControlButtons'
-// import specialties from '../../services/specialties'
 
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
@@ -30,7 +32,7 @@ const TeacherDetails = ({
 	updateTeacher,
 	setProcessingForm,
 	processingForm,
-	// initializeSpecialties,
+	deleteTeacher,
 	setFetchingData,
 	setNotification }) => {
 
@@ -39,7 +41,11 @@ const TeacherDetails = ({
 	const [deleteModalShow, setDeleteModalShow] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
 	const [isDeleting, setIsDeleting] = useState(false)
-	const unmounted = useRef(false)
+	// const unmounted = useRef(false)
+	const [ redirect, setRedirect ] = useState({
+		to: null
+	})
+
 
 	const calcXpToDate = useCallback(({ employmentDate, experienceToDate }) => {
 		const date = moment()
@@ -56,14 +62,6 @@ const TeacherDetails = ({
 				payments: teacher.payments.sort(nestedSort('create_date', null, 'desc'))
 			})
 			calcXpToDate(teacher)
-			/* initializeSpecialties()
-				.catch(error => {
-					const { message } = { ...error.response.data }
-					setNotification({
-						message,
-						variant: 'danger'
-					}, 5)
-				}) */
 		}
 	}, [teacher, calcXpToDate, setNotification])
 
@@ -133,6 +131,8 @@ const TeacherDetails = ({
 					message: 'Вчітель успішно видален.',
 					variant: 'success'
 				}, 5)
+				setDeleteModalShow(false)
+				setRedirect({ to: '/school/teachers' })
 			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
@@ -140,13 +140,13 @@ const TeacherDetails = ({
 					message,
 					variant: 'danger'
 				}, 5)
-				setIsDeleting(false)
-				setDeleteModalShow(false)
 			})
 			.finally(() => {
-				if (!unmounted) setIsDeleting(false)
+				setIsDeleting(false)
 			})
 	}
+
+	if (redirect.to) return <Redirect to={redirect.to} />
 
 	return (
 		<Container>

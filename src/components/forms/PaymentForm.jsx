@@ -139,7 +139,7 @@ const PaymentForm = ({
 	// when order data changes, calculate total
 	useEffect(() => {
 		const { specialty, months, cost, benefits } = orderData
-		const preliminaryPaymentData = () => specialty && months ? true : false
+		const preliminaryPaymentData = () => specialty && months.length ? true : false
 
 		if (preliminaryPaymentData()) {
 			benefits
