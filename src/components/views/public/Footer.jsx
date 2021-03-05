@@ -66,14 +66,14 @@ const Footer = () => {
 							<Col xs={4} className="d-flex align-items-center justify-content-center">
 								<a
 									href="https://www.facebook.com/myz.shpytky"
-									alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"
+									alt="Фейсбук-група КЗСМО «Школа мистецтв «АРТ ВІВА»"
 									aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
 								>
 									<FbIcon style={socialIconsStyle} />
 								</a>
 								<a
 									href="https://www.instagram.com/myz_shputky"
-									alt="Інстаграм Шпитьківської Дитячої Школи Мистецтв"
+									alt="Інстаграм КЗСМО «Школа мистецтв «АРТ ВІВА»"
 									aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
 								>
 									<InstIcon style={socialIconsStyle} />
