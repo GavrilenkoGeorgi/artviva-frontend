@@ -429,6 +429,11 @@ const PaymentForm = ({
 								<em>Заповніть форму для розрахунку вартості</em>
 							</p>
 						}
+						<Col xs={12} className="text-right">
+							<em className="text-muted small">
+								Плюс відсоток 2.75% за зручність, покращений сервіс.
+							</em>
+						</Col>
 					</Form.Row>
 
 					<input type="hidden" name="data" value={liqpayData.data || ''} />
