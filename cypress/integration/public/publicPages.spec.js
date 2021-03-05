@@ -10,7 +10,7 @@ describe('Artviva public app view', function() {
 
 	it('front page can be opened and footer is visible', function() {
 		cy.contains('ArtViva')
-		cy.contains('КПНЗ Шпитьківська ДШМ')
+		cy.contains('«Школа мистецтв «АРТ ВІВА»')
 	})
 
 	it('teachers page can be opened', function() {
