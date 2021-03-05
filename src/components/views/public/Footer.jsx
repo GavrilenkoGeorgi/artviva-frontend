@@ -37,7 +37,7 @@ const Footer = () => {
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
 						<Row>
 							<Col xs={12} className="pb-2">
-								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
+								<p className="mb-2">КЗСМО «Школа мистецтв «АРТ ВІВА»</p>
 								<em className="text-muted">
 									08122, Київська обл., Києво-Святошинський район, с. Шпитьки, вул. Господарська, 3
 								</em>
@@ -84,7 +84,7 @@ const Footer = () => {
 
 					<Col xs={12} className="pt-3 text-center text-muted">
 						<span>
-							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva
+							&copy;&nbsp;{footerDate()} Школа мистецтв «АРТ ВІВА»
 						</span>
 					</Col>
 				</Row>
