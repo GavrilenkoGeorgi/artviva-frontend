@@ -37,7 +37,7 @@ const Footer = () => {
 					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
 						<Row>
 							<Col xs={12} className="pb-2">
-								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
+								<p className="mb-2">КЗСМО «Школа мистецтв «АРТ ВІВА»</p>
 								<em className="text-muted">
 									08122, Київська обл., Києво-Святошинський район, с. Шпитьки, вул. Господарська, 3
 								</em>
@@ -66,14 +66,14 @@ const Footer = () => {
 							<Col xs={4} className="d-flex align-items-center justify-content-center">
 								<a
 									href="https://www.facebook.com/myz.shpytky"
-									alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"
+									alt="Фейсбук-група КЗСМО «Школа мистецтв «АРТ ВІВА»"
 									aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
 								>
 									<FbIcon style={socialIconsStyle} />
 								</a>
 								<a
 									href="https://www.instagram.com/myz_shputky"
-									alt="Інстаграм Шпитьківської Дитячої Школи Мистецтв"
+									alt="Інстаграм КЗСМО «Школа мистецтв «АРТ ВІВА»"
 									aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
 								>
 									<InstIcon style={socialIconsStyle} />
@@ -84,7 +84,7 @@ const Footer = () => {
 
 					<Col xs={12} className="pt-3 text-center text-muted">
 						<span>
-							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva
+							&copy;&nbsp;{footerDate()} Школа мистецтв «АРТ ВІВА»
 						</span>
 					</Col>
 				</Row>

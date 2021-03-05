@@ -104,7 +104,7 @@ const NavigationBar = ({ user }) => {
 							ArtViva
 						</Col>
 						<Col xs={12} className="pl-3 nav-logo-small-font">
-							дитяча школа мистецтв
+							школа мистецтв
 						</Col>
 					</Row>
 				</Navbar.Brand>
