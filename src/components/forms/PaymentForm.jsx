@@ -426,12 +426,12 @@ const PaymentForm = ({
 								<Col xs={1} className="d-flex align-items-center">
 									<FontAwesomeIcon icon={faHryvnia} />
 								</Col>
-								<Col xs={12} className="text-right">
+								{/* <Col xs={12} className="text-right">
 									<em className="text-muted small">
 										Плюс відсотки платіжної системи (2.85%):{' '}
 										{liqpayCommission} <FontAwesomeIcon size="sm" icon={faHryvnia} />
 									</em>
-								</Col>
+								</Col> */}
 							</>
 							: <p className="payment-total-message">
 								<em>Заповніть форму для розрахунку вартості</em>

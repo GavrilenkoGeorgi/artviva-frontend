@@ -29,7 +29,7 @@ describe('Payment form', function() {
 			.find('[type="checkbox"]').first().check({ force: true })
 
 		cy.contains('Всього: 350')
-		cy.contains('Плюс відсотки платіжної системи (2.85%): 9.97')
+		/* cy.contains('Плюс відсотки платіжної системи (2.85%): 9.97') */
 	})
 
 })
