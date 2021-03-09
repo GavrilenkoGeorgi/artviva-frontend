@@ -114,7 +114,9 @@ const PaymentForm = ({
 			setOrderData({
 				...orderData,
 				specialty: target.value,
-				cost: priceData ? priceData.cost : 0
+				cost: priceData
+					? priceData.cost + (priceData.cost * process.env.REACT_APP_CENTS_AMOUNT)
+					: 0
 			})
 			break
 		case 'benefits':
@@ -147,7 +149,7 @@ const PaymentForm = ({
 		}
 	}, [orderData])
 
-	const showTotals = (total, percent) => Number(total) + percent
+	const showTotals = (total, percent) => (Number(total) + percent).toFixed(2)
 
 	const paymentFormEl = useRef(null)
 	const [liqpayData, setLiqpayData] = useState({})
@@ -155,7 +157,7 @@ const PaymentForm = ({
 	// Send payment data to liqpay
 	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
-		const percent = parseFloat(process.env.REACT_APP_LIQPAY_API_PERCENT)
+		const percent = parseFloat(process.env.REACT_APP_CENTS_AMOUNT)
 		const amountToSend = total + (total/100 * percent)
 		const paymentData = {
 			action: 'pay',

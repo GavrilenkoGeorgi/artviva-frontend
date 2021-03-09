@@ -32,8 +32,8 @@ describe('<PricesView /> component', () => {
 	})
 
 	it('shows prices list', () => {
-		expect(screen.getByText('Java advanced')).toBeInTheDocument()
-		expect(screen.getByText('450')).toBeInTheDocument()
+		expect(screen.getByText('Basic programming language')).toBeInTheDocument()
+		expect(screen.getByText('350.35')).toBeInTheDocument()
 	})
 
 	it('opens benefits tab on click', async () => {
