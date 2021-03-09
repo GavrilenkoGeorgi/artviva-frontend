@@ -157,7 +157,7 @@ const PaymentForm = ({
 	// Send payment data to liqpay
 	const handlePayment = useCallback(async ({ teacher, pupil, specialty, months }) => {
 		// compile payment data
-		const percent = parseFloat(process.env.REACT_APP_CENTS_AMOUNT)
+		const percent = parseFloat(process.env.REACT_APP_LIQPAY_API_PERCENT)
 		const amountToSend = total + (total/100 * percent)
 		const paymentData = {
 			action: 'pay',
