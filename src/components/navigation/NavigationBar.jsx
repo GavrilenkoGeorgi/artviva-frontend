@@ -96,7 +96,7 @@ const NavigationBar = ({ user }) => {
 				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image
 						alt="Лого"
-						src="/img/schoolLogo-transparent.png"
+						src="/img/logo/artviva_logo_small.png"
 						className="nav-logo-img"
 					/>{' '}
 					<Row className="d-inline pl-2 nav-logo">

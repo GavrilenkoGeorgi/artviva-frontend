@@ -25,7 +25,7 @@ describe('Artiva main page', () => {
 	})
 
 	it('renders correctly', () => {
-		expect(screen.getByText(/ArtViva — школа мистецтв/i))
+		expect(screen.getByText('Школа мистецтв'))
 			.toBeInTheDocument()
 	})
 
