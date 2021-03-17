@@ -26,7 +26,7 @@ const MainPage = () => {
 						className="d-flex justify-content-center align-items-center"
 					>
 						<Image
-							src="img/schoolLogo-transparent.png"
+							src="img/logo/artviva_logo.png"
 							className='responsive-image'
 							alt="Лого ArtViva"
 						/>
@@ -36,7 +36,7 @@ const MainPage = () => {
 						className="d-flex justify-content-center align-items-center"
 					>
 						<strong className="main-title custom-font">
-							ArtViva — школа мистецтв
+							Школа мистецтв
 						</strong>
 					</Col>
 					<Col>
@@ -46,9 +46,9 @@ const MainPage = () => {
 									<OrigamiIcon />
 								</ScrollAnimation>
 								<p className="pt-4 px-2 main-page-descr">
-									Сьогодні школа мистецтв «АРТ ВІВА» на чолі з Іванчук Оленою
+									Сьогодні Школа мистецтв «АРТ ВІВА» на чолі з Іванчук Оленою
 									Анатоліївною — сучасний заклад естетичного виховання, де на музичному,
-									хореографічному та художньому відділеннях 80 досвідчених, дипломованих
+									хореографічному та художньому відділеннях 65 досвідчених, дипломованих
 									викладачів та концертмейстерів навчають майже 1000 дітей.
 								</p>
 							</Col>
