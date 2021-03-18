@@ -22,7 +22,7 @@ const MainPage = () => {
 			<Container>
 				<Row className="pt-4">
 					<Col
-						xs={4}
+						sm={6}
 						className="d-flex justify-content-center align-items-center"
 					>
 						<Image
@@ -32,7 +32,7 @@ const MainPage = () => {
 						/>
 					</Col>
 					<Col
-						xs={8}
+						sm={6}
 						className="d-flex justify-content-center align-items-center"
 					>
 						<strong className="main-title custom-font">
@@ -77,13 +77,13 @@ const MainPage = () => {
 					</Col>
 				</Row>
 			</Container>
-			<Container className="border1 border-primary">
-				<Row className="border1 border-success d-flex justify-content-center">
-					<Col sm={10} className="py-4 text-center">
+			<Container>
+				<Row className="d-flex justify-content-center">
+					<Col sm={10} className="py-4 mb-3 mb-sm-5 text-center">
 						<ScrollAnimation animateIn="fadeIn">
 							<Enrollment />
 						</ScrollAnimation>
-						<p className="pt-4 px-2 main-page-descr">
+						<p className="pt-4 main-page-descr">
 							Ви можете оплатити або заповнити та надіслати заявку на
 							навчання за допомогою нашої зручної форми ;)
 						</p>

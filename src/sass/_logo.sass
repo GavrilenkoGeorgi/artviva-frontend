@@ -1,25 +1,29 @@
 @import 'mixins.sass'
-// @import 'palette.sass'
+@import 'palette.scss'
 
 .nav-logo-img
 	width: 5rem
 	height: 5rem
-	padding: .6rem
+	padding: .3rem
 	+handheld(2, 360px)
 		width: 3rem
 		height: 3rem
 
 .nav-logo
-	font-family: $custom-font
 	line-height: .9
 
 .nav-logo-font
-	letter-spacing: .15em
+	font-family: $logo-font
+	color: $primary-color
+	letter-spacing: .1em
 	font-size: 200%
 	+handheld(2, 360px)
 		font-size: 130%
 
 .nav-logo-small-font
-	letter-spacing: .15em
+	font-family: $serif-font
+	text-align: center
+	letter-spacing: .09em
+	color: $logo-sub-text
 	+handheld(2, 360px)
 		font-size: 60%

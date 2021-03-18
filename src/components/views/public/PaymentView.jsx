@@ -12,7 +12,7 @@ const PaymentView = ({ match }) => {
 
 	return <CommonLayout>
 		<Container>
-			<Row className="my-4 justify-content-center">
+			<Row className="my-4 justify-content-center py-sm-5">
 				<Col lg={8}>
 					{status
 						? <>
