@@ -149,8 +149,10 @@ p
 .carousel-container
 	margin-top: -5rem
 	img
-		height: 50vh
+		height: 55vh
 		object-fit: cover
+		+desktop(96dpi, 1024px)
+			height: 70vh
 
 .carousel-overlay
 	background-image: linear-gradient(to bottom, rgba(33, 33, 33, 0), rgba(33, 33, 33, .8))

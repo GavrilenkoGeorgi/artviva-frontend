@@ -22,21 +22,21 @@ const MainPage = () => {
 			<Container>
 				<Row className="pt-4">
 					<Col
-						xs={4}
+						sm={6}
 						className="d-flex justify-content-center align-items-center"
 					>
 						<Image
-							src="img/schoolLogo-transparent.png"
+							src="img/logo/artviva_logo.png"
 							className='responsive-image'
 							alt="Лого ArtViva"
 						/>
 					</Col>
 					<Col
-						xs={8}
+						sm={6}
 						className="d-flex justify-content-center align-items-center"
 					>
 						<strong className="main-title custom-font">
-							ArtViva — дитяча школа мистецтв
+							Школа мистецтв
 						</strong>
 					</Col>
 					<Col>
@@ -46,9 +46,9 @@ const MainPage = () => {
 									<OrigamiIcon />
 								</ScrollAnimation>
 								<p className="pt-4 px-2 main-page-descr">
-									Сьогодні Шпитьківська ДШМ на чолі з Іванчук Оленою Анатоліївною
-									&mdash; сучасний заклад естетичного виховання, де на музичному,
-									хореографічному та художньому відділеннях 80 досвідчених, дипломованих
+									Сьогодні Школа мистецтв «АРТ ВІВА» на чолі з Іванчук Оленою
+									Анатоліївною — сучасний заклад естетичного виховання, де на музичному,
+									хореографічному та художньому відділеннях 65 досвідчених, дипломованих
 									викладачів та концертмейстерів навчають майже 1000 дітей.
 								</p>
 							</Col>
@@ -67,8 +67,8 @@ const MainPage = () => {
 									<LoveSongIcon />
 								</ScrollAnimation>
 								<p className="pt-4 px-2 main-page-descr">
-									Головним завданням навчально-виховного процесу ШДШМ є створення умов
-									для творчого, інтелектуального, духовного і фізичного самовираження
+									Головним завданням навчально-виховного процесу школи мистецтв «АРТ ВІВА» є
+									створення умов для творчого, інтелектуального, духовного і фізичного самовираження
 									особистості, пошук, розвиток та підтримка обдарованих і талановитих
 									дітей. Все це ми робимо з любов&apos;ю, щирістю та відкритою душею.
 								</p>
@@ -77,13 +77,13 @@ const MainPage = () => {
 					</Col>
 				</Row>
 			</Container>
-			<Container className="border1 border-primary">
-				<Row className="border1 border-success d-flex justify-content-center">
-					<Col sm={10} className="py-4 text-center">
+			<Container>
+				<Row className="d-flex justify-content-center">
+					<Col sm={10} className="py-4 mb-3 mb-sm-5 text-center">
 						<ScrollAnimation animateIn="fadeIn">
 							<Enrollment />
 						</ScrollAnimation>
-						<p className="pt-4 px-2 main-page-descr">
+						<p className="pt-4 main-page-descr">
 							Ви можете оплатити або заповнити та надіслати заявку на
 							навчання за допомогою нашої зручної форми ;)
 						</p>

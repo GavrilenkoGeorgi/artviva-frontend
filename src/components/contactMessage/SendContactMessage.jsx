@@ -77,7 +77,7 @@ const SendContactMessage = ({
 		}
 	}, [reCaptchaScore, messageData, sendContactMessage])
 
-	return <Container className="my-5 fluid">
+	return <Container className="py-4 my-4 py-sm-5 my-sm-5 fluid">
 		<Row className="justify-content-center">
 			<h2 className="text-center custom-font">
 				Зворотній зв&apos;язок
