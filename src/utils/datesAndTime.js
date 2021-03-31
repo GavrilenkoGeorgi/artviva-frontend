@@ -40,7 +40,10 @@ export const schoolYearMonths = locale => {
 
 	// get array of period months based on the current and ending month
 	const getPeriodMonths = (currentMonth, endingMonth) => {
-		const date = new Date()
+		// https://stackoverflow.com/questions/23976513/javascript-setmonth-shows-improper-date
+		const current = new Date()
+		const date = new Date(current.getFullYear(), currentMonth, 1) // so we set it to the first day of the month
+
 		const result = []
 		while (endingMonth !== currentMonth) {
 			date.setMonth(endingMonth - 1)
