@@ -235,7 +235,7 @@ const PassResetForm = ({
 							type="submit"
 							block
 							loadingState={processingForm}
-							disabled={reCaptchaScore !==null && reCaptchaScore < .3 ? true : false}
+							disabled={reCaptchaScore !== 0 && reCaptchaScore < .3 ? true : false}
 							label="Змінити пароль"
 							variant="primary"
 							dataCy="pass-reset-btn"
