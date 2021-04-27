@@ -1,12 +1,15 @@
 import React from 'react'
 
-import { Container, Col } from 'react-bootstrap'
+import { Container, Row } from 'react-bootstrap'
 
 const CommonLayout = props => {
-	return <Container className="px-0 animated fadeIn d-flex justify-content-center">
-		<Col lg={9} className="px-0">
+	return <Container
+		id="layout"
+		className="py-4 py-lg-5 animated fadeIn d-flex justify-content-center border1 border-success"
+	>
+		<Row id="layoutRow" className="justify-content-center">
 			{props.children}
-		</Col>
+		</Row>
 	</Container>
 }
 
