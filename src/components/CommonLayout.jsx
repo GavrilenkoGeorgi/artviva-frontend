@@ -8,7 +8,7 @@ const CommonLayout = props => {
 		className="py-4 py-lg-5 animated fadeIn"
 	>
 		<Row id="layoutRow"
-			className="d-flex flex-column align-content-center"
+			className="d-flex flex-column align-items-center align-content-center"
 		>
 			{props.children}
 		</Row>
