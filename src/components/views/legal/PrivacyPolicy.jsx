@@ -1,12 +1,12 @@
 import React from 'react'
 
 import CommonLayout from '../../CommonLayout'
-import { Container } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 
 const PrivacyPolicy = () => {
 
 	return <CommonLayout>
-		<Container className="oferta-container">
+		<Col lg={8} className="oferta-container">
 			<h3 className="custom-font">
 				Політика конфіденційності
 			</h3>
@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
 				і реквізитів документа, що посвідчує фізичну особу, яка подає запит, крім випадків,
 				установлених законом. Доступ користувача до даних про себе здійснюється безоплатно.
 			</p>
-		</Container>
+		</Col>
 	</CommonLayout>
 }
 

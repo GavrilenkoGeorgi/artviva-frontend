@@ -7,28 +7,30 @@ import { Prices, Benefits, Conditions } from '../../prices'
 const PricesView = () => {
 
 	return <CommonLayout>
-		<h1 className="text-center custom-font">Інформація про освітні послуги</h1>
-		<Tabs defaultActiveKey="prices"
-			id="prices-tabs"
-			className="text-center"
-			aria-label="Вкладки з інформацією про ціни"
-		>
-			<Tab eventKey="prices" title="Ціни">
-				<Col className="pt-4">
-					<Prices />
-				</Col>
-			</Tab>
-			<Tab eventKey="benefits" title="Пільги">
-				<Col className="pt-4">
-					<Benefits />
-				</Col>
-			</Tab>
-			<Tab eventKey="conditions" title="Умови навчання">
-				<Col className="pt-4">
-					<Conditions />
-				</Col>
-			</Tab>
-		</Tabs>
+		<Col md={10}>
+			<h1 className="text-center custom-font">Інформація про освітні послуги</h1>
+			<Tabs defaultActiveKey="prices"
+				id="prices-tabs"
+				className="text-center"
+				aria-label="Вкладки з інформацією про ціни"
+			>
+				<Tab eventKey="prices" title="Ціни">
+					<Col className="pt-4">
+						<Prices />
+					</Col>
+				</Tab>
+				<Tab eventKey="benefits" title="Пільги">
+					<Col className="pt-4">
+						<Benefits />
+					</Col>
+				</Tab>
+				<Tab eventKey="conditions" title="Умови навчання">
+					<Col className="pt-4">
+						<Conditions />
+					</Col>
+				</Tab>
+			</Tabs>
+		</Col>
 	</CommonLayout>
 }
 

@@ -71,9 +71,9 @@ const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotificat
 				aria-controls="specialty-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between text-left align-items-center1"
+				className="d-flex justify-content-between text-left"
 			>
-				<Row className="border1 border-success">
+				<Row>
 					<Col xs={12}>{orderNumber}. {specialty.title}</Col>
 					<Col xs={12}>
 						<em className="text-muted">
@@ -97,7 +97,7 @@ const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotificat
 						</Col>
 					</Row>
 
-					<Row className="border border-primary">
+					<Row>
 						<EntityControlButtons
 							route={`${routes.specialties}/${specialty.id}`}
 							entity="specialty"

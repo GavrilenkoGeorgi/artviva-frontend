@@ -28,9 +28,10 @@ const SpecialtiesList = ({ specialties }) => {
 						)}
 					</ListGroup>
 				</>
-				: <p className="text-warning">
-					Схоже, у вас ще немає спеціальностей у вашій школі, будь ласка, створіть їх.
-				</p>
+				: <LoadingIndicator
+					animation="border"
+					variant="primary"
+				/>
 			}
 			<p className="py-3 text-muted">
 				Щоб створити спеціальність, вам потрібна така інформація:

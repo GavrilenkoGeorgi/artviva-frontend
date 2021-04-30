@@ -49,12 +49,12 @@ const Prices = ({ setNotification }) => {
 			? <>
 				{prices.map(item =>
 					<Row key={item.id} className="mt-3 py-2 price-position justify-content-end">
-						<Col xs={2} className="px-1 text-center">
+						<Col xs={3} className="px-1 text-center">
 							<strong>{item.cost}</strong>{' '}
 							<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
 						</Col>
 						{item.titles.map(title =>
-							<Col xs={10} key={title}>{title}<br /></Col>
+							<Col xs={9} key={title}>{title}<br /></Col>
 						)}
 					</Row>
 				)}

@@ -78,16 +78,16 @@ const LoginView = ({
 	}, [loginSuccessful])
 
 	return <Container>
-		<Row className="d-flex justify-content-center">
+		<Row className="py-4 d-flex justify-content-center">
 			<Col xs={10} md={4} className="text-center">
 				<span className="image-align-helper"></span>
 				<Image
-					src="img/schoolLogo-transparent.png"
+					src="img/logo/artviva_logo.png"
 					alt="ArtViva logo"
 					className="responsive-image-fraction"
 				/>
 			</Col>
-			<Col xs={12} md={8}>
+			<Col xs={12} md={6}>
 				<h1 className="text-center custom-font my-4">
 					Логін
 				</h1>

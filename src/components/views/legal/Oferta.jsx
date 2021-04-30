@@ -1,12 +1,12 @@
 import React from 'react'
 
 import CommonLayout from '../../CommonLayout'
-import { Container } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 
 const Oferta = () => {
 
 	return <CommonLayout>
-		<Container className="oferta-container">
+		<Col lg={8} className="oferta-container">
 			<h3 className="custom-font">
 				Договір публічної оферти про надання послуг
 			</h3>
@@ -419,7 +419,7 @@ const Oferta = () => {
 				12.4. Адреса Виконавця: <strong>08122, Київська обл., Києво-Святошинський район,
 					с. Шпитьки, вул. Господарська, 3.</strong>
 			</p>
-		</Container>
+		</Col>
 	</CommonLayout>
 }
 
