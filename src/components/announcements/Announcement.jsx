@@ -8,7 +8,7 @@ const Announcement = () => {
 	return <Col xs={12} className={classes.container}>
 		<section className='p-2 p-md-4'>
 			<h2 className="custom-font mt-3 mt-md-4">ШКОЛА МИСТЕЦТВ «АРТ ВІВА»<br /> ОГОЛОШУЄ НАБІР УЧНІВ</h2>
-			<h3 className="custom-font-small">на 2020-2021 навчальний рік</h3>
+			<h3 className="custom-font-small">на 2021-2022 навчальний рік</h3>
 			<article>
 				{/* Announcement */}
 				<Container>
