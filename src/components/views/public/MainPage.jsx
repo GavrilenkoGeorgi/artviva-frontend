@@ -14,7 +14,7 @@ import { ReactComponent as OrigamiIcon } from '../../../svg/origami.svg'
 import { ReactComponent as EditIcon } from '../../../svg/edit.svg'
 import { ReactComponent as LoveSongIcon } from '../../../svg/love-song.svg'
 import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
-import Announcement from '../../announcements/Announcement'
+/* import Announcement from '../../announcements/Announcement' */
 
 const MainPage = () => {
 	return (
@@ -40,7 +40,7 @@ const MainPage = () => {
 							Школа мистецтв
 						</strong>
 					</Col>
-					<Announcement />
+					{/* <Announcement /> */}
 					<Col>
 						<Row className="text-center pt-4 justify-content-center">
 							<Col xs={12} sm={6} className="py-4">
