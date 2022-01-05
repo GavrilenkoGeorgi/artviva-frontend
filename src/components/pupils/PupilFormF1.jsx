@@ -64,7 +64,7 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 				<Col>
 					<p className="text-right">
 						Директору «Школа мистецтв «АРТ ВІВА»<br />
-						Іванчук О. А.<br />
+						Мовчун Г. А.<br />
 						від <span className="f1-form-field-underline">
 							{f1Data.applicantName}</span><br />
 						що проживає: <span className="f1-form-field-underline">

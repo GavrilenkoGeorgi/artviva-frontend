@@ -28,7 +28,7 @@ describe('Payment form', function() {
 		cy.contains('div', currentMonth)
 			.find('[type="checkbox"]').first().check({ force: true })
 
-		cy.contains('Всього: 350')
+		cy.contains('Всього: 359.98')
 	})
 
 })

@@ -40,7 +40,7 @@ const EntityControlButtons = ({
 					onClick={() => openDeleteModal()}
 				/>
 			}
-			<BtnWithIcon
+			{openEditModal && <BtnWithIcon
 				dataCy={`edit-${entity}`}
 				label="Редагувати"
 				icon="edit"
@@ -48,7 +48,7 @@ const EntityControlButtons = ({
 				type="button"
 				loading={processingForm}
 				onClick={() => openEditModal()}
-			/>
+			/>}
 		</Col>
 	)
 }
@@ -61,7 +61,7 @@ const mapStateToProps = (state) => {
 
 EntityControlButtons.propTypes = {
 	route: PropTypes.string,
-	openEditModal: PropTypes.func.isRequired,
+	openEditModal: PropTypes.func,
 	openDeleteModal: PropTypes.func
 }
 

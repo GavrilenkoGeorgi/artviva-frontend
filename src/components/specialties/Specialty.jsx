@@ -11,6 +11,8 @@ import LoadingIndicator from '../common/LoadingIndicator'
 import SpecialtyForm from '../forms/SpecialtyForm'
 import EntityControlButtons from '../common/EntityControlButtons'
 
+import routes from '../../services/routes'
+
 const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
 
@@ -95,8 +97,9 @@ const Specialty = ({ user, specialty, orderNumber, deleteSpecialty, setNotificat
 						</Col>
 					</Row>
 
-					<Row>
+					<Row className="border border-primary">
 						<EntityControlButtons
+							route={`${routes.specialties}/${specialty.id}`}
 							entity="specialty"
 							openEditModal={() => setEditModalShow(true)}
 							openDeleteModal={() => setDeleteModalShow(true)}
