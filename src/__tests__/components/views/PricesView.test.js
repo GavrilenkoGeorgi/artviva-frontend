@@ -43,7 +43,7 @@ describe('<PricesView /> component', () => {
 
 		await waitFor(() => {
 			expect(benefitsTab).toHaveAttribute('aria-selected', 'true')
-			expect(screen.getByText(/В нашій школі надаються/)).toBeInTheDocument()
+			expect(screen.getByText(/звільнити від оплати за навчання:/)).toBeInTheDocument()
 		})
 	})
 
