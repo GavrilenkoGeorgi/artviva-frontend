@@ -82,7 +82,7 @@ const LoginView = ({
 			<Col xs={10} md={4} className="text-center">
 				<span className="image-align-helper"></span>
 				<Image
-					src="img/schoolLogo-transparent.png"
+					src="img/logo/artviva_logo.png"
 					alt="ArtViva logo"
 					className="responsive-image-fraction"
 				/>
