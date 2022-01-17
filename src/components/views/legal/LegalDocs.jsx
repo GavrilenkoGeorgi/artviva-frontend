@@ -6,7 +6,7 @@ import { Container } from 'react-bootstrap'
 const LegalDocs = () => {
 
 	return <CommonLayout>
-		<Container className="page-container border mt-5">
+		<Container className="page-container my-5">
 			<h1 className="custom-font mt-5">
 				Нормативна база, якою керується у своїй діяльності школа
 			</h1>
