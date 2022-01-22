@@ -28,7 +28,7 @@ const TeachersView = ({ match }) => {
 					: null
 				}
 			</Col>
-			<Col xs={12}>
+			<Col xs={12} className="mb-5">
 				<h2 className="text-center custom-font py-4">
 					Наші вчителі
 				</h2>

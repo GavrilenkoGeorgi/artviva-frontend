@@ -21,6 +21,7 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	GroupsView, PupilsView, ListOfTeachers, PricesView, MainPage } from './components/views'
 
 import Oferta from './components/views/legal/Oferta'
+import LegalDocs from './components/views/legal/LegalDocs'
 import PrivacyPolicy from './components/views/legal/PrivacyPolicy'
 import SchoolExplained from './components/help/SchoolExplained'
 import SpecialtyDetails from './components/specialties/SpecialtyDetails'
@@ -43,6 +44,7 @@ const Routes = ({ fetchingData }) => {
 			<Route exact path="/" component={MainPage} />
 			<Route path="/about" component={AboutView} />
 			<Route path="/oferta" component={Oferta} />
+			<Route path="/legaldocs" component={LegalDocs} />
 			<Route path="/privacypolicy" component={PrivacyPolicy} />
 			<Route path="/showcase" component={ShowcaseView} />
 			<Route path="/teachers/:department?" component={TeachersView} />
