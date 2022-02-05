@@ -7,7 +7,11 @@ import { Prices, Benefits, Conditions } from '../../prices'
 const PricesView = () => {
 
 	return <CommonLayout>
-		<h1 className="text-center custom-font">Інформація про освітні послуги</h1>
+		<h1
+			className="mt-5 text-center custom-font"
+		>
+			Інформація про освітні послуги
+		</h1>
 		<Tabs defaultActiveKey="prices"
 			id="prices-tabs"
 			className="text-center"
