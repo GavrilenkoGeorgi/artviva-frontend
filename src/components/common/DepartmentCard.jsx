@@ -56,7 +56,7 @@ const DepartmentCard = ({ department }) => {
 							<Col>
 								<Card.Text>
 									<Link to={`/teachers/${department.town}`}>
-										Вчітели філії
+										Вчителі філії
 									</Link>
 								</Card.Text>
 							</Col>
