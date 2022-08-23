@@ -12,7 +12,7 @@ import { ReactComponent as LiqPayLogoIcon } from '../../../svg/logo-liqpay-main.
 
 const Footer = () => {
 	const socialIconsStyle = {
-		width: '1.4em',
+		width: '2em',
 		margin: '0em .5em'
 	}
 
@@ -30,67 +30,80 @@ const Footer = () => {
 	const path = /\/(school+)/
 	if (window.location.pathname.match(path)) return null
 
-	return (
-		<footer className="footer d-flex align-items-center">
-			<Container>
-				<Row>
-					<Col xs={12} md={6} className="py-1 d-flex align-items-center">
-						<Row>
-							<Col xs={12} className="pb-2">
-								<p className="mb-2">КПНЗ Шпитьківська ДШМ</p>
+	return <footer className="footer pt-lg-5">
+		<Container>
+			<Row className="mb-3">
+				<Col>
+					<p className="mb-2 lead">
+						<strong>КЗСМО «Школа мистецтв «АРТ ВІВА»</strong>
+					</p>
+					<p>
+						<em>Дмитрівської сільської ради Бучанського району Київської області</em>
+					</p>
+				</Col>
+				<Col xs={12} md={6} className="d-flex align-items-center pt-3 pt-sm-0">
+					<Row>
+						<Col xs={12} className="pb-2">
+							<p className="lead mb-2">
+								<strong>Адреса адміністрації школи:</strong>
+							</p>
+							<p>
 								<em className="text-muted">
-									08122, Київська обл., Києво-Святошинський район, с. Шпитьки, вул. Господарська, 3
+									08122, Україна, Київська обл.,<br />
+									Києво-Святошинський р-н, село Шпитьки,<br />
+									вул. Господарська, будинок 3.
 								</em>
+							</p>
+						</Col>
+					</Row>
+				</Col>
+			</Row>
 
-							</Col>
-
-							<Col className="py-3 d-flex justify-content-around">
-								<a href="/privacypolicy" >Політика конфіденційності</a>
-								<a href="/oferta" >Публічна оферта</a>
-							</Col>
-						</Row>
-					</Col>
-					<Col xs={12} md={6} className="py-1">
-						<small>
-							{/* eslint-disable-next-line */}
-							Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a> з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
+			<Row>
+				<Col>
+					<a className="mr-3" href="/privacypolicy"><u>Політика конфіденційності</u></a>
+					<a href="/oferta" ><u>Публічна оферта</u></a>
+				</Col>
+				<Col xs={12}>
+					<small>
+						Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a>
+						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
+						</a>
+					</small>
+					<ReCaptchaStatement />
+					<Row className="justify-content-center mt-2">
+						<Col xs={8}>
+							<VisaIcon style={paymentIconsStyle} />
+							<MasterCardIcon style={paymentIconsStyle} />
+							<LiqPayLogoIcon style={LiqPayLogoStyle} />
+						</Col>
+						<Col xs={4} className="d-flex align-items-center justify-content-end">
+							<a
+								href="https://www.facebook.com/myz.shpytky"
+								alt="Фейсбук-група КЗСМО «Школа мистецтв «АРТ ВІВА»"
+								aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
+							>
+								<FbIcon style={socialIconsStyle} />
 							</a>
-						</small>
-						<ReCaptchaStatement />
-						<Row>
-							<Col xs={8} className="pr-0">
-								<VisaIcon style={paymentIconsStyle} />
-								<MasterCardIcon style={paymentIconsStyle} />
-								<LiqPayLogoIcon style={LiqPayLogoStyle} />
-							</Col>
-							<Col xs={4} className="d-flex align-items-center justify-content-center">
-								<a
-									href="https://www.facebook.com/myz.shpytky"
-									alt="Фейсбук-група Шпитьківської Дитячої Школи Мистецтв"
-									aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
-								>
-									<FbIcon style={socialIconsStyle} />
-								</a>
-								<a
-									href="https://www.instagram.com/myz_shputky"
-									alt="Інстаграм Шпитьківської Дитячої Школи Мистецтв"
-									aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
-								>
-									<InstIcon style={socialIconsStyle} />
-								</a>
-							</Col>
-						</Row>
-					</Col>
+							<a
+								href="https://www.instagram.com/myz_shputky"
+								alt="Інстаграм КЗСМО «Школа мистецтв «АРТ ВІВА»"
+								aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
+							>
+								<InstIcon style={socialIconsStyle} />
+							</a>
+						</Col>
+					</Row>
+				</Col>
 
-					<Col xs={12} className="pt-3 text-center text-muted">
-						<span>
-							&copy;&nbsp;{footerDate()} Дитяча школа мистецтв ArtViva
-						</span>
-					</Col>
-				</Row>
-			</Container>
-		</footer>
-	)
+				<Col className="pt-3 text-center text-muted">
+					<span>
+						&copy;&nbsp;{footerDate()} Школа мистецтв «АРТ ВІВА»
+					</span>
+				</Col>
+			</Row>
+		</Container>
+	</footer>
 }
 
 export default Footer

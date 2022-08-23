@@ -96,7 +96,7 @@ const NavigationBar = ({ user }) => {
 				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image
 						alt="Лого"
-						src="/img/schoolLogo-transparent.png"
+						src="/img/logo/artviva_logo_small.png"
 						className="nav-logo-img"
 					/>{' '}
 					<Row className="d-inline pl-2 nav-logo">
@@ -104,7 +104,7 @@ const NavigationBar = ({ user }) => {
 							ArtViva
 						</Col>
 						<Col xs={12} className="pl-3 nav-logo-small-font">
-							дитяча школа мистецтв
+							школа мистецтв
 						</Col>
 					</Row>
 				</Navbar.Brand>
@@ -121,9 +121,10 @@ const NavigationBar = ({ user }) => {
 							id="school-mgmt-links"
 							className="school-mgmt-links"
 						>
+							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
+							<NavDropdown.Item href="/legaldocs">Нормативна база</NavDropdown.Item>
 							<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
 							<NavDropdown.Item href="/prices">Ціни</NavDropdown.Item>
-							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							{user
 								? <>
 									<NavDropdown.Divider />

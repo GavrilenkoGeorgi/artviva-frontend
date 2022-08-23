@@ -63,8 +63,8 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 				</Col>
 				<Col>
 					<p className="text-right">
-						Директору КПНЗ &ldquo;Шпитьківська ДШМ&ldquo;<br />
-						Іванчук О. А.<br />
+						Директору «Школа мистецтв «АРТ ВІВА»<br />
+						Мовчун Г. А.<br />
 						від <span className="f1-form-field-underline">
 							{f1Data.applicantName}</span><br />
 						що проживає: <span className="f1-form-field-underline">
@@ -131,7 +131,7 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 				<Col xs={12}>
 					<p className="pt-2 f1-personal-data-text">
 						Відповідно до Закону України “Про захист персональних даних” надаю
-						КПНЗ &ldquo;Шпитьківська ДШМ&ldquo; згоду на обробку зазначених у
+						«Школа мистецтв «АРТ ВІВА» згоду на обробку зазначених у
 						даній заяві особистих персональних даних у картотеках
 						та/або за допомогою інформаційно-телекомунікаційної системи бази
 						персональних даних з метою:<br />

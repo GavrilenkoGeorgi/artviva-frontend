@@ -28,10 +28,11 @@ const Prices = ({ setNotification }) => {
 
 	const compilePricesList = data => {
 		let result = data.reduce((acc, d) => {
-			const found = acc.find(a => a.cost === d.cost)
+			const found = acc.find(a => Math.trunc(a.cost) === Math.trunc(d.cost))
 			found
 				? found.titles.push(d.title)
-				: acc.push({ cost: d.cost, titles: [d.title], id: d.id }) // id is used only for a key
+				: acc.push({ cost: (d.cost + (d.cost * process.env.REACT_APP_CENTS_AMOUNT))
+					.toFixed(2), titles: [d.title], id: d.id })
 			return acc
 		}, [])
 		return result
@@ -41,10 +42,13 @@ const Prices = ({ setNotification }) => {
 		<h4 className="text-center custom-font"> {/* How about one custom header for every page?? */}
 			Ціни на навчання
 		</h4>
+		<p className="text-center mt-2 mb-3">
+			<em className="text-muted">При оплаті через сайт.</em>
+		</p>
 		{prices.length
 			? <>
 				{prices.map(item =>
-					<Row key={item.id} className="py-2 price-position justify-content-end">
+					<Row key={item.id} className="mt-3 py-2 price-position justify-content-end">
 						<Col xs={2} className="px-1 text-center">
 							<strong>{item.cost}</strong>{' '}
 							<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
@@ -55,7 +59,11 @@ const Prices = ({ setNotification }) => {
 					</Row>
 				)}
 			</>
-			: <>Завантажуються актуальні ціни...</>
+			: <Row className="d-flex justify-content-center">
+				<em className="p-3">
+					Зачекайте, завантажуються актуальні ціни...
+				</em>
+			</Row>
 		}
 	</>
 }
@@ -74,5 +82,3 @@ export default connect(
 	mapStateToProps,
 	mapDispatchToProps
 )(Prices)
-
-// export default Prices

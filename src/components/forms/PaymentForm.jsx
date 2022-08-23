@@ -99,7 +99,6 @@ const PaymentForm = ({
 		benefits: 0
 	})
 	const [total, setTotal] = useState(null)
-	const [liqpayCommission, setLiqpayCommission] = useState(0)
 
 	// calculate total to show on input
 	const processOrderData = ({ target }) => {
@@ -115,7 +114,9 @@ const PaymentForm = ({
 			setOrderData({
 				...orderData,
 				specialty: target.value,
-				cost: priceData ? priceData.cost : 0
+				cost: priceData
+					? priceData.cost + (priceData.cost * process.env.REACT_APP_CENTS_AMOUNT)
+					: 0
 			})
 			break
 		case 'benefits':
@@ -148,11 +149,7 @@ const PaymentForm = ({
 		}
 	}, [orderData])
 
-	useEffect(() => {
-		// set liqpay commission info
-		if (total)
-			setLiqpayCommission(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total).toFixed(2))
-	}, [total])
+	const showTotals = (total, percent) => (Number(total) + percent).toFixed(2)
 
 	const paymentFormEl = useRef(null)
 	const [liqpayData, setLiqpayData] = useState({})
@@ -421,22 +418,24 @@ const PaymentForm = ({
 						{total
 							? <>
 								<Col xs={11} className="text-right payment-total-message">
-									Всього: <span className="total-amount">{total} </span>
+									Всього: <span className="total-amount">
+										{showTotals(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total)
+											.toFixed(2), total)}
+									</span>
 								</Col>
 								<Col xs={1} className="d-flex align-items-center">
 									<FontAwesomeIcon icon={faHryvnia} />
-								</Col>
-								<Col xs={12} className="text-right">
-									<em className="text-muted small">
-										Плюс відсотки платіжної системи (2.85%):{' '}
-										{liqpayCommission} <FontAwesomeIcon size="sm" icon={faHryvnia} />
-									</em>
 								</Col>
 							</>
 							: <p className="payment-total-message">
 								<em>Заповніть форму для розрахунку вартості</em>
 							</p>
 						}
+						<Col xs={12} className="text-right">
+							<em className="text-muted small">
+								В тому числі відсоток 2.75% за зручність, покращений сервіс.
+							</em>
+						</Col>
 					</Form.Row>
 
 					<input type="hidden" name="data" value={liqpayData.data || ''} />
