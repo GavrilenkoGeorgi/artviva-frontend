@@ -14,13 +14,14 @@ module.exports = {
 			"plugin:testing-library/react",
 			"plugin:jest-dom/recommended"
   ],
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
       "ecmaFeatures": {
           "jsx": true
       },
       "ecmaVersion": 2018,
-      "sourceType": "module"
+      "sourceType": "module",
+      "requireConfigFile": false
   },
   "plugins": [
       "react",
@@ -60,14 +61,14 @@ module.exports = {
     "cypress/no-assigning-return-values": "error",
     "cypress/no-unnecessary-waiting": "error",
     "cypress/assertion-before-screenshot": "warn",
-    "max-len": ["error", { "code": 120 }],
+    "max-len": ["error", { "code": 150 }],
     "indent": [
         "error",
         "tab"
     ],
     "linebreak-style": [
         "error",
-        "unix"
+        "windows"
     ],
     "quotes": [
         "error",
