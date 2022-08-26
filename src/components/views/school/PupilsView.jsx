@@ -82,6 +82,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		} else { // reset
 			setPupils([ ...pupils ])
 		}
+		// eslint-disable-next-line
 	}, [pupils, selectData])
 
 	useEffect(() => {

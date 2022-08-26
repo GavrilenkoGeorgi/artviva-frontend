@@ -15,6 +15,7 @@ const TeachersView = ({ match }) => {
 	useEffect(() => {
 		setAdministration(administration)
 		setDepartments(departments)
+	// eslint-disable-next-line
 	}, [setAdministration, setDepartments])
 
 	return (
