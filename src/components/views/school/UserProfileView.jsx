@@ -37,6 +37,7 @@ const UserProfileView = ({
 	useEffect(() => {
 		async function getDetailedUserData () {
 			setFetchingData(true)
+			// eslint-disable-next-line
 			const userDetails = await userService.getById(match.params.id)
 			if (userDetails) {
 				setUserData(userDetails)

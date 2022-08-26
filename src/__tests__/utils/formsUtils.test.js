@@ -1,6 +1,8 @@
 import { fieldChoices, calculatePercent } from '../../utils/formsUtils'
-import { select } from '../../data/forms/teacherFields.json'
+import teacherFields from '../../data/forms/teacherFields.json'
 
+
+const { select } = teacherFields
 const expectedSelectOptions = {
 	gender: [ 'Чоловіча', 'Жіноча' ],
 	qualification: [

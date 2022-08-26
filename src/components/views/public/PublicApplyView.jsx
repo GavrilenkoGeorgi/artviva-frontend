@@ -11,8 +11,7 @@ import PublicApplyStatus from '../../pupils/PublicApplyStatus'
 import CommonLayout from '../../CommonLayout'
 import { InfoModal } from '../../common/modals'
 
-import { paymentObligations,
-	personalDataProcessing, benefitsExplained } from '../../../data/formTexts.json'
+import formTexts from '../../../data/formTexts.json'
 
 const PublicApplyView = ({ match, specialties, setNotification, setProcessingForm }) => {
 
@@ -20,6 +19,9 @@ const PublicApplyView = ({ match, specialties, setNotification, setProcessingFor
 	const [infoModalVis, setInfoModalVis] = useState(false)
 	const [infoModalText, setInfoModalText] = useState({})
 	const [infoModalTitle, setInfoModalTitle] = useState('')
+
+	const { paymentObligations,
+		personalDataProcessing, benefitsExplained } = formTexts
 
 	useEffect(() => {
 		return () => { unmounted.current = true }

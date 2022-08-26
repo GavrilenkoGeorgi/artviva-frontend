@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { getGroups } from '../../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../../reducers/notificationReducer'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
-import { filter } from '../../../data/forms/groupFields.json'
+import groupFields from '../../../data/forms/groupFields.json'
 
 import { Link } from 'react-router-dom'
 import { Container, Col, Row, Form } from 'react-bootstrap'
@@ -20,6 +20,7 @@ const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModa
 
 const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 
+	const { filter } = groupFields
 	const [groupsList, setGroupsList] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})
 	const [addModalShow, setAddModalShow] = useState(false)

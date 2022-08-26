@@ -10,7 +10,7 @@ import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelper
 import { multiPropsFilter, boolPropsFilter } from '../../../utils/arrayHelpers'
 import { calcEmployeeExperience } from '../../../utils/datesAndTime'
 
-import { filter, select, boolean, range } from '../../../data/forms/teacherFields.json'
+import teacherFields from '../../../data/forms/teacherFields.json'
 import { Teacher, AddTeacher } from '../../teachers'
 import { ShowFilterSettings, FilterData, ExperienceSort,
 	SelectFields, FilterBooleanFields, AgeFilter } from '../../sorting'
@@ -28,6 +28,8 @@ const ListOfTeachers = ({ teachers,
 	setTeacherExp,
 	setNotification,
 	setFetchingData }) => {
+
+	const { filter, select, boolean, range } = teacherFields
 
 	const [teacherList, setTeacherList] = useState([])
 	const [filterSettings, setFilterSettings] = useState({})

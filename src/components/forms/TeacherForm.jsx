@@ -8,8 +8,8 @@ import { trimObject } from '../../utils/objectHelpers'
 import { setPhoneInputFieldValue } from '../../utils/formsUtils'
 import { fullTimeEmployee, parseIntegerValue, currentExperience,
 	calcEmployeeExperience, fieldChoices } from '../../utils/formsUtils'
-import { teacherAccomplishmentsDscr } from '../../data/formTexts.json'
-import { select } from '../../data/forms/teacherFields.json'
+import formTexts from '../../data/formTexts.json'
+import teacherFields from '../../data/forms/teacherFields.json'
 
 import { Row, Col, Form, Button } from 'react-bootstrap'
 import { Formik, FieldArray, ErrorMessage } from 'formik'
@@ -34,6 +34,8 @@ const TeacherForm = ({
 	processTeacherData
 }) => {
 
+	const { teacherAccomplishmentsDscr } = formTexts
+	const { select } = teacherFields
 	const [editMode, setEditMode] = useState(false)
 	const [specialtyListData, setSpecialtyListData] = useState([])
 	const [unusedSpecialties, setUnusedSpecialties] = useState(null)

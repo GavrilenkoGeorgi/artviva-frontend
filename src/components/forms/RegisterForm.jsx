@@ -4,7 +4,7 @@ import { setNotification,
 	setRecaptchaScore, setProcessingForm } from '../../reducers/notificationReducer'
 import userService from '../../services/users'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
-import { registrationDataProcessing } from '../../data/formTexts.json'
+import formTexts from '../../data/formTexts.json'
 
 import { Col, Form, InputGroup, Button } from 'react-bootstrap'
 import { Formik } from 'formik'
@@ -23,6 +23,8 @@ const RegisterForm = ({
 	setNotification,
 	setRecaptchaScore,
 	setProcessingForm }) => {
+
+	const { registrationDataProcessing } = formTexts
 
 	const unmounted = useRef(false)
 	const [registrationData, setRegistrationData] = useState(null)
