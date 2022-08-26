@@ -1,8 +1,9 @@
 import * as Yup from 'yup'
 import { phoneNumber } from './constants/stringPatterns'
-import { select } from '../../../data/forms/teacherFields.json'
+import teacherFields from '../../../data/forms/teacherFields.json'
 import { fieldChoices } from '../../../utils/formsUtils'
 
+const { select } = teacherFields
 const choices = fieldChoices(select)
 
 export default function teacherFormValidationSchema(specialtyListData) {

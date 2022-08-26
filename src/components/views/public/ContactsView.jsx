@@ -1,10 +1,12 @@
 import React from 'react'
 import ContactMap from '../../common/ContactMap'
-import { departments } from '../../../data/departments.json'
+import departmentsData from '../../../data/departments.json'
 import { Container, Row } from 'react-bootstrap'
 import DepartmentCard from '../../common/DepartmentCard'
 
 const ContactsView = () => {
+
+	const { departments } = departmentsData
 	const mapStyles = {
 		height: '70vh',
 		width: '100%',

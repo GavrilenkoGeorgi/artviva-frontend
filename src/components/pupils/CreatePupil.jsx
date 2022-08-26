@@ -6,7 +6,8 @@ import { PupilForm } from '../forms'
 import { InfoModal } from '../common/modals'
 import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
 import { createPupil } from '../../reducers/pupilsReducer'
-import { benefitsExplained } from '../../data/formTexts.json'
+import formTexts from '../../data/formTexts.json'
+
 
 const CreatePupil = ({
 	user,
@@ -18,6 +19,7 @@ const CreatePupil = ({
 
 	const unmounted = useRef(false)
 	const [infoModalVis, setInfoModalVis] = useState(false)
+	const { benefitsExplained } = formTexts
 
 	useEffect(() => {
 		return () => { unmounted.current = true }

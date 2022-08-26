@@ -23,6 +23,7 @@ const teacherDataReducer = (state = null, action) => {
  */
 export const getTeacherData = id => {
 	return async dispatch => {
+		// eslint-disable-next-line
 		const teacher = await teachersService.getById(id)
 		const minusPercent = teacher.payments.map(item => ({ ...item, amount: substractLiqPayPercent(item.amount) }))
 		dispatch ({

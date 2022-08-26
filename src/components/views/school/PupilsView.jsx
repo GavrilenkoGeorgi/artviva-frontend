@@ -9,7 +9,7 @@ import { CollapseComponent } from '../../common'
 import { LoadingIndicator } from '../../common'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
 
-import { filter, select, boolean } from '../../../data/forms/pupilFields.json'
+import pupilFields from '../../../data/forms/pupilFields.json'
 import { multiPropsFilter, boolPropsFilter } from '../../../utils/arrayHelpers'
 import { FilterData as FilterString, ShowFilterSettings,
 	SelectFields, FilterBooleanFields } from '../../sorting'
@@ -21,6 +21,8 @@ import CommonLayout from '../../CommonLayout'
 const LazyEntityEditModal = React.lazy(() => import('../../common/EntityEditModal'))
 
 const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) => {
+
+	const { filter, select, boolean } = pupilFields
 
 	const [userData, setUser] = useState({})
 	const [pupilsList, setPupils] = useState([])
