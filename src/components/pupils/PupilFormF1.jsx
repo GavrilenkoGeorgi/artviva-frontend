@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import pupilsService from '../../services/pupils'
 import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import moment from 'moment'
-import html2pdf from 'html2pdf.js'
+import html2pdf from 'html2pdf.js/dist/html2pdf.min.js'
 
 import CommonLayout from '../CommonLayout'
 
