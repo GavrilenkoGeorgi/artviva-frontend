@@ -17,29 +17,29 @@ export const maxDate = months => {
 	return maxDate
 }
 
-export const schoolYearMonths = locale => {
+export const schoolYearMonths = () => {
 
 	// check if date is in summer
-	const isSummer = date => {
+	/* const isSummer = date => {
 		const summerMonths = [5, 6, 7]
 		if (summerMonths.includes(date.getMonth())) {
 			return true
 		}
 		return false
-	}
+	} */
 
 	// how many months left till the end of the school year
-	const monthsTillSummer = month => {
+	/* 	const monthsTillSummer = month => {
 		const studyMonths = 9
 		if (month > 8) {
 			return (studyMonths - month) + studyMonths
 		} else {
 			return (studyMonths - month) - 3 // months of the summer
 		}
-	}
+	} */
 
 	// get array of period months based on the current and ending month
-	const getPeriodMonths = (currentMonth, endingMonth) => {
+	/* const getPeriodMonths = (currentMonth, endingMonth) => {
 		// https://stackoverflow.com/questions/23976513/javascript-setmonth-shows-improper-date
 		const current = new Date()
 		const date = new Date(current.getFullYear(), currentMonth, 1) // so we set it to the first day of the month
@@ -51,10 +51,14 @@ export const schoolYearMonths = locale => {
 			endingMonth--
 		}
 		return result.reverse()
-	}
+	} */
 
 	// finally
-	const currentDate = new Date()
+
+	const result = ['вересень', 'жовтень', 'листопад', 'грудень', 'січень', 'лютий', 'березень', 'квітень', 'травень']
+
+	return result
+	/* const currentDate = new Date()
 	let endingMonth
 
 	if (currentDate.getMonth() === 8 || isSummer(currentDate)) { // september or summer
@@ -62,7 +66,7 @@ export const schoolYearMonths = locale => {
 	} else { // not september nor summer, i.e. middle of the year
 		endingMonth = (currentDate.getMonth() - 1) + monthsTillSummer(currentDate.getMonth())
 		return getPeriodMonths(currentDate.getMonth(), endingMonth)
-	}
+	} */
 }
 
 // returns user with calculated xp
