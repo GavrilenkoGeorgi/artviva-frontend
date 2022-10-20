@@ -433,7 +433,7 @@ const PaymentForm = ({
 						}
 						<Col xs={12} className="text-right">
 							<em className="text-muted small">
-								В тому числі відсоток 2.75% за зручність, покращений сервіс.
+								В тому числі відсоток 1.75% за зручність, покращений сервіс.
 							</em>
 						</Col>
 					</Form.Row>
