@@ -46,7 +46,7 @@ const PaymentForm = ({
 			.then(data => {
 				const list = data.filter(spec => spec.cost > 1)
 				setSpecialtiesData(list)
-				setSpecialtiesNames(list.map(specialty => specialty.title))
+				setSpecialtiesNames(list.map(specialty => specialty.title).reverse())
 			})
 			.catch(error => {
 				const { message } = { ...error.response.data }
