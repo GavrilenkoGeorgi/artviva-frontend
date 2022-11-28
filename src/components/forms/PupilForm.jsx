@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { setFetchingData } from '../../reducers/notificationReducer'
 import searchService from '../../services/search'
 import moment from 'moment'
-import { setPhoneInputFieldValue } from '../../utils/formsUtils'
+// import { setPhoneInputFieldValue } from '../../utils/formsUtils'
 
 import { Formik } from 'formik'
 import { Col, Form } from 'react-bootstrap'
@@ -113,7 +113,7 @@ const PupilForm = ({
 		{({ handleSubmit,
 			handleChange,
 			handleBlur,
-			setFieldValue,
+			/* setFieldValue, */
 			handleReset,
 			values,
 			touched,
@@ -308,7 +308,7 @@ const PupilForm = ({
 					name="phoneNumber"
 					required={false}
 					onChange={handleChange}
-					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
+					/* onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)} */
 					onBlur={handleBlur}
 					value={values.phoneNumber}
 					touched={touched.phoneNumber}
@@ -354,7 +354,7 @@ const PupilForm = ({
 					label="Телефонний номер батька"
 					name="fathersPhone"
 					onChange={handleChange}
-					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
+					/* onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)} */
 					onBlur={handleBlur}
 					value={values.fathersPhone}
 					touched={touched.fathersPhone}
@@ -385,7 +385,7 @@ const PupilForm = ({
 					label="Телефонний номер матері"
 					name="mothersPhone"
 					onChange={handleChange}
-					onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)}
+					/* onKeyUp={event => setPhoneInputFieldValue(event, setFieldValue)} */
 					onBlur={handleBlur}
 					value={values.mothersPhone}
 					touched={touched.mothersPhone}
