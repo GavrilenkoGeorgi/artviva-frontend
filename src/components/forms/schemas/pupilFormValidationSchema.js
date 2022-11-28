@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { phoneNumber } from './constants/stringPatterns'
+import { simplifiedPhoneNumber } from './constants/stringPatterns'
 
 const genders = ['Чоловіча', 'Жіноча']
 const classNumbers = ['Дошкільник', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'Студент']
@@ -46,8 +46,8 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть повнe ім\'я батька.'),
 		fathersPhone: Yup.string()
-			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX')
+			.length(10, 'Перевірте форматування, 10 символів: "0505554422"')
+			.matches(simplifiedPhoneNumber, 'Перевірте форматування, має бути: "0505554422"')
 			.required('Введіть номер телефону батька.'),
 		fathersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -58,8 +58,8 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть повнe ім\'я матері.'),
 		mothersPhone: Yup.string()
-			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX')
+			.length(10, 'Перевірте форматування, 10 символів: "0505554422"')
+			.matches(simplifiedPhoneNumber, 'Перевірте форматування, має бути: "0505554422"')
 			.required('Введіть номер телефону матері.'),
 		mothersEmploymentInfo: Yup.string()
 			.min(2, 'Не менш 2 символів.')
@@ -73,8 +73,8 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 			.max(128, 'Максимум 128 символів.')
 			.required('Введіть домашню адресу.'),
 		phoneNumber: Yup.string()
-			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'),
+			.length(10, 'Перевірте форматування, 10 символів: "0505554422"')
+			.matches(simplifiedPhoneNumber, 'Перевірте форматування, має бути: "0505554422"'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form
