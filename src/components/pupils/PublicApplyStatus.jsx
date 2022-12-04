@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faExclamation } from '@fortawesome/free-solid-svg-icons'
 
 const PublicApplyStatus = ({ status }) => {
-	status = 'false'
 	return <CommonLayout>
 		<Container className='my-5 py-5'>
 			<Row className="mt-5 justify-content-center">
