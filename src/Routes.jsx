@@ -16,7 +16,7 @@ import { ScrollToTop, ScrollToTopArrow,
 
 import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
-	SchoolOverview, PaymentView, ActivateAccountView, PassResetView,
+	SchoolOverview, ActivateAccountView, PassResetView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
 	GroupsView, PupilsView, ListOfTeachers, PricesView, MainPage } from './components/views'
 
@@ -55,7 +55,7 @@ const Routes = ({ fetchingData }) => {
 			<Route path="/contacts" component={ContactsView} />
 			<Route path="/apply/:status?" component={PublicApplyView} />
 			<Route path="/prices" component={PricesView} />
-			<Route path="/pay/:status" component={PaymentView} />
+			{/* <Route path="/pay/:status" component={PaymentView} /> */}
 			<Route path="/activate/:email/:uuid" component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" component={PassResetView} />
 			{/* Private teacher routes */}
