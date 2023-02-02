@@ -453,6 +453,7 @@ const PaymentForm = ({
 								loadingState={processingForm}
 								className="primary-color-shadow"
 								label="Оплатити"
+								onClick={() => alert('Оплату тимчасово вимкнено, вибачте за незручності.')}
 							/>
 						</Col>
 						<Col>
