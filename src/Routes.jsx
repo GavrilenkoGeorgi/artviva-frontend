@@ -18,7 +18,7 @@ import { UsersListView, PublicApplyView, AboutView, LoginView,
 	RegisterView, BlogView, ContactsView, TeachersView, RecoverView,
 	SchoolOverview, ActivateAccountView, PassResetView,
 	ShowcaseView, UserProfileView, Specialties, TeacherPaymentsView,
-	GroupsView, PupilsView, ListOfTeachers, PricesView, MainPage } from './components/views'
+	GroupsView, PupilsView, ListOfTeachers, PricesView, MainPage, PaymentView } from './components/views'
 
 import Oferta from './components/views/legal/Oferta'
 import LegalDocs from './components/views/legal/LegalDocs'
@@ -55,7 +55,7 @@ const Routes = ({ fetchingData }) => {
 			<Route path="/contacts" component={ContactsView} />
 			<Route path="/apply/:status?" component={PublicApplyView} />
 			<Route path="/prices" component={PricesView} />
-			{/* <Route path="/pay/:status" component={PaymentView} /> */}
+			<Route path="/pay/:status" component={PaymentView} />
 			<Route path="/activate/:email/:uuid" component={ActivateAccountView} />
 			<Route path="/reset/:email/:uuid" component={PassResetView} />
 			{/* Private teacher routes */}
