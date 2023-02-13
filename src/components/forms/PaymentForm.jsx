@@ -241,7 +241,7 @@ const PaymentForm = ({
 			}}
 			validationSchema={paymentFormSchema}
 		>
-			{({ // handleSubmit,
+			{({ handleSubmit,
 				handleChange,
 				handleBlur,
 				handleReset,
@@ -253,8 +253,7 @@ const PaymentForm = ({
 					ref={paymentFormEl}
 					data-cy="payment-form"
 					noValidate
-					// onSubmit={handleSubmit}
-					onSubmit={() => alert('Оплату тимчасово вимкнено, вибачте за незручності.')}
+					onSubmit={handleSubmit}
 					onChange={event => processOrderData(event)}
 					method="POST"
 					action={process.env.REACT_APP_LIQPAY_API_URL}
