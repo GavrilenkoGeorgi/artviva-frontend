@@ -4,11 +4,9 @@ import { connect } from 'react-redux'
 import pupilsService from '../../services/pupils'
 import { setNotification, setFetchingData } from '../../reducers/notificationReducer'
 import moment from 'moment'
-import html2pdf from 'html2pdf.js/dist/html2pdf.min.js'
 
+import html2pdf from 'html2pdf.js'
 import CommonLayout from '../CommonLayout'
-
-// eslint-disable-next-line1
 import { Container, Row, Col, Button } from 'react-bootstrap'
 
 const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
