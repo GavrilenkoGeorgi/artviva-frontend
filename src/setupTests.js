@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/extend-expect'
 // jest.mock('./services/blogs')
 import { configure } from '@testing-library/react'
 import 'jest-canvas-mock'
+import 'mutationobserver-shim'
 
 // i already have cypress data tags on the elements
 configure({ testIdAttribute: 'data-cy' })

@@ -263,13 +263,13 @@ describe('<PupilForm /> component', () => {
 
 	it('pupil\'s phone number input value can be changed', () => {
 		userEvent.type(phoneNumberInput, '0505555555')
-		expect(phoneNumberInput.value).toBe('+38 (050) 555-55-55')
+		expect(phoneNumberInput.value).toBe('0505555555')
 	})
 
 	it('pupil\'s phone number input shows errors on invalid input', async () => {
 		userEvent.type(phoneNumberInput, '123aaaa')
 		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+			expect(screen.getByText('Перевірте форматування, 10 символів: "0505554433"'))
 				.toBeInTheDocument()
 		})
 	})
@@ -352,13 +352,13 @@ describe('<PupilForm /> component', () => {
 
 	it('father\'s phone number input value can be changed', () => {
 		userEvent.type(fathersPhoneInput, '0505555555')
-		expect(fathersPhoneInput.value).toBe('+38 (050) 555-55-55')
+		expect(fathersPhoneInput.value).toBe('0505555555')
 	})
 
 	it('father\'s phone number input shows errors on invalid input', async () => {
 		userEvent.type(fathersPhoneInput, '1234aaaa')
 		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+			expect(screen.getByText('Перевірте форматування, 10 символів: "0505554433"'))
 				.toBeInTheDocument()
 		})
 	})
@@ -415,13 +415,13 @@ describe('<PupilForm /> component', () => {
 
 	it('mother\'s phone number input value can be changed', () => {
 		userEvent.type(mothersPhoneInput, '0505555555')
-		expect(mothersPhoneInput.value).toBe('+38 (050) 555-55-55')
+		expect(mothersPhoneInput.value).toBe('0505555555')
 	})
 
 	it('mother\'s phone number input shows errors on invalid input', async () => {
 		userEvent.type(mothersPhoneInput, '123sdfsdf')
 		await waitFor(() => {
-			expect(screen.getByText('Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX'))
+			expect(screen.getByText('Перевірте форматування, 10 символів: "0505554433"'))
 				.toBeInTheDocument()
 		})
 	})
