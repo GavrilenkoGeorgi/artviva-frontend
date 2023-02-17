@@ -1,5 +1,5 @@
 import * as Yup from 'yup'
-import { simplifiedPhoneNumber } from './constants/stringPatterns'
+// import { simplifiedPhoneNumber } from './constants/stringPatterns'
 
 const genders = ['Чоловіча', 'Жіноча']
 const classNumbers = ['Дошкільник', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', 'Студент']
@@ -74,7 +74,7 @@ export default function pupilFormValidationSchema(mode, users, specialtiesNames)
 			.required('Введіть домашню адресу.'),
 		phoneNumber: Yup.string()
 			.length(10, 'Перевірте форматування, 10 символів: "0505554433"'),
-			// .matches(simplifiedPhoneNumber, 'Перевірте форматування, має бути: "0505554422"'),
+		// .matches(simplifiedPhoneNumber, 'Перевірте форматування, має бути: "0505554422"'),
 		// this doesn't spark joy ((
 		// next three fields are not present
 		// in the teacher view form
