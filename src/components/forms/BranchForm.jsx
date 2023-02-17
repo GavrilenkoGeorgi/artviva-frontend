@@ -109,7 +109,7 @@ const BranchForm = ({
 		phone: Yup.string()
 			.min(3, 'Не менш 19 символів.')
 			.max(19, 'Максимум 19 символів.')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +XX (XXX) XXX-XX-XX')
+			.matches(phoneNumber, 'Перевірте форматування, має бути: 0505554433')
 			.required('Введіть номер телефону.'),
 		info: Yup.string()
 			.min(3, 'Не менш 3 символів.')

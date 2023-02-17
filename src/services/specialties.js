@@ -7,8 +7,12 @@ const baseUrl = `${process.env.REACT_APP_API_URL}/api/specialties`
  * @returns {Object} - Response data
  */
 const getAll = async () => {
-	const response = await axios.get(baseUrl)
-	return response.data
+	try {
+		const response = await axios.get(baseUrl)
+		return response.data
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 /**
@@ -17,8 +21,12 @@ const getAll = async () => {
  * @returns {Object} - Response data
  */
 const getPrices = async () => {
-	const response = await axios.get(`${baseUrl}/prices`)
-	return response.data
+	try {
+		const response = await axios.get(`${baseUrl}/prices`)
+		return response.data
+	} catch (error) {
+		console.log(error)
+	}
 }
 
 /**

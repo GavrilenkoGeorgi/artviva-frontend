@@ -44,7 +44,7 @@ export const initializeSpecialties = () => {
 		const specialties = await specialtiesService.getAll()
 		dispatch ({
 			type: 'INIT_SPECIALTIES',
-			data: specialties
+			data: specialties || [] //?
 		})
 	}
 }

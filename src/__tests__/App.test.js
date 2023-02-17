@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
 import store from '../store'
-import axiosMock from 'axios'
-import mockSpecialtiesData from '../fixtures/specialties'
+// import axiosMock from 'axios'
+// import mockSpecialtiesData from '../fixtures/specialties'
 
 import App from '../App'
 import user from '../fixtures/user.json'
@@ -15,7 +15,7 @@ global.scrollTo = jest.fn()
 
 describe('Artiva main page', () => {
 	beforeEach(() => {
-		axiosMock.get.mockResolvedValue({ data: mockSpecialtiesData })
+		// axiosMock.get.mockResolvedValue({ data: mockSpecialtiesData })
 
 		render(
 			<Provider store={store}>
