@@ -8,7 +8,7 @@ import GA4React from 'ga-4-react'
 import UserDataContext from './context/UserDataContext'
 
 try {
-	setTimeout(_ => { // ()?
+	setTimeout(() => {
 		const ga4react = new GA4React(process.env.REACT_APP_TRACKING_ID)
 		ga4react.initialize().catch(err => console.error(err))
 	}, 4000)
