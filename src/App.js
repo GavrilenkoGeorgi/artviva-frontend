@@ -3,11 +3,18 @@ import { connect } from 'react-redux'
 import { setUserFromLocalStorage } from './reducers/loginReducer'
 import { initializeSpecialties } from './reducers/specialtiesReducer'
 import Routes from './Routes'
-import ReactGA from 'react-ga'
+import GA4React from 'ga-4-react'
 
 import UserDataContext from './context/UserDataContext'
 
-ReactGA.initialize(process.env.REACT_APP_TRACKING_ID)
+try {
+	setTimeout(_ => { // ()?
+		const ga4react = new GA4React(process.env.REACT_APP_TRACKING_ID)
+		ga4react.initialize().catch(err => console.error(err))
+	}, 4000)
+} catch (err) {
+		console.error(err)
+}
 
 const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 
@@ -16,7 +23,7 @@ const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 	}, [initializeSpecialties])
 
 	useEffect(() => {
-		ReactGA.pageview(window.location.pathname + window.location.search)
+		GA4React.send({ hitType: 'pageview', page: window.location.pathname + window.location.search })
 		console.log('GA page view')
 	}, [])
 
