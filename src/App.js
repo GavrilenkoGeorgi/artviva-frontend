@@ -22,10 +22,10 @@ const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 		initializeSpecialties()
 	}, [initializeSpecialties])
 
-	useEffect(() => {
-		GA4React.send({ hitType: 'pageview', page: window.location.pathname + window.location.search })
+	/* useEffect(() => {
+		ga4react.send({ hitType: 'pageview', page: window.location.pathname + window.location.search })
 		console.log('GA page view')
-	}, [])
+	}, []) */
 
 	useEffect(() => {
 		if (!user) {
