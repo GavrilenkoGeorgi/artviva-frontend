@@ -13,7 +13,7 @@ try {
 		ga4react.initialize().catch(err => console.error(err))
 	}, 4000)
 } catch (err) {
-		console.error(err)
+	console.error(err)
 }
 
 const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
