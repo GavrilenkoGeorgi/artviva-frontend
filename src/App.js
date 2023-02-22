@@ -3,14 +3,22 @@ import { connect } from 'react-redux'
 import { setUserFromLocalStorage } from './reducers/loginReducer'
 import { initializeSpecialties } from './reducers/specialtiesReducer'
 import Routes from './Routes'
+import ReactGA from 'react-ga'
 
 import UserDataContext from './context/UserDataContext'
+
+ReactGA.initialize(process.env.REACT_APP_TRACKING_ID)
 
 const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 
 	useEffect(() => {
 		initializeSpecialties()
 	}, [initializeSpecialties])
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search)
+		console.log('GA page view')
+	}, [])
 
 	useEffect(() => {
 		if (!user) {
