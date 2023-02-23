@@ -70,7 +70,7 @@ const TeacherCard = ({ person }) => {
 									</div>
 								)}
 							</li>
-							<li>
+							<li className="teacher-info">
 								<p>
 									{person.description.intro}
 								</p>
