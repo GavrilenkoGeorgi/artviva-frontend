@@ -19,9 +19,9 @@ const TeachersView = ({ match }) => {
 	}, [setAdministration, setDepartments])
 
 	return (
-		<CommonLayout className="border">
+		<CommonLayout>
 			<Col xs={12}>
-				<h1 className="text-center custom-font py-sm-4">
+				<h1 className="my-5 text-center custom-font">
 					Адміністрація
 				</h1>
 				{admins
@@ -30,7 +30,7 @@ const TeachersView = ({ match }) => {
 					: null
 				}
 			</Col>
-			<Col xs={12} className="mb-5">
+			<Col xs={12} className="my-5">
 				<h2 className="text-center custom-font py-4">
 					Наші вчителі
 				</h2>

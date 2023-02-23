@@ -30,7 +30,7 @@ const TeacherCard = ({ person }) => {
 
 	return (
 		<Card className="mb-4">
-			<Card.Body>
+			<Card.Body className='py-5'>
 				<Row className="d-flex justify-content-around">
 					<Col xs={6} sm={5} md={3} className="pb-3">
 						<LazyLoadedImage
@@ -63,7 +63,7 @@ const TeacherCard = ({ person }) => {
 									}
 								</span>
 							</li>
-							<li>
+							<li className="teacher-job-title">
 								{person.speciality.map((title, index) =>
 									<div key={index} className="teacher-speciality">
 										{title}
