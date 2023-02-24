@@ -48,9 +48,9 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 	}
 
 	return <CommonLayout>
-		<Container id={'f1-form'} className="f1-form pl-5 pr-4 py-3 rounded">
-			<h6 className="text-right">Ф-1</h6>
-			<Row className="f1-header">
+		<Container id='f1-form' className="f1-form">
+			<h1 className="f1-page-title">Ф-1</h1>
+			<Row className="f1-header-text">
 				<Col>
 					<p>
 						До наказу:<br />
@@ -61,8 +61,9 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 				</Col>
 				<Col>
 					<p className="text-right">
-						Директору «Школа мистецтв «АРТ ВІВА»<br />
-						Мовчун Г. А.<br />
+						Виконуючому обов’язки директора<br />
+						«Школи мистецтв «АРТ ВІВА»<br />
+						Робакідзе Лілії Вікторівні<br />
 						від <span className="f1-form-field-underline">
 							{f1Data.applicantName}</span><br />
 						що проживає: <span className="f1-form-field-underline">
@@ -71,7 +72,7 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 				</Col>
 			</Row>
 
-			<h3 className="mt-2 text-center">Заява</h3>
+			<h3 className="f1-title">Заява</h3>
 			<Row className="justify-content-end">
 				<Col className="f1-apply-text">
 					<p>Прошу прийняти мою дитину: <span className="f1-form-field-underline">
@@ -84,9 +85,9 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 						}
 					</span>
 					</p>
-					<h6 className="mt-3 text-center f1-subheader">
+					<h4 className="f1-subheader">
 						Відомості про учня
-					</h6>
+					</h4>
 					<p>
 						1. Призвище, ім&apos;я, по побатькові: <span className="f1-form-field-underline">
 							{f1Data.name}
@@ -120,22 +121,24 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 							{f1Data.mothersPhone}
 						</span></p>
 
-					<h6 className="text-center f1-subheader mt-3 mb-0">До заяви додаються:</h6>
+					<h4 className="f1-subheader">
+						До заяви додаються:
+					</h4>
 					<p className="f1-docs">
 						1. Копія свідоцтва про народження<br/>
 						2. Медична довідка про відсутність протипоказань до занять у закладі
 					</p>
 				</Col>
 				<Col xs={12}>
-					<p className="pt-2 f1-personal-data-text">
+					<p className="f1-personal-data-text">
 						Відповідно до Закону України “Про захист персональних даних” надаю
 						«Школа мистецтв «АРТ ВІВА» згоду на обробку зазначених у
 						даній заяві особистих персональних даних у картотеках
 						та/або за допомогою інформаційно-телекомунікаційної системи бази
 						персональних даних з метою:<br />
-						ведення діловодства для реалізації визначених законодавством прав та
+						- ведення діловодства для реалізації визначених законодавством прав та
 						обов&apos;язків учнів у навчальному процесі та платі за навчання;<br />
-						підготовки, відповідно до діючого законодавства, статистичної,
+						- підготовки, відповідно до діючого законодавства, статистичної,
 						адміністративної та іншої інформації з питань навчання.
 					</p>
 					<p className="f1-personal-data-text">
@@ -148,9 +151,9 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 
 			<Row>
 				<Col className="f1-obligations-text">
-					<h6 className="text-center mt-2 mb-0">
+					<h4 className="f1-subheader">
 						Зобов&apos;язання
-					</h6>
+					</h4>
 					<p>
 						Я погоджуюсь з умовами плати за навчання та ознайомлений(а)
 						з тим, що місячний розмір плати за навчання визначений в
@@ -171,10 +174,10 @@ const PupilFormF1 = ({ user, match, setNotification, setFetchingData }) => {
 					</p>
 				</Col>
 			</Row>
-			<Row className="text-center mt-3 mb-4">
+			<Row className="text-center f1-form-signature">
 				<Col>
 					<p>
-						«____»_______________20___ р.
+						«____»_____________________20___ р.
 					</p>
 				</Col>
 				<Col>
