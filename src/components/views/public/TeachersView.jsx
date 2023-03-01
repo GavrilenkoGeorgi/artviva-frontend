@@ -22,7 +22,7 @@ const TeachersView = ({ match }) => {
 		<CommonLayout>
 			<Col xs={12}>
 				<h1 className="my-5 text-center custom-font">
-					Адміністрація
+					Дирекція
 				</h1>
 				{admins
 					? admins.map(person =>
