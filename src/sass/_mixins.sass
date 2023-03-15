@@ -1,5 +1,6 @@
 @import 'palette.scss'
 @import 'notification.sass'
+@import 'variables'
 
 =carouselText()
 	margin: 0
@@ -49,8 +50,16 @@
 
 =mainNavLink()
 	color: $primary-second
-	padding: .5rem .5rem .05rem .5rem
-	font-size: 120%
+	padding: .5rem 0
+	letter-spacing: 1.6px
+	font-weight: 400
+	@media (min-width: $medium)
+		padding: .5rem .5rem 0rem .5rem
+		font-size: 1rem
+	@media (min-width: $large)
+		padding: 1rem 1rem .25rem 1rem
+		margin-bottom: .75rem
+		font-size: 1.4rem
 	border-bottom: $borderNavLinkHeight solid transparent
 	transition: border .35s
 	transition-timing-function: cubic-bezier(.43,.18,.79,.48)

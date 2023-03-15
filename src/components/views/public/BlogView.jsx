@@ -6,8 +6,8 @@ const BlogView = () => {
 	const windowWidth = window.innerWidth
 
 	return (
-		<Container className="text-center">
-			<h1 className="custom-font py-3 m-0">Фейсбук</h1>
+		<Container className="text-center my-5 pb-5">
+			<h1 className="custom-font my-5">Останні новини</h1>
 			<FacebookProvider appId="2185912735037143">
 				<Page href="https://www.facebook.com/myz.shpytky" tabs="timeline"
 					width={windowWidth} // max 500px

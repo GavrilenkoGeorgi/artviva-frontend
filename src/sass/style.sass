@@ -11,6 +11,7 @@
 @import 'lazyLoadingImage.sass'
 @import 'mixins.sass'
 @import 'logo.sass'
+@import 'variables.sass'
 @import './components/f1Form'
 
 html
@@ -145,8 +146,10 @@ p
 .school-mgmt-links
 	a
 		+mainNavLink()
-		padding-left: .5rem !important // this!
+		// this one is particullary bad
 		color: $primary-second !important // :(
+		@media screen and (max-width: $medium)
+			padding-left: 0 !important
 
 .carousel-container
 	margin-top: -5rem
