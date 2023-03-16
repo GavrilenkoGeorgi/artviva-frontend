@@ -119,6 +119,8 @@ p
 	width: 100%
 	text-align: right
 	font-size: 110%
+	&:hover
+		text-decoration: none
 
 // navigation bar links
 .navbar-nav
@@ -383,3 +385,11 @@ nav
 
 .user-details-highlight
 	background-color: $warn
+
+.dropdown-menu
+	@media (min-width: $large)
+		padding: 1.5rem 2.5rem
+
+.dropdown-item
+	&:hover
+		background-color: #fff
