@@ -6,6 +6,8 @@ import TeacherCard from './TeacherCard'
 import PropTypes from 'prop-types'
 import { useScroll } from '../../hooks'
 
+import styles from './Department.module.sass'
+
 const Department = ({ name, teachers, scrollTo }) => {
 
 	const [open, setOpen] = useState(false)
@@ -21,16 +23,16 @@ const Department = ({ name, teachers, scrollTo }) => {
 	}, [executeScroll, name, scrollTo])
 
 	return (
-		<Container ref={htmlElRef} className="my121-1 px-0 border1 border-light">
+		<Container ref={htmlElRef} className={styles.departmentContainer}>
 			<Button
 				block
 				onClick={() => setOpen(!open)}
 				aria-controls="department-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-between align-items-center"
+				className="d-flex justify-content-center align-items-center"
 			>
-				<h5>
+				<h5 className={styles.departmentTitle}>
 					{name}
 				</h5>
 				{ open
