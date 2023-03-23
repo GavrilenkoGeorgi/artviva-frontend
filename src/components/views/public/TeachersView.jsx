@@ -33,7 +33,7 @@ const TeachersView = ({ match }) => {
 		</Col>
 		<Col xs={12} className="my-3">
 			<h2 className="text-center custom-font py-4">
-				Вчителі з якими мі співпрацювали
+				Вчителі з якими ми співпрацювали
 			</h2>
 			{formerTeachers.map(department =>
 				<Department
