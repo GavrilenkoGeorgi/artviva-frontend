@@ -70,6 +70,12 @@ const TeacherCard = ({ person }) => {
 									</div>
 								)}
 							</li>
+							{person.timePeriod
+								? <li className='teacher-working-period'>
+									{person.timePeriod}
+								</li>
+								: null
+							}
 							<li className="teacher-info">
 								<p>
 									{person.description.intro}
