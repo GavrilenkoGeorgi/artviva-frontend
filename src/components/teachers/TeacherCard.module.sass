@@ -1,0 +1,70 @@
+@import '../../sass/_palette.scss'
+@import '../../sass/_variables.sass'
+@import '../../sass/_fonts.sass'
+
+.socialIconsRow
+	display: flex
+	justify-content: center
+	margin: 1rem 0
+	@media screen and (min-width: $small)
+		justify-content: flex-end
+
+.teacherSocialIcon
+	margin: 0 .5rem
+	path
+		fill: $lightGrey
+	&:hover path
+		fill: $primary-color
+
+.teacherSpecsList
+	list-style: none
+	padding: 0
+	margin: 0
+	p
+		text-indent: .75rem
+		margin-bottom: .5rem
+
+.teacherAvatar
+	height: auto
+	width: 100%
+	filter: brightness(1.2)
+	box-shadow: .1rem .3rem .5rem .15rem rgba(0, 0, 0, 0.1)
+
+.teacherNameRow
+	display: flex
+	justify-content: center
+	@media screen and (min-width: $small)
+		justify-content: flex-start
+
+.teacherName
+	font-size: 150%
+	text-align: center
+	font-family: $custom-font
+
+.teacherJobTitle
+	border-bottom: 1px solid $lightGrey
+
+.teacherWorkingPeriod
+	text-align: right
+	font-size: .75rem
+	font-style: italic
+	color: $lightGrey
+
+.teacherInfo
+	margin-top: 1.3rem
+
+.teacherSpeciality
+	font-size: 110%
+	color: $primary-color
+	font-style: oblique
+	font-weight: 400
+
+.moreInfo
+	padding-top: .5rem
+
+.moreTeacherInfo
+	color: $primary-color
+	background: none
+	padding: 0
+	margin: 0
+	border: 0
