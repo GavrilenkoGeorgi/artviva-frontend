@@ -9,6 +9,8 @@ import Logout from '../common/Logout'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 
+import styles from './NavigationBar.module.sass'
+
 const NavigationBar = ({ user }) => {
 
 	// navbar visibility and hiding on scroll
@@ -91,7 +93,7 @@ const NavigationBar = ({ user }) => {
 				bg="light"
 				variant="light"
 				data-cy="navbar"
-				className={`py-sm-0 ${visibility ? 'navbar-visible' : 'navbar-hidden'}`}
+				className={`${styles.navbar} ${visibility ? 'navbar-visible' : 'navbar-hidden'}`}
 			>
 				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
 					<Image

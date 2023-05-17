@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import PropTypes from 'prop-types'
+import styles from './TeacherCard.module.sass'
 
 const TeacherCard = ({ person }) => {
 	const [open, setOpen] = useState(false)
@@ -14,15 +15,14 @@ const TeacherCard = ({ person }) => {
 	}
 
 	const showIcon = (icon) => {
-		const iconStyle = 'teacher-social-icon fa-lg mx-2'
 
 		switch (icon) {
 		case 'facebook':
-			return <FontAwesomeIcon icon={faFacebookF} className={iconStyle} />
+			return <FontAwesomeIcon icon={faFacebookF} />
 		case 'instagram':
-			return <FontAwesomeIcon icon={faInstagram} className={iconStyle} />
+			return <FontAwesomeIcon icon={faInstagram} />
 		case 'youtube':
-			return <FontAwesomeIcon icon={faYoutube} className={iconStyle} />
+			return <FontAwesomeIcon icon={faYoutube} />
 		default:
 			return null
 		}
@@ -30,29 +30,30 @@ const TeacherCard = ({ person }) => {
 
 	return (
 		<Card className="mb-4">
-			<Card.Body className='py-5'>
+			<Card.Body className='pt-5 pb-3'>
 				<Row className="d-flex justify-content-around">
 					<Col xs={6} sm={5} md={3} className="pb-3">
 						<LazyLoadedImage
 							src={`/img/teachers/${person.image}`}
-							classList="teacher-avatar"
+							classList={styles.teacherAvatar}
 							rounded
 							alt={`Фото ${person.name}`}
 						/>
 					</Col>
 					<Col xs={12} md={8}>
-						<ul className="teacher-specs-list">
-							<li className="d-flex justify-content-between align-items-center">
-								<strong className="custom-font teacher-name text-left">
+						<ul className={styles.teacherSpecsList}>
+							<li className={styles.teacherNameRow}>
+								<strong className={styles.teacherName}>
 									{person.name}
 								</strong>
 							</li>
 							<li>
-								<span className="d-flex justify-content-end">
-									{ person.social
+								<span className={styles.socialIconsRow}>
+									{person.social
 										?
 										person.social.map(social =>
 											<a key={social.link} href={social.link}
+												className={styles.teacherSocialIcon}
 												alt={`Посилання на профіль вчителя в соціальній мережі ${social.icon}`}
 												aria-label={social.icon} target="_blank" rel="noopener noreferrer"
 											>
@@ -63,14 +64,20 @@ const TeacherCard = ({ person }) => {
 									}
 								</span>
 							</li>
-							<li className="teacher-job-title">
+							<li className={styles.teacherJobTitle}>
 								{person.speciality.map((title, index) =>
-									<div key={index} className="teacher-speciality">
+									<div key={index} className={styles.teacherSpeciality}>
 										{title}
 									</div>
 								)}
 							</li>
-							<li className="teacher-info">
+							{person.timePeriod
+								? <li className={styles.teacherWorkingPeriod}>
+									{person.timePeriod}
+								</li>
+								: null
+							}
+							<li className={styles.teacherInfo}>
 								<p>
 									{person.description.intro}
 								</p>
@@ -82,7 +89,7 @@ const TeacherCard = ({ person }) => {
 										<Collapse in={open}>
 											<div id="more-info">
 												{person.description.text.map((paragraph, idx) =>
-													<p key={idx} className="text-left more-info">
+													<p key={idx} className={styles.moreInfo}>
 														{paragraph}
 													</p>
 												)}
@@ -90,7 +97,7 @@ const TeacherCard = ({ person }) => {
 										</Collapse>
 										<div className="text-right pt-3">
 											<button
-												className="more-teacher-info"
+												className={styles.moreTeacherInfo}
 												onClick={() => openPersonDescr()}
 												aria-controls="more-info"
 												aria-expanded={open}
