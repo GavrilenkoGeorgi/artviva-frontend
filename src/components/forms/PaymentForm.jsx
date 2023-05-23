@@ -336,7 +336,7 @@ const PaymentForm = ({
 							>
 								<Form.Label className={styles.wideLabel}>
 									<span>
-										Предмет
+										Фах або повна вартість навчання
 									</span>
 									<FontAwesomeIcon
 										icon={faInfoCircle}
