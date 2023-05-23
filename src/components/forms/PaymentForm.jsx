@@ -299,6 +299,7 @@ const PaymentForm = ({
 									name="teacher"
 									list="teachers-list"
 									autoComplete="off"
+									placeholder='Почніть вводити прізвище вчителя'
 									data-cy="teacher-name-input"
 									onChange={handleChange}
 									onKeyUp={event => getTeachers(event.target.value.trim())}
