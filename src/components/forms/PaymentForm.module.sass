@@ -1,6 +1,9 @@
 @import '../../sass/_palette.scss'
 @import '../../sass/_variables.sass'
 
+.paymentForm
+	text-align: left
+
 .wideLabel
 	width: 100%
 	display: flex
@@ -17,7 +20,25 @@
 	font-size: 140%
 	color: $primary-second
 	text-align: right
+	border: 1px solid pink
+	align-self: flex-end
+
+.totalAmountContainer
+	width: 100%
+	text-align: right
+	font-size: 1.8rem
+	margin-top: 1rem
+	color: $primary-second
+	display: flex
+	align-items: center
+	justify-content: flex-end
 
 .totalAmount
-	color: $primary-second
-	font-weight: 500
+	font-style: italic
+	line-height: 1.3
+	font-size: 1.5rem
+
+.hryvniaIcon
+	font-size: 1.2rem
+	margin-left: .4rem
+	color: $grayish

@@ -275,7 +275,7 @@ const PaymentForm = ({
 						method="POST"
 						action={process.env.REACT_APP_LIQPAY_API_URL}
 						acceptCharset="utf-8"
-						className="text-left"
+						className={styles.paymentForm}
 					>
 
 						{/* Teacher's name input */}
@@ -334,8 +334,15 @@ const PaymentForm = ({
 								controlId="specialty-input"
 								as={Col}
 							>
-								<Form.Label>
-									Предмет
+								<Form.Label className={styles.wideLabel}>
+									<span>
+										Предмет
+									</span>
+									<FontAwesomeIcon
+										icon={faInfoCircle}
+										className={styles.infoIcon}
+										onClick={() => openInfoModal('benefits')}
+									/>
 								</Form.Label>
 								<Form.Control
 									as="select"
@@ -359,7 +366,7 @@ const PaymentForm = ({
 							</Form.Group>
 						</Form.Row>
 
-						<Form.Row>
+						{/* <Form.Row>
 							<Form.Group
 								controlId="benefits-input"
 								as={Col}
@@ -392,8 +399,7 @@ const PaymentForm = ({
 									{errors.benefits}
 								</Form.Control.Feedback>
 							</Form.Group>
-
-						</Form.Row>
+						</Form.Row> */}
 
 						<Form.Row>
 							<FieldArray
@@ -438,22 +444,18 @@ const PaymentForm = ({
 							/>
 						</Form.Row>
 
-						<Form.Row className="py-3 d-flex justify-content-center">
+						<Form.Row>
 							{total
-								? <>
-									<Col xs={11} className={styles.paymentTotalMessage}>
-										Всього: <span className={styles.totalAmount}>
-											{showTotals(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total)
-												.toFixed(2), total)}
-										</span>
-									</Col>
-									<Col xs={1} className="d-flex align-items-center">
-										<FontAwesomeIcon icon={faHryvnia} />
-									</Col>
-								</>
-								: <p className={styles.paymentTotalMessage}>
-									<em>Заповніть форму для розрахунку вартості</em>
-								</p>
+								? <Col className={styles.totalAmountContainer}>
+									<span className={styles.totalAmount}>Всього:&nbsp;
+										{showTotals(calculatePercent(process.env.REACT_APP_LIQPAY_API_PERCENT, total)
+											.toFixed(2), total)}
+									</span>
+									<FontAwesomeIcon icon={faHryvnia} className={styles.hryvniaIcon}/>
+								</Col>
+								: <div className={styles.totalAmountContainer}>
+									<span className={styles.totalAmount}>Заповніть форму для розрахунку вартості</span>
+								</div>
 							}
 							<Col xs={12} className="text-right">
 								<em className="text-muted small">
@@ -467,7 +469,7 @@ const PaymentForm = ({
 						<input type="hidden" name="language" value="uk" />
 
 						{/* Pay button */}
-						<Form.Row className="d-flex justify-content-around py-4">
+						<Form.Row className="d-flex justify-content-around mt-5">
 							<Col>
 								<BtnWithSpinner
 									block
