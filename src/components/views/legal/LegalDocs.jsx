@@ -2,8 +2,20 @@ import React from 'react'
 
 import CommonLayout from '../../CommonLayout'
 import { Container } from 'react-bootstrap'
+import links from '../../../data/legalDocsLinks.json'
 
 const LegalDocs = () => {
+
+	const pdfLinkComp = (title, link, humanReadableTitle) => {
+		return <li key={link}>
+			<a target="_blank" rel="noopener noreferrer" href={link}>
+				{title}
+			</a><br />
+			<a target="_blank" rel="noopener noreferrer" href={link}>
+				{humanReadableTitle ? humanReadableTitle : link }
+			</a>
+		</li>
+	}
 
 	return <CommonLayout>
 		<Container className="page-container my-5">
@@ -13,70 +25,16 @@ const LegalDocs = () => {
 
 			<h2>Правові документи:</h2>
 			<ul>
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/254%D0%BA/96-%D0%B2%D1%80#Text">
-						Конституція України
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/254%D0%BA/96-%D0%B2%D1%80#Text">
-						https://zakon.rada.gov.ua/laws/show/254%D0%BA/96-%D0%B2%D1%80
-					</a>
-				</li>
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/995_021#Text">
-						Конвенція про права дитини
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/995_021#Text">
-						https://zakon.rada.gov.ua/laws/show/995_021
-					</a>
-				</li>
+				{links.legalDocs.map(item => {
+					return pdfLinkComp(item.title, item.link)
+				})}
 			</ul>
 
 			<h2>Закони України:</h2>
 			<ul>
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/1841-14#Text">
-						Закон України «Про позашкільну освіту»
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/1841-14#Text">
-						https://zakon.rada.gov.ua/laws/show/1841-14
-					</a>
-				</li>
-
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2939-17#Text">
-						Закон України «Про доступ до публічної інформації»
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2939-17#Text">
-						https://zakon.rada.gov.ua/laws/show/2939-17
-					</a>
-				</li>
-
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2694-12#Text">
-						Закон України «Про охорону праці»
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2694-12#Text">
-						https://zakon.rada.gov.ua/laws/show/2694-12
-					</a>
-				</li>
-
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2402-14#Text">
-						Закон України «Про охорону дитинства»
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/2402-14#Text">
-						https://zakon.rada.gov.ua/laws/show/2694-12
-					</a>
-				</li>
-
-				<li>
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/322-08#Text">
-						Кодекс законів про працю України
-					</a><br />
-					<a target="_blank" rel="noopener noreferrer" href="https://zakon.rada.gov.ua/laws/show/322-08#Text">
-					https://zakon.rada.gov.ua/laws/show/322-08
-					</a>
-				</li>
+				{links.laws.map(item => {
+					return pdfLinkComp(item.title, item.link)
+				})}
 			</ul>
 
 			<h2>Порядок реагування на доведені випадки булінгу</h2>
@@ -126,22 +84,9 @@ const LegalDocs = () => {
 
 			<h2>Інформаційна відкритість</h2>
 			<ul>
-				<li>
-					<a href="/pdf/statut-artviva-2020.pdf">
-						Статут школи мистецтв «АРТ ВІВА»
-					</a><br />
-					<a href="/pdf/statut-artviva-2020.pdf">
-						завантажити PDF
-					</a>
-				</li>
-				<li>
-					<a href="/pdf/Про порядок оплати та надання пільг.pdf">
-						Про порядок оплати та надання пільг
-					</a><br />
-					<a href="/pdf/Про порядок оплати та надання пільг.pdf">
-						завантажити PDF
-					</a>
-				</li>
+				{links.pdf.map(item => {
+					return pdfLinkComp(item.title, item.link, item.humanReadableTitle)
+				})}
 			</ul>
 
 			<h3>Виписка з державного реєстру</h3>

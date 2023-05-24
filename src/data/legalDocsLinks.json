@@ -1,0 +1,51 @@
+{
+	"pdf": [
+		{
+			"title": "Статут школи мистецтв «АРТ ВІВА»",
+			"link": "/pdf/statut-artviva-2020.pdf",
+			"humanReadableTitle": "завантажити PDF"
+		},
+		{
+			"title": "Про порядок оплати та надання пільг",
+			"link": "/pdf/Про порядок оплати та надання пільг.pdf",
+			"humanReadableTitle": "завантажити PDF"
+		},
+		{
+			"title": "Витяг з державного реєстру PDF",
+			"link": "/pdf/Витяг 23.11.2022.pdf",
+			"humanReadableTitle": "завантажити PDF"
+		}
+	],
+	"legalDocs": [
+		{
+			"title": "Конституція України",
+			"link": "https://zakon.rada.gov.ua/laws/show/254%D0%BA/96-%D0%B2%D1%80"
+		},
+		{
+			"title": "Конвенція про права дитини",
+			"link": "https://zakon.rada.gov.ua/laws/show/995_021"
+		}
+	],
+	"laws": [
+		{
+			"title": "Закон України «Про позашкільну освіту»",
+			"link": "https://zakon.rada.gov.ua/laws/show/1841-14"
+		},
+		{
+			"title": "Закон України «Про доступ до публічної інформації»",
+			"link": "https://zakon.rada.gov.ua/laws/show/2939-17"
+		},
+		{
+			"title": "Закон України «Про охорону праці»",
+			"link": "https://zakon.rada.gov.ua/laws/show/2694-12"
+		},
+		{
+			"title": "Закон України «Про охорону дитинства»",
+			"link": "https://zakon.rada.gov.ua/laws/show/2402-14"
+		},
+		{
+			"title": "Кодекс законів про працю України",
+			"link": "https://zakon.rada.gov.ua/laws/show/322-08"
+		}
+	]
+}
