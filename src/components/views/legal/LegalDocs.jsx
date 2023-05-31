@@ -89,12 +89,6 @@ const LegalDocs = () => {
 				})}
 			</ul>
 
-			<h3>Виписка з державного реєстру</h3>
-			<p className="text-center">
-				<img src="/img/legal/excerpt_page_1.jpg" alt="Виписка з державного реєстру сторінка 1." />
-				<img src="/img/legal/excerpt_page_2.jpg" alt="Виписка з державного реєстру сторінка 2." />
-			</p>
-
 		</Container>
 	</CommonLayout>
 }
