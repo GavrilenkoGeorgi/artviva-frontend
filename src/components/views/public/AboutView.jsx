@@ -1,9 +1,15 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
+
 import { Container, Row, Col } from 'react-bootstrap'
 import AboutTextImage from '../../common/AboutTextImage'
 
 const AboutView = () => {
-	return (
+	return <>
+		<Helmet>
+			<title>Історія школи мистецтв «АРТ ВІВА»</title>
+			<meta name="description" content="40 років діяльності навчального закладу і багата історія перших починань та досягнень." />
+		</Helmet>
 		<Container fluid>
 			<Row className="d-flex justify-content-center">
 				<Col xs={12} md={8} className="p-0">
@@ -207,7 +213,7 @@ const AboutView = () => {
 				</Col>
 			</Row>
 		</Container>
-	)
+	</>
 }
 
 export default AboutView

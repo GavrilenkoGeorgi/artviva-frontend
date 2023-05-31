@@ -1,4 +1,6 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
+
 import { Col } from 'react-bootstrap'
 import teachers from '../../../data/teachers'
 import TeacherCard from '../../teachers/TeacherCard'
@@ -8,8 +10,14 @@ import CommonLayout from '../../CommonLayout'
 import PropTypes from 'prop-types'
 
 const TeachersView = ({ match }) => {
+
 	const { administration, departments, formerTeachers } = teachers
+
 	return <CommonLayout>
+		<Helmet>
+			<title>Вчителі школи мистецтв «АРТ ВІВА»</title>
+			<meta name="description" content="Чинний і колишній педагогічний колектив." />
+		</Helmet>
 		<Col xs={12} className="my-3">
 			<h1 className="text-center custom-font mb-5">
 				Дирекція

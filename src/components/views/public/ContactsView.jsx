@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import ContactMap from '../../common/ContactMap'
 import departmentsData from '../../../data/departments.json'
 import { Container, Row } from 'react-bootstrap'
@@ -23,27 +24,29 @@ const ContactsView = () => {
 		paddingTop: '75vh'
 	}
 
-	return (
-		<>
-			<ContactMap
-				mapStyles={mapStyles}
-				initialCenter={initialCenter}
-				zoom={11}
-				departments={departments}
-			/>
-			<h1 className="text-center py-2 custom-font">Філії</h1>
-			<Container style={largePaddingTop}>
-				<Row className="d-flex justify-content-around px-2">
-					{departments.map(department =>
-						<DepartmentCard
-							key={department.id}
-							department={department}
-						/>
-					)}
-				</Row>
-			</Container>
-		</>
-	)
+	return <>
+		<Helmet>
+			<title>Контакти школи мистецтв «АРТ ВІВА»</title>
+			<meta name="description" content="Карта, яка показує всі наші відділення та їх контакти." />
+		</Helmet>
+		<ContactMap
+			mapStyles={mapStyles}
+			initialCenter={initialCenter}
+			zoom={11}
+			departments={departments}
+		/>
+		<h1 className="text-center py-2 custom-font">Філії</h1>
+		<Container style={largePaddingTop}>
+			<Row className="d-flex justify-content-around px-2">
+				{departments.map(department =>
+					<DepartmentCard
+						key={department.id}
+						department={department}
+					/>
+				)}
+			</Row>
+		</Container>
+	</>
 }
 
 export default ContactsView
