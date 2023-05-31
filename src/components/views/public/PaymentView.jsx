@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 
 import { Col } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -42,9 +43,15 @@ const PaymentView = ({ match }) => {
 		break
 	}
 
-	return <CommonLayout>
-		{content}
-	</CommonLayout>
+	return <>
+		<Helmet>
+			<title>Оплата навчання</title>
+			<meta name="description" content="Сплачуйте вартість навчання безпосередньо на сайті"/>
+		</Helmet>
+		<CommonLayout>
+			{content}
+		</CommonLayout>
+	</>
 }
 
 export default PaymentView

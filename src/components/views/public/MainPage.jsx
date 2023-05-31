@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { Helmet } from 'react-helmet'
 import { ParallaxProvider } from 'react-scroll-parallax'
 import { ParallaxBanner } from 'react-scroll-parallax'
 import ParallaxCache from '../../common/ParallaxCache'
@@ -19,6 +20,10 @@ import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
 const MainPage = () => {
 	return (
 		<>
+			<Helmet>
+				<title>Школа мистецтв «АРТ ВІВА» - Головна сторінка</title>
+				<meta name="description" content="Школа мистецтв «АРТ ВІВА» сучасний заклад початкової мистецької освіти." />
+			</Helmet>
 			<Carousel />
 			<Container>
 				<Row className="pt-4">
