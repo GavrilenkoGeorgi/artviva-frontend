@@ -20,6 +20,7 @@ const AboutTextImage = ({
 		<Image
 			rounded
 			fluid
+			height="auto"
 			src={src}
 			alt={alt}
 			style={float ? floatingStyle : null}
