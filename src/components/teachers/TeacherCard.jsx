@@ -3,7 +3,7 @@ import { Row, Col, Card, Collapse } from 'react-bootstrap'
 import LazyLoadedImage from '../common/LazyLoadedImage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons'
-import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
+import { faFacebookF, faInstagram, faYoutube, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import PropTypes from 'prop-types'
 import styles from './TeacherCard.module.sass'
 
@@ -23,6 +23,8 @@ const TeacherCard = ({ person }) => {
 			return <FontAwesomeIcon icon={faInstagram} />
 		case 'youtube':
 			return <FontAwesomeIcon icon={faYoutube} />
+		case 'linkedin':
+			return <FontAwesomeIcon icon={faLinkedinIn} />
 		default:
 			return null
 		}

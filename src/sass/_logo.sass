@@ -4,26 +4,23 @@
 .nav-logo-img
 	width: 5rem
 	height: 5rem
-	padding: .3rem
-	+handheld(2, 360px)
-		width: 3rem
-		height: 3rem
+	padding: .4rem
+	@media screen and (min-width: $medium)
+		padding: .6rem
 
 .nav-logo
 	line-height: .9
+	text-align: center
 
 .nav-logo-font
 	font-family: $logo-font
 	color: $primary-color
-	letter-spacing: .1em
-	font-size: 200%
-	+handheld(2, 360px)
-		font-size: 130%
+	letter-spacing: .075em
+	font-size: 2.2rem
 
 .nav-logo-small-font
 	font-family: $serif-font
 	text-align: center
 	letter-spacing: .09em
 	color: $logo-sub-text
-	+handheld(2, 360px)
-		font-size: 60%
+	font-size: 1.075rem
