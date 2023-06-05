@@ -1,0 +1,55 @@
+@import '../../../sass/variables'
+@import '../../../sass/palette'
+@import '../../../sass/fonts'
+
+.section
+	margin: 4rem auto 6rem
+	color: $blackText // TODO: need make this more global
+
+.article
+	max-width: 50rem
+	padding: 0 1rem
+	margin: auto
+	h1
+		text-align: center
+		font-family: $custom-font
+		margin-bottom: 1rem
+
+.quote
+	font-family: $custom-font
+	letter-spacing: .075rem
+	text-align: right
+	margin-bottom: 2rem
+	span
+		font-weight: 600
+
+.aboutText
+	font-size: .9rem
+	letter-spacing: .03rem
+	text-indent: 1.4em
+	text-align: left
+	line-height: 1.7
+	margin-bottom: 1rem
+	color: $blackText
+	text-align: left
+	strong
+		font-weight: 500
+	@media screen and (min-width: $medium)
+		font-size: 1.1rem
+
+.wideImgMargins
+	margin: 1rem auto 2rem
+
+.inlineImgMarginsLeft,
+.inlineImgMarginsRight
+	margin: 2rem auto
+	@media screen and (min-width: $medium)
+		margin-bottom: 1rem
+
+.inlineImgMarginsLeft
+	@media screen and (min-width: $small)
+		margin-right: 2rem
+
+.inlineImgMarginsRight
+	@media screen and (min-width: $small)
+		margin-left: 2rem
