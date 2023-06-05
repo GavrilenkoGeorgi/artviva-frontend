@@ -18,15 +18,13 @@ const TeachersView = ({ match }) => {
 			<title>Вчителі школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Чинний і колишній педагогічний колектив." />
 		</Helmet>
-		<Col xs={12} className="my-3">
+		<Col md={10}>
 			<h1 className="text-center custom-font mb-5">
 				Дирекція
 			</h1>
 			{administration.map(person =>
 				<TeacherCard key={person.id} person={person} />)
 			}
-		</Col>
-		<Col xs={12} className="my-3"> {/* TODO: This can be one thing with the next */}
 			<h2 className="text-center custom-font py-4">
 				Наші вчителі
 			</h2>
@@ -38,8 +36,6 @@ const TeachersView = ({ match }) => {
 					scrollTo={match ? match.params.department : 'default'}
 				/>)
 			}
-		</Col>
-		<Col xs={12} className="my-3">
 			<h2 className="text-center custom-font py-4">
 				Вчителі з якими ми співпрацювали
 			</h2>

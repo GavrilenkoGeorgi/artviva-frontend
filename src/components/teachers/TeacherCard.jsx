@@ -30,7 +30,7 @@ const TeacherCard = ({ person }) => {
 
 	return (
 		<Card className="mb-4">
-			<Card.Body className='pt-5 pb-3'>
+			<Card.Body className='p-lg-5'>
 				<Row className="d-flex justify-content-around">
 					<Col xs={6} sm={5} md={3} className="pb-3">
 						<LazyLoadedImage
@@ -105,7 +105,7 @@ const TeacherCard = ({ person }) => {
 											>
 												{ open
 													? <em><FontAwesomeIcon icon={faAngleUp} /></em>
-													: <em>докладніше...</em>
+													: <em>ще...</em>
 												}
 											</button>
 										</div>
