@@ -95,7 +95,7 @@ const NavigationBar = ({ user }) => {
 				data-cy="navbar"
 				className={`${styles.navbar} ${visibility ? 'navbar-visible' : 'navbar-hidden'}`}
 			>
-				<Navbar.Brand href="/" className="d-flex align-items-center py-0 mr-0">
+				<Navbar.Brand href="/" className="p-0 d-flex align-items-center">
 					<Image
 						alt="Лого"
 						src="/img/logo/artviva_logo_small.png"

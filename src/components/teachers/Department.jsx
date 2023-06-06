@@ -23,14 +23,14 @@ const Department = ({ name, teachers, scrollTo }) => {
 	}, [executeScroll, name, scrollTo])
 
 	return (
-		<Container ref={htmlElRef} className={styles.departmentContainer}>
+		<Container ref={htmlElRef} className={`p-0 ${styles.departmentContainer}`}>
 			<Button
 				block
 				onClick={() => setOpen(!open)}
 				aria-controls="department-collapse"
 				aria-expanded={open}
 				variant="link"
-				className="d-flex justify-content-center align-items-center"
+				className={`sticky-top bg-white d-flex justify-content-between align-items-center ${styles.listBtn}`}
 			>
 				<h5 className={styles.departmentTitle}>
 					{name}

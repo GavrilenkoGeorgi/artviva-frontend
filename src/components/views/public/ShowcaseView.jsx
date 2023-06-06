@@ -1,6 +1,7 @@
 import React from 'react'
-import YoutubeVideo from '../../common/YoutubeVideo'
+import { Helmet } from 'react-helmet'
 
+import YoutubeVideo from '../../common/YoutubeVideo'
 import { Container } from 'react-bootstrap'
 
 const ShowcaseView = () => {
@@ -28,7 +29,11 @@ const ShowcaseView = () => {
 		}
 	]
 
-	return (
+	return <>
+		<Helmet>
+			<title>На сцені школи мистецтв «АРТ ВІВА»</title>
+			<meta name="description" content="Виступи наших учнів та вчителів." />
+		</Helmet>
 		<Container className="border1 border-primary text-center">
 			<h1 className="pt-3 mb-4 custom-font">На сцені</h1>
 			{videos.map(video => (
@@ -44,7 +49,7 @@ const ShowcaseView = () => {
 				</div>
 			))}
 		</Container>
-	)
+	</>
 }
 
 export default ShowcaseView

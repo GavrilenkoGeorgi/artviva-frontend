@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { Helmet } from 'react-helmet'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { history } from '../../../Routes'
@@ -86,31 +87,37 @@ const PublicApplyView = ({ match, specialties, setNotification, setProcessingFor
 		setInfoModalVis(true)
 	}
 
-	return <CommonLayout>
-		{match.params.status
-			? <PublicApplyStatus status={match.params.status}/>
-			: <>
-				<h4 className="mt-3 mb-4 text-center custom-font">Подати заяву на навчання</h4>
-				<Container className="px-0 mb-5 d-flex justify-content-center">
-					<Col lg={8}>
-						<PupilForm
-							handleFormData={handleFormData}
-							openInfoModal={openInfoModal}
-							specialties={specialties.map(spec => spec.title)}
-							mode="public"
-						/>
-					</Col>
-				</Container>
-				<InfoModal
-					title={infoModalTitle}
-					text={infoModalText}
-					centered
-					show={infoModalVis}
-					onHide={() => setInfoModalVis(!infoModalVis)}
-				/>
-			</>
-		}
-	</CommonLayout>
+	return <>
+		<Helmet>
+			<title>Подати заяву до школи мистецтв «АРТ ВІВА»</title>
+			<meta name="description" content="Заповнити форму та подати заяву на навчання до школи мистецтв." />
+		</Helmet>
+		<CommonLayout>
+			{match.params.status
+				? <PublicApplyStatus status={match.params.status}/>
+				: <>
+					<h4 className="mt-3 mb-4 text-center custom-font">Подати заяву на навчання</h4>
+					<Container className="px-0 mb-5 d-flex justify-content-center">
+						<Col lg={8}>
+							<PupilForm
+								handleFormData={handleFormData}
+								openInfoModal={openInfoModal}
+								specialties={specialties.map(spec => spec.title)}
+								mode="public"
+							/>
+						</Col>
+					</Container>
+					<InfoModal
+						title={infoModalTitle}
+						text={infoModalText}
+						centered
+						show={infoModalVis}
+						onHide={() => setInfoModalVis(!infoModalVis)}
+					/>
+				</>
+			}
+		</CommonLayout>
+	</>
 }
 
 PublicApplyView.propTypes = {

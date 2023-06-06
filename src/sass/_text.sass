@@ -22,7 +22,7 @@
 .carousel-indicators
 	margin: 0 0 .3rem 0
 
-.main-page-descr, .about-text
+.main-page-descr
 	text-indent: 1.4em
 	text-align: left
 	line-height: 1.8
@@ -33,19 +33,10 @@
 	+handheld(2, 1440px)
 		font-size: 120%
 
-.about-text
-	margin: 2rem 0rem
-	color: $grayish
-	text-align: left
-	+desktop(96dpi, 768px)
-		font-size: 110%
-
 .main-title
 	font-size: 150%
 	text-align: center
 	color: $grayish
-	// +handheld(2, 768px)
-		// font-size: 150%
 	+desktop(96dpi, 600px)
 		font-size: 180%
 	+desktop(96dpi, 1024px)
@@ -104,24 +95,12 @@
 	&:last-child
 		border-bottom: none
 
-.oferta-container
-	margin-bottom: 6rem
-	h3
-		margin: 2rem 0rem
-		text-align: center
-	h4
-		margin-top: 2rem
-		padding-left: 2rem
-	p
-		line-height: 1.9
-		text-indent: 1rem
-		margin-bottom: .75rem
-		white-space: pre-line
-
 .page-container
+	max-width: 800px
 	h1, h2, h3
 		text-align: center
 		margin-top: 2rem
+		font-weight: 400
 	h1
 		font-size: 36px
 	h2
