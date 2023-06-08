@@ -15,6 +15,7 @@ import { ReactComponent as OrigamiIcon } from '../../../svg/origami.svg'
 import { ReactComponent as EditIcon } from '../../../svg/edit.svg'
 import { ReactComponent as LoveSongIcon } from '../../../svg/love-song.svg'
 import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
+import styles from './MainPage.module.sass'
 /* import Announcement from '../../announcements/Announcement' */
 
 const MainPage = () => {
@@ -25,8 +26,8 @@ const MainPage = () => {
 				<meta name="description" content="Школа мистецтв «АРТ ВІВА» сучасний заклад початкової мистецької освіти." />
 			</Helmet>
 			<Carousel />
-			<Container>
-				<Row className="pt-4">
+			<Container className={styles.mainSection}>
+				<Row>
 					<Col
 						sm={6}
 						className="d-flex justify-content-center align-items-center"
@@ -48,11 +49,11 @@ const MainPage = () => {
 					{/* <Announcement /> */}
 					<Col>
 						<Row className="text-center pt-4 justify-content-center">
-							<Col xs={12} sm={6} className="py-4">
+							<Col sm={6} className={styles.mainTextItem}>
 								<ScrollAnimation animateIn="fadeIn">
 									<OrigamiIcon />
 								</ScrollAnimation>
-								<p className="pt-4 px-2 main-page-descr">
+								<p>
 									Сьогодні Школа мистецтв «АРТ ВІВА» на чолі з
 									Лілією Робакідзе — сучасний заклад початкової
 									мистецької освіти, де на музичному,
@@ -61,11 +62,11 @@ const MainPage = () => {
 									концертмейстерів навчають майже 500 дітей.
 								</p>
 							</Col>
-							<Col xs={12} sm={6} className="py-4">
+							<Col sm={6} className={styles.mainTextItem}>
 								<ScrollAnimation animateIn="fadeIn">
 									<EditIcon />
 								</ScrollAnimation>
-								<p className="pt-4 px-2 main-page-descr">
+								<p>
 									Дирекція школи у цей складний час, прикладає
 									максимум зусиль для того, щоб діти почували
 									себе комфортно та в безпеці, та працює над
@@ -74,11 +75,11 @@ const MainPage = () => {
 									навчання відповідно до нових освітніх програм.
 								</p>
 							</Col>
-							<Col xs={12} sm={10} className="py-4">
+							<Col sm={6} className={styles.mainTextItem}>
 								<ScrollAnimation animateIn="fadeIn">
 									<LoveSongIcon />
 								</ScrollAnimation>
-								<p className="pt-4 px-2 main-page-descr">
+								<p>
 									Головним завданням навчально-виховного процесу Школи Мистецтв «АРТ ВІВА» є
 									створення безпечних умов для творчого, інтелектуального, духовного і
 									фізичного самовираження особистості, пошук, розвиток та підтримка обдарованих
@@ -91,15 +92,17 @@ const MainPage = () => {
 			</Container>
 			<Container>
 				<Row className="d-flex justify-content-center">
-					<Col sm={10} className="py-4 mb-3 mb-sm-5 text-center">
+					<Col sm={6} className={styles.mainTextItem}>
 						<ScrollAnimation animateIn="fadeIn">
 							<Enrollment />
 						</ScrollAnimation>
-						<p className="pt-4 main-page-descr">
+						<p>
 							Ви можете оплатити або заповнити та надіслати заявку на
 							навчання за допомогою нашої зручної форми ;)
 						</p>
-						<p className="py-4 text-center">
+					</Col>
+					<Col xs={12} className={styles.mainTextItem}>
+						<div className={styles.btnContainer}>
 							<ButtonLink
 								variant="primary"
 								route="/apply"
@@ -112,22 +115,22 @@ const MainPage = () => {
 								label="Оплатити"
 								className="success-color-shadow mx-3 my-3 my-md-0 max-width-btn"
 							/>
-						</p>
+						</div>
 					</Col>
 				</Row>
 			</Container>
 			<ParallaxProvider>
 				<ParallaxCache />
 				<ParallaxBanner
-					className="parallax-main-page"
+					className={styles.parallax}
 					layers={[
 						{
-							image: 'img/parallax/book-crop.jpg',
-							amount: 0.3,
+							image: 'img/parallax/vinyl.webp',
+							amount: 0.7,
 						},
 					]}
 					style={{
-						height: '30rem',
+						height: '35rem',
 					}}
 				>
 				</ParallaxBanner>

@@ -20,5 +20,3 @@ export { default as Specialties } from './school/Specialties'
 export { default as TeacherPaymentsView } from './school/TeacherPaymentsView'
 export { default as PricesView } from './public/PricesView'
 export { default as MainPage } from './public/MainPage'
-export { default as Footer } from './public/Footer'
-

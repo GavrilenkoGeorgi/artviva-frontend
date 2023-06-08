@@ -6,7 +6,7 @@ import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import Interceptor from './utils/interceptor.js'
 
 import App from './App'
-import { Footer } from './components/views'
+import Footer from './components/common/layout/Footer'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import './css/index.css'
