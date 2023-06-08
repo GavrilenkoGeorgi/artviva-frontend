@@ -2,13 +2,15 @@ import React from 'react'
 import { footerDate } from '../../../services/dateAndTime'
 
 import { Container, Row, Col } from 'react-bootstrap'
-import { ReCaptchaStatement } from '../../common'
+import { ReCaptchaStatement } from '..'
 
 import { ReactComponent as FbIcon } from '../../../svg/facebook.svg'
 import { ReactComponent as InstIcon } from '../../../svg/instagram.svg'
 import { ReactComponent as MasterCardIcon } from '../../../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../../../svg/visa-logo.svg'
 import { ReactComponent as LiqPayLogoIcon } from '../../../svg/logo-liqpay-main.svg'
+
+import styles from './Footer.module.sass'
 
 const Footer = () => {
 	const socialIconsStyle = {
@@ -30,7 +32,7 @@ const Footer = () => {
 	const path = /\/(school+)/
 	if (window.location.pathname.match(path)) return null
 
-	return <footer className="footer pt-lg-5">
+	return <footer className={styles.footer}>
 		<Container>
 			<Row className="mb-3">
 				<Col>
