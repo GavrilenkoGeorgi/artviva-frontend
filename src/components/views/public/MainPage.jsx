@@ -102,7 +102,7 @@ const MainPage = () => {
 						</p>
 					</Col>
 					<Col xs={12} className={styles.mainTextItem}>
-						<div className={styles.btnContainer}>
+						<div>
 							<ButtonLink
 								variant="primary"
 								route="/apply"
