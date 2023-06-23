@@ -32,7 +32,6 @@ const ContactMap = ({
 			zoom={zoom}
 			style={mapStyles}
 			initialCenter={initialCenter}
-			className="map-container"
 		>
 			{departments.map(department => (
 				<Marker
