@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Helmet } from 'react-helmet'
-import { Container } from 'react-bootstrap'
 import axios from 'axios'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
+import { Container } from 'react-bootstrap'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
+import { SimpleSpinner } from '../../common/spinners'
 
 import styles from './BlogView.module.sass'
 
@@ -18,20 +20,19 @@ const BlogView = () => {
 			setPageAccessToken(response.data.access_token)
 		})
 	}, [])
+
 	// and this
 	useEffect(() => {
 		if (pageAccessToken) {
-			const feedURL = `https://graph.facebook.com/v17.0/${process.env.REACT_APP_FACEBOOK_PAGE_ID}/feed?fields=message,full_picture,created_time,actions,permalink_url&access_token=${pageAccessToken}`
+			const feedURL = `https://graph.facebook.com/v17.0/${process.env.REACT_APP_FACEBOOK_PAGE_ID}/feed?fields=message,full_picture,created_time,permalink_url&access_token=${pageAccessToken}`
 			axios.get(feedURL).then(({ data: posts}) => {
 				const filtered = posts.data.filter(post => post.hasOwnProperty('message'))
-				console.log(filtered)
 				setFacebookPosts(filtered)
 			})
 		}
 	}, [pageAccessToken])
 
 	const formatDate = date => {
-		console.log('Format: ', date)
 		const result = moment(date).format('LL')
 		return result
 	}
@@ -43,24 +44,33 @@ const BlogView = () => {
 		</Helmet>
 		<Container className="text-center my-5 pb-5">
 			<h1 className="custom-font my-5">Останні новини</h1>
-			<article>
-				{facebookPosts.length
-					? <div className={styles.postsContainer}>
+			{facebookPosts.length
+				? <div className={styles.postsContainer}>
+					<ResponsiveMasonry columnsCountBreakPoints={{350: 1, 1440: 2}}>
+						<Masonry gutter='2.5rem'>
 							{facebookPosts.map((item) => {
 								return <a href={item.permalink_url} key={item.id}>
 									<div className={styles.post}>
-										<p className={styles.dateStamp}>{formatDate(item.created_time)}</p>
 										<div className={styles.imgContainer}>
-											<img className={styles.postImg} src={item.full_picture} />
+											<img
+												className={styles.postImg}
+												src={item.full_picture}
+											/>
 										</div>
-										<p className={styles.message}>{item.message}</p>
+										<p className={styles.message}>
+											{item.message}
+										</p>
+										<p className={styles.dateStamp}>
+											{formatDate(item.created_time)}
+										</p>
 									</div>
 								</a>
 							})}
-						</div>
-					: <div>loading...</div>
-				}
-			</article>
+						</Masonry>
+					</ResponsiveMasonry>
+					</div>
+				: <SimpleSpinner />
+			}
 		</Container>
 	</>
 }

@@ -2,11 +2,6 @@
 @import '../../../sass/variables'
 
 .postsContainer
-	display: grid
-	grid-template-columns: 1fr
-	@media screen and (min-width: $medium)
-		grid-template-columns: 1fr 1fr
-	gap: 60px
 	border-radius: .4rem
 	a
 		transition: box-shadow .7s
@@ -19,8 +14,9 @@
 
 .post
 	border: 1px solid #00000018
-	padding: 1.5rem
-	padding-top: 1rem
+	padding: 1rem
+	@media screen and (min-width: $medium)
+		padding: 1.5rem
 	&:hover
 		.postImg
 			transform: scale(1.02)
@@ -30,10 +26,11 @@
 	font-style: italic
 	color: $grayish
 	font-size: .8rem
+	margin-top: 1rem
 
 .imgContainer
 	overflow: hidden
-	margin: 1rem 0rem
+	margin-bottom: 1rem
 
 .postImg
 	width: 100%
@@ -42,3 +39,4 @@
 
 .message
 	text-align: left
+	text-indent: 1rem
