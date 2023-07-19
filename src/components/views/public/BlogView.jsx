@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet'
 import { Container } from 'react-bootstrap'
 import axios from 'axios'
+import moment from 'moment'
 
 import styles from './BlogView.module.sass'
 
@@ -10,21 +11,30 @@ const BlogView = () => {
 	const [ pageAccessToken, setPageAccessToken ] = useState(null)
 	const [ facebookPosts, setFacebookPosts ] = useState([])
 
+	// ToDo: move this somewhere
 	useEffect(() => {
 		const pageAccess = `https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`
 		axios.get(pageAccess).then((response) => {
 			setPageAccessToken(response.data.access_token)
 		})
 	}, [])
-
+	// and this
 	useEffect(() => {
 		if (pageAccessToken) {
-			const feedURL = `https://graph.facebook.com/v2.2/${process.env.REACT_APP_FACEBOOK_PAGE_ID}/feed?fields=message,full_picture&access_token=${pageAccessToken}`
+			const feedURL = `https://graph.facebook.com/v17.0/${process.env.REACT_APP_FACEBOOK_PAGE_ID}/feed?fields=message,full_picture,created_time,actions,permalink_url&access_token=${pageAccessToken}`
 			axios.get(feedURL).then(({ data: posts}) => {
-				setFacebookPosts(posts.data)
+				const filtered = posts.data.filter(post => post.hasOwnProperty('message'))
+				console.log(filtered)
+				setFacebookPosts(filtered)
 			})
 		}
 	}, [pageAccessToken])
+
+	const formatDate = date => {
+		console.log('Format: ', date)
+		const result = moment(date).format('LL')
+		return result
+	}
 
 	return <>
 		<Helmet>
@@ -37,10 +47,15 @@ const BlogView = () => {
 				{facebookPosts.length
 					? <div className={styles.postsContainer}>
 							{facebookPosts.map((item) => {
-								return <div key={item.id}>
-									<p>{item.message}</p>
-									<img src={item.full_picture} />
-								</div>
+								return <a href={item.permalink_url} key={item.id}>
+									<div className={styles.post}>
+										<p className={styles.dateStamp}>{formatDate(item.created_time)}</p>
+										<div className={styles.imgContainer}>
+											<img className={styles.postImg} src={item.full_picture} />
+										</div>
+										<p className={styles.message}>{item.message}</p>
+									</div>
+								</a>
 							})}
 						</div>
 					: <div>loading...</div>

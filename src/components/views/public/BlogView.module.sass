@@ -1,6 +1,44 @@
+@import '../../../sass/palette'
+@import '../../../sass/variables'
+
 .postsContainer
-  display: grid
-  grid-template-columns: 1fr 1fr
-  gap: 60px
-  img
-    max-width: 600px
+	display: grid
+	grid-template-columns: 1fr
+	@media screen and (min-width: $medium)
+		grid-template-columns: 1fr 1fr
+	gap: 60px
+	border-radius: .4rem
+	a
+		transition: box-shadow .7s
+		box-shadow: none
+		color: $blackText
+		&:hover
+			text-decoration: none
+			color: $blackText
+			box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 2px 6px -2px rgba(0,0,0,.1)
+
+.post
+	border: 1px solid #00000018
+	padding: 1.5rem
+	padding-top: 1rem
+	&:hover
+		.postImg
+			transform: scale(1.02)
+
+.dateStamp
+	text-align: right
+	font-style: italic
+	color: $grayish
+	font-size: .8rem
+
+.imgContainer
+	overflow: hidden
+	margin: 1rem 0rem
+
+.postImg
+	width: 100%
+	transition: all .5s ease-out
+	object-fit: cover
+
+.message
+	text-align: left
