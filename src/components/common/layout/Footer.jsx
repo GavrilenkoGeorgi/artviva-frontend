@@ -6,6 +6,7 @@ import { ReCaptchaStatement } from '..'
 
 import { ReactComponent as FbIcon } from '../../../svg/facebook.svg'
 import { ReactComponent as InstIcon } from '../../../svg/instagram.svg'
+import { ReactComponent as YouTubeIcon } from '../../../svg/youtube.svg'
 import { ReactComponent as MasterCardIcon } from '../../../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../../../svg/visa-logo.svg'
 import { ReactComponent as LiqPayLogoIcon } from '../../../svg/logo-liqpay-main.svg'
@@ -15,17 +16,14 @@ import styles from './Footer.module.sass'
 const Footer = () => {
 	const socialIconsStyle = {
 		width: '2em',
-		margin: '0em .5em'
 	}
 
 	const paymentIconsStyle = {
 		maxWidth: '2.3em',
-		margin: '1rem 0rem'
 	}
 
 	const LiqPayLogoStyle = {
 		maxWidth: '6em',
-		margin: '1rem'
 	}
 
 	// don't show footer inside certain routes
@@ -73,19 +71,26 @@ const Footer = () => {
 						</a>
 					</small>
 					<ReCaptchaStatement />
-					<Row className="justify-content-center mt-2">
-						<Col xs={8}>
+					<Row>
+						<Col xs={12} md={8} className={styles.paymentIconsCont}>
 							<VisaIcon style={paymentIconsStyle} />
 							<MasterCardIcon style={paymentIconsStyle} />
 							<LiqPayLogoIcon style={LiqPayLogoStyle} />
 						</Col>
-						<Col xs={4} className="d-flex align-items-center justify-content-end">
+						<Col xs={12} md={4} className={styles.socialIconsCont}>
 							<a
 								href="https://www.facebook.com/myz.shpytky"
 								alt="Фейсбук-група КЗСМО «Школа мистецтв «АРТ ВІВА»"
 								aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
 							>
 								<FbIcon style={socialIconsStyle} />
+							</a>
+							<a
+								href="https://www.youtube.com/@ArtViva"
+								alt="Ютюб КЗСМО «Школа мистецтв «АРТ ВІВА»"
+								aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
+							>
+								<YouTubeIcon style={socialIconsStyle} />
 							</a>
 							<a
 								href="https://www.instagram.com/myz_shputky"
@@ -98,7 +103,7 @@ const Footer = () => {
 					</Row>
 				</Col>
 
-				<Col className="pt-3 text-center text-muted">
+				<Col className="text-center text-md-right text-muted">
 					<span>
 						&copy;&nbsp;{footerDate()} Школа мистецтв «АРТ ВІВА»
 					</span>
