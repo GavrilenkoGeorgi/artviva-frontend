@@ -5,7 +5,6 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { ReCaptchaStatement } from '..'
 
 import { ReactComponent as FbIcon } from '../../../svg/facebook.svg'
-import { ReactComponent as InstIcon } from '../../../svg/instagram.svg'
 import { ReactComponent as YouTubeIcon } from '../../../svg/youtube.svg'
 import { ReactComponent as MasterCardIcon } from '../../../svg/MasterCard_Logo.svg'
 import { ReactComponent as VisaIcon } from '../../../svg/visa-logo.svg'
@@ -91,13 +90,6 @@ const Footer = () => {
 								aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
 							>
 								<YouTubeIcon style={socialIconsStyle} />
-							</a>
-							<a
-								href="https://www.instagram.com/myz_shputky"
-								alt="Інстаграм КЗСМО «Школа мистецтв «АРТ ВІВА»"
-								aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
-							>
-								<InstIcon style={socialIconsStyle} />
 							</a>
 						</Col>
 					</Row>
