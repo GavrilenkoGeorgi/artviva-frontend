@@ -26,14 +26,14 @@ describe('Teacher card component', () => {
 	})
 
 	it('expands and shows additional content', () => {
-		fireEvent.click(teacherCard.getByText('докладніше...'))
+		fireEvent.click(teacherCard.getByText('ще...'))
 		expect(teacherCard.getByText(/Some additional test text/i)).toBeInTheDocument()
 		expect(teacherCard.getByText(/Yet some more text for the second paragraph/i)).toBeInTheDocument()
 	})
 
 	it('hides expanded content after clicking a button', () => {
 		// it's hidden by default, so we expand it
-		fireEvent.click(teacherCard.getByText('докладніше...'))
+		fireEvent.click(teacherCard.getByText('ще...'))
 		expect(teacherCard.getByText(/Some additional test text/i)).toBeVisible()
 
 		// expanded 'more info' button is now an arrow, hence the test id
