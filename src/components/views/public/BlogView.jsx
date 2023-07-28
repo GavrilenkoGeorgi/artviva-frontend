@@ -52,15 +52,25 @@ const BlogView = () => {
 			<title>Блог школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
-		<Container className="text-center my-5 pb-5">
-			<h1 className="custom-font my-5">Останні новини</h1>
+		<Container className={styles.container}>
+			<h1 className="custom-font">Новини</h1>
+			<p className={styles.pageIntro}>
+				Ласкаво просимо до нашої сторінки новин,
+				де креативність перебуває на першому плані ;)
+				Відкрийте для себе останні події,
+				надихаючі історії та визначні досягнення наших
+				талановитих художників та музикантів.
+				Досліджуйте динамічний світ мистецької освіти
+				та музики та знайдіть натхнення для приєднання
+				до нашої спільноти пристрасних учнів.
+			</p>
 			{facebookPosts.length
 				? <div className={styles.postsContainer}>
-						<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 1440: 2, 1920: 3 }}>
+						<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 1440: 2 }}>
 							<Masonry gutter='2.5rem'>
 								{facebookPosts.map((item) => {
 									return <ScrollAnimation animateIn="fadeIn" key={item.id} >
-										<a href={item.permalink_url}>
+										<a className={styles.postLink} href={item.permalink_url}>
 											<div className={styles.post}>
 												<div className={styles.imgContainer}>
 													<img
@@ -71,9 +81,14 @@ const BlogView = () => {
 												<p className={styles.message}>
 													{item.message}
 												</p>
-												<p className={styles.dateStamp}>
-													{formatDate(item.created_time)}
-												</p>
+												<div className={styles.postFooter}>
+													<p className={styles.dateStamp}>
+														{formatDate(item.created_time)}
+													</p>
+													<p className={styles.postCta}>
+														❯❯
+													</p>
+												</div>
 											</div>
 										</a>
 									</ScrollAnimation>
@@ -88,7 +103,9 @@ const BlogView = () => {
 							</button>
 						</div>
 					</div>
-				: <SimpleSpinner />
+				: <div className={styles.spinnerCont}>
+					<SimpleSpinner />
+				</div>
 			}
 		</Container>
 	</>

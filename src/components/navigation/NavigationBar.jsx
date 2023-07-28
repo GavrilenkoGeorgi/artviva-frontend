@@ -71,7 +71,7 @@ const NavigationBar = ({ user }) => {
 		},
 		{
 			to: '/blog',
-			label: 'Новини/Facebook',
+			label: 'Новини',
 			className: linkClassList
 		},
 		{
