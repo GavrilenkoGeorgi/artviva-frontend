@@ -6,6 +6,8 @@ import { Container } from 'react-bootstrap'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { SimpleSpinner } from '../../common/spinners'
 import ScrollAnimation from 'react-animate-on-scroll'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
 
 import styles from './BlogView.module.sass'
 
@@ -54,16 +56,43 @@ const BlogView = () => {
 		</Helmet>
 		<Container className={styles.container}>
 			<h1 className="custom-font">Новини</h1>
-			<p className={styles.pageIntro}>
-				Ласкаво просимо до нашої сторінки новин,
-				де креативність перебуває на першому плані ;)
-				Відкрийте для себе останні події,
-				надихаючі історії та визначні досягнення наших
-				талановитих художників та музикантів.
-				Досліджуйте динамічний світ мистецької освіти
-				та музики та знайдіть натхнення для приєднання
-				до нашої спільноти пристрасних учнів.
-			</p>
+			<div className={styles.introContainer}>
+				<div className={styles.socialIconsCont}>
+					<a href="https://www.facebook.com/myz.shpytky"
+						alt="Фейсбук-група КЗСМО «Школа мистецтв «АРТ ВІВА»"
+						aria-label="Фейсбук" target="_blank" rel="noopener noreferrer"
+					>
+						<FontAwesomeIcon icon={faFacebookF} />
+					</a>
+					<a
+						href="https://www.youtube.com/@ArtViva"
+						alt="Ютюб КЗСМО «Школа мистецтв «АРТ ВІВА»"
+						aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
+					>
+						<FontAwesomeIcon icon={faYoutube} />
+					</a>
+					<a href="https://www.instagram.com/myz_shputky"
+						alt="Інстаграм КЗСМО «Школа мистецтв «АРТ ВІВА»"
+						aria-label="Інстаграм" target="_blank" rel="noopener noreferrer"
+					>
+						<FontAwesomeIcon icon={faInstagram} />
+					</a>
+				</div>
+				<div>
+					<p className={styles.pageIntro}>
+						Ласкаво просимо до нашої сторінки новин,
+						де креативність перебуває на першому плані ;)
+					</p>
+					<p className={styles.pageIntro}>
+						Відкрийте для себе останні події,
+						надихаючі історії та визначні досягнення наших
+						талановитих художників та музикантів.
+						Досліджуйте динамічний світ мистецької освіти
+						та музики та знайдіть натхнення для приєднання
+						до нашої спільноти пристрасних учнів.
+					</p>
+				</div>
+			</div>
 			{facebookPosts.length
 				? <div className={styles.postsContainer}>
 						<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 1440: 2 }}>
