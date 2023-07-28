@@ -51,7 +51,7 @@ const BlogView = () => {
 
 	return <>
 		<Helmet>
-			<title>Блог школи мистецтв «АРТ ВІВА»</title>
+			<title>Новини школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
 		<Container className={styles.container}>
