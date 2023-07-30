@@ -44,7 +44,7 @@ describe('Pupil routines', function() {
 
 		cy.contains('div', 'Телефонний номер учня')
 			.find('input').type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Ім\'я особи, яка звертається із заявою')
 			.find('input').type('Pupils Father')
@@ -57,7 +57,7 @@ describe('Pupil routines', function() {
 
 		cy.contains('div', 'Телефонний номер батька')
 			.find('input').type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Місце роботи батька')
 			.find('input').type('Construction site')
@@ -67,7 +67,7 @@ describe('Pupil routines', function() {
 
 		cy.contains('div', 'Телефонний номер матері')
 			.find('input').type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Місце роботи матері')
 			.find('input').type('Hospital')

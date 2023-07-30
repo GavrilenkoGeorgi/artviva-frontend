@@ -16,8 +16,9 @@ describe('Artviva public app view', function() {
 	it('teachers page can be opened', function() {
 		cy.contains('Вчителі').click()
 		cy.location('pathname').should('equal', '/teachers')
-		cy.contains('Адміністрація')
+		cy.contains('Дирекція')
 		cy.contains('Наші вчителі')
+		cy.contains('Вчителі з якими ми співпрацювали')
 	})
 
 	it('showcase page can be opened', function() {
@@ -32,9 +33,9 @@ describe('Artviva public app view', function() {
 	})
 
 	it('blog page can be opened', function() {
-		cy.contains('Блог').click()
+		cy.contains('Новини').click()
 		cy.location('pathname').should('equal', '/blog')
-		cy.contains('Фейсбук')
+		cy.contains('Новини')
 	})
 
 	it('contacts page can be opened', function() {
@@ -67,6 +68,9 @@ describe('Artviva public app view', function() {
 	})
 
 	it('register form can be opened', function() {
+		// needs refresh to log out
+		cy.visit('/')
+
 		cy.contains('Школа').click()
 		cy.contains('Реєстрація').click()
 		cy.location('pathname').should('equal', '/register')

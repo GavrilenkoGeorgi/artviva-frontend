@@ -34,7 +34,7 @@ describe('Public apply form', function() {
 
 		cy.contains('div', 'Телефонний номер учня')
 			.find('input').first().type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Ім\'я особи, яка звертається із заявою')
 			.find('input').first().type('Pupils Father')
@@ -50,7 +50,7 @@ describe('Public apply form', function() {
 
 		cy.contains('div', 'Телефонний номер батька')
 			.find('input').first().type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Місце роботи батька')
 			.find('input').first().type('Construction site')
@@ -60,7 +60,7 @@ describe('Public apply form', function() {
 
 		cy.contains('div', 'Телефонний номер матері')
 			.find('input').first().type('0501234567')
-			.should('have.value', '+38 (050) 123-45-67')
+			.should('have.value', '0501234567')
 
 		cy.contains('div', 'Місце роботи матері')
 			.find('input').first().type('Hospital')
