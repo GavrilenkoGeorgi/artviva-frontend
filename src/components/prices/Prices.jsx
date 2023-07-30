@@ -6,7 +6,7 @@ import { setNotification } from '../../reducers/notificationReducer'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHryvnia } from '@fortawesome/free-solid-svg-icons'
 
-import { Row, Col } from 'react-bootstrap'
+import styles from './Prices.module.sass'
 
 const Prices = ({ setNotification }) => {
 
@@ -43,27 +43,28 @@ const Prices = ({ setNotification }) => {
 			Ціни на навчання
 		</h4>
 		<p className="text-center mt-2 mb-3">
-			<em className="text-muted">При оплаті через сайт.</em>
+			<em className="text-muted">При <a href='/pay/form'>оплаті</a> через сайт.</em>
 		</p>
 		{prices.length
 			? <>
 				{prices.map(item =>
-					<Row key={item.id} className="mt-3 py-2 price-position justify-content-end">
-						<Col xs={2} className="px-1 text-center">
-							<strong>{item.cost}</strong>{' '}
-							<FontAwesomeIcon icon={faHryvnia} className="text-muted pr-1"/>
-						</Col>
-						{item.titles.map(title =>
-							<Col xs={10} key={title}>{title}<br /></Col>
-						)}
-					</Row>
+					<div key={item.id} className={styles.pricePosition}>
+						<div className={styles.price}>
+							<strong>{item.cost}</strong>&nbsp;<FontAwesomeIcon icon={faHryvnia} className="text-muted"/>
+						</div>
+						<div>
+							{item.titles.map(title =>
+								<div key={title} className={styles.specName}>• {title}</div>
+							)}
+						</div>
+					</div>
 				)}
 			</>
-			: <Row className="d-flex justify-content-center">
+			: <div>
 				<em className="p-3">
 					Зачекайте, завантажуються актуальні ціни...
 				</em>
-			</Row>
+			</div>
 		}
 	</>
 }

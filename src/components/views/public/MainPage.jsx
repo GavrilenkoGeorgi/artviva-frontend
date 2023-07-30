@@ -26,29 +26,18 @@ const MainPage = () => {
 				<meta name="description" content="Школа мистецтв «АРТ ВІВА» сучасний заклад початкової мистецької освіти." />
 			</Helmet>
 			<Carousel />
-			<Container className={styles.mainSection}>
+			<div className={styles.logoImg}>
+				<Image
+					src="img/logo/artviva_logo.png"
+					className='responsive-image'
+					alt="Лого ArtViva"
+				/>
+			</div>
+			<Container>
 				<Row>
-					<Col
-						sm={6}
-						className="d-flex justify-content-center align-items-center"
-					>
-						<Image
-							src="img/logo/artviva_logo.png"
-							className='responsive-image'
-							alt="Лого ArtViva"
-						/>
-					</Col>
-					<Col
-						sm={6}
-						className="d-flex justify-content-center align-items-center"
-					>
-						<strong className="main-title custom-font">
-							Школа мистецтв
-						</strong>
-					</Col>
 					{/* <Announcement /> */}
 					<Col>
-						<Row className="text-center pt-4 justify-content-center">
+						<Row className="text-center justify-content-center">
 							<Col sm={6} className={styles.mainTextItem}>
 								<ScrollAnimation animateIn="fadeIn">
 									<OrigamiIcon />
@@ -75,7 +64,7 @@ const MainPage = () => {
 									навчання відповідно до нових освітніх програм.
 								</p>
 							</Col>
-							<Col sm={6} className={styles.mainTextItem}>
+							<Col sm={8} className={styles.mainTextItem}>
 								<ScrollAnimation animateIn="fadeIn">
 									<LoveSongIcon />
 								</ScrollAnimation>
@@ -92,7 +81,7 @@ const MainPage = () => {
 			</Container>
 			<Container>
 				<Row className="d-flex justify-content-center">
-					<Col sm={6} className={styles.mainTextItem}>
+					<Col sm={8} className={styles.mainTextItem}>
 						<ScrollAnimation animateIn="fadeIn">
 							<Enrollment />
 						</ScrollAnimation>

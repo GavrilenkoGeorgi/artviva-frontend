@@ -2,7 +2,7 @@ import React from 'react'
 
 const Benefits = () => {
 
-	return <section className='pb-5 mb-5'>
+	return <section className='prices-explained'>
 		<h4 className="text-center custom-font">Пільги</h4>
 		<p className="py-2">
 			Відповідно до рішення Дмитрівської сільської ради Бучанського
