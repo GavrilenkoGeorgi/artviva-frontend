@@ -231,12 +231,12 @@ nav
 .payment-month
 	@for $i from 1 through 9
 		&:nth-child(#{$i})
-			background-color: color.adjust($month-color, $hue: $i * 15%)
+			background-color: color.adjust($month-color, $hue: $i * 15)
 
 .top-ten-colors
 	@for $i from 1 through 9
 		&:nth-child(#{$i})
-			background-color: color.adjust($top-ten-color, $hue: $i * 30%)
+			background-color: color.adjust($top-ten-color, $hue: $i * 30)
 
 .payment-month
 	font-size: .8rem
@@ -313,7 +313,7 @@ nav
 	border-radius: .7rem
 	@for $i from 1 through 5
 		&:nth-child(#{$i})
-			background-color: color.adjust($top-ten-color, $hue: $i * 50%)
+			background-color: color.adjust($top-ten-color, $hue: $i * 50)
 
 .user-details-email
 	color: $primary-color
@@ -344,3 +344,15 @@ nav
 .dropdown-item
 	&:hover
 		background-color: #fff
+
+.nav-tabs,
+.tab-content
+	width: 100%
+	max-width: 1000px
+
+.nav-tabs
+	margin-top: 1rem
+	justify-content: center
+
+.tab-content
+	margin-top: 2rem

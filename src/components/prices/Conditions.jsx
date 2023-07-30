@@ -2,7 +2,7 @@ import React from 'react'
 
 const Conditions = () => {
 
-	return <div className="prices-explained">
+	return <section className="prices-explained">
 		<h4 className="text-center custom-font">Умови навчання</h4>
 		<p>
 			Заняття проводяться індивідуально для учнів навчаючихся на музичних інструментах та тих,
@@ -34,7 +34,7 @@ const Conditions = () => {
 			вносити визначену плату за навчання (надання платних послуг) з вересня по травень
 			включно.
 		</p>
-	</div>
+	</section>
 }
 
 export default Conditions
