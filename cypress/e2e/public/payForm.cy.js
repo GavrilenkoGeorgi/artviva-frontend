@@ -11,7 +11,6 @@ describe('Payment form', function() {
 	})
 
 	it('can be opened and filled', function() {
-		const currentMonth = new Date().toLocaleDateString('uk', { month: 'long' })
 
 		cy.location('pathname').should('equal', '/pay/form')
 		cy.contains('Оплата навчання')
@@ -22,10 +21,10 @@ describe('Payment form', function() {
 		cy.contains('div', 'Прізвище учня')
 			.find('input').first().type('Test Pupil')
 
-		cy.contains('div', 'Предмет')
+		cy.contains('div', 'Фах або повна вартість навчання')
 			.find('select').first().select('Java')
 
-		cy.contains('div', currentMonth)
+		cy.contains('div', 'вересень')
 			.find('[type="checkbox"]').first().check({ force: true })
 
 		cy.contains('Всього: 359.98')

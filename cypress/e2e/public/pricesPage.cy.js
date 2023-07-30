@@ -13,7 +13,8 @@ describe('Prices page', function() {
 		cy.contains('Інформація про освітні послуги')
 		cy.contains('a', 'Ціни').should('have.class', 'active')
 		cy.contains('Ціни на навчання')
-		cy.contains('350.35 Java')
+		cy.contains('250.25')
+    cy.contains('Саксофон')
 	})
 
 	it('benefits tab can be opened', function() {

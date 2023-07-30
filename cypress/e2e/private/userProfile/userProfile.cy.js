@@ -37,7 +37,7 @@ describe('User profile', function() {
 		cy.get('#employmentDate-input').should('have.value', new Date().toLocaleDateString('en-CA'))
 
 		cy.contains('div', 'Років')
-			.find('input').first().type('1')
+		cy.get('[data-cy="years-input"]').type('1', {force: true})
 		cy.get('#months-input').type('1')
 		cy.get('#days-input').type('1')
 

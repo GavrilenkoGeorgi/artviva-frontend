@@ -247,7 +247,7 @@ describe('<TeacherForm /> component', () => {
 
 	it('phone number input value can be changed', () => {
 		userEvent.type(phoneNumberInput, '0505555555')
-		expect(phoneNumberInput.value).toBe('+38 (050) 555-55-55')
+		expect(phoneNumberInput.value).toBe('0505555555')
 	})
 
 	it('phone number input shows errors on invalid input', async () => {

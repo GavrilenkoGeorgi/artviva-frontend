@@ -350,6 +350,7 @@ const TeacherForm = ({
 						<TextInput
 							label="Років"
 							name="years"
+							dataCy="years-input"
 							onChange={handleChange}
 							onBlur={handleBlur}
 							onKeyUp={event => calcExp(event, values)}
