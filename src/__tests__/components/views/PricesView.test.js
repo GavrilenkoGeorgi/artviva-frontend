@@ -32,7 +32,7 @@ describe('<PricesView /> component', () => {
 	})
 
 	it('shows prices list', () => {
-		expect(screen.getByText('Basic programming language')).toBeInTheDocument()
+		expect(screen.getByText('• Basic programming language')).toBeInTheDocument()
 	})
 
 	it('opens benefits tab on click', async () => {
