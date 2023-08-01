@@ -42,8 +42,8 @@ export default function teacherFormValidationSchema(specialtyListData) {
 			.min(0, 'Нуль або більше.')
 			.max(100, 'Забагато.'),
 		phone: Yup.string()
-			.length(19, 'Перевірте форматування, 19 символів: +38 (XXX) XXX-XX-XX')
-			.matches(phoneNumber, 'Перевірте форматування, має бути: +38 (XXX) XXX-XX-XX')
+			.length(10, 'Перевірте форматування, 10 символів: 0505554433')
+			.matches(phoneNumber, 'Перевірте форматування, має бути: 0505554433')
 			.required('Введіть номер телефону.'),
 		contactEmail: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
