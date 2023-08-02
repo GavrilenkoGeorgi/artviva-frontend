@@ -17,14 +17,14 @@
 
 .paymentIconsCont
 	margin: 1rem 0
-	@media screen and (min-width: $medium)
+	@media screen and (min-width: $small)
 		justify-content: flex-start
 	svg
 		margin: 0 .33rem
 
 .socialIconsCont
 	margin: 2.5rem 0
-	@media screen and (min-width: $medium)
+	@media screen and (min-width: $small)
 		justify-content: flex-end
 	a
 		margin: 0 .66rem
@@ -33,6 +33,13 @@
 	margin-top: 1rem
 	margin-bottom: 2rem
 	text-align: center
+	display: flex
+	flex-direction: column
+	a
+		&:first-child
+			margin-right: 1rem
+	@media screen and (min-width: $small)
+		flex-direction: row
 
 .contactsContainer
 	display: flex
@@ -40,10 +47,10 @@
 	justify-content: center
 	align-items: center
 	text-align: center
-	@media screen and (min-width: $medium)
+	@media screen and (min-width: $small)
 		text-align: left
 		flex-direction: row
-		justify-content: space-around
+		justify-content: space-between
 
 .schoolContacts,
 .schoolTitle
@@ -59,10 +66,14 @@
 			font-size: 1rem
 			font-family: $custom-font
 			font-style: normal
-			margin-bottom: .5rem
+			margin-bottom: .2rem
 			@media screen and (min-width: $medium)
 				font-size: 1.3rem
 
 .footerSmallText
 	color: $lightGrey
 	font-size: .7rem
+	text-align: center
+	@media screen and (min-width: $small)
+		text-align: left
+

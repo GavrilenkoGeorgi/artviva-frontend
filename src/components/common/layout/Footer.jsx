@@ -63,15 +63,15 @@ const Footer = () => {
 
 			<Row>
 				<Col className={styles.legalLinks}>
-					<a className="mr-3" href="/privacypolicy"><u>Політика конфіденційності</u></a>
+					<a href="/privacypolicy"><u>Політика конфіденційності</u></a>
 					<a href="/oferta" ><u>Публічна оферта</u></a>
 				</Col>
 				<Col xs={12} >
-					<small className={styles.footerSmallText}>
+					<p className={styles.footerSmallText}>
 						Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
 						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
 						</a>
-					</small>
+					</p>
 					<ReCaptchaStatement />
 					<Row>
 						<Col xs={12} md={8} className={styles.paymentIconsCont}>
