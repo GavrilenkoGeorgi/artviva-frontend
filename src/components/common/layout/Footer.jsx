@@ -31,41 +31,44 @@ const Footer = () => {
 
 	return <footer className={styles.footer}>
 		<Container>
-			<Row className="mb-3">
-				<Col>
-					<p className="mb-2 lead">
-						<strong>КЗСМО «Школа мистецтв «АРТ ВІВА»</strong>
+			<div className={styles.contactsContainer}>
+
+				<div className={styles.schoolTitle}>
+					<p>
+						<strong>
+							КЗСМО «Школа мистецтв «АРТ ВІВА»
+						</strong>
 					</p>
 					<p>
-						<em>Дмитрівської сільської ради Бучанського району Київської області</em>
+
+							Дмитрівської сільської ради<br />
+							Бучанського району Київської області
 					</p>
-				</Col>
-				<Col xs={12} md={6} className="d-flex align-items-center pt-3 pt-sm-0">
-					<Row>
-						<Col xs={12} className="pb-2">
-							<p className="lead mb-2">
-								<strong>Адреса адміністрації школи:</strong>
-							</p>
-							<p>
-								<em className="text-muted">
-									08122, Україна, Київська обл.,<br />
-									Києво-Святошинський р-н, село Шпитьки,<br />
-									вул. Господарська, будинок 3.
-								</em>
-							</p>
-						</Col>
-					</Row>
-				</Col>
-			</Row>
+				</div>
+
+				<div className={styles.schoolContacts}>
+					<p>
+						<strong>
+							Адреса адміністрації школи:
+						</strong>
+					</p>
+					<p>
+							08122, Україна, Київська обл.,<br />
+							Києво-Святошинський р-н, село Шпитьки,<br />
+							вул. Господарська, будинок 3.
+					</p>
+				</div>
+
+			</div>
 
 			<Row>
-				<Col>
+				<Col className={styles.legalLinks}>
 					<a className="mr-3" href="/privacypolicy"><u>Політика конфіденційності</u></a>
 					<a href="/oferta" ><u>Публічна оферта</u></a>
 				</Col>
-				<Col xs={12}>
-					<small>
-						Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik"> Freepik</a>
+				<Col xs={12} >
+					<small className={styles.footerSmallText}>
+						Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
 						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
 						</a>
 					</small>
