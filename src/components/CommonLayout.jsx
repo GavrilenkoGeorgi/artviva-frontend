@@ -5,7 +5,7 @@ import { Container, Row } from 'react-bootstrap'
 const CommonLayout = props => {
 	return <Container
 		id="layout"
-		className="mt-5 py-4 py-lg-5 animated fadeIn"
+		className="mt-5 animated fadeIn"
 	>
 		<Row id="layoutRow"
 			className="d-flex flex-column align-items-center align-content-center"

@@ -5,7 +5,8 @@ import styles from './Oferta.module.sass'
 const Oferta = () => {
 	return <section className={styles.ofertaSection}>
 		<h3>
-			Договір публічної оферти про надання послуг
+			Договір публічної оферти<br />
+			про надання послуг
 		</h3>
 		<p>
 			<strong>Комунальний заклад спеціалізованої мистецької освіти «Школа мистецтв «АРТ ВІВА»

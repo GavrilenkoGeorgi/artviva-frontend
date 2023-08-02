@@ -1,17 +1,19 @@
 import React from 'react'
 
+import styles from './layout/Footer.module.sass'
+
 const ReCaptchaStatement = () => {
 	return (
-		<div className="recaptcha-statement">
+		<p className={styles.footerSmallText}>
 			Цей сайт захищений reCAPTCHA, і застосовуються
-			<a href="https://policies.google.com/privacy">
+			{' '}<a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">
 				Політика конфіденційності
 			</a>
-			Google та
-			<a href="https://policies.google.com/terms">
+			{' '}Google та
+			{' '}<a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">
 				Умови використання.
 			</a>
-		</div>
+		</p>
 	)
 }
 
