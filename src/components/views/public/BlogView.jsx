@@ -28,8 +28,7 @@ const BlogView = () => {
 		}
 	}, [])
 
-	// ToDo: move this somewhere
-	// --- Get page access token ---
+	// ToDo: move this somewhere // --- Get page access token ---
 	useEffect(() => {
 		const pageAccess = `https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`
 		axios.get(pageAccess).then((response) => {
