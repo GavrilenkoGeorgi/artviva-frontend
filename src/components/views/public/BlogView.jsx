@@ -9,8 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import Parallax from '../../common/layout/Parallax'
 import { useWindowSize } from '../../../hooks'
+import { getAccessToken, getPostsURL } from './facebookAPI'
 
 import styles from './BlogView.module.sass'
+
 
 const BlogView = () => {
 
@@ -19,24 +21,24 @@ const BlogView = () => {
 	const [ postsURL, setPostsURL ] = useState(null)
 	const [ paging, setPaging ] = useState(null)
 
+	// parallax
 	const [ aspect, setAspect ] = useState('6 / 3')
-
 	const screenWidth = useWindowSize().width
+
 	useEffect(() => {
 		if (screenWidth >= 1280) {
 			setAspect('6 / 1')
 		}
 	}, [])
 
-	// ToDo: move this somewhere // --- Get page access token ---
+	// Get page access token
 	useEffect(() => {
-		const pageAccess = `https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`
-		axios.get(pageAccess).then((response) => {
-			setPostsURL(`https://graph.facebook.com/v17.0/${process.env.REACT_APP_FACEBOOK_PAGE_ID}/feed?fields=message,full_picture,created_time,permalink_url&access_token=${response.data.access_token}`)
+		getAccessToken().then(({ data }) => {
+			setPostsURL(getPostsURL(data.access_token))
 		})
 	}, [])
 
-	// and this
+	// Fetch news on url change
 	useEffect(() => {
 		setFetching(true)
 		if (postsURL) {
