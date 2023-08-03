@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import moment from 'moment'
 import { Helmet } from 'react-helmet'
-import { Container } from 'react-bootstrap'
 import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 import { SimpleSpinner } from '../../common/spinners'
 import ScrollAnimation from 'react-animate-on-scroll'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
+import Parallax from '../../common/layout/Parallax'
+import { useWindowSize } from '../../../hooks'
 
 import styles from './BlogView.module.sass'
 
@@ -18,8 +19,16 @@ const BlogView = () => {
 	const [ postsURL, setPostsURL ] = useState(null)
 	const [ paging, setPaging ] = useState(null)
 
-	// ToDo: move this somewhere
-	// --- Get page access token ---
+	const [ aspect, setAspect ] = useState('6 / 3')
+
+	const screenWidth = useWindowSize().width
+	useEffect(() => {
+		if (screenWidth >= 1280) {
+			setAspect('6 / 1')
+		}
+	}, [])
+
+	// ToDo: move this somewhere // --- Get page access token ---
 	useEffect(() => {
 		const pageAccess = `https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`
 		axios.get(pageAccess).then((response) => {
@@ -54,8 +63,9 @@ const BlogView = () => {
 			<title>Новини школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
-		<Container className={styles.container}>
-			<h1 className="custom-font">Новини</h1>
+		<Parallax imgSrc="img/parallax/score.webp" aspect={aspect} />
+		<section className={styles.container}>
+			<h1>Новини</h1>
 			<div className={styles.introContainer}>
 				<div className={styles.socialIconsCont}>
 					<a href="https://www.facebook.com/myz.shpytky"
@@ -95,7 +105,7 @@ const BlogView = () => {
 			</div>
 			{facebookPosts.length
 				? <div className={styles.postsContainer}>
-						<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 1440: 2 }}>
+						<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 800: 2 }}>
 							<Masonry gutter='2.5rem'>
 								{facebookPosts.map((item) => {
 									return <ScrollAnimation animateIn="fadeIn" key={item.id} >
@@ -136,7 +146,7 @@ const BlogView = () => {
 					<SimpleSpinner />
 				</div>
 			}
-		</Container>
+		</section>
 	</>
 }
 

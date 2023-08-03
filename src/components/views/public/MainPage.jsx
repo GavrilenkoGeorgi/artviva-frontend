@@ -2,9 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import { Helmet } from 'react-helmet'
-import { ParallaxProvider } from 'react-scroll-parallax'
-import { ParallaxBanner } from 'react-scroll-parallax'
-import ParallaxCache from '../../common/ParallaxCache'
 import ScrollAnimation from 'react-animate-on-scroll'
 
 import { Container, Row, Col, Image } from 'react-bootstrap'
@@ -17,6 +14,7 @@ import { ReactComponent as LoveSongIcon } from '../../../svg/love-song.svg'
 import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
 import styles from './MainPage.module.sass'
 /* import Announcement from '../../announcements/Announcement' */
+import Parallax from '../../common/layout/Parallax'
 
 const MainPage = () => {
 	return (
@@ -108,22 +106,9 @@ const MainPage = () => {
 					</Col>
 				</Row>
 			</Container>
-			<ParallaxProvider>
-				<ParallaxCache />
-				<ParallaxBanner
-					className={styles.parallax}
-					layers={[
-						{
-							image: 'img/parallax/vinyl.webp',
-							amount: 0.7,
-						},
-					]}
-					style={{
-						height: '35rem',
-					}}
-				>
-				</ParallaxBanner>
-			</ParallaxProvider>
+			<div className={styles.parallax}>
+				<Parallax imgSrc="img/parallax/vinyl.webp" aspect="2 / 1" />
+			</div>
 			<SendContactMessage />
 		</>
 	)
