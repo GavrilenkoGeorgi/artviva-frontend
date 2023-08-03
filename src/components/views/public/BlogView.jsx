@@ -63,7 +63,7 @@ const BlogView = () => {
 			<title>Новини школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
-		<Parallax imgSrc="img/parallax/score.webp" aspect={aspect} />
+		<Parallax imgSrc="img/parallax/art.jpg" aspect={aspect} />
 		<section className={styles.container}>
 			<h1>Новини</h1>
 			<div className={styles.introContainer}>
@@ -88,18 +88,22 @@ const BlogView = () => {
 						<FontAwesomeIcon icon={faInstagram} />
 					</a>
 				</div>
-				<div>
-					<p className={styles.pageIntro}>
-						Ласкаво просимо до нашої сторінки новин,
+				<div className={styles.pageIntro}>
+					<p>
+						Ласкаво просимо до новин,
 						де креативність перебуває на першому плані ;)
 					</p>
-					<p className={styles.pageIntro}>
-						Відкрийте для себе останні події,
-						надихаючі історії та визначні досягнення наших
-						талановитих художників та музикантів.
-						Досліджуйте динамічний світ мистецької освіти
-						та музики та знайдіть натхнення для приєднання
-						до нашої спільноти пристрасних учнів.
+					<p>
+						Відкрийте для себе останні події, надихаючі
+						історії та визначні досягнення наших талановитих
+						учнів: художників та музикантів, артистів та
+						хореографів. Досліджуйте дивовижний світ мистецтва,
+						музики, театру та знайдіть натхнення для приєднання
+						до нашої спільноти учнів.
+					</p>
+					<p className={styles.slogan}>
+						Здійсни свої творчі мрії та розкрий
+						свій талант разом з "Арт Віва"!
 					</p>
 				</div>
 			</div>
