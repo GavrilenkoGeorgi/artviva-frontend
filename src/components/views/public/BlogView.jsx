@@ -63,7 +63,7 @@ const BlogView = () => {
 			<title>Новини школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
-		<Parallax imgSrc="img/parallax/score.webp" aspect={aspect} />
+		<Parallax imgSrc="img/parallax/art.jpg" aspect={aspect} />
 		<section className={styles.container}>
 			<h1>Новини</h1>
 			<div className={styles.introContainer}>
