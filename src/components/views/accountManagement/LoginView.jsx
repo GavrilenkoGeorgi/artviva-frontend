@@ -59,6 +59,9 @@ const LoginView = ({
 				}, 5)
 				setLoginSuccessful(true)
 			})
+			.catch((error) => {
+				console.error(error)
+			})
 			.finally(() => {
 				if (!unmounted.current)
 					setProcessingForm(false)

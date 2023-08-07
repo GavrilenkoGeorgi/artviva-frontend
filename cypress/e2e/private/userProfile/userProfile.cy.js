@@ -47,7 +47,7 @@ describe('User profile', function() {
 			.find('input').first().type(36)
 		// phone number
 		cy.contains('div', 'Телефонний номер')
-			.find('input').first().type('0501234567').should('have.value', '+38 (050) 123-45-67')
+			.find('input').first().type('0501234567').should('have.value', '0501234567')
 		// email
 		// eslint-disable-next-line
 		cy.contains('Контактна електронна пошта').scrollIntoView().wait(750)

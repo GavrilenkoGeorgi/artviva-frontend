@@ -54,7 +54,7 @@ describe('Adding new teacher through the form', () => {
 			.find('input').first().type(36)
 		// phone number
 		cy.contains('div', 'Телефонний номер')
-			.find('input').first().type('0501234567').should('have.value', '+38 (050) 123-45-67')
+			.find('input').first().type('0501234567').should('have.value', '0501234567')
 		// email
 		cy.contains('div', 'Контактна електронна пошта')
 			.find('input').first().type('test@example.com')
