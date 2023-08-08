@@ -22,13 +22,12 @@ const BlogView = () => {
 	const [ paging, setPaging ] = useState(null)
 
 	// parallax
-	const [ aspect, setAspect ] = useState('6 / 3')
+	const [ aspect, setAspect ] = useState('4 / 3')
 	const screenWidth = useWindowSize().width
 
 	useEffect(() => {
-		if (screenWidth >= 1280) {
-			setAspect('6 / 1')
-		}
+		if (screenWidth >= 500) setAspect('16 / 9')
+		if (screenWidth >= 1280) setAspect('16 / 4')
 	}, [])
 
 	// Get page access token

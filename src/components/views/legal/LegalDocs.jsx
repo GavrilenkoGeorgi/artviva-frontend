@@ -1,9 +1,8 @@
 import React from 'react'
 
 import CommonLayout from '../../CommonLayout'
-import { ButtonLink } from '../../common/buttons'
+import QuestionnaireCTA from '../../announcements/QuestionnaireCTA'
 import links from '../../../data/legalDocsLinks.json'
-import styles from './LegalDocs.module.sass'
 
 const LegalDocs = () => {
 
@@ -25,23 +24,7 @@ const LegalDocs = () => {
 			</h1>
 
 			<aside>
-				<h2>Анкета для батьків</h2>
-				<p>
-					Допоможіть нам покращити ваш досвід у школі, поділившись своїми думками.
-					Віддайте кілька хвилин, щоб повідомити нам, наскільки ми відповідаємо
-					вашим очікуванням. Ваша думка допомагає нам створити ще краще
-					середовище для творчого і музичного розвитку вашої дитини. Клікнить на
-					кнопку, щоб відкрітити анкету.
-					Дякуємо, що є частиною нашої творчої спільноти!
-				</p>
-				<div className={styles.cta}>
-					<ButtonLink
-						variant="primary"
-						route="https://docs.google.com/forms/d/e/1FAIpQLSdUZJHgvXtu81sHLhckFbxPkUAvci5hRE0t_GN_fqWklIee4Q/viewform"
-						label="Поділіться своїми враженнями"
-						className="primary-color-shadow"
-					/>
-				</div>
+				<QuestionnaireCTA />
 			</aside>
 
 			<h2>Порядок реагування на доведені випадки булінгу</h2>

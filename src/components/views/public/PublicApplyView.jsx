@@ -87,12 +87,12 @@ const PublicApplyView = ({ match, specialties, setNotification, setProcessingFor
 		setInfoModalVis(true)
 	}
 
-	return <>
+	return <CommonLayout>
 		<Helmet>
 			<title>Подати заяву до школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Заповнити форму та подати заяву на навчання до школи мистецтв." />
 		</Helmet>
-		<CommonLayout>
+		<>
 			{match.params.status
 				? <PublicApplyStatus status={match.params.status}/>
 				: <>
@@ -116,8 +116,8 @@ const PublicApplyView = ({ match, specialties, setNotification, setProcessingFor
 					/>
 				</>
 			}
-		</CommonLayout>
-	</>
+		</>
+	</CommonLayout>
 }
 
 PublicApplyView.propTypes = {
