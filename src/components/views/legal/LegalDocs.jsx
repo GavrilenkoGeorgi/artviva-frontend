@@ -1,7 +1,7 @@
 import React from 'react'
 
 import CommonLayout from '../../CommonLayout'
-import { Container } from 'react-bootstrap'
+import QuestionnaireCTA from '../../announcements/QuestionnaireCTA'
 import links from '../../../data/legalDocsLinks.json'
 
 const LegalDocs = () => {
@@ -18,24 +18,14 @@ const LegalDocs = () => {
 	}
 
 	return <CommonLayout>
-		<Container className="page-container my-5">
-			<h1 className="custom-font mt-5">
+		<section className="page-container">
+			<h1>
 				Нормативна база, якою керується у своїй діяльності школа
 			</h1>
 
-			<h2>Правові документи:</h2>
-			<ul>
-				{links.legalDocs.map(item => {
-					return pdfLinkComp(item.title, item.link)
-				})}
-			</ul>
-
-			<h2>Закони України:</h2>
-			<ul>
-				{links.laws.map(item => {
-					return pdfLinkComp(item.title, item.link)
-				})}
-			</ul>
+			<aside>
+				<QuestionnaireCTA />
+			</aside>
 
 			<h2>Порядок реагування на доведені випадки булінгу</h2>
 			<p>
@@ -82,14 +72,28 @@ const LegalDocs = () => {
 				</li>
 			</ul>
 
-			<h2>Інформаційна відкритість</h2>
+			<h2>Інформаційна відкритість:</h2>
 			<ul>
 				{links.pdf.map(item => {
 					return pdfLinkComp(item.title, item.link, item.humanReadableTitle)
 				})}
 			</ul>
 
-		</Container>
+			<h2>Правові документи:</h2>
+			<ul>
+				{links.legalDocs.map(item => {
+					return pdfLinkComp(item.title, item.link)
+				})}
+			</ul>
+
+			<h2>Закони України:</h2>
+			<ul>
+				{links.laws.map(item => {
+					return pdfLinkComp(item.title, item.link)
+				})}
+			</ul>
+
+		</section>
 	</CommonLayout>
 }
 

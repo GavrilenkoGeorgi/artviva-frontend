@@ -3,7 +3,7 @@ import { Carousel } from 'react-bootstrap'
 
 const MainViewCarousel = () => {
 	return (
-		<Carousel className="carousel-container" fade>
+		<Carousel className="carousel-container" slide>
 			<Carousel.Item>
 				<div className="carousel-overlay"></div>
 				<img

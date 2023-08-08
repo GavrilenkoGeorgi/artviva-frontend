@@ -2,10 +2,11 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 
 import AboutTextImage from '../../common/AboutTextImage'
+import CommonLayout from '../../CommonLayout'
 import styles from './AboutView.module.sass'
 
 const AboutView = () => {
-	return <>
+	return <CommonLayout>
 		<Helmet>
 			<title>Історія школи мистецтв «АРТ ВІВА»</title>
 			<meta
@@ -210,7 +211,7 @@ const AboutView = () => {
 			</article>
 		</section>
 
-	</>
+	</CommonLayout>
 }
 
 export default AboutView

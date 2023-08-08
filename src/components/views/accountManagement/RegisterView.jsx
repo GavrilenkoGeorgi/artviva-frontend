@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { Container, Row, Col } from 'react-bootstrap'
 import RegisterForm from '../../forms/RegisterForm'
+import CommonLayout from '../../CommonLayout'
 
 const RegisterView = () => {
 
 	const [registrationSuccessful, setRegistrationSuccessful] = useState(false)
 
-	return (
+	return <CommonLayout>
 		<Container>
 			<Row className="d-flex justify-content-center align-items-center">
 				<Col xs={12} sm={10} md={7} className="text-center">
@@ -33,7 +34,7 @@ const RegisterView = () => {
 				</Col>
 			</Row>
 		</Container>
-	)
+	</CommonLayout>
 }
 
 const mapStateToProps = (state) => {

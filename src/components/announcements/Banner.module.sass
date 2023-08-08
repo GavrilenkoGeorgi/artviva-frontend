@@ -1,0 +1,31 @@
+@import '../../sass/_variables'
+@import '../../sass/_palette'
+
+.bannerLayout
+	display: flex
+	justify-content: center
+
+.bannerContainer
+	background-color: $pupil-not-enrolled
+	position: fixed
+	margin: 2rem 1rem
+	border: 2px solid $google-form-color
+	z-index: 3000
+	padding: 2rem
+	padding-bottom: 1rem
+	border-radius: 6px
+	max-width: 700px
+	p
+		text-indent: 1rem
+	button
+		border: none
+		background-color: transparent
+		opacity: .5
+		transition: opacity .3s ease-in
+		&:hover
+			opacity: 1
+
+.closeBtnCont
+	display: flex
+	justify-content: flex-end
+	margin-bottom: 1rem

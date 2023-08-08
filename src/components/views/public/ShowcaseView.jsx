@@ -1,6 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
+import CommonLayout from '../../CommonLayout'
 import YoutubeVideo from '../../common/YoutubeVideo'
 import { Container } from 'react-bootstrap'
 
@@ -29,7 +30,7 @@ const ShowcaseView = () => {
 		}
 	]
 
-	return <>
+	return <CommonLayout>
 		<Helmet>
 			<title>На сцені школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Виступи наших учнів та вчителів." />
@@ -49,7 +50,7 @@ const ShowcaseView = () => {
 				</div>
 			))}
 		</Container>
-	</>
+	</CommonLayout>
 }
 
 export default ShowcaseView

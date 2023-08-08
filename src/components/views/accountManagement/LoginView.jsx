@@ -10,6 +10,7 @@ import { setNotification, setProcessingForm } from '../../../reducers/notificati
 
 import { Container, Row, Col, Image } from 'react-bootstrap'
 import LoginForm from '../../forms/LoginForm'
+import CommonLayout from '../../CommonLayout'
 
 const LoginView = ({
 	login,
@@ -80,28 +81,30 @@ const LoginView = ({
 		}
 	}, [loginSuccessful])
 
-	return <Container>
-		<Row className="d-flex justify-content-center">
-			<Col xs={10} md={4} className="text-center">
-				<span className="image-align-helper"></span>
-				<Image
-					src="img/logo/artviva_logo.png"
-					alt="ArtViva logo"
-					className="responsive-image-fraction"
-				/>
-			</Col>
-			<Col xs={12} md={8}>
-				<h1 className="text-center custom-font my-4">
-					Логін
-				</h1>
-				<LoginForm
-					handleLogin={handleLogin}
-					processing={processingForm}
-					score={score}
-				/>
-			</Col>
-		</Row>
-	</Container>
+	return <CommonLayout>
+		<Container>
+			<Row className="d-flex justify-content-center">
+				<Col xs={10} md={4} className="text-center">
+					<span className="image-align-helper"></span>
+					<Image
+						src="img/logo/artviva_logo.png"
+						alt="ArtViva logo"
+						className="responsive-image-fraction"
+					/>
+				</Col>
+				<Col xs={12} md={8}>
+					<h1 className="text-center custom-font my-4">
+						Логін
+					</h1>
+					<LoginForm
+						handleLogin={handleLogin}
+						processing={processingForm}
+						score={score}
+					/>
+				</Col>
+			</Row>
+		</Container>
+	</CommonLayout>
 }
 
 LoginView.propTypes = {
