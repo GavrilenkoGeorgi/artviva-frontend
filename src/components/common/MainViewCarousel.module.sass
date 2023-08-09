@@ -1,0 +1,17 @@
+@import '../../sass/variables'
+
+.carouselContainer
+	img
+		height: 40vh
+		object-fit: cover
+		@media screen and (min-width: $medium)
+			height: 60vh
+
+.carouselOverlay
+	background-image: linear-gradient(to bottom, rgba(33, 33, 33, 0), rgba(33, 33, 33, .8))
+	height: 7rem
+	width: 100%
+	position: absolute
+	bottom: 0
+	@media screen and (min-width: $medium)
+		height: 10rem
