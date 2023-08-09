@@ -1,11 +1,12 @@
 import React from 'react'
 import { Carousel } from 'react-bootstrap'
+import styles from './MainViewCarousel.module.sass'
 
 const MainViewCarousel = () => {
 	return (
-		<Carousel className="carousel-container" slide>
+		<Carousel className={styles.carouselContainer} slide>
 			<Carousel.Item>
-				<div className="carousel-overlay"></div>
+				<div className={styles.carouselOverlay}></div>
 				<img
 					className="d-block w-100"
 					src="img/carousel/arts-n-crafts.jpg"
@@ -19,7 +20,7 @@ const MainViewCarousel = () => {
 			</Carousel.Item>
 
 			<Carousel.Item>
-				<div className="carousel-overlay"></div>
+				<div className={styles.carouselOverlay}></div>
 				<img
 					className="d-block w-100"
 					src="img/carousel/paper-boats.jpg"
@@ -33,7 +34,7 @@ const MainViewCarousel = () => {
 			</Carousel.Item>
 
 			<Carousel.Item>
-				<div className="carousel-overlay"></div>
+				<div className={styles.carouselOverlay}></div>
 				<img
 					className="d-block w-100"
 					src="img/carousel/commerce.jpg"
