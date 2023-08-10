@@ -1,26 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import QuestionnaireCTA from './QuestionnaireCTA'
 import CloseBtnSVG from '../common/buttons/CloseBtnSVG'
 import styles from './Banner.module.sass'
-import { useEffect } from 'react'
 
 const Banner = () => {
 
-	const [ visible, setVisible ] = useState(true)
+	const [ open, setOpen ] = useState(false)
 
+	// if there is no banner data, show banner
 	useEffect(() => {
-		if (window.sessionStorage.getItem('closedBanner')) {
-			setVisible(false)
+		if (!window.sessionStorage.getItem('banner')) {
+			setTimeout(() => { // animate it
+				setOpen(true)
+			}, 500)
 		}
 	}, [])
 
 	const handleClick = () => {
-		window.sessionStorage.setItem('closedBanner', true)
-		setVisible(false)
+		window.sessionStorage.setItem('banner', 'closed')
+		setOpen(false)
 	}
 
-	return visible && <div className={styles.bannerLayout}>
+	const { bannerLayout, visible, hidden } = styles
+	const banner = `${bannerLayout} ${open ? visible : hidden}`
+
+	return <div className={banner}>
 		<div className={styles.bannerContainer}>
 			<div className={styles.closeBtnCont}>
 				<button onClick={() => handleClick()}>
