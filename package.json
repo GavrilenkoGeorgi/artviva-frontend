@@ -57,7 +57,7 @@
     "jest-canvas-mock": "^2.5.2",
     "mutationobserver-shim": "^0.3.7",
     "react-helmet": "^6.1.0",
-    "react-test-renderer": "^17.0.1",
+    "react-test-renderer": "^16.14.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
     "sass": "^1.64.1",
