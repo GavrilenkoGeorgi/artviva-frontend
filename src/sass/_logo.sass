@@ -1,22 +1,30 @@
 @import 'mixins.sass'
 @import 'palette.scss'
+@import 'variables.sass'
 
 .nav-logo-img
-	max-width: 3rem
+	max-width: 2.5rem
+	@media screen and (min-width: $medium)
+		max-width: 3rem
 
 .nav-logo
 	line-height: .9
 	text-align: center
+	padding: .5rem 0
 
 .nav-logo-font
 	font-family: $logo-font
 	color: $primary-color
 	letter-spacing: .075em
-	font-size: 2.2rem
+	font-size: 1.7rem
+	@media screen and (min-width: $medium)
+		font-size: 2rem
 
 .nav-logo-small-font
 	font-family: $serif-font
 	text-align: center
 	letter-spacing: .09em
 	color: $logo-sub-text
-	font-size: 1.075rem
+	font-size: 0.8rem
+	@media screen and (min-width: $medium)
+		font-size: 1rem

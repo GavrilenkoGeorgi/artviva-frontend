@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons'
 import Parallax from '../../common/layout/Parallax'
 import { useWindowSize } from '../../../hooks'
-import { getAccessToken, getPostsURL } from './facebookAPI'
+import { getAccessToken, getPostsURL } from '../../../services/facebookAPI'
 
 import styles from './BlogView.module.sass'
 

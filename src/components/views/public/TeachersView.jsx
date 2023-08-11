@@ -16,7 +16,11 @@ const TeachersView = ({ match }) => {
 	return <CommonLayout>
 		<Helmet>
 			<title>Вчителі школи мистецтв «АРТ ВІВА»</title>
-			<meta name="description" content="Чинний і колишній педагогічний колектив." />
+			<meta name="description" content="Чинний і колишній педагогічний колектив школи мистецтв «АРТ ВІВА»." />
+			<meta
+				name="keywords"
+				content="вчителі, філії, школа, мистецтв, арт, віва, artviva"
+			/>
 		</Helmet>
 		<Col md={10}>
 			<h1 className="text-center custom-font mb-5">

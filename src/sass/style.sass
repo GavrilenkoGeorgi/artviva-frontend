@@ -62,7 +62,14 @@ p
 	color: $primary-color-muted
 
 .dropdown-menu
-	padding: 1rem 1.5rem
+	padding: .75rem 1.5rem
+	@media screen and (min-width: $medium)
+		min-width: 350px
+		padding: .75rem 1.25rem
+	@media screen and (min-width: $large)
+		padding: 1rem 1.5rem
+	a
+		padding: .25rem 0 !important // drop-down link styles
 
 .nav-list-icon
 	padding-right: .5rem
@@ -75,20 +82,13 @@ p
 	&:hover
 		text-decoration: none
 
-// navigation bar links
-.navbar-nav
-	+handheld(2, 100px)
-		padding: .7rem 1rem .7rem 1rem
-	+desktop(96dpi, 100px)
-		padding: .7rem 1rem .7rem 1rem
-
 .school-nav-link
 	color: $primary-second
 	font-weight: 500
 	border-bottom: $borderNavLinkHeight solid transparent
 	transition: border .15s, background-color .7s
 	transition-timing-function: cubic-bezier(.43,.18,.79,.48)
-	
+
 .school-nav-link
 	&.is-active
 		+linkHighlight()
@@ -101,10 +101,7 @@ p
 .school-mgmt-links
 	a
 		+mainNavLink()
-		// this one is particullary bad
-		color: $primary-second !important // :(
-		@media screen and (max-width: $medium)
-			padding-left: 0 !important
+		color: $primary-second !important // TODO: new navbar
 
 .elevated-z-index
 	z-index: 3
@@ -312,14 +309,6 @@ nav
 
 .user-details-highlight
 	background-color: $warn
-
-.dropdown-menu
-	@media (min-width: $large)
-		padding: 1.5rem 2.5rem
-
-.dropdown-item
-	&:hover
-		background-color: #fff
 
 .nav-tabs,
 .tab-content

@@ -21,7 +21,14 @@ const MainPage = () => {
 		<>
 			<Helmet>
 				<title>Школа мистецтв «АРТ ВІВА» - Головна сторінка</title>
-				<meta name="description" content="Школа мистецтв «АРТ ВІВА» сучасний заклад початкової мистецької освіти." />
+				<meta
+					name="description"
+					content="Школа мистецтв «АРТ ВІВА» сучасний заклад початкової мистецької освіти."
+				/>
+				<meta
+					name="keywords"
+					content="музична, художня, мистецька, освіта, школа, мистецтв, арт, віва, artviva"
+				/>
 			</Helmet>
 			<Carousel />
 			<div className={styles.logoImg}>
