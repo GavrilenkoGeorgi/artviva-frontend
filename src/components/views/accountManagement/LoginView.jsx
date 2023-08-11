@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
+import { Helmet } from 'react-helmet'
 import { history } from '../../../Routes'
 import PropTypes from 'prop-types'
+
 
 import recaptchaService from '../../../services/recaptcha'
 import { login } from '../../../reducers/loginReducer'
@@ -81,30 +83,36 @@ const LoginView = ({
 		}
 	}, [loginSuccessful])
 
-	return <CommonLayout>
-		<Container>
-			<Row className="d-flex justify-content-center">
-				<Col xs={10} md={4} className="text-center">
-					<span className="image-align-helper"></span>
-					<Image
-						src="img/logo/artviva_logo.png"
-						alt="ArtViva logo"
-						className="responsive-image-fraction"
-					/>
-				</Col>
-				<Col xs={12} md={8}>
-					<h1 className="text-center custom-font my-4">
-						Логін
-					</h1>
-					<LoginForm
-						handleLogin={handleLogin}
-						processing={processingForm}
-						score={score}
-					/>
-				</Col>
-			</Row>
-		</Container>
-	</CommonLayout>
+	return <>
+		<Helmet>
+			<title>Логін сторінка для вчителів</title>
+			<meta name="description" content="Логін сторінка для вчителів школи мистецтв «АРТ ВІВА»" />
+		</Helmet>
+		<CommonLayout>
+			<Container>
+				<Row className="d-flex justify-content-center">
+					<Col xs={10} md={4} className="text-center">
+						<span className="image-align-helper"></span>
+						<Image
+							src="img/logo/artviva_logo.png"
+							alt="ArtViva logo"
+							className="responsive-image-fraction"
+						/>
+					</Col>
+					<Col xs={12} md={8}>
+						<h1 className="text-center custom-font my-4">
+							Логін
+						</h1>
+						<LoginForm
+							handleLogin={handleLogin}
+							processing={processingForm}
+							score={score}
+						/>
+					</Col>
+				</Row>
+			</Container>
+		</CommonLayout>
+	</>
 }
 
 LoginView.propTypes = {
