@@ -46,21 +46,17 @@
 	color: $primary-second
 	padding: .5rem 0
 	letter-spacing: 1.4px
-	line-height: 1.8rem
-	font-weight: 400
+	font-size: 1.1rem
 	@media (min-width: $medium)
-		padding: 0rem .8rem 0rem .75rem
-		font-size: .9rem
-	@media (min-width: $large)
-		padding: 1rem 1rem .25rem 1rem
-		margin-bottom: .75rem
-		font-size: 1.2rem
+		padding: 0 .5rem
 	@media (min-width: $xlarge)
-		font-size: 1.4rem
+		font-size: 1.5rem
 	border-bottom: $borderNavLinkHeight solid transparent
 	transition: border .4s
 	transition-timing-function: cubic-bezier(.43,.18,.79,.48)
 	&:hover
 		text-decoration: none
 		color: $primary-second
+		border-bottom: $borderNavLinkHeight solid $primary-second
+	&.active
 		border-bottom: $borderNavLinkHeight solid $primary-second
