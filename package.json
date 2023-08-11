@@ -67,9 +67,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eslint": "eslint .",
     "cypress:open": "cypress open",
-    "jest:cd": "npm test",
+    "eslint": "eslint .",
     "sass:watch": "sass --no-source-map --watch src/sass:src/css --style compressed"
   },
   "repository": {
