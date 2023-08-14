@@ -50,7 +50,7 @@ const Prices = ({ setNotification }) => {
 				{prices.map(item =>
 					<div key={item.id} className={styles.pricePosition}>
 						<div className={styles.price}>
-							<strong>{item.cost}</strong>&nbsp;<FontAwesomeIcon icon={faHryvnia} className="text-muted"/>
+							<strong>{item.cost}</strong>&nbsp;<FontAwesomeIcon icon={faHryvnia} className={styles.uahIcon}/>
 						</div>
 						<div>
 							{item.titles.map(title =>
