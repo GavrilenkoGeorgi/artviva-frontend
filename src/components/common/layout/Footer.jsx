@@ -69,8 +69,10 @@ const Footer = () => {
 				<Col xs={12} >
 					<p className={styles.footerSmallText}>
 						Іконки <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a>
-						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com
-						</a>
+						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+					</p>
+					<p className={styles.footerSmallText}>
+						Розробка та підтримка сайту <a href="https://jsmonkey.dev" title="jsMonkey">jsmonkey.dev</a>
 					</p>
 					<ReCaptchaStatement />
 					<Row>
