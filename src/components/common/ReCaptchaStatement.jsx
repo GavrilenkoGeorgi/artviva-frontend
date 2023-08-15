@@ -11,7 +11,7 @@ const ReCaptchaStatement = () => {
 			</a>
 			{' '}Google та
 			{' '}<a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">
-				Умови використання.
+				Умови використання
 			</a>
 		</p>
 	)
