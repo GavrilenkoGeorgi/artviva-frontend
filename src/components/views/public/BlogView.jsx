@@ -54,7 +54,7 @@ const BlogView = () => {
 		setPostsURL(paging.next)
 	}
 
-	const formatDate = date => {
+	const formatDate = date => { // why is this here?
 		const result = moment(date).format('LL')
 		return result
 	}

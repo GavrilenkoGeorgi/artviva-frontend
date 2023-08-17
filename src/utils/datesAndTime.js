@@ -17,6 +17,11 @@ export const maxDate = months => {
 	return maxDate
 }
 
+export const formatDate = date => {
+	const result = moment(date).format('LL')
+	return result
+}
+
 export const schoolYearMonths = () => {
 
 	// check if date is in summer

@@ -15,6 +15,7 @@ import { ReactComponent as Enrollment } from '../../../svg/enrollment.svg'
 import styles from './MainPage.module.sass'
 /* import Announcement from '../../announcements/Announcement' */
 import Parallax from '../../common/layout/Parallax'
+import FeaturedNews from '../../news/FeaturedNews'
 
 const MainPage = () => {
 	return (
@@ -116,6 +117,7 @@ const MainPage = () => {
 			<div className={styles.parallax}>
 				<Parallax imgSrc="img/parallax/vinyl.webp" aspect="2 / 1" />
 			</div>
+			<FeaturedNews />
 			<SendContactMessage />
 		</>
 	)
