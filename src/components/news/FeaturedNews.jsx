@@ -15,17 +15,18 @@ const FeaturedNews = () => {
 	useEffect(() => {
 		getAccessToken().then(({ data }) => { // move this somewhere?
 			const url = getPostsURL(data.access_token)
-			axios.get(url).then(({ data: { data } }) => { // this comes from facebook api
-				const shared = data.filter(({ shares, message }) => message && shares?.count)
-
-				// create hashtags
-				shared.map(post => {
-					const hashtags = post.message.match(/#[\p{L}]+/ugi)
-					post.hashtags = hashtags || []
-				})
-
-				const taggedPosts = shared.filter(({ hashtags }) => hashtags.length)
-				setPosts(() => taggedPosts.slice(-4))
+			axios.get(url).then((response) => { // this comes from facebook api
+				if (response.data.data) {
+					const postsArray = response.data.data
+					const shared = postsArray.filter(({ shares, message }) => message && shares?.count)
+					// create hashtags
+					shared.map(post => {
+						const hashtags = post.message.match(/#[\p{L}]+/ugi)
+						post.hashtags = hashtags || []
+					})
+					const taggedPosts = shared.filter(({ hashtags }) => hashtags.length)
+					setPosts(() => taggedPosts.slice(-4))
+				} else return null
 			})
 		})
 	}, [])
