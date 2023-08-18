@@ -98,3 +98,20 @@ export const boolPropsFilter = (products, filters) => {
 		})
 	})
 }
+
+/**
+ * Create hashtags from the facebook post data
+ *
+ * @param {Object[]} array - Array of posts
+ *
+ * @returns {Object[]} - Sorted and filtered data
+ */
+
+export const getHashtags = array => {
+	// create hashtags
+	array.map(post => {
+		const hashtags = post.message.match(/#[\p{L}]+/ugi)
+		post.hashtags = hashtags || []
+	})
+	return array.filter(({ hashtags }) => hashtags.length)
+}
