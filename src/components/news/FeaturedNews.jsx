@@ -1,5 +1,5 @@
 /* eslint-disable1 */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 
 import axios from 'axios'
@@ -15,7 +15,7 @@ const FeaturedNews = ({ setNotification }) => {
 
 	const [ posts, setPosts ] = useState(null)
 
-	const getNewsToShow = async () => {
+	const getNewsToShow = useCallback(async () => {
 		try {
 			// get data
 			const { data: { access_token } } = await getAccessToken()
@@ -31,11 +31,11 @@ const FeaturedNews = ({ setNotification }) => {
 				variant: 'danger'
 			}, 5)
 		}
-	}
+	}, [setNotification])
 
 	useEffect(() => {
 		getNewsToShow()
-	}, [])
+	}, [ getNewsToShow ])
 
 	return <aside className={styles.featuredNews}>
 		<div>
