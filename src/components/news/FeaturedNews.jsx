@@ -1,3 +1,4 @@
+/* eslint-disable1 */
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 
@@ -14,23 +15,27 @@ const FeaturedNews = ({ setNotification }) => {
 
 	const [ posts, setPosts ] = useState(null)
 
-	// select posts to feature on the main page
+	const getNewsToShow = async () => {
+		try {
+			// get data
+			const { data: { access_token } } = await getAccessToken()
+			const url = getPostsURL(access_token)
+			const { data: { data } } = await axios.get(url)
+			// sort and filter
+			const items = data.filter(({ shares, message }) => message && shares?.count)
+			const featuredPosts = getHashtags(items)
+			setPosts(() => featuredPosts.slice(-4))
+		} catch (err) {
+			setNotification({
+				message: err.message,
+				variant: 'danger'
+			}, 5)
+		}
+	}
+
 	useEffect(() => {
-		getAccessToken()
-			.then(({ data: { access_token } }) => {
-				const url = getPostsURL(access_token)
-				axios.get(url).then(({ data: { data } }) => {
-					const items = data.filter(({ shares, message }) => message && shares?.count)
-					const featuredPosts = getHashtags(items)
-					setPosts(() => featuredPosts.slice(-4))
-				})
-			}).catch(err => {
-				setNotification({
-					message: err.message,
-					variant: 'danger'
-				}, 5)
-			})
-	}, [ setNotification ])
+		getNewsToShow()
+	}, [])
 
 	return <aside className={styles.featuredNews}>
 		<div>

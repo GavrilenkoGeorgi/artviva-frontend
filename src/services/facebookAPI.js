@@ -1,9 +1,8 @@
 import axios from 'axios'
 
-const getAccessToken = async () => {
+const getAccessToken = () => {
 	// eslint-disable-next-line
-	const pageAccess = `https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`
-	return await axios.get(pageAccess)
+	return axios.get(`https://graph.facebook.com/${process.env.REACT_APP_FACEBOOK_PAGE_ID}?fields=access_token&access_token=${process.env.REACT_APP_FACEBOOK_ACCESS_TOKEN}`)
 }
 
 const getPostsURL = ( access_token ) => {
