@@ -1,34 +1,36 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 
 import axios from 'axios'
+import { setNotification } from '../../reducers/notificationReducer'
+import { getHashtags } from '../../utils/arrayHelpers'
 import { getAccessToken, getPostsURL } from '../../services/facebookAPI'
 import { formatDate } from '../../utils/datesAndTime'
 
 import ScrollAnimation from 'react-animate-on-scroll'
 import styles from './FeaturedNews.module.sass'
 
-const FeaturedNews = () => {
+const FeaturedNews = ({ setNotification }) => {
 
 	const [ posts, setPosts ] = useState(null)
 
-	// we need to get last two posts (last week posts with most shares)
+	// select posts to feature on the main page
 	useEffect(() => {
-		getAccessToken().then(({ data }) => { // move this somewhere?
-			const url = getPostsURL(data.access_token)
-			axios.get(url).then(({ data: { data } }) => { // this comes from facebook api
-				const shared = data.filter(({ shares, message }) => message && shares?.count)
-
-				// create hashtags
-				shared.map(post => {
-					const hashtags = post.message.match(/#[\p{L}]+/ugi)
-					post.hashtags = hashtags || []
+		getAccessToken()
+			.then(({ data: { access_token } }) => {
+				const url = getPostsURL(access_token)
+				axios.get(url).then(({ data: { data } }) => {
+					const items = data.filter(({ shares, message }) => message && shares?.count)
+					const featuredPosts = getHashtags(items)
+					setPosts(() => featuredPosts.slice(-4))
 				})
-
-				const taggedPosts = shared.filter(({ hashtags }) => hashtags.length)
-				setPosts(() => taggedPosts.slice(-4))
+			}).catch(err => {
+				setNotification({
+					message: err.message,
+					variant: 'danger'
+				}, 5)
 			})
-		}).catch(err => console.log(err)) // set notification?
-	}, [])
+	}, [ setNotification ])
 
 	return <aside className={styles.featuredNews}>
 		<div>
@@ -77,4 +79,17 @@ const FeaturedNews = () => {
 	</aside>
 }
 
-export default FeaturedNews
+const mapStateToProps = state => {
+	return {
+		user: state.user
+	}
+}
+
+const mapDispatchToProps = {
+	setNotification
+}
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(FeaturedNews)
