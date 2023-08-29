@@ -100,11 +100,12 @@ export const boolPropsFilter = (products, filters) => {
 }
 
 /**
- * Create hashtags from the facebook post data
+ * Creates hashtags from the facebook post data
+ * also removes them from the message body
  *
  * @param {Object[]} array - Array of posts
  *
- * @returns {Object[]} - Sorted and filtered data
+ * @returns {Object[]} - Sorted and filtered data, hastags applied to each post
  */
 
 export const getHashtags = array => {
@@ -112,6 +113,35 @@ export const getHashtags = array => {
 	array.map(post => {
 		const hashtags = post.message.match(/#[\p{L}]+/ugi)
 		post.hashtags = hashtags || []
+		if (hashtags) {
+			let message
+			for (let tag of hashtags) {
+				message = post.message.replace(tag, '')
+				post.message = message.trim()
+			}
+		}
 	})
 	return array.filter(({ hashtags }) => hashtags.length)
+}
+
+/**
+ * Parses youtube links from post's text blob
+ *
+ * @param {Object[]} array - Array of posts
+ *
+ * @returns {Object[]} - Sorted and filtered data, hastags applied to each post
+ */
+
+export const parseYtLInks = array => {
+	array.map(post => {
+		// eslint-disable-next-line
+		let ytLinkPattern = /(https?:\/\/)?(((m|www)\.)?(youtube(-nocookie)?|youtube.googleapis)\.com.*(v\/|v=|vi=|vi\/|e\/|embed\/|user\/.*\/u\/\d+\/)|youtu\.be\/)([_0-9a-z-]+)(\?[_0-9a-z-]+=[_0-9a-z-]+)?/i
+		const id = post.message?.match(ytLinkPattern)
+		if (id) {
+			const message = post.message.replace(ytLinkPattern, '')
+			post.message = message
+			post.ytId = id[8]
+		}
+	})
+	return array
 }
