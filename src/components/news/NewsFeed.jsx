@@ -58,7 +58,7 @@ const NewsFeed = (props) => {
 				{feedItems}
 			</Masonry>
 		</ResponsiveMasonry>
-		{props.feed.length > 0 &&
+		{props.feed.length &&
 		<div className={styles.paginationContainer}>
 			<button
 				onClick={() => props.loadMore()}

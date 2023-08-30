@@ -132,7 +132,7 @@ export const getHashtags = array => {
  * @returns {Object[]} - Sorted and filtered data, hastags applied to each post
  */
 
-export const parseYtLInks = array => {
+export const parseYtLinks = array => {
 	array.map(post => {
 		// eslint-disable-next-line
 		let ytLinkPattern = /(https?:\/\/)?(((m|www)\.)?(youtube(-nocookie)?|youtube.googleapis)\.com.*(v\/|v=|vi=|vi\/|e\/|embed\/|user\/.*\/u\/\d+\/)|youtu\.be\/)([_0-9a-z-]+)(\?[_0-9a-z-]+=[_0-9a-z-]+)?/i

@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet'
 import { useWindowSize } from '../../../hooks'
 import { setNotification } from '../../../reducers/notificationReducer'
 import { getAccessToken, getPostsURL } from '../../../services/facebookAPI'
-import { getHashtags, parseYtLInks } from '../../../utils/arrayHelpers'
+import { getHashtags, parseYtLinks } from '../../../utils/arrayHelpers'
 
 import { SimpleSpinner } from '../../common/spinners'
 import NewsFeed from '../../news/NewsFeed'
@@ -47,7 +47,7 @@ const BlogView = ({ setNotification }) => {
 
 			// get hastags and or youtube links if any
 			getHashtags(filtered)
-			parseYtLInks(filtered)
+			parseYtLinks(filtered)
 			setFacebookPosts(prevState => [ ...prevState, ...filtered ])
 		} catch (err) {
 			// set error notification
@@ -81,7 +81,7 @@ const BlogView = ({ setNotification }) => {
 		<section className={styles.container}>
 			<h1>Новини</h1>
 			<NewsFeedLeadSection />
-			{facebookPosts.length > 0
+			{facebookPosts.length
 				? <NewsFeed
 						feed={facebookPosts}
 						fetching={fetching}
