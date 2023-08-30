@@ -11,51 +11,54 @@ import newsStyles from '../../components/news/FeaturedNews.module.sass'
 
 const NewsFeed = (props) => {
 
+	const feedItems = props.feed.map((item) =>
+		<ScrollAnimation animateIn="fadeIn" key={item.id} animateOnce>
+			<div className={styles.post}>
+				<a className={styles.postLink} href={item.permalink_url}>
+					{item.ytId
+						? <YoutubeEmbed embedId={item.ytId} />
+						: <div className={styles.imgContainer}>
+							<img
+								className={styles.postImg}
+								src={item.full_picture}
+							/>
+						</div>
+					}
+					<pre className={styles.message}>
+						{item.message}
+					</pre>
+				</a>
+				<div className={newsStyles.hashtags}>
+					{item.hashtags.map(tag => (
+						<a
+							className={newsStyles.hashtag}
+							href={`https://www.facebook.com/hashtag/${tag.slice(1)}`}
+							key={tag}>
+							{tag}{' '}
+						</a>
+					))}
+				</div>
+				<div className={styles.postFooter}>
+					<p className={styles.dateStamp}>
+						{formatDate(item.created_time)}
+					</p>
+					<a href={item.permalink_url}>
+						<p className={styles.postCta}>
+							❯❯
+						</p>
+					</a>
+				</div>
+			</div>
+		</ScrollAnimation>
+	)
+
 	return <div className={styles.postsContainer}>
 		<ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 800: 2 }}  >
 			<Masonry gutter='2.5rem'>
-				{props.feed.map((item) => {
-					return <ScrollAnimation animateIn="fadeInUp" key={item.id} animateOnce>
-						<div className={styles.post}>
-							<a className={styles.postLink} href={item.permalink_url}>
-								{item.ytId
-									? <YoutubeEmbed embedId={item.ytId} />
-									: <div className={styles.imgContainer}>
-										<img
-											className={styles.postImg}
-											src={item.full_picture}
-										/>
-									</div>
-								}
-								<pre className={styles.message}>
-									{item.message}
-								</pre>
-							</a>
-							<div className={newsStyles.hashtags}>
-								{item.hashtags.map(tag => (
-									<a
-										className={newsStyles.hashtag}
-										href={`https://www.facebook.com/hashtag/${tag.slice(1)}`}
-										key={tag}>
-										{tag}{' '}
-									</a>
-								))}
-							</div>
-							<div className={styles.postFooter}>
-								<p className={styles.dateStamp}>
-									{formatDate(item.created_time)}
-								</p>
-								<a href={item.permalink_url}>
-									<p className={styles.postCta}>
-										❯❯
-									</p>
-								</a>
-							</div>
-						</div>
-					</ScrollAnimation>
-				})}
+				{feedItems}
 			</Masonry>
 		</ResponsiveMasonry>
+		{props.feed.length &&
 		<div className={styles.paginationContainer}>
 			<button
 				onClick={() => props.loadMore()}
@@ -63,6 +66,7 @@ const NewsFeed = (props) => {
 				{ props.fetching ? <SimpleSpinner /> : 'Завантажити ще' }
 			</button>
 		</div>
+		}
 	</div>
 }
 
