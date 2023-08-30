@@ -30,10 +30,21 @@ const BlogView = ({ setNotification }) => {
 	}, [])
 
 	// Get page access token
-	useEffect(() => {
-		getAccessToken().then(({ data }) => {
+	const getPageAccessToken = async () => {
+		try {
+			const { data } = await getAccessToken()
 			setPostsURL(getPostsURL(data.access_token))
-		})
+		} catch (err){
+			setNotification({
+				message: 'Не вдається отримати токен доступу.',
+				variant: 'warning'
+			}, 15)
+			console.error(err)
+		}
+	}
+
+	useEffect(() => {
+		getPageAccessToken()
 	}, [])
 
 	const feedData = async (postsURL) => {
@@ -49,6 +60,7 @@ const BlogView = ({ setNotification }) => {
 			getHashtags(filtered)
 			parseYtLinks(filtered)
 			setFacebookPosts(prevState => [ ...prevState, ...filtered ])
+
 		} catch (err) {
 			// set error notification
 			setNotification({
