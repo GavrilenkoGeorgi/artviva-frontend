@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux' // !!!!
 import { Helmet } from 'react-helmet'
-import { useWindowSize } from '../../../hooks'
 import { setNotification } from '../../../reducers/notificationReducer'
 import { getAccessToken, getPostsURL } from '../../../services/facebookAPI'
 import { getHashtags, parseYtLinks } from '../../../utils/arrayHelpers'
@@ -19,15 +18,6 @@ const BlogView = ({ setNotification }) => {
 	const [ facebookPosts, setFacebookPosts ] = useState([])
 	const [ postsURL, setPostsURL ] = useState('')
 	const [ paging, setPaging ] = useState('')
-
-	// parallax
-	const [ aspect, setAspect ] = useState('4 / 3')
-	const screenWidth = useWindowSize().width
-
-	useEffect(() => {
-		if (screenWidth >= 500) setAspect('16 / 9')
-		if (screenWidth >= 1280) setAspect('16 / 4')
-	}, [])
 
 	// Get page access token
 	const getPageAccessToken = async () => {
@@ -89,7 +79,7 @@ const BlogView = ({ setNotification }) => {
 			<title>Новини школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Останні новини зі сторінкі у Фейсбук" />
 		</Helmet>
-		<Parallax imgSrc="img/parallax/art.jpg" aspect={aspect} />
+		<Parallax imgSrc="img/parallax/art.jpg" />
 		<section className={styles.container}>
 			<h1>Новини</h1>
 			<NewsFeedLeadSection />
