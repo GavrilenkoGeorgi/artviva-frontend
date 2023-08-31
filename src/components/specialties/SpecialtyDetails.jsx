@@ -2,6 +2,7 @@ import React, { useEffect, useState, Suspense } from 'react'
 import { connect } from 'react-redux'
 import { createSelector } from 'reselect'
 import { Redirect } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 import { deleteSpecialty } from '../../reducers/specialtiesReducer'
 import { setNotification } from '../../reducers/notificationReducer'
@@ -55,58 +56,64 @@ const SpecialtyDetails = ({ match, specialties, deleteSpecialty, setNotification
 
 	if (redirect.to) return <Redirect to={redirect.to} />
 
-	return <CommonLayout>
-		<Col className="text-center">
-			<PageHeader className="custom-font text-muted">
-				Деталі фаху
-			</PageHeader>
-		</Col>
-		{details && <Col lg={8}>
-			<h2 className="display-4 text-center">
-				{details.title}
-			</h2>
-			<Row className="py-4">
-				<Col xs={12} md={6} className="mb-4">
-					<p className="lead">Ціна: {details.cost} грн</p>
-				</Col>
-				<Col xs={12} md={6}>
-					<p className="lead">{details.info}</p>
-				</Col>
-				<Col>
-					<p className="mb-2">Класів по цьому фаху: {details.schoolClasses.length}</p>
-					<p>Вчителів цього фаху: {details.teachers.length}</p>
-				</Col>
-				{/* Buttons */}
-				<Col>
-					<EntityControlButtons
-						entity="specialty"
-						route={`/school/${routes.specialties}/${details.id}`}
-						openDeleteModal={() => setDeleteModalShow(true)}
-					/>
-				</Col>
-			</Row>
-			<Row>
-				{/* Delete modal */}
-				<Suspense fallback={
-					<LoadingIndicator
-						animation="border"
-						variant="primary"
-						size="md"
-					/>}>
-					<LazyEntityDeleteModal
-						subject="Видалити фах"
-						subjectid={details.id}
-						valuetoconfirm={details.title}
-						show={deleteModalShow}
-						handleDelete={handleDelete}
-						loadingState={isDeleting}
-						onHide={() => setDeleteModalShow(false)}
-					/>
-				</Suspense>
-			</Row>
-		</Col>
-		}
-	</CommonLayout>
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
+		<CommonLayout>
+			<Col className="text-center">
+				<PageHeader className="custom-font text-muted">
+					Деталі фаху
+				</PageHeader>
+			</Col>
+			{details && <Col lg={8}>
+				<h2 className="display-4 text-center">
+					{details.title}
+				</h2>
+				<Row className="py-4">
+					<Col xs={12} md={6} className="mb-4">
+						<p className="lead">Ціна: {details.cost} грн</p>
+					</Col>
+					<Col xs={12} md={6}>
+						<p className="lead">{details.info}</p>
+					</Col>
+					<Col>
+						<p className="mb-2">Класів по цьому фаху: {details.schoolClasses.length}</p>
+						<p>Вчителів цього фаху: {details.teachers.length}</p>
+					</Col>
+					{/* Buttons */}
+					<Col>
+						<EntityControlButtons
+							entity="specialty"
+							route={`/school/${routes.specialties}/${details.id}`}
+							openDeleteModal={() => setDeleteModalShow(true)}
+						/>
+					</Col>
+				</Row>
+				<Row>
+					{/* Delete modal */}
+					<Suspense fallback={
+						<LoadingIndicator
+							animation="border"
+							variant="primary"
+							size="md"
+						/>}>
+						<LazyEntityDeleteModal
+							subject="Видалити фах"
+							subjectid={details.id}
+							valuetoconfirm={details.title}
+							show={deleteModalShow}
+							handleDelete={handleDelete}
+							loadingState={isDeleting}
+							onHide={() => setDeleteModalShow(false)}
+						/>
+					</Suspense>
+				</Row>
+			</Col>
+			}
+		</CommonLayout>
+	</>
 }
 
 const getSpecialties = createSelector(

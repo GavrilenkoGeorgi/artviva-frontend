@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, Suspense/* , useRef */ } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 import moment from 'moment'
 import 'moment-precise-range-plugin'
@@ -148,7 +149,11 @@ const TeacherDetails = ({
 
 	if (redirect.to) return <Redirect to={redirect.to} />
 
-	return (
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
 		<Container>
 			<Row className="justify-content-center">
 				{teacherDetails
@@ -210,7 +215,7 @@ const TeacherDetails = ({
 				: null
 			}
 		</Container>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

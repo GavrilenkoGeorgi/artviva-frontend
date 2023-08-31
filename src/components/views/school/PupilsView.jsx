@@ -1,6 +1,7 @@
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react'
 import { useScrollPosition } from '../../../hooks/scrollHooks'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { initializePupils, initialiseUserPupils } from '../../../reducers/pupilsReducer'
 
 import { Container, Row, Col, Form } from 'react-bootstrap'
@@ -142,7 +143,11 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 		}
 	})
 
-	return (
+	return <>
+		<Helmet>
+			<title>Список всіх учнів школи</title>
+			<meta name="description" content="Список всіх учнів школи."/>
+		</Helmet>
 		<CommonLayout>
 			<Container>
 				<Row>
@@ -263,7 +268,7 @@ const PupilsView = ({ user, pupils, initializePupils, initialiseUserPupils }) =>
 				</Row>
 			</Container>
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

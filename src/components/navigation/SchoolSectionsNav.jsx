@@ -73,7 +73,7 @@ const SchoolSectionsNav = ({ user }) => {
 	if (!window.location.pathname.match(path)) return null
 
 	return <>
-		{user && <Container className="pb-2">
+		{user && <Container className="pt-5">
 			<Row className="px-4 pt-sm-5 d-flex align-items-center">
 				<Col xs={12} sm={5} className="text-right profile-user-name">
 					<Link to="/school">

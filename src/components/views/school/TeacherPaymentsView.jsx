@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { getTeacherData } from '../../../reducers/teacherDataReducer'
 import { setFetchingData, setNotification } from '../../../reducers/notificationReducer'
 
@@ -57,7 +58,11 @@ const TeacherPaymentsView = ({
 		}
 	}, [teacher])
 
-	return (
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
 		<CommonLayout>
 			<Tabs defaultActiveKey="all-payments" id="payments-tabs">
 				{/*<Tab eventKey="payments-by-pupil" title="По учням">
@@ -96,7 +101,7 @@ const TeacherPaymentsView = ({
 				</Tab>
 			</Tabs>
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

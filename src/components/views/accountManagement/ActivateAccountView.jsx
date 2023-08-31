@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { Container, Spinner, Col } from 'react-bootstrap'
 import { setNotification } from '../../../reducers/notificationReducer'
 import userService from '../../../services/users'
@@ -37,7 +38,11 @@ const ActivateAccountView = ({ match, setNotification }) => {
 	// eslint-disable-next-line
 	},[]) // ??
 
-	return (
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
 		<Container className="pt-4 mt-4 d-flex justify-content-center">
 			<Col xs={8}>
 				<h2 className="custom-font py-4 text-center">
@@ -58,7 +63,7 @@ const ActivateAccountView = ({ match, setNotification }) => {
 					: null }
 			</Col>
 		</Container>
-	)
+	</>
 }
 
 const mapStateToProps = (state) => {

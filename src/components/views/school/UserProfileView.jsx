@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import userService from '../../../services/users'
 import { getTeacherData, updateTeacherData, createTeacherData } from '../../../reducers/teacherDataReducer'
 import { refreshUserData } from '../../../reducers/loginReducer'
@@ -91,7 +92,11 @@ const UserProfileView = ({
 			})
 	}
 
-	return (
+	return <>
+		<Helmet>
+			<title>Перегляд профілю користувача</title>
+			<meta name="description" content="Інформація про поточного користувача."/>
+		</Helmet>
 		<CommonLayout>
 			{userData && <Tabs defaultActiveKey="user-account" id="user-data-tabs">
 				<Tab eventKey="user-account" title="Аккаунт">
@@ -136,7 +141,7 @@ const UserProfileView = ({
 			</Tabs>
 			}
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

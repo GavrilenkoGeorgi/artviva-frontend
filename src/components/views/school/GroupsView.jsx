@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Suspense, useCallback } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { getGroups } from '../../../reducers/schoolClassesReducer'
 import { setNotification,  setFetchingData } from '../../../reducers/notificationReducer'
 import { removeFalsyProps, pureObjectIsEmpty } from '../../../utils/objectHelpers'
@@ -78,7 +79,11 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 		}
 	}, [filterSettings, sortData])
 
-	return (
+	return <>
+		<Helmet>
+			<title>Список гуртків школи</title>
+			<meta name="description" content="Список гуртків школи."/>
+		</Helmet>
 		<CommonLayout>
 			<Container>
 				<Row className="d-flex align-items-center">
@@ -192,7 +197,7 @@ const GroupsView = ({ user, getGroups, setNotification, groups }) => {
 				</Row>
 			</Container>
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

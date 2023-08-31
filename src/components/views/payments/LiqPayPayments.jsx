@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import { setNotification, setFetchingData } from '../../../reducers/notificationReducer'
 import { getLiqPayData } from '../../../reducers/liqPayDataReducer'
 import moment from 'moment'
@@ -137,112 +138,118 @@ const LiqPayPayments = ({
 		return <>Cant parse payment descr!</>
 	}
 
-	return <CommonLayout>
-		<Container>
-			<Row>
-				<Col xs={12}>
-					<h1 className="text-center custom-font">Платежі</h1>
-					<h6 className="text-muted text-center">(дані з бази даніх liqpay)</h6>
-				</Col>
-				<Col xs={12}>
-					<Tabs defaultActiveKey="liqpay" id="reports-tabs">
-						<Tab eventKey="liqpay" title="LIQPAY">
-							<Col xs={12}>
-								<DateRangeInput
-									range={range}
-									setRange={setRange} />
-							</Col>
+	return <>
+		<Helmet>
+			<title>Список платежів</title>
+			<meta name="description" content="Список платежів."/>
+		</Helmet>
+		<CommonLayout>
+			<Container>
+				<Row>
+					<Col xs={12}>
+						<h1 className="text-center custom-font">Платежі</h1>
+						<h6 className="text-muted text-center">(дані з бази даніх liqpay)</h6>
+					</Col>
+					<Col xs={12} className='d-flex flex-column align-items-center'>
+						<Tabs defaultActiveKey="liqpay" id="reports-tabs" className="m-auto1">
+							<Tab eventKey="liqpay" title="LIQPAY">
+								<Col xs={12}>
+									<DateRangeInput
+										range={range}
+										setRange={setRange} />
+								</Col>
 
-							<Row className="my-3">
-								<Col sm={8} className="px-0">
-									<FilterData
-										size="full"
-										filter={e => setFilter(e.target.value)}
-										fieldName="query"
-										placeholder="Пошук по опису платежа (викладач, учень, предмет)"
-									/>
-								</Col>
-								<Col
-									sm={4}
-									// eslint-disable-next-line
-									className="px-0 mt-3 mt-sm-0 d-flex align-items-center justify-content-center justify-content-sm-start">
-									<CheckBox
-										checked={hideSuccessful}
-										label={hideSuccessful ? 'Успішни приховані' : 'Сховати успішни'}
-										onChange={() => setHideSuccessful(!hideSuccessful)}
-									/>
-								</Col>
-							</Row>
-							{paymentsList.length
-								? <Container>
-									<Row className="mt-3 py-3 text-right border rounded">
-										<Col sm={6}>
-											<em>Платежів <span>за {humanReadableRange(range)}</span>:{' '}
-												<strong>{paymentsList.length}</strong> шт.</em>
-										</Col>
-										<Col sm={6}>
-											{hideSuccessful
-												? <span className='text-warning'>
-													<em>Невдали платежі <span> за {humanReadableRange(range)}
+								<Row className="my-3">
+									<Col sm={8} className="px-0">
+										<FilterData
+											size="full"
+											filter={e => setFilter(e.target.value)}
+											fieldName="query"
+											placeholder="Пошук по опису платежа (викладач, учень, предмет)"
+										/>
+									</Col>
+									<Col
+										sm={4}
+										// eslint-disable-next-line
+										className="px-0 mt-3 mt-sm-0 d-flex align-items-center justify-content-center justify-content-sm-start">
+										<CheckBox
+											checked={hideSuccessful}
+											label={hideSuccessful ? 'Успішни приховані' : 'Сховати успішни'}
+											onChange={() => setHideSuccessful(!hideSuccessful)}
+										/>
+									</Col>
+								</Row>
+								{paymentsList.length
+									? <Container>
+										<Row className="mt-3 py-3 text-right border rounded">
+											<Col sm={6}>
+												<em>Платежів <span>за {humanReadableRange(range)}</span>:{' '}
+													<strong>{paymentsList.length}</strong> шт.</em>
+											</Col>
+											<Col sm={6}>
+												{hideSuccessful
+													? <span className='text-warning'>
+														<em>Невдали платежі <span> за {humanReadableRange(range)}
+														</span>:{' '}
+														<strong>{totals.failure.toFixed(2)}</strong> грн.</em></span>
+													: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
 													</span>:{' '}
-													<strong>{totals.failure.toFixed(2)}</strong> грн.</em></span>
-												: <em>Сума (успішні платежі) <span> за {humanReadableRange(range)}
-												</span>:{' '}
-												<strong>{totals.success.toFixed(2)}</strong> грн.</em>
-											}
-										</Col>
-									</Row>
-									{paymentsList.slice(0, maxCount).map((payment, index) => (
-										<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
-											<Col sm={3}>
-												ID: {payment.order_id.slice(0, 8)}
-											</Col>
-											<Col sm={3}>
-												{toHumanReadable('uk-ua', payment.create_date)}
-											</Col>
-											<Col sm={3}>
-												{/* eslint-disable-next-line */}
-												<em className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
-													{liqpayStatusCodes[payment.status]}
-												</em>
-											</Col>
-											<Col sm={2} className="text-right">
-												<span>{index + 1}</span>
-											</Col>
-											<Col sm={9} className="mt-3 text-muted">
-												<small><em>{payment.description}</em></small>
-											</Col>
-											<Col sm={3} className="d-flex align-items-center justify-content-center">
-												<strong>{payment.amount.toFixed(2)}<em>&nbsp;грн</em></strong>
-											</Col>
-											<Col xs={12} className="mt-4">
-												<ParsedDescription descr={payment.description} />
+													<strong>{totals.success.toFixed(2)}</strong> грн.</em>
+												}
 											</Col>
 										</Row>
-									))}
-								</Container>
-								: <Container>
-									<Col className="my-3 text-center">
-										<p>
-											Не вдається знайти платежі за певний діапазон, спробуйте відкоригувати його.
-										</p>
-									</Col>
-								</Container>
-							}
-						</Tab>
-						<Tab eventKey="pupils-total" title="Звіт учні pdf">
-							<Col xs={12} className="px-0">
-								<PupilsReport data={paymentsList} />
-							</Col>
-						</Tab>
-						{/*<Tab eventKey="teachers-total" title="Звіт вчителі pdf">
-							Teachers
-						</Tab>*/}
-					</Tabs>
-				</Col>
-			</Row>
-		</Container>
-	</CommonLayout>
+										{paymentsList.slice(0, maxCount).map((payment, index) => (
+											<Row key={payment.order_id} className="my-3 py-2 p-sm-3 border rounded">
+												<Col sm={3}>
+													ID: {payment.order_id.slice(0, 8)}
+												</Col>
+												<Col sm={3}>
+													{toHumanReadable('uk-ua', payment.create_date)}
+												</Col>
+												<Col sm={3}>
+													{/* eslint-disable-next-line */}
+													<em className={`text-${payment.status === 'success' ? 'success' : 'warning'}`}>
+														{liqpayStatusCodes[payment.status]}
+													</em>
+												</Col>
+												<Col sm={2} className="text-right">
+													<span>{index + 1}</span>
+												</Col>
+												<Col sm={9} className="mt-3 text-muted">
+													<small><em>{payment.description}</em></small>
+												</Col>
+												<Col sm={3} className="d-flex align-items-center justify-content-center">
+													<strong>{payment.amount.toFixed(2)}<em>&nbsp;грн</em></strong>
+												</Col>
+												<Col xs={12} className="mt-4">
+													<ParsedDescription descr={payment.description} />
+												</Col>
+											</Row>
+										))}
+									</Container>
+									: <Container>
+										<Col className="my-3 text-center">
+											<p>
+												Не вдається знайти платежі за певний діапазон, спробуйте відкоригувати його.
+											</p>
+										</Col>
+									</Container>
+								}
+							</Tab>
+							<Tab eventKey="pupils-total" title="Звіт учні pdf">
+								<Col xs={12} className="px-0">
+									<PupilsReport data={paymentsList} />
+								</Col>
+							</Tab>
+							{/*<Tab eventKey="teachers-total" title="Звіт вчителі pdf">
+								Teachers
+							</Tab>*/}
+						</Tabs>
+					</Col>
+				</Row>
+			</Container>
+		</CommonLayout>
+	</>
 }
 
 const mapStateToProps = state => {
