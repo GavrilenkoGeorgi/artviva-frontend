@@ -84,7 +84,7 @@ const SendContactMessage = ({
 			</h2>
 		</Row>
 		<Row className="justify-content-center">
-			<Col md={6}>
+			<Col md={8} lg={6}>
 				<ContactForm
 					handleContactMessage={handleContactMessage}
 					score={reCaptchaScore}
