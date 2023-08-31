@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, Suspense } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 
 import { Form, ListGroup, Container, Row, Col } from 'react-bootstrap'
 import { initializeTeachers, setTeacherExp } from '../../../reducers/teachersReducer'
@@ -200,7 +201,11 @@ const ListOfTeachers = ({ teachers,
 		}
 	}, [filterSettings, sortData, teachers])
 
-	return (
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
 		<CommonLayout>
 			<Container>
 				<Row className="d-flex align-items-center">
@@ -342,7 +347,7 @@ const ListOfTeachers = ({ teachers,
 				</Row>
 			</Container>
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {

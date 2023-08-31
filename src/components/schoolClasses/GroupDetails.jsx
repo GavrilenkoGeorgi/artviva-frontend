@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Suspense, useRef } from 'react'
 import { connect } from 'react-redux'
+import { Helmet } from 'react-helmet'
 import schoolClassesService from '../../services/schoolClasses'
 import { setNotification } from '../../reducers/notificationReducer'
 import { deleteSchoolClass } from '../../reducers/schoolClassesReducer'
@@ -74,7 +75,11 @@ const GroupDetails = ({ user, match, setNotification, deleteSchoolClass }) => {
 			})
 	}
 
-	return (
+	return <>
+		<Helmet>
+			<title>Активація аккаунта</title>
+			<meta name="description" content="Активація аккаунта нових користувачів."/>
+		</Helmet>
 		<CommonLayout>
 			{groupDetails
 				? <Container>
@@ -164,7 +169,7 @@ const GroupDetails = ({ user, match, setNotification, deleteSchoolClass }) => {
 				: <LoadingIndicator animation="border" variant="primary" />
 			}
 		</CommonLayout>
-	)
+	</>
 }
 
 const mapStateToProps = state => {
