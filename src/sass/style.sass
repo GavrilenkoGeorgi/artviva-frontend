@@ -16,33 +16,17 @@
 
 html
 	scroll-behavior: smooth
-	+handheld(2, 768px) // ipad
-		font-size: 110%
 	+handheld(2, 1024px) // ipadPro
 		font-size: 115%
-	+desktop(96dpi, 640px)
-		font-size: 110%
 
 body
 	font-family: $sans-serif-font
-
-p
-	margin: 0
-	padding: 0
 
 .contacts-list
 	list-style: none
 	padding: 0
 	line-height: 1.6
 	font-size: 120%
-
-.responsive-image
-	height: auto
-	width: 100%
-
-.responsive-image-fraction
-	height: auto
-	width: 75%
 
 .image-align-helper
 	display: inline-block
@@ -109,10 +93,10 @@ p
 .elevated-z-index
 	z-index: 3
 
-.custom-gray-border
-	border-right: 1px solid #dee2e6
-	border-bottom: 1px solid #dee2e6
-	border-left: 1px solid #dee2e6
+.custom-gray-border //?
+	border-right: 1px solid $bootstrap-light-gray
+	border-bottom: 1px solid $bootstrap-light-gray
+	border-left: 1px solid $bootstrap-light-gray
 
 .navbar-hidden
 	top: -3.5rem
@@ -123,7 +107,7 @@ p
 	opacity: 1
 
 nav
-	transition: opacity ease-in 500ms, top ease-in 500ms
+	transition: opacity ease-in 300ms, top ease-in 300ms
 
 .moar-padding-top // tf is this?
 	padding-top: 4rem
@@ -157,9 +141,6 @@ nav
 	a
 		color: red
 		padding: 2rem
-
-.form-label
-	margin-top: .75rem
 
 .form-required-mark
 	color: #dc3545

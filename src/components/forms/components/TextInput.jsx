@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Form, Col } from 'react-bootstrap'
+import styles from './TextInput.module.sass'
 
 const TextInput = props => {
 	const {
@@ -16,7 +17,7 @@ const TextInput = props => {
 			as={Col}
 			className= {className ? className : 'px-0' }
 		>
-			<Form.Label>
+			<Form.Label className={styles.inputLabel}>
 				{props.label}
 				{props.required === false
 					? null
@@ -29,7 +30,7 @@ const TextInput = props => {
 				isInvalid={touched && !!props.errors}
 				{ ...other }
 			/>
-			<Form.Control.Feedback type="invalid">
+			<Form.Control.Feedback type="invalid" className={styles.formFeedback}>
 				{props.errors}
 			</Form.Control.Feedback>
 		</Form.Group>

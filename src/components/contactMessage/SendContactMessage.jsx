@@ -51,7 +51,7 @@ const SendContactMessage = ({
 
 	// send email message
 	const sendContactMessage = useCallback(async messageData => {
-		await emailService.sendContactEmail(messageData.values)
+		await emailService.sendContactEmail(messageData.values) // await?
 			.then(() => {
 				setNotification({
 					message: 'Ваше повідомлення надіслано, дякуємо вам.',
@@ -77,14 +77,12 @@ const SendContactMessage = ({
 		}
 	}, [reCaptchaScore, messageData, sendContactMessage])
 
-	return <Container id="contact-form-anchor" className="py-4 my-4 py-sm-5 my-sm-5">
-		<Row className="justify-content-center">
-			<h2 className="text-center custom-font">
-				Зворотній зв&apos;язок
-			</h2>
-		</Row>
-		<Row className="justify-content-center">
-			<Col md={8} lg={6}>
+	return <Container id="contact-form-anchor" className="my-5 py-5">
+		<h2 className="text-center">
+			Зворотній зв&apos;язок
+		</h2>
+		<Row className='justify-content-center mt-4'>
+			<Col md={8} lg={5}>
 				<ContactForm
 					handleContactMessage={handleContactMessage}
 					score={reCaptchaScore}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
+import ScrollAnimation from 'react-animate-on-scroll'
 
 import Carousel from '../../common/MainViewCarousel'
 import TextIntro from '../../mainPage/TextIntro'
@@ -31,7 +32,14 @@ const MainPage = () => {
 			<Parallax imgSrc="img/parallax/vinyl.webp" />
 		</section>
 		<FeaturedNews />
-		<SendContactMessage />
+		<ScrollAnimation
+			animatePreScroll={false}
+			animateOnce={true}
+			animateIn="fadeInUp"
+			delay={250}
+		>
+			<SendContactMessage />
+		</ScrollAnimation>
 	</>
 }
 
