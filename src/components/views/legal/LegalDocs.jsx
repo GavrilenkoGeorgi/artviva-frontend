@@ -29,7 +29,7 @@ const LegalDocs = () => {
 					Нормативна база, якою керується у своїй діяльності школа
 				</h1>
 
-				<aside>
+				<aside className='py-4'>
 					<QuestionnaireCTA />
 				</aside>
 

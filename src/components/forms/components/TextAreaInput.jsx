@@ -5,6 +5,8 @@ import { Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons'
 
+import styles from './TextInput.module.sass'
+
 const TextAreaInput = props => {
 	const {
 		touched,
@@ -16,7 +18,7 @@ const TextAreaInput = props => {
 		<Form.Group
 			controlId={`${props.name}-input`}
 		>
-			<Form.Label>
+			<Form.Label className={styles.inputLabel}>
 				{props.label}
 				{infoBtn
 					? <FontAwesomeIcon
@@ -32,7 +34,7 @@ const TextAreaInput = props => {
 				isInvalid={touched && !!props.errors}
 				{ ...other }
 			/>
-			<Form.Control.Feedback type="invalid">
+			<Form.Control.Feedback type="invalid" className={styles.formFeedback}>
 				{props.errors}
 			</Form.Control.Feedback>
 		</Form.Group>

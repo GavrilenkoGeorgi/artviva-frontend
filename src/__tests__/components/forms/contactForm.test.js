@@ -27,9 +27,9 @@ describe('<ContactForm /> component', () => {
 			/>
 		)
 
-		nameInput = screen.getByRole('textbox', { name: /Ваше ім'я/ })
+		nameInput = screen.getByRole('textbox', { name: /Ім'я/ })
 		emailInput = screen.getByRole('textbox', { name: /Ваша електронна пошта/ })
-		messageInput = screen.getByRole('textbox', { name: /Ваше повідомлення/ })
+		messageInput = screen.getByRole('textbox', { name: /Повідомлення/ })
 		button = screen.getByRole('button', /Відправити/)
 	})
 
@@ -77,7 +77,7 @@ describe('<ContactForm /> component', () => {
 
 		userEvent.clear(emailInput)
 		await waitFor(() => {
-			expect(screen.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть електронну пошту/)).toBeInTheDocument()
 		})
 	})
 
@@ -104,7 +104,7 @@ describe('<ContactForm /> component', () => {
 
 		await waitFor(() => {
 			expect(screen.getByText(/Введіть ваше ім'я/)).toBeInTheDocument()
-			expect(screen.getByText(/Введіть свою електронну пошту/)).toBeInTheDocument()
+			expect(screen.getByText(/Введіть електронну пошту/)).toBeInTheDocument()
 			expect(screen.getByText(/Будь ласка, введіть своє повідомлення/)).toBeInTheDocument()
 		})
 	})

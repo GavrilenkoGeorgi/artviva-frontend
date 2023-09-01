@@ -1,4 +1,3 @@
-/* eslint-disable1 */
 import React, { useEffect, useState, useCallback } from 'react'
 import { connect } from 'react-redux'
 

@@ -8,7 +8,7 @@ export default function contactFormValidationSchema() {
 			.required('Введіть ваше ім\'я.'),
 		email: Yup.string().trim()
 			.email('Адреса електронної пошти недійсна.')
-			.required('Введіть свою електронну пошту.'),
+			.required('Введіть електронну пошту.'),
 		message: Yup.string().trim()
 			.min(8, 'Мінімум 8 символів.')
 			.max(280, 'Максимум 280 символів.')
