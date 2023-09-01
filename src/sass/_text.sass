@@ -59,21 +59,28 @@
 		line-height: 1.5
 
 .page-container
+	margin: 0 1rem
 	max-width: 800px
+	h1, h2, h3
+		text-align: center
+		margin: 2rem 1rem
 	h1
-		font-size: 36px
+		font-size: 1.5rem
+		@media screen and (min-width: $medium)
+			font-size: 2rem
 	h2
-		font-size: 24px
+		font-size: 1.2rem
 	h3
-		font-size: 16px
+		font-size: 1rem
 	p
 		text-indent: 1.3rem
 		margin-bottom: 1.3rem
-		padding: 0 1rem
 	p, ul
-		line-height: 1.7
+		line-height: 1.5
 	ul
 		list-style: none
+		@media screen and (max-width: $small)
+			padding: 0 1rem
 	ul li
 		margin: 1rem 0rem
 		&::before
