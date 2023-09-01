@@ -24,6 +24,9 @@ const Banner = () => {
 
 	const { bannerLayout, visible, hidden } = styles
 	const banner = `${bannerLayout} ${open ? visible : hidden}`
+	const path = /\/(school+)/
+
+	if (window.location.pathname.match(path)) return null
 
 	return <div className={banner}>
 		<div className={styles.bannerContainer}>
