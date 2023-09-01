@@ -26,7 +26,7 @@ const SchoolExplained = ({ user }) => {
 				<Col md={9}>
 					<Row>
 						<Col xs={12}>
-							<h3 className="pb-2 pt-3 text-center custom-font">Школа для початківців</h3>
+							<h3 className="pb-2 pt-3 text-center custom-font">Школа</h3>
 						</Col>
 						<Col xs={12} className="px-3 school-explained-section">
 							<p className="paragraph-text-info">
