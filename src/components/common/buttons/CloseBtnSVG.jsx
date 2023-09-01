@@ -10,7 +10,7 @@ const CloseBtnSVG = () => {
 		<path
 			// eslint-disable-next-line
 			d="M38 12.83l-2.83-2.83-11.17 11.17-11.17-11.17-2.83 2.83 11.17 11.17-11.17 11.17 2.83 2.83 11.17-11.17 11.17 11.17 2.83-2.83-11.17-11.17z"
-			fill="grey"
+			fill="currentColor"
 		/>
 		<path
 			d="M0 0h48v48h-48z"
