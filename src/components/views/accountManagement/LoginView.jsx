@@ -90,16 +90,16 @@ const LoginView = ({
 		</Helmet>
 		<CommonLayout>
 			<Container>
-				<Row className="d-flex justify-content-center">
+				<Row className="d-flex justify-content-center border1 ">
 					<Col xs={10} md={4} className="text-center">
 						<span className="image-align-helper"></span>
 						<Image
-							src="img/logo/artviva_logo.png"
+							src="img/logo/artviva_logo.webp"
 							alt="ArtViva logo"
-							className="responsive-image-fraction"
+							className="responsive-image-fraction p-4"
 						/>
 					</Col>
-					<Col xs={12} md={8}>
+					<Col xs={12} md={5}>
 						<h1 className="text-center custom-font my-4">
 							Логін
 						</h1>
