@@ -42,11 +42,11 @@ const App = ({ user, setUserFromLocalStorage, initializeSpecialties }) => {
 	}, [user, setUserFromLocalStorage])
 
 	// div responsible for sticky footer, looks ugly
-	return <div className="content">
+	return <main className="content">
 		<UserDataContext.Provider value={user}>
 			<Routes />
 		</UserDataContext.Provider>
-	</div>
+	</main>
 }
 
 const mapStateToProps = state => {

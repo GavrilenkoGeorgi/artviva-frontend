@@ -20,10 +20,12 @@ const FeaturedNews = ({ setNotification }) => {
 			const { data: { access_token } } = await getAccessToken()
 			const url = getPostsURL(access_token)
 			const { data: { data } } = await axios.get(url)
+
 			// sort and filter
-			const items = data.filter(({ shares, message }) => message && shares?.count)
+			const items = data.filter(({ message }) => message)
 			const featuredPosts = getHashtags(items)
-			setPosts(() => featuredPosts.slice(-4))
+			setPosts(() => featuredPosts.slice(0, 4))
+
 		} catch (err) {
 			setNotification({
 				message: err.message,
