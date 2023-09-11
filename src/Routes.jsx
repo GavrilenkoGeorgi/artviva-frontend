@@ -25,7 +25,6 @@ import LegalDocs from './components/views/legal/LegalDocs'
 import PrivacyPolicy from './components/views/legal/PrivacyPolicy'
 import SchoolExplained from './components/help/SchoolExplained'
 import SpecialtyDetails from './components/specialties/SpecialtyDetails'
-import Banner from './components/announcements/Banner'
 
 export const history = createBrowserHistory({ forceRefresh: true })
 
@@ -33,7 +32,6 @@ const Routes = ({ fetchingData }) => {
 	return <Router history={history}>
 		<ScrollToTop />
 		<NavigationBar />
-		<Banner />
 		<SchoolSectionsNav />
 		<Notification />
 		{fetchingData &&

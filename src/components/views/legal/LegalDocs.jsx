@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet'
 
 import CommonLayout from '../../CommonLayout'
 import QuestionnaireCTA from '../../announcements/QuestionnaireCTA'
+import Banner from '../../../components/announcements/Banner'
 import links from '../../../data/legalDocsLinks.json'
 
 const LegalDocs = () => {
@@ -23,6 +24,7 @@ const LegalDocs = () => {
 			<title>Нормативна база школи мистецтв «АРТ ВІВА»</title>
 			<meta name="description" content="Нормативна база, якою керується у своїй діяльності школа мистецтв «АРТ ВІВА»" />
 		</Helmet>
+		<Banner />
 		<CommonLayout>
 			<section className="page-container">
 				<h1>
