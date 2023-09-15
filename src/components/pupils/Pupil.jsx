@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { connect } from 'react-redux'
-import { updatePupil } from '../../reducers/pupilsReducer'
+import { deletePupil, updatePupil } from '../../reducers/pupilsReducer'
 import { updatePupilData } from './updatePupilData'
 import { setNotification, setProcessingForm } from '../../reducers/notificationReducer'
 
@@ -14,11 +14,22 @@ import PupilForm from '../forms/PupilForm'
 import EntityControlButtons from '../common/EntityControlButtons'
 
 const LazyEntityEditModal = React.lazy(() => import('../common/EntityEditModal'))
+const LazyEntityDeleteModal = React.lazy(() => import('../common/EntityDeleteModal'))
 
-const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessingForm, setNotification }) => {
+const Pupil = ({
+	user,
+	specialties,
+	pupil,
+	posInList,
+	updatePupil,
+	deletePupil,
+	setProcessingForm,
+	setNotification }) => {
 
 	const [open, setOpen] = useState(false)
 	const [editModalShow, setEditModalShow] = useState(false)
+	const [deleteModalShow, setDeleteModalShow] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
 	const unmounted = useRef(false)
 
 	useEffect(() => {
@@ -40,6 +51,32 @@ const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessing
 			closeModal
 		}
 		updatePupilData(data, utils)
+	}
+
+	const handleDelete = id => { // classes?
+		setIsDeleting(true)
+		deletePupil(id)
+			.then(() => {
+				setNotification({
+					message: 'Учень успішно видален.',
+					variant: 'success'
+				}, 5)
+				history.push('/school/pupils')
+			})
+			.catch(error => {
+				const { message } = { ...error.response.data }
+				setNotification({
+					message,
+					variant: 'danger'
+				}, 5)
+				setIsDeleting(false)
+			})
+			.finally(() => {
+				if (!unmounted.current) {
+					setDeleteModalShow(false)
+					setIsDeleting(false)
+				}
+			})
 	}
 
 	return <>
@@ -78,6 +115,8 @@ const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessing
 						route={`/school/pupils/${pupil.id}`}
 						entity="pupil"
 						openEditModal={() => setEditModalShow(true)}
+						openDeleteModal={() => setDeleteModalShow(true)
+						}
 					/>
 				</Row>
 			</Container>
@@ -102,6 +141,15 @@ const Pupil = ({ user, specialties, pupil, posInList, updatePupil, setProcessing
 					mode="edit"
 				/>
 			</LazyEntityEditModal>
+			<LazyEntityDeleteModal
+				subject="учня"
+				subjectid={pupil.id}
+				valuetoconfirm={pupil.name}
+				show={deleteModalShow}
+				handleDelete={handleDelete}
+				loadingState={isDeleting}
+				onHide={() => setDeleteModalShow(false)}
+			/>
 		</Suspense>
 	</>
 }
@@ -116,6 +164,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = {
 	setNotification,
 	updatePupil,
+	deletePupil,
 	setProcessingForm
 }
 
