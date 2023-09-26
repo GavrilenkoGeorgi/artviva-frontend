@@ -106,7 +106,7 @@ const Pupil = ({
 				{/* Control buttons */}
 				<Row>
 					<Col className="my-4 d-flex align-items-center">
-						<Link to={`/school/pupils/f1/${pupil.id}`}>
+						<Link to={`/school/pupils/f1/${pupil.id}`} target="_blank" rel="noreferrer">
 							Форма Ф-1
 						</Link>
 					</Col>
