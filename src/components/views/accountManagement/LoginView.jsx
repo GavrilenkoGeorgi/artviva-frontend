@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet'
 import { history } from '../../../Routes'
 import PropTypes from 'prop-types'
 
-
 import recaptchaService from '../../../services/recaptcha'
 import { login } from '../../../reducers/loginReducer'
 import { setNotification, setProcessingForm } from '../../../reducers/notificationReducer'
@@ -13,6 +12,7 @@ import { setNotification, setProcessingForm } from '../../../reducers/notificati
 import { Container, Row, Col, Image } from 'react-bootstrap'
 import LoginForm from '../../forms/LoginForm'
 import CommonLayout from '../../CommonLayout'
+import styles from './LoginView.module.sass'
 
 const LoginView = ({
 	login,
@@ -90,13 +90,12 @@ const LoginView = ({
 		</Helmet>
 		<CommonLayout>
 			<Container>
-				<Row className="d-flex justify-content-center border1 ">
-					<Col xs={10} md={4} className="text-center">
-						<span className="image-align-helper"></span>
+				<Row className="justify-content-center">
+					<Col xs={6} md={4} className="d-flex">
 						<Image
 							src="img/logo/artviva_logo.webp"
 							alt="ArtViva logo"
-							className="responsive-image-fraction p-4"
+							className={styles.logo}
 						/>
 					</Col>
 					<Col xs={12} md={5}>
