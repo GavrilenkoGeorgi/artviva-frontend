@@ -72,7 +72,7 @@ const Footer = () => {
 						{' '}з <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 					</p>
 					<p className={styles.footerSmallText}>
-						Розробка та підтримка сайту <a href="https://jsmonkey.dev" title="jsMonkey">jsmonkey.dev</a>
+						Розробка та підтримка сайту <a href="https://jsmonkey.netlify.app/" title="jsMonkey">jsmonkey.netlify.app</a>
 					</p>
 					<ReCaptchaStatement />
 					<Row>
