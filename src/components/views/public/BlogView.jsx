@@ -3,7 +3,7 @@ import { connect } from 'react-redux' // !!!!
 import { Helmet } from 'react-helmet'
 import { setNotification } from '../../../reducers/notificationReducer'
 import { getAccessToken, getPostsURL } from '../../../services/facebookAPI'
-import { getHashtags, parseYtLinks } from '../../../utils/arrayHelpers'
+import { getHashtagsAndURLs, parseYtLinks } from '../../../utils/arrayHelpers'
 
 import { SimpleSpinner } from '../../common/spinners'
 import NewsFeed from '../../news/NewsFeed'
@@ -47,7 +47,7 @@ const BlogView = ({ setNotification }) => {
 			const filtered = data.filter(post => post.hasOwnProperty('message'))
 
 			// get hastags and or youtube links if any
-			getHashtags(filtered)
+			getHashtagsAndURLs(filtered)
 			parseYtLinks(filtered)
 			setFacebookPosts(prevState => [ ...prevState, ...filtered ])
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import axios from 'axios'
 import { setNotification } from '../../reducers/notificationReducer'
-import { getHashtags } from '../../utils/arrayHelpers'
+import { getHashtagsAndURLs } from '../../utils/arrayHelpers'
 import { getAccessToken, getPostsURL } from '../../services/facebookAPI'
 import { formatDate } from '../../utils/datesAndTime'
 
@@ -23,7 +23,7 @@ const FeaturedNews = ({ setNotification }) => {
 
 			// sort and filter
 			const items = data.filter(({ message }) => message)
-			const featuredPosts = getHashtags(items)
+			const featuredPosts = getHashtagsAndURLs(items)
 			setPosts(() => featuredPosts.slice(0, 4))
 
 		} catch (err) {
@@ -67,13 +67,21 @@ const FeaturedNews = ({ setNotification }) => {
 									</p>
 								</div>
 							</a>
-							<div className={styles.hashtags}>
+							<div className={styles.tags}>
 								{item.hashtags.map(tag => (
 									<a
 										className={styles.hashtag}
 										href={`https://www.facebook.com/hashtag/${tag.slice(1)}`}
 										key={tag}>
 										{tag}{' '}
+									</a>
+								))}
+								{item.urls.map(url => (
+									<a
+										className={styles.url}
+										href={url}
+										key={url}>
+										{url}{' '}
 									</a>
 								))}
 							</div>

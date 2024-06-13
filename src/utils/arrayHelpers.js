@@ -108,20 +108,27 @@ export const boolPropsFilter = (products, filters) => {
  * @returns {Object[]} - Sorted and filtered data, hastags applied to each post
  */
 
-export const getHashtags = array => {
+export const getHashtagsAndURLs = array => {
 	// create hashtags
 	array.map(post => {
-		const hashtags = post.message.match(/#[\p{L}]+/ugi)
-		post.hashtags = hashtags || []
-		if (hashtags) {
+		const hashtags = post.message.match(/#[\p{L}]+/ugi) || []
+		// eslint-disable-next-line
+		const urls = post.message.match(/([a-z0-9-]+\:\/+)([^\/\s]+)([a-z0-9\-@\^=%&;\/~\+]*)[\?]?([^ \#\r\n]*)#?([^ \#\r\n]*)/mig) || []
+
+		post.hashtags = hashtags
+		post.urls = urls
+
+		const tagsAndUrls = [ ...hashtags, ...urls ]
+		if (tagsAndUrls) {
 			let message
-			for (let tag of hashtags) {
-				message = post.message.replace(tag, '')
+			for (let item of tagsAndUrls) {
+				message = post.message.replace(item, '')
 				post.message = message.trim()
 			}
 		}
 	})
-	return array.filter(({ hashtags }) => hashtags.length)
+
+	return array
 }
 
 /**
