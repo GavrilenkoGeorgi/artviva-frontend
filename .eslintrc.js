@@ -66,7 +66,7 @@ module.exports = {
         "error",
         "tab"
     ],
-    "linebreak-style": ['error', process.platform === 'win32' ? 'windows' : 'unix'],
+    "linebreak-style": ['error', 'unix'],
     "quotes": [
         "error",
         "single"
