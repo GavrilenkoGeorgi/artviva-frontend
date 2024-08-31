@@ -83,12 +83,6 @@ const TextIntro = () => {
 							label="Подати заяву"
 							className="primary-color-shadow mx-3 my-3 my-md-0 max-width-btn"
 						/>
-						<ButtonLink
-							variant="success"
-							route="/pay/form"
-							label="Оплатити"
-							className="success-color-shadow mx-3 my-3 my-md-0 max-width-btn"
-						/>
 					</div>
 				</Col>
 			</Row>

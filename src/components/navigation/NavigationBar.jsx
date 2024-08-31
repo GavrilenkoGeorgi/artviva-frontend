@@ -125,7 +125,6 @@ const NavigationBar = ({ user }) => {
 						>
 							<NavDropdown.Item href="/apply">Подати заяву</NavDropdown.Item>
 							<NavDropdown.Item href="/legaldocs">Нормативна база</NavDropdown.Item>
-							<NavDropdown.Item href="/pay/form">Оплата навчання</NavDropdown.Item>
 							<NavDropdown.Item href="/prices">Ціни</NavDropdown.Item>
 							{user
 								? <>
